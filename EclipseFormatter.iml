@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PLUGIN_MODULE" version="4">
+  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/META-INF/plugin.xml" />
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/test/resources" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/antadapter" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/batch" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/codeassist" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/compiler" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/dom" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/eval" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/formatter" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/model" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/scripts" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/search" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/gwt" />
+          <root url="file://$MODULE_DIR$/lib/javascript" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib/gwt" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/antadapter" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/batch" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/codeassist" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/compiler" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/dom" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/eval" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/formatter" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/model" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/scripts" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/search" />
+          <root url="jar://$MODULE_DIR$/lib/gwt/gwt-dev.jar!/" />
+          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.core/src" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib/gwt" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/javascript" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/gwt" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/test" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib/test" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib/test" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/test" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
+
