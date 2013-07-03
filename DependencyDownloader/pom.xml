@@ -21,7 +21,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/../cal/</outputDirectory>
+							<outputDirectory>${project.basedir}/../lib/</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
@@ -35,7 +35,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/../lib/cal</outputDirectory>
+							<outputDirectory>${project.basedir}/../lib/source</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
