@@ -8,7 +8,7 @@ import java.io.File;
 public class FileDoesNotExistsException extends RuntimeException {
 
 	public FileDoesNotExistsException(File file) {
-		super("File does not exists: " + file.getAbsolutePath());
+		super("Configured settings file does not exist, path=\"" + file.getPath()+"\"");
 	}
 
 }

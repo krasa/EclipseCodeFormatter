@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.*;
 import javax.swing.event.AncestorEvent;
@@ -27,6 +28,7 @@ import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.centerkey.utils.BareBonesBrowserLaunch;
@@ -37,7 +39,9 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
@@ -121,6 +125,7 @@ public class ProjectSettingsForm {
 	@NotNull
 	private Project project;
 	protected SortedComboBoxModel<Settings> profilesModel;
+	protected AtomicBoolean profileChangedValidation = new AtomicBoolean();
 
 	private void updateComponents() {
 		hidePopups();
@@ -186,7 +191,7 @@ public class ProjectSettingsForm {
 		}
 	}
 
-	public ProjectSettingsForm(Project project) {
+	public ProjectSettingsForm(final Project project) {
 		DONATEButton.setBorder(BorderFactory.createEmptyBorder());
 		DONATEButton.setContentAreaFilled(false);
 		this.project = project;
@@ -261,14 +266,18 @@ public class ProjectSettingsForm {
 		newProfile.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				if (isModified(displayedSettings)) {
 					createConfirmation("Profile was modified, save changes to current profile?", "Yes", "No",
 							new Runnable() {
 								@Override
 								public void run() {
-									exportDisplayedSettings();
-									createProfile();
+									try {
+										exportDisplayedSettings();
+										createProfile();
+									} catch (ConfigurationException e) {
+										Messages.showErrorDialog(project, e.getMessage(), e.getTitle());
+									}
 								}
 							}, new Runnable() {
 								@Override
@@ -296,8 +305,12 @@ public class ProjectSettingsForm {
 							"Profile was modified, save changes to current profile?", "Yes", "No", new Runnable() {
 								@Override
 								public void run() {
-									exportDisplayedSettings();
-									copyProfile();
+									try {
+										exportDisplayedSettings();
+										copyProfile();
+									} catch (ConfigurationException e) {
+										Messages.showErrorDialog(project, e.getMessage(), e.getTitle());
+									}
 								}
 							}, new Runnable() {
 								@Override
@@ -470,18 +483,29 @@ public class ProjectSettingsForm {
 	}
 
 	private void showConfirmationDialogOnProfileChange() {
-		createConfirmation("Profile was modified, save changes?", "Yes", "No", new Runnable() {
-			@Override
-			public void run() {
-				exportDisplayedSettings();
-				importFrom(getSelectedItem());
-			}
-		}, new Runnable() {
-			@Override
-			public void run() {
-				importFromInternal(getSelectedItem());
-			}
-		}, 0).showInCenterOf(profiles);
+		if (!profileChangedValidation.get()) {
+			createConfirmation("Profile was modified, save changes?", "Yes", "No", new Runnable() {
+						@Override
+						public void run() {
+							try {
+								exportDisplayedSettings();
+								importFrom(getSelectedItem());
+							} catch (ConfigurationException e) {
+								profileChangedValidation.set(true);
+								Messages.showErrorDialog(project, e.getMessage(), e.getTitle());
+								profiles.setSelectedItem(getSelectedItem());
+							}
+						}
+					}, new Runnable() {
+						@Override
+						public void run() {
+							importFromInternal(getSelectedItem());
+						}
+					}, 0
+			).showInCenterOf(profiles);
+		} else {
+			profileChangedValidation.set(false);
+		}
 	}
 
 	private boolean isSameId() {
@@ -597,7 +621,9 @@ public class ProjectSettingsForm {
 		updateComponents();
 	}
 
-	public Settings exportDisplayedSettings() {
+	public Settings exportDisplayedSettings() throws ConfigurationException {
+		validate();
+
 		if (useEclipseFormatter.isSelected()) {
 			displayedSettings.setFormatter(Settings.Formatter.ECLIPSE);
 		} else {
@@ -609,6 +635,27 @@ public class ProjectSettingsForm {
 		displayedSettings.setSelectedJavaScriptProfile((String) javaScriptFormatterProfile.getSelectedItem());
 		getData(displayedSettings);
 		return displayedSettings;
+	}
+
+	private void validate() throws ConfigurationException {
+		if (useEclipseFormatter.isSelected()) {
+			if (enableJavaFormatting.isSelected()) {
+				if (StringUtils.isBlank(pathToEclipsePreferenceFileJava.getText())) {
+					throw new ConfigurationException("Path to Java config file is not valid");
+				}
+				if (!new File(pathToEclipsePreferenceFileJava.getText()).exists()) {
+					throw new ConfigurationException("Path to Java config file is not valid - file does not exist");
+				}
+			}
+			if (enableJSFormatting.isSelected()) {
+				if (StringUtils.isBlank(pathToEclipsePreferenceFileJS.getText())) {
+					throw new ConfigurationException("Path to JS config file is not valid");
+				}
+				if (!new File(pathToEclipsePreferenceFileJS.getText()).exists()) {
+					throw new ConfigurationException("Path to JS config file is not valid - file does not exist");
+				}
+			}
+		}
 	}
 
 	private boolean customIsModified(Settings data) {
