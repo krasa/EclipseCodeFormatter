@@ -96,10 +96,9 @@ public class ImportSorter {
 
 	protected List<String> sortByEclipseStandard(List<String> imports) {
 		ImportsTemplate importsTemplate = new ImportsTemplate(importsOrder);
-		List<String> notMatching = importsTemplate.filterMatchingImports(imports);
-		notMatching.addAll(importsOrder);
-		importsTemplate.mergeStaticImports(notMatching);
-		importsTemplate.mergeNotMatchingItems(notMatching);
+		importsTemplate.filterMatchingImports(imports);
+		importsTemplate.mergeStaticImports();
+		importsTemplate.mergeNotMatchingItems();
 		importsTemplate.mergeMatchingItems();
 
 		return importsTemplate.getResult();
@@ -117,6 +116,8 @@ public class ImportSorter {
 	class ImportsTemplate {
 		List<String> template = new ArrayList<String>();
 		MultiValuesMap<String, String> matchingImports = new MultiValuesMap<java.lang.String, java.lang.String>();
+		ArrayList<String> staticImports = new ArrayList<String>();
+		ArrayList<String> notMatching = new ArrayList<String>();
 		Set<String> order = new HashSet<String>();
 
 		ImportsTemplate(List<String> order) {
@@ -127,8 +128,7 @@ public class ImportSorter {
 		/**
 		 * returns not matching items and initializes internal state
 		 */
-		public List<String> filterMatchingImports(List<String> imports) {
-			ArrayList<String> notMatching = new ArrayList<String>();
+		public void filterMatchingImports(List<String> imports) {
 			for (String anImport : imports) {
 				String matchingImport = null;
 				for (String orderItem : order) {
@@ -142,17 +142,19 @@ public class ImportSorter {
 				}
 				if (matchingImport != null) {
 					matchingImports.put(matchingImport, anImport);
+				} else if (anImport.startsWith("static")) {
+					staticImports.add(anImport);
 				} else {
 					notMatching.add(anImport);
 				}
 			}
-			return notMatching;
+			notMatching.addAll(importsOrder);
 		}
 
 		/**
 		 * not matching means it does not match eny order item, so it will be appended before or after order items
 		 */
-		public void mergeNotMatchingItems(List<String> notMatching) {
+		public void mergeNotMatchingItems() {
 			Collections.sort(notMatching);
 
 			int firstIndexOfOrderItem = getFirstIndexOfOrderItem(notMatching);
@@ -166,6 +168,7 @@ public class ImportSorter {
 					if (indexOfOrderItem == 0 && firstIndexOfOrderItem != 0) {
 						// insert before alphabetically first order item
 						template.add(firstIndexOfOrderItem, notMatchingItem);
+						firstIndexOfOrderItem++;
 					} else if (firstIndexOfOrderItem == 0) {
 						// no order is specified
 						if (template.size() > 0 && (template.get(template.size() - 1).startsWith("static"))) {
@@ -249,18 +252,19 @@ public class ImportSorter {
 			return strings;
 		}
 
-		public void mergeStaticImports(List<String> notMatching) {
-			Collections.sort(notMatching);
-			Collections.reverse(notMatching);
+		public void mergeStaticImports() {
+			Collections.sort(staticImports);
+			Collections.reverse(staticImports);
 
-			for (int i = 0; i < notMatching.size(); i++) {
-				String notMatchingItem = notMatching.get(i);
+			for (int i = 0; i < staticImports.size(); i++) {
+				String notMatchingItem = staticImports.get(i);
 				if (notMatchingItem.startsWith("static ")) {
 					template.add(0, notMatchingItem);
-					notMatching.remove(i);
+					staticImports.remove(i);
 					i--;
 				}
 			}
 		}
+
 	}
 }

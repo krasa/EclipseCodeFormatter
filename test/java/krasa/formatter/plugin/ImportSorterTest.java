@@ -54,7 +54,7 @@ public class ImportSorterTest {
 				+ "import sun.security.action.GetLongAction;\n" + "import org.jingle.mocquer.MockControl;\n"
 				+ "import tmplatform.comms.common.caaa.EvasLdapInterfaceProfileWrapper;\n" + N
 				+ "import static tmutil.StringUtil.replaceText;\n\n" + "import base.LoadUnitTestDataTestCase;\n";
-
+    
 		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
 		ImportSorter importSorter = new ImportSorter(importsOrder);
 		List<String> strings = importSorter.sortByEclipseStandard(StringUtils.trimImport(imports));
@@ -70,7 +70,7 @@ public class ImportSorterTest {
 				+ "import org.w3c.dom.ls.LSException;\n" + "import org.w3c.dom.ls.LSInput;\n"
 				+ "import org.w3c.dom.ls.LSParser;\n" + "import org.w3c.dom.ls.LSParserFilter;\n"
 				+ "import org.xml.sax.InputSource;\n";
-
+    
 		String imports = "import org.w3c.dom.DOMConfiguration;\n" + "import org.w3c.dom.DOMException;\n"
 				+ "import org.w3c.dom.Document;\n" + "import org.w3c.dom.Node;\n"
 				+ "import org.w3c.dom.ls.LSException;\n" + "import org.w3c.dom.ls.LSInput;\n"
@@ -84,7 +84,7 @@ public class ImportSorterTest {
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
 		List<String> strings = importSorter.sortByEclipseStandard(imports1);
-		printAndAssert(expected, strings);
+	    	printAndAssert(expected, strings);
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class ImportSorterTest {
 				+ "import play.mvc.Before;\n" + "import models.Deployment;\n" + "import play.jobs.Job;\n";
 
 		ImportSorter importSorter = new ImportSorter(DEFAULT_ORDER);
-
+    
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
 		List<String> strings = importSorter.sortByEclipseStandard(imports1);
@@ -110,12 +110,12 @@ public class ImportSorterTest {
 				+ "import java.util.List;\n" + "import java.util.Map;\n"
 				+ "import javax.xml.crypto.dsig.spec.HMACParameterSpec;\n" + "import org.w3c.dom.Text;\n"
 				+ "import org.w3c.dom.stylesheets.StyleSheetList;\n";
-
+    
 		String imports = "import javax.xml.crypto.dsig.spec.HMACParameterSpec;\n" + "import org.w3c.dom.Text;\n"
 				+ "import java.util.List;\n" + "import static java.lang.Integer.numberOfLeadingZeros;\n"
 				+ "import java.sql.Date;\n" + "\n" + "import static java.lang.Integer.valueOf;\n"
 				+ "import java.util.Map;\n" + "import org.w3c.dom.stylesheets.StyleSheetList;\n";
-
+    
 		List<String> importsOrder = Collections.emptyList();
 		ImportSorter importSorter = new ImportSorter(importsOrder);
 
@@ -149,6 +149,28 @@ public class ImportSorterTest {
 		importSorter.sortImports(document1);
 		System.err.println(document1.getText());
 	}
+
+	@Test
+	public void test9() throws Exception {
+		String expected = "import android.content.Context;\n" +
+				"import android.view.LayoutInflater;\n" +
+				"import android.view.View;\n" +
+				"import android.widget.TextView;\n";
+
+		String imports = "\n" +
+						"import android.widget.TextView;\n" +
+						"import android.view.LayoutInflater;\n" +
+						"import android.view.View;\n" +
+						"import android.content.Context;";
+
+		ImportSorter importSorter = new ImportSorter(DEFAULT_ORDER);
+
+		List<String> imports1 = StringUtils.trimImport(imports);
+		System.err.println(Arrays.toString(imports1.toArray()));
+		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		printAndAssert(expected, strings);
+	}
+
 
 	@Test
 	public void test7() throws Exception {
@@ -187,7 +209,7 @@ public class ImportSorterTest {
 		System.out.println("-----------------");
 
 	}
-
+	
 	private StringBuilder print(List<String> strings) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (String string : strings) {
