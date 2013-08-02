@@ -138,6 +138,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 
 	public void apply() throws ConfigurationException {
 		if (form != null) {
+			form.validate();
 			settings = form.exportDisplayedSettings();
 			ProjectUtils.applyToAllOpenedProjects(settings);
 		}
