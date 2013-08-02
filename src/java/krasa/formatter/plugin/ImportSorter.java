@@ -24,13 +24,6 @@ public class ImportSorter {
 		this.importsOrder = new ArrayList<String>(importsOrder);
 	}
 
-	public void setImportsOrder(List<String> importsOrder) {
-		this.importsOrder = importsOrder;
-	}
-
-	public ImportSorter() {
-	}
-
 	public void sortImports(Document document) {
 		String documentText = document.getText();
 		// parse file
