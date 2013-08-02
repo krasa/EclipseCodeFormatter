@@ -1,6 +1,7 @@
 package krasa.formatter.plugin.processor;
 
 import krasa.formatter.common.ModifiableFile;
+import krasa.formatter.eclipse.FileDoesNotExistsException;
 import krasa.formatter.plugin.ImportSorter;
 import krasa.formatter.plugin.ImportSorterException;
 import krasa.formatter.plugin.Range;
@@ -36,6 +37,8 @@ public class ImportOrderProcessor implements Processor {
 			FileUtils.optimizeImportsByIntellij(psiFile);
 			try {
 				getImportSorter().sortImports(document);
+			} catch (FileDoesNotExistsException e) {
+				throw e;
 			} catch (Exception e) {
 				final PsiImportList oldImportList = ((PsiJavaFile) psiFile).getImportList();
 				StringBuilder stringBuilder = new StringBuilder();
