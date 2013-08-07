@@ -1,26 +1,23 @@
 package krasa.formatter.plugin;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 import krasa.formatter.settings.Settings;
 
 import com.intellij.openapi.editor.Document;
-import krasa.formatter.utils.StringUtils;
 
 /**
  * @author Vojtech Krasa
  */
-public class ImportSorter {
+public class ImportSorterAdapter {
 	public static final int START_INDEX_OF_IMPORTS_PACKAGE_DECLARATION = 7;
 	public static final String N = Settings.LINE_SEPARATOR;
 
 	private List<String> importsOrder;
 
-	public ImportSorter(List<String> importsOrder) {
+	public ImportSorterAdapter(List<String> importsOrder) {
 		this.importsOrder = new ArrayList<String>(importsOrder);
 	}
 
@@ -53,7 +50,7 @@ public class ImportSorter {
 			}
 		}
 
-		List<String> sortedImports = sortByEclipseStandard(imports);
+		List<String> sortedImports = ImportsSorter.sort(imports, importsOrder);
 		applyImportsToDocument(document, firstImportLine, lastImportLine, sortedImports);
 	}
 
@@ -92,15 +89,6 @@ public class ImportSorter {
 	private boolean isNotValidImport(int i) {
 		return i <= START_INDEX_OF_IMPORTS_PACKAGE_DECLARATION;
 	}
-	protected List<String> sortByEclipseStandard(List<String> imports) {
-		ImportsTemplate importsTemplate = new ImportsTemplate( importsOrder);
-		importsTemplate.filterMatchingImports(imports);
-		importsTemplate.mergeNotMatchingItems(false);
-		importsTemplate.mergeNotMatchingItems(true);
-		importsTemplate.mergeMatchingItems();
 
-		return importsTemplate.getResult();
-	}
 
-		
 }

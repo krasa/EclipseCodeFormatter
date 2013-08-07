@@ -29,7 +29,7 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>3.7.0 (2013-08-2)
+        <br>3.7.0 (2013-08-07)
         <br>- fix for custom static imports order
         <br>- settings validations
         <br>3.6.0 (2013-04-22)

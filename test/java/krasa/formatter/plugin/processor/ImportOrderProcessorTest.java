@@ -9,7 +9,7 @@ import junit.framework.Assert;
 import krasa.easymock.EasyMockTest;
 import krasa.easymock.Mocked;
 import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.plugin.ImportSorter;
+import krasa.formatter.plugin.ImportSorterAdapter;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 
@@ -23,7 +23,7 @@ import org.junit.Test;
 
 public class ImportOrderProcessorTest extends EasyMockTest {
 	@Mocked
-	protected ImportSorter importSorter;
+	protected ImportSorterAdapter importSorter;
 	@Mocked
 	protected ImportOrderProvider orderProvider;
 	@Mocked
@@ -46,7 +46,7 @@ public class ImportOrderProcessorTest extends EasyMockTest {
 
 		ImportOrderProcessor importOrderProcessor = new ImportOrderProcessor(settings, orderProvider);
 
-		ImportSorter importSorter = importOrderProcessor.getImportSorter();
+		ImportSorterAdapter importSorter = importOrderProcessor.getImportSorter();
 		Assert.assertNotNull(importSorter);
 		importSorter = importOrderProcessor.getImportSorter();
 		Assert.assertNotNull(importSorter);
@@ -61,7 +61,7 @@ public class ImportOrderProcessorTest extends EasyMockTest {
 
 		ImportOrderProcessor importOrderProcessor = new ImportOrderProcessor(settings, orderProvider);
 
-		ImportSorter importSorter = importOrderProcessor.getImportSorter();
+		ImportSorterAdapter importSorter = importOrderProcessor.getImportSorter();
 		Assert.assertNotNull(importSorter);
 	}
 

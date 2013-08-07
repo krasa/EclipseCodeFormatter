@@ -14,7 +14,7 @@ import com.intellij.mock.MockDocument;
 /**
  * @author Vojtech Krasa
  */
-public class ImportSorterTest {
+public class ImportsSorterTest {
 
 	public static final String N = "\n";
 	public static final List<String> DEFAULT_ORDER = Arrays.asList("java", "javax", "org", "com");
@@ -34,8 +34,8 @@ public class ImportSorterTest {
 				"sun.security.action.GetLongAction");
 
 		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
-		ImportSorter importSorter = new ImportSorter(importsOrder);
-		List<String> strings = importSorter.sortByEclipseStandard(imports);
+
+		List<String> strings = ImportsSorter.sort(imports, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -56,8 +56,8 @@ public class ImportSorterTest {
 				+ "import static tmutil.StringUtil.replaceText;\n\n" + "import base.LoadUnitTestDataTestCase;\n";
 
 		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
-		ImportSorter importSorter = new ImportSorter(importsOrder);
-		List<String> strings = importSorter.sortByEclipseStandard(StringUtils.trimImport(imports));
+
+		List<String> strings = ImportsSorter.sort(StringUtils.trimImport(imports), importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -79,11 +79,9 @@ public class ImportSorterTest {
 				+ "import org.w3c.dom.ls.LSParserFilter;\n" + "import org.xml.sax.InputSource;\n" + N
 				+ "import java.util.ArrayList;";
 
-		ImportSorter importSorter = new ImportSorter(DEFAULT_ORDER);
-
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 
@@ -95,11 +93,9 @@ public class ImportSorterTest {
 		String imports = "import controllers.deadbolt.Restrict;\n" + "import java.util.Arrays;\n"
 				+ "import play.mvc.Before;\n" + "import models.Deployment;\n" + "import play.jobs.Job;\n";
 
-		ImportSorter importSorter = new ImportSorter(DEFAULT_ORDER);
-
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 
@@ -117,11 +113,10 @@ public class ImportSorterTest {
 				+ "import java.util.Map;\n" + "import org.w3c.dom.stylesheets.StyleSheetList;\n";
 
 		List<String> importsOrder = Collections.emptyList();
-		ImportSorter importSorter = new ImportSorter(importsOrder);
 
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -144,7 +139,7 @@ public class ImportSorterTest {
 				+ "// @OnApplicationStart(async=true)\n" + "public class Picture4493Crawler extends Job {\n\n}";
 
 		List<String> importsOrder = Collections.emptyList();
-		ImportSorter importSorter = new ImportSorter(importsOrder);
+		ImportSorterAdapter importSorter = new ImportSorterAdapter(importsOrder);
 		MockDocument document1 = new MockDocument(document);
 		importSorter.sortImports(document1);
 		System.err.println(document1.getText());
@@ -158,11 +153,9 @@ public class ImportSorterTest {
 		String imports = "\n" + "import android.widget.TextView;\n" + "import android.view.LayoutInflater;\n"
 				+ "import android.view.View;\n" + "import android.content.Context;";
 
-		ImportSorter importSorter = new ImportSorter(DEFAULT_ORDER);
-
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 
@@ -173,11 +166,10 @@ public class ImportSorterTest {
 		String expected = "import java.util.Calendar;\n";
 
 		List<String> importsOrder = Arrays.asList("com", "java", "javax", "org");
-		ImportSorter importSorter = new ImportSorter(importsOrder);
 
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -188,11 +180,10 @@ public class ImportSorterTest {
 		String expected = "import org.junit.Test;\n" + "\n" + "import static org.junit.Assert.assertSame;\n";
 
 		List<String> importsOrder = Arrays.asList("", "\\#");
-		ImportSorter importSorter = new ImportSorter(importsOrder);
 
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -203,11 +194,10 @@ public class ImportSorterTest {
 		String expected = "import static org.junit.Assert.assertSame;\n" + "\n" + "import org.junit.Test;\n";
 
 		List<String> importsOrder = Arrays.asList("\\#", "");
-		ImportSorter importSorter = new ImportSorter(importsOrder);
 
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -221,11 +211,10 @@ public class ImportSorterTest {
 				+ "import static foo.Tomcat7Start.startTomcat;\n";
 
 		List<String> importsOrder = Arrays.asList("\\#", "", "\\#foo.Tomcat7Start");
-		ImportSorter importSorter = new ImportSorter(importsOrder);
 
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -238,11 +227,10 @@ public class ImportSorterTest {
 				+ "import static foo.JettyStart.startJetty;\n" + "\n" + "import static foo.Tomcat7Start.startTomcat;\n";
 
 		List<String> importsOrder = Arrays.asList("", "\\#foo.Tomcat7Start");
-		ImportSorter importSorter = new ImportSorter(importsOrder);
 
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -252,11 +240,9 @@ public class ImportSorterTest {
 
 		String expected = "";
 
-		ImportSorter importSorter = new ImportSorter(DEFAULT_ORDER);
-
 		List<String> imports1 = StringUtils.trimImport(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = importSorter.sortByEclipseStandard(imports1);
+		List<String> strings = ImportsSorter.sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 

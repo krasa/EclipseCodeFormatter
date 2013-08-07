@@ -11,18 +11,25 @@ import krasa.formatter.utils.StringUtils;
 
 import com.intellij.openapi.util.MultiValuesMap;
 
-class ImportsTemplate {
-	List<String> template = new ArrayList<String>();
-	MultiValuesMap<String, String> matchingImports = new MultiValuesMap<String, String>();
-	ArrayList<String> staticImports = new ArrayList<String>();
-	ArrayList<String> notMatching = new ArrayList<String>();
-	Set<String> allImportOrderItems = new HashSet<String>();
+/*not thread safe*/
+class ImportsSorter {
 
-	ImportsTemplate(List<String> allImportOrderItems) {
-		normalizeStaticOrderItems(allImportOrderItems);
-		putStaticItemIfNotExists(allImportOrderItems);
-		template.addAll(allImportOrderItems);
-		this.allImportOrderItems.addAll(allImportOrderItems);
+	private List<String> template = new ArrayList<String>();
+	private MultiValuesMap<String, String> matchingImports = new MultiValuesMap<String, String>();
+	private ArrayList<String> notMatching = new ArrayList<String>();
+	private Set<String> allImportOrderItems = new HashSet<String>();
+
+	static List<String> sort(List<String> imports, List<String> importsOrder) {
+		ImportsSorter importsSorter = new ImportsSorter(importsOrder);
+		return importsSorter.sort(imports);
+	}
+
+	private ImportsSorter(List<String> importOrder) {
+		List<String> importOrderCopy = new ArrayList<String>(importOrder);
+		normalizeStaticOrderItems(importOrderCopy);
+		putStaticItemIfNotExists(importOrderCopy);
+		template.addAll(importOrderCopy);
+		this.allImportOrderItems.addAll(importOrderCopy);
 	}
 
 	private void putStaticItemIfNotExists(List<String> allImportOrderItems) {
@@ -54,7 +61,7 @@ class ImportsTemplate {
 	/**
 	 * returns not matching items and initializes internal state
 	 */
-	public void filterMatchingImports(List<String> imports) {
+	private void filterMatchingImports(List<String> imports) {
 		for (String anImport : imports) {
 			String orderItem = getBestMatchingImportOrderItem(anImport);
 			if (orderItem != null) {
@@ -83,7 +90,7 @@ class ImportsTemplate {
 	/**
 	 * not matching means it does not match any order item, so it will be appended before or after order items
 	 */
-	public void mergeNotMatchingItems(boolean staticItems) {
+	private void mergeNotMatchingItems(boolean staticItems) {
 		Collections.sort(notMatching);
 
 		int firstIndexOfOrderItem = getFirstIndexOfOrderItem(notMatching, staticItems);
@@ -105,7 +112,7 @@ class ImportsTemplate {
 					// no order is specified
 					if (template.size() > 0 && (template.get(template.size() - 1).startsWith("static"))) {
 						// insert N after last static import
-						template.add(ImportSorter.N);
+						template.add(ImportSorterAdapter.N);
 					}
 					template.add(notMatchingItem);
 				} else {
@@ -132,7 +139,7 @@ class ImportsTemplate {
 			if (!matchesStatic(staticItems, notMatchingItem)) {
 				continue;
 			}
-			boolean isOrderItem = isOrderItem(notMatchingItem,staticItems);
+			boolean isOrderItem = isOrderItem(notMatchingItem, staticItems);
 			if (isOrderItem) {
 				firstIndexOfOrderItem = template.indexOf(notMatchingItem);
 				break;
@@ -146,7 +153,7 @@ class ImportsTemplate {
 		return (isStatic && staticItems) || (!isStatic && !staticItems);
 	}
 
-	public void mergeMatchingItems() {
+	private void mergeMatchingItems() {
 		for (int i = 0; i < template.size(); i++) {
 			String item = template.get(i);
 			if (allImportOrderItems.contains(item)) {
@@ -164,38 +171,46 @@ class ImportsTemplate {
 				// replace order item by matching import statements
 				// this is a mess and it is only a luck that it works :-]
 				template.remove(i);
-				if (i != 0 && !template.get(i - 1).equals(ImportSorter.N)) {
-					template.add(i, ImportSorter.N);
+				if (i != 0 && !template.get(i - 1).equals(ImportSorterAdapter.N)) {
+					template.add(i, ImportSorterAdapter.N);
 					i++;
 				}
-				if (i + 1 < template.size() && !template.get(i + 1).equals(ImportSorter.N)
-						&& !template.get(i).equals(ImportSorter.N)) {
-					template.add(i, ImportSorter.N);
+				if (i + 1 < template.size() && !template.get(i + 1).equals(ImportSorterAdapter.N)
+						&& !template.get(i).equals(ImportSorterAdapter.N)) {
+					template.add(i, ImportSorterAdapter.N);
 				}
 				template.addAll(i, matchingItems);
-				if (i != 0 && !template.get(i - 1).equals(ImportSorter.N)) {
-					template.add(i, ImportSorter.N);
+				if (i != 0 && !template.get(i - 1).equals(ImportSorterAdapter.N)) {
+					template.add(i, ImportSorterAdapter.N);
 				}
 
 			}
 		}
 		// if there is \n on the end, remove it
-		if (template.size() > 0 && template.get(template.size() - 1).equals(ImportSorter.N)) {
+		if (template.size() > 0 && template.get(template.size() - 1).equals(ImportSorterAdapter.N)) {
 			template.remove(template.size() - 1);
 		}
 	}
 
-	public List<String> getResult() {
+	private List<String> getResult() {
 		ArrayList<String> strings = new ArrayList<String>();
 
 		for (String s : template) {
-			if (s.equals(ImportSorter.N)) {
+			if (s.equals(ImportSorterAdapter.N)) {
 				strings.add(s);
 			} else {
-				strings.add("import " + s + ";" + ImportSorter.N);
+				strings.add("import " + s + ";" + ImportSorterAdapter.N);
 			}
 		}
 		return strings;
 	}
 
+	private List<String> sort(List<String> imports) {
+		filterMatchingImports(imports);
+		mergeNotMatchingItems(false);
+		mergeNotMatchingItems(true);
+		mergeMatchingItems();
+
+		return getResult();
+	}
 }
