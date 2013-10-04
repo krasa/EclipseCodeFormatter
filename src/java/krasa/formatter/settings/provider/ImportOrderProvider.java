@@ -29,23 +29,22 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 		if (property != null) {
 			order = StringUtils.trimToList(property);
 		} else {
-			order = loadImportOrder(file);
+			order = loadImportOrderFile(file);
 		}
 		return order;
 	}
 
-	private List<String> loadImportOrder(File file) {
+	private List<String> loadImportOrderFile(File file) {
 		List<String> fileLines = loadFile(file);
 		Collections.sort(fileLines);
-		return transform(fileLines);
+		return toImportOrder(fileLines);
 	}
 
-	private List<String> transform(List<String> fileLines) {
+	private List<String> toImportOrder(List<String> fileLines) {
 		List<String> order = new ArrayList<String>();
 		for (String s : fileLines) {
-			String[] split = s.split("=");
-			if (split.length == 2) {
-				order.add(split[1]);
+			if (s.contains("=")) {
+				order.add(s.substring(s.indexOf("=")+1));
 			}
 		}
 		return order;

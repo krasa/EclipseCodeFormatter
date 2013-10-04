@@ -21,8 +21,8 @@ public class StringUtils {
 			if (order2.length() - 1 == i && order1.length() - 1 != i) {
 				return order1;
 			}
-			char orderChar1 = order1.charAt(i);
-			char orderChar2 = order2.charAt(i);
+			char orderChar1 = order1.length()!=0?order1.charAt(i):' ';
+			char orderChar2 = order2.length()!=0?order2.charAt(i):' ';
 			char importChar = anImport.charAt(i);
 
 			if (importChar == orderChar1 && importChar != orderChar2) {

@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>3.5.2</version>
+	<version>3.7.0</version>
 
 	<idea-version since-build="110.137" until-build=""/>
 	<!--<idea-version since-build="90.000" until-build="109.999"/>-->
@@ -29,8 +29,11 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>3.5.2 (2013-07-08)
+        <br>3.7.0 (2013-08-07)
+        <br>- fix for custom static imports order
         <br>- settings validations
+        <br>3.6.0 (2013-04-22)
+        <br>- import order fix - issue #44
         <br>3.5.1 (2013-04-13)
         <br>- debug logging
         <br>3.5 (2013-01-28)

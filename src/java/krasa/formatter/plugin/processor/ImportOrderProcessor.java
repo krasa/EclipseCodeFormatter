@@ -1,7 +1,8 @@
 package krasa.formatter.plugin.processor;
 
 import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.plugin.ImportSorter;
+import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.plugin.ImportSorterAdapter;
 import krasa.formatter.plugin.ImportSorterException;
 import krasa.formatter.plugin.Range;
 import krasa.formatter.settings.Settings;
@@ -20,7 +21,7 @@ import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
  */
 public class ImportOrderProcessor implements Processor {
 	private Settings settings;
-	protected ImportSorter importSorter;
+	protected ImportSorterAdapter importSorter;
 	protected ImportOrderProvider importOrderProviderFromFile;
 	protected ModifiableFile.Monitor modifiedMonitor;
 
@@ -36,6 +37,8 @@ public class ImportOrderProcessor implements Processor {
 			FileUtils.optimizeImportsByIntellij(psiFile);
 			try {
 				getImportSorter().sortImports(document);
+			} catch (FileDoesNotExistsException e) {
+				throw e;
 			} catch (Exception e) {
 				final PsiImportList oldImportList = ((PsiJavaFile) psiFile).getImportList();
 				StringBuilder stringBuilder = new StringBuilder();
@@ -54,14 +57,14 @@ public class ImportOrderProcessor implements Processor {
 		return true;
 	}
 
-	protected ImportSorter getImportSorter() {
+	protected ImportSorterAdapter getImportSorter() {
 		if (settings.isImportOrderFromFile()) {
 			if (importSorter == null || importOrderProviderFromFile.wasChanged(modifiedMonitor)) {
 				modifiedMonitor = importOrderProviderFromFile.getModifiedMonitor();
-				importSorter = new ImportSorter(importOrderProviderFromFile.get());
+				importSorter = new ImportSorterAdapter(importOrderProviderFromFile.get());
 			}
 		} else if (importSorter == null) {
-			importSorter = new ImportSorter(settings.getImportOrderAsList());
+			importSorter = new ImportSorterAdapter(settings.getImportOrderAsList());
 		}
 		return importSorter;
 	}
