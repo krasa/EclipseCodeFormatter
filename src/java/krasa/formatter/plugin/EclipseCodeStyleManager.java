@@ -1,5 +1,6 @@
 package krasa.formatter.plugin;
 
+import com.intellij.openapi.util.TextRange;
 import krasa.formatter.eclipse.FileDoesNotExistsException;
 import krasa.formatter.eclipse.JSCodeFormatterFacade;
 import krasa.formatter.eclipse.JavaCodeFormatterFacade;
@@ -26,6 +27,8 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
+
+import java.util.Collection;
 
 /**
  * Supported operations are handled by Eclipse formatter, other by IntelliJ formatter.
@@ -57,8 +60,19 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 				settings.getJavaProperties()));
 	}
 
+	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
+			throws IncorrectOperationException {
+		for (TextRange textRange : textRanges) {
+			format(psiFile, textRange.getStartOffset(), textRange.getEndOffset(), Mode.ALWAYS_FORMAT);
+		}
+	}
+
 	public void reformatText(@NotNull final PsiFile psiFile, final int startOffset, final int endOffset)
 			throws IncorrectOperationException {
+		format(psiFile, startOffset, endOffset, Mode.WITH_CTRL_SHIFT_ENTER_CHECK);
+	}
+
+	private void format(PsiFile psiFile, int startOffset, int endOffset, Mode mode) {
 		LOG.debug("reformatText " + psiFile.getName() + " " + startOffset + " " + endOffset);
 		ApplicationManager.getApplication().assertWriteAccessAllowed();
 		PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
@@ -74,10 +88,9 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 				notifier.showNotification(notification);
 				return;
 			}
-			// ctrl shift enter fix
 			boolean wholeFileOrSelectedText = isWholeFileOrSelectedText(psiFile, startOffset, endOffset);
-			if (canReformatWithEclipse(psiFile) && wholeFileOrSelectedText) {
-				formatWithEclipse(psiFile, startOffset, endOffset);
+						if (canReformatWithEclipse(psiFile) && shouldReformat(wholeFileOrSelectedText, mode)) {
+							formatWithEclipse(psiFile, startOffset, endOffset);
 				boolean skipSuccessFormattingNotification = shouldSkipNotification(startOffset, endOffset,
 						psiFile.getText());
 				if (!skipSuccessFormattingNotification) {
@@ -116,6 +129,18 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 			LOG.error("startOffset" + startOffset + ", endOffset:" + endOffset + ", length of file "
 					+ psiFile.getText().length(), e);
 		}
+	}
+
+	private boolean shouldReformat(boolean wholeFileOrSelectedText, Mode mode) {
+		switch (mode) {
+			/*when formatting only vcs changes, this is needed.*/
+			case ALWAYS_FORMAT:
+				return true;
+			/*live templates gets broken without that*/
+			case WITH_CTRL_SHIFT_ENTER_CHECK:
+				return wholeFileOrSelectedText;
+		}
+		return true;
 	}
 
 	private void formatWithEclipse(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {

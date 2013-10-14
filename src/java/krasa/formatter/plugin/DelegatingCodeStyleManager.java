@@ -149,13 +149,10 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 		return original.performActionWithFormatterDisabled(r);
 
 	}
-
 	// 11.1
 	// @Override
 	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
 			throws IncorrectOperationException {
-		for (TextRange textRange : textRanges) {
-			reformatText(psiFile, textRange.getStartOffset(), textRange.getEndOffset());
-		}
+		original.reformatText(psiFile, textRanges);
 	}
 }
