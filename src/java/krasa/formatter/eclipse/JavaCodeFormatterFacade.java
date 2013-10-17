@@ -100,12 +100,22 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 				LOG.debug("reformatting done");
 				edit.apply(doc);
 			} else {
-				throw new FormattingFailedException();
+				throw new FormattingFailedException(getErrorMessage());
 			}
 			return doc.get();
 		} catch (BadLocationException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private String getErrorMessage() {
+		String compliance = javaPropertiesProvider.get().getProperty("org.eclipse.jdt.core.compiler.compliance");
+		String targetPlatform = javaPropertiesProvider.get().getProperty(
+				"org.eclipse.jdt.core.compiler.codegen.targetPlatform");
+		String source = javaPropertiesProvider.get().getProperty("org.eclipse.jdt.core.compiler.source");
+		return "Make sure these properties from configuration file matches your source code level: org.eclipse.jdt.core.compiler.source="
+				+ source + ", org.eclipse.jdt.core.compiler.codegen.targetPlatform" + targetPlatform
+				+ ", org.eclipse.jdt.core.compiler.compliance" + compliance;
 	}
 
 }

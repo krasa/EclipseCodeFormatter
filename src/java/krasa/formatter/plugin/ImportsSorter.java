@@ -24,6 +24,15 @@ class ImportsSorter {
 		return importsSorter.sort(imports);
 	}
 
+	private List<String> sort(List<String> imports) {
+		filterMatchingImports(imports);
+		mergeNotMatchingItems(false);
+		mergeNotMatchingItems(true);
+		mergeMatchingItems();
+
+		return getResult();
+	}
+	
 	private ImportsSorter(List<String> importOrder) {
 		List<String> importOrderCopy = new ArrayList<String>(importOrder);
 		normalizeStaticOrderItems(importOrderCopy);
@@ -205,12 +214,4 @@ class ImportsSorter {
 		return strings;
 	}
 
-	private List<String> sort(List<String> imports) {
-		filterMatchingImports(imports);
-		mergeNotMatchingItems(false);
-		mergeNotMatchingItems(true);
-		mergeMatchingItems();
-
-		return getResult();
-	}
 }

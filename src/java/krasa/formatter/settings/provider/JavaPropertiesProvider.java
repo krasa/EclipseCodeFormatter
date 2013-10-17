@@ -22,7 +22,7 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 	protected Properties createDefaultConfig() {
 		Properties defaultConfig = new Properties();
 		// TODO: Ideally, the IntelliJ project's language level should be the default value.
-		defaultConfig.setProperty("org.eclipse.jdt.core.compiler.source", "1.5");
+		defaultConfig.setProperty("org.eclipse.jdt.core.compiler.source", "1.7");
 		return defaultConfig;
 	}
 

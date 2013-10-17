@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>3.8.0</version>
+	<version>3.8.1</version>
 
 	<idea-version since-build="110.137" until-build=""/>
 	<!--<idea-version since-build="90.000" until-build="109.999"/>-->
@@ -29,6 +29,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>3.8.1 (2013-10-17)
+        <br>- better error messages.
         <br>3.8.0 (2013-10-15)
         <br>- format "Only VCS changed text" fixed
         <br>3.7.0 (2013-08-07)

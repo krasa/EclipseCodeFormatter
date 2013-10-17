@@ -1,6 +1,7 @@
 package krasa.formatter.plugin;
 
-import com.intellij.openapi.util.TextRange;
+import java.util.Collection;
+
 import krasa.formatter.eclipse.FileDoesNotExistsException;
 import krasa.formatter.eclipse.JSCodeFormatterFacade;
 import krasa.formatter.eclipse.JavaCodeFormatterFacade;
@@ -20,6 +21,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
@@ -27,8 +29,6 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
-
-import java.util.Collection;
 
 /**
  * Supported operations are handled by Eclipse formatter, other by IntelliJ formatter.
@@ -89,8 +89,8 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 				return;
 			}
 			boolean wholeFileOrSelectedText = isWholeFileOrSelectedText(psiFile, startOffset, endOffset);
-						if (canReformatWithEclipse(psiFile) && shouldReformat(wholeFileOrSelectedText, mode)) {
-							formatWithEclipse(psiFile, startOffset, endOffset);
+			if (canReformatWithEclipse(psiFile) && shouldReformat(wholeFileOrSelectedText, mode)) {
+				formatWithEclipse(psiFile, startOffset, endOffset);
 				boolean skipSuccessFormattingNotification = shouldSkipNotification(startOffset, endOffset,
 						psiFile.getText());
 				if (!skipSuccessFormattingNotification) {
@@ -108,37 +108,41 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 			}
 
 		} catch (final FileDoesNotExistsException e) {
-			e.printStackTrace();
 			LOG.debug(e);
 			notifier.notifyFailedFormatting(psiFile, formattedByIntelliJ, e);
 		} catch (final InvalidPropertyFile e) {
-			e.printStackTrace();
 			LOG.debug(e);
 			notifier.notifyFailedFormatting(psiFile, formattedByIntelliJ, e);
 		} catch (final ImportSorterException e) {
 			LOG.error(e);
 			notifier.notifyBrokenImportSorter();
 		} catch (final FormattingFailedException e) {
-			e.printStackTrace();
 			LOG.debug("startOffset" + startOffset + ", endOffset:" + endOffset + ", length of file "
 					+ psiFile.getText().length(), e);
-			notifier.notifyFailedFormatting(psiFile, formattedByIntelliJ,
-					"Probably due to syntax error or wrong configuration file.");
+			notifier.notifyFailedFormatting(psiFile, formattedByIntelliJ, getReason(e));
 		} catch (final Exception e) {
-			e.printStackTrace();
 			LOG.error("startOffset" + startOffset + ", endOffset:" + endOffset + ", length of file "
 					+ psiFile.getText().length(), e);
 		}
 	}
 
+	private String getReason(FormattingFailedException e) {
+		String result = "Probably due to syntax error or wrong configuration file.";
+		String message = e.getMessage();
+		if (message != null) {
+			result = result + "<br>" + message;
+		}
+		return result;
+	}
+
 	private boolean shouldReformat(boolean wholeFileOrSelectedText, Mode mode) {
 		switch (mode) {
-			/*when formatting only vcs changes, this is needed.*/
-			case ALWAYS_FORMAT:
-				return true;
-			/*live templates gets broken without that*/
-			case WITH_CTRL_SHIFT_ENTER_CHECK:
-				return wholeFileOrSelectedText;
+		/* when formatting only vcs changes, this is needed. */
+		case ALWAYS_FORMAT:
+			return true;
+			/* live templates gets broken without that */
+		case WITH_CTRL_SHIFT_ENTER_CHECK:
+			return wholeFileOrSelectedText;
 		}
 		return true;
 	}
