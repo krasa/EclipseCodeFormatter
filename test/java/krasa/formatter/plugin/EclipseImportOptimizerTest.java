@@ -1,4 +1,4 @@
-package krasa.formatter.plugin.processor;
+package krasa.formatter.plugin;
 
 import static org.easymock.EasyMock.*;
 
@@ -9,7 +9,6 @@ import junit.framework.Assert;
 import krasa.easymock.EasyMockTest;
 import krasa.easymock.Mocked;
 import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.plugin.ImportSorterAdapter;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 
@@ -21,7 +20,7 @@ import org.junit.Test;
  * @author Vojtech Krasa
  */
 
-public class ImportOrderProcessorTest extends EasyMockTest {
+public class EclipseImportOptimizerTest extends EasyMockTest {
 	@Mocked
 	protected ImportSorterAdapter importSorter;
 	@Mocked
@@ -34,34 +33,27 @@ public class ImportOrderProcessorTest extends EasyMockTest {
 	@Test
 	public void testInitializeImportSorter() throws Exception {
 		expect(settings.isImportOrderFromFile()).andReturn(true);
-		expect(orderProvider.getModifiedMonitor()).andReturn(monitor);
-		expect(orderProvider.get()).andReturn(getStrings());
-
-		expect(settings.isImportOrderFromFile()).andReturn(true);
-		expect(orderProvider.wasChanged(monitor)).andReturn(true);
-		expect(orderProvider.getModifiedMonitor()).andReturn(monitor);
+		expect(settings.getImportOrderProvider()).andReturn(orderProvider);
 		expect(orderProvider.get()).andReturn(getStrings());
 
 		replayAll();
 
-		ImportOrderProcessor importOrderProcessor = new ImportOrderProcessor(settings, orderProvider);
+		EclipseImportOptimizer eclipseImportOptimizer = new EclipseImportOptimizer();
 
-		ImportSorterAdapter importSorter = importOrderProcessor.getImportSorter();
-		Assert.assertNotNull(importSorter);
-		importSorter = importOrderProcessor.getImportSorter();
+		ImportSorterAdapter importSorter = eclipseImportOptimizer.getImportSorter(settings);
 		Assert.assertNotNull(importSorter);
 	}
 
 	@Test
-	public void testInitializeImportSorter2() throws Exception {
+	public void testInitializeImportSorterFromFile() throws Exception {
 		expect(settings.isImportOrderFromFile()).andReturn(false);
 		expect(settings.getImportOrderAsList()).andReturn(new ArrayList<String>());
 
 		replayAll();
 
-		ImportOrderProcessor importOrderProcessor = new ImportOrderProcessor(settings, orderProvider);
+		EclipseImportOptimizer eclipseImportOptimizer = new EclipseImportOptimizer();
 
-		ImportSorterAdapter importSorter = importOrderProcessor.getImportSorter();
+		ImportSorterAdapter importSorter = eclipseImportOptimizer.getImportSorter(settings);
 		Assert.assertNotNull(importSorter);
 	}
 

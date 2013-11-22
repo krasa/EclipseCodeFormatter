@@ -32,6 +32,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiFile;
 
 //import com.intellij.notification.impl.NotificationsConfiguration;
 
@@ -69,6 +70,10 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 				NotificationDisplayType.BALLOON);
 		NotificationsConfiguration.getNotificationsConfiguration().register(GROUP_DISPLAY_ID_ERROR,
 				NotificationDisplayType.BALLOON);
+	}
+
+	public static Settings getSettings(PsiFile psiFile) {
+		return getInstance(psiFile.getProject()).getSettings();
 	}
 
 	public void install(@NotNull Settings settings) {

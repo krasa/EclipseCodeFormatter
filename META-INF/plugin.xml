@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>3.9.0</version>
+	<version>4.0.0</version>
 
 	<idea-version since-build="133.79" until-build=""/>
 	<!--<idea-version since-build="90.000" until-build="109.999"/>-->
@@ -29,6 +29,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>4.0.0 (2013-11-21)
+        <br>- Proper Import Optimizer integration, it is no longer true that IntelliJ's Import Optimizing must be turned off, quite the opposite.
         <br>3.9.0 (2013-11-21)
         <br>- IJ 13 API changes
         <br>3.8.1 (2013-10-17)
@@ -40,98 +42,7 @@
         <br>- settings validations
         <br>3.6.0 (2013-04-22)
         <br>- import order fix - issue #44
-        <br>3.5.1 (2013-04-13)
-        <br>- debug logging
-        <br>3.5 (2013-01-28)
-        <br>- generation of new profile Id was not neccesary in some cases
-        <br>3.3 (2013-01-17)
-        <br>- support for different format of import order settings file
-        <br>3.3 (2013-01-14)
-        <br>- fixed loading of xml profile
-        <br>3.2.1 (2012-12-09)
-        <br>- compiled with java 1.6
-        <br>3.2 (2012-12-08)
-        <br>- new feature: support for xml config file for JavaScript formatter 
-        <br>3.1 (2012-11-30)
-        <br>- fixed redundant new line at imports under specific conditions
-        <br>3.0 (2012-11-10)
-        <br>- fixed radio buttons at settings form
-        <br>2.9 (2012-11-09)
-        <br>- attempt to fix NPE on import optimizing
-        <br>2.8 (2012-10-15)
-        <br>- fixed optimize imports action shortcut
-        <br>2.7 (2012-09-16)
-        <br>- fixed toolbar action for IDEs which did not support it
-        <br>2.6 (2012-09-12)
-        <br>- improved error notification - only baloon is displayed, when formatting fails due to syntax error
-        <br>2.5 (2012-08-28)
-        <br>- new JavaScript comments formatting - turned off by default
-        <br>2.4 (2012-08-01)
-        <br>- new action for import optimalization, it de/registeres shortcuts of default action on formatter switch.
-        <br>- automatic turn off of IntelliJ's import optimalization on code reformatting - which causes problems.
-        <br>2.3 (2012-07-12)
-        <br>- fixed bug: log spam 
-        <br>2.2 (2012-06-30)
-        <br>- added button for switching formatters to the main toolbar
-        <br>2.1 (2012-06-22)
-        <br>- added support for formatting GWT native methods by Google Plugin for Eclipse 
-        <br>2.0 (2012-05-24)
-        <br>- enabled for other IDEs
-        <br>- optimized settings form and added links to Home page and Help.
-        <br>1.9.x.1 (2012-04-09)
-        <br>- optimized settings form and fixed scrollbars
-        <br>1.9 (2012-04-08)
-        <br>- new feature: support for xml config file for java formatter
-        <br>1.8 (2012-04-04)
-        <br>- fixed bug: error when calling a live template from a file which has syntax errors
-        <br>- fixed bug: duplication of profiles
-        <br>- fixed bug: quick swich of code formatter now applies to all opened projects which uses same profile
-        <br>- new donation button :-)
-        <br>1.7 (2012-03-25)
-        <br>- new features: profiles, import/export of settings, loading of imports order from eclipse settings file
-        <br>- fixed import sorting when no order is specified
-        <br>- deleted old imports formatter
-        <br>1.6 (2012-03-21)
-        <br>- fixed bug - new import sorting was sometimes wrong
-        <br>1.5.x.1 (2012-03-16)
-        <br>- fixed default import order - if you already installed 1.5, you need to change it manually
-        <br>1.5 (2012-03-15)
-        <br>- added new experimental Import optimizer, which should work exactly like the Eclipse's one.
-        <br>- fixed bug - formatting one file multiple times toggles imports formatting
-        <br>1.4 (2012-03-10)
-        <br>- added default language level for java formatter(1.5) and more robust handling of config file.
-        <br>1.3 (2012-02-21)
-        <br>- new JavaScript formatting support!
-        <br>1.2 (2012-02-20)
-        <br>- fixed bug - it was possible to get an error about wrong line separators
-        <br>1.1 (2012-02-16)
-        <br>- fixed error logging
-        <br>- fixed bug - caret position was sometimes changed after reformatting
-        <br>- fixed bug - ctrl+shift+enter did not work correctly
-        <br>- fixed bug - optimizing of imports will be done only when the whole file is reformatted.
-        <br>1.0 (2012-02-15)
-        <br>- new FileChooser dialog
-        <br>- fixed bug with loading of plugin
-        <br>0.9 (2012-02-14)
-        <br>- caching of config file
-        <br>- improved error handling
-        <br>0.8 (2012-02-13)
-        <br>- fixed rebuild for 11.1 build 114.65
-        <br>0.7 (2012-02-13)
-        <br>- rebuild for 11.1 build 114.65
-        <br>0.6 (2011-12-1)
-        <br>- new ability to disable IntelliJ's code formatter for certain file types
-        <br>0.5 (2011-11-26)
-        <br>- improved imports group joining
-        <br>0.4 (2011-11-25)
-        <br>- fixed bug with optimizing imports
-        <br>0.3 (2011-11-24)
-        <br>- new Eclipse like Optimizing Imports function
-        <br>- notification about successful formatting will come up only when formatted area is longer than 300 character.
-        <br>0.2 (2011-11-17)
-        <br>- fixed bug -when file was edited and editor was closed
-        and then file was reformatted without prior saving,
-        changes was lost.
+      	<br>...
         <br>0.1 (2011-11-01)
         <br>- Initial release
         <br>
@@ -163,15 +74,11 @@
 				description="Switch formatter between Eclipse and IntelliJ">
 			<add-to-group group-id="MainToolBar" anchor="last"/>
 		</action>
-		<action id="EclipseFormatterPluginOptimizeImports" class="krasa.formatter.action.OptimizeImportsAction"
-				text="Optimize Imports by Eclipse Formatter Plugin"
-				description="Optimize Imports by Eclipse Formatter Plugin">
-			<add-to-group group-id="CodeMenu" anchor="after" relative-to-action="CodeFormatGroup"/>
-		</action>
 	</actions>
-	
-	<!--<extensions defaultExtensionNs="com.intellij" >-->
-		<!--<lang.importOptimizer order="FIRST" language="JAVA" implementationClass="krasa.formatter.plugin.processor.ImportOrderProcessor"/>-->
-	<!--</extensions>-->
-		
+
+	<extensions defaultExtensionNs="com.intellij">
+		<lang.importOptimizer order="FIRST" language="JAVA"
+							  implementationClass="krasa.formatter.plugin.EclipseImportOptimizer"/>
+	</extensions>
+
 </idea-plugin>

@@ -19,16 +19,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.util.IncorrectOperationException;
 
 /**
  * @author Vojtech Krasa
@@ -50,29 +44,6 @@ public class FileUtils {
 
 	public static boolean isJava(PsiFile psiFile) {
 		return psiFile.getName().endsWith(".java");
-	}
-
-	public static void optimizeImportsByIntellij(PsiFile psiFile) {
-
-		Project project = psiFile.getProject();
-		final PsiImportList newImportList = JavaCodeStyleManager.getInstance(project).prepareOptimizeImportsResult(
-				(PsiJavaFile) psiFile);
-
-		try {
-			final PsiDocumentManager manager = PsiDocumentManager.getInstance(project);
-			final Document document = manager.getDocument(psiFile);
-			if (document != null) {
-				manager.commitDocument(document);
-			}
-			final PsiImportList oldImportList = ((PsiJavaFile) psiFile).getImportList();
-			assert oldImportList != null;
-			if (newImportList != null) {
-				oldImportList.replace(newImportList);
-			}
-			manager.doPostponedOperationsAndUnblockDocument(document);
-		} catch (IncorrectOperationException e) {
-			LOG.error(e);
-		}
 	}
 
 	public static Properties readPropertiesFile(File file, Properties defaultConfig) {

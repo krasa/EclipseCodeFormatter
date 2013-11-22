@@ -10,6 +10,7 @@ package krasa.formatter.settings;
 
 import java.util.List;
 
+import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import krasa.formatter.utils.StringUtils;
@@ -52,6 +53,8 @@ public class Settings {
 	protected transient JavaPropertiesProvider javaPropertiesProvider;
 	@Transient
 	protected transient JSPropertiesProvider jsPropertiesProvider;
+	@Transient
+	protected transient ImportOrderProvider importOrderProvider;
 	private boolean enableJSProcessor;
 	private String selectedJavaScriptProfile;
 
@@ -118,6 +121,7 @@ public class Settings {
 	}
 
 	public void setImportOrderConfigFilePath(final String importOrderConfigFilePath) {
+		importOrderProvider = null;
 		this.importOrderConfigFilePath = importOrderConfigFilePath;
 	}
 
@@ -147,6 +151,13 @@ public class Settings {
 		return javaPropertiesProvider;
 	}
 
+	public ImportOrderProvider getImportOrderProvider() {
+		if (importOrderProvider == null) {
+			importOrderProvider = new ImportOrderProvider(this);
+		}
+		return importOrderProvider;
+	}
+
 	public boolean isEnableJSProcessor() {
 		return enableJSProcessor;
 	}
@@ -162,6 +173,10 @@ public class Settings {
 	public void setSelectedJavaScriptProfile(String selectedJavaScriptProfile) {
 		jsPropertiesProvider = null;
 		this.selectedJavaScriptProfile = selectedJavaScriptProfile;
+	}
+
+	public boolean isEnabled() {
+		return getFormatter() == Formatter.ECLIPSE;
 	}
 
 	public static enum Formatter {

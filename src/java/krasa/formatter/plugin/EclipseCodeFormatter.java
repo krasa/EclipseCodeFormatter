@@ -6,11 +6,9 @@ import java.util.List;
 import krasa.formatter.eclipse.CodeFormatterFacade;
 import krasa.formatter.eclipse.FileDoesNotExistsException;
 import krasa.formatter.plugin.processor.GWTProcessor;
-import krasa.formatter.plugin.processor.ImportOrderProcessor;
 import krasa.formatter.plugin.processor.JSCommentsFormatterProcessor;
 import krasa.formatter.plugin.processor.Processor;
 import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.FileUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +38,6 @@ public class EclipseCodeFormatter {
 	public EclipseCodeFormatter(@NotNull Settings settings, @NotNull CodeFormatterFacade codeFormatterFacade1) {
 		codeFormatterFacade = codeFormatterFacade1;
 		postProcessors = new ArrayList<Processor>();
-		postProcessors.add(new ImportOrderProcessor(settings, new ImportOrderProvider(settings)));
 		postProcessors.add(new GWTProcessor(settings));
 		postProcessors.add(new JSCommentsFormatterProcessor(settings));
 	}

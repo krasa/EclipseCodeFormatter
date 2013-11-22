@@ -1,6 +1,7 @@
 package krasa.formatter.plugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,6 +20,10 @@ public class ImportSorterAdapter {
 
 	public ImportSorterAdapter(List<String> importsOrder) {
 		this.importsOrder = new ArrayList<String>(importsOrder);
+	}
+
+	public String getImportsOrderAsString() {
+		return Arrays.toString(importsOrder.toArray());
 	}
 
 	public void sortImports(Document document) {
@@ -89,6 +94,5 @@ public class ImportSorterAdapter {
 	private boolean isNotValidImport(int i) {
 		return i <= START_INDEX_OF_IMPORTS_PACKAGE_DECLARATION;
 	}
-
 
 }
