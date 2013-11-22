@@ -29,18 +29,21 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 	@Override
 	protected void validateConfig(Properties config, File file) {
 		super.validateConfig(config, file);
-		String sourceVersionString = config.getProperty("org.eclipse.jdt.core.compiler.source");
+		setLanguageLevel(config, "org.eclipse.jdt.core.compiler.source");
+	}
+
+	private void setLanguageLevel(Properties config, final String key) {
+		String sourceVersionString = config.getProperty(key);
 		if (sourceVersionString != null) {
 			float sourceVersion = 0;
 			try {
 				sourceVersion = Float.parseFloat(sourceVersionString);
 			} catch (NumberFormatException e) {
-				throw new RuntimeException("Illegal value for org.eclipse.jdt.core.compiler.source property ("
-						+ sourceVersionString + ") - supported Java source versions are 1.5, 1.6, 1.7, or 1.8.");
+				throw new RuntimeException("Illegal value for " + key + " property (" + sourceVersionString
+						+ ") - supported Java source versions are 1.5, 1.6, 1.7");
 			}
-			if (sourceVersion < 1.5) {
-				throw new RuntimeException("Illegal value for org.eclipse.jdt.core.compiler.source property ("
-						+ sourceVersionString + ") - Eclipse formatter requires a Java source version >= 1.5.");
+			if (sourceVersion < 1.7) {
+				config.setProperty(key, "1.7");
 			}
 		}
 	}

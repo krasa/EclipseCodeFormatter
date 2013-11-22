@@ -32,6 +32,7 @@
 	<change-notes><![CDATA[
         <br>4.0.0 (2013-11-21)
         <br>- Proper Import Optimizer integration, it is no longer true that IntelliJ's Import Optimizing must be turned off, quite the opposite.
+        <br>- Hard-coded using of language level to 1.7 if configured lower in eclipse settings file, to be more user friendly.
         <br>3.9.0 (2013-11-21)
         <br>- IJ 13 API changes
         <br>3.8.1 (2013-10-17)
