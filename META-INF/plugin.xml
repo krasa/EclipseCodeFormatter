@@ -6,7 +6,8 @@
 	<id>EclipseCodeFormatter</id>
 	<version>4.0.0</version>
 
-	<idea-version since-build="133.79" until-build=""/>
+	<!--<idea-version since-build="133.79" until-build=""/>-->
+	<idea-version since-build="110.137" until-build="132.637"/>
 
 	<description><![CDATA[
         Allows using Eclipse's code formatter directly from IntelliJ.<br>
@@ -30,7 +31,7 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>4.0.0 (2013-11-21)
+        <br>4.0.0 (2013-11-22)
         <br>- Proper Import Optimizer integration, it is no longer true that IntelliJ's Import Optimizing must be turned off, quite the opposite.
         <br>- Hard-coded using of language level to 1.7 if configured lower in eclipse settings file, to be more user friendly.
         <br>3.9.0 (2013-11-21)

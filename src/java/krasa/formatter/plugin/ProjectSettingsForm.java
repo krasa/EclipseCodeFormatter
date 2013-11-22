@@ -31,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.centerkey.utils.BareBonesBrowserLaunch;
+import com.intellij.ide.ui.ListCellRendererWrapper;
 import com.intellij.openapi.application.ex.ApplicationEx;
 import com.intellij.openapi.application.ex.ApplicationManagerEx;
 import com.intellij.openapi.diagnostic.Logger;
@@ -48,7 +49,6 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import com.intellij.ui.popup.list.ListPopupImpl;
@@ -340,7 +340,7 @@ public class ProjectSettingsForm {
 
 		});
 
-		profiles.setRenderer(new ListCellRendererWrapper() {
+		profiles.setRenderer(new ListCellRendererWrapper(profiles.getRenderer()) {
 			@Override
 			public void customize(JList jList, Object value, int i, boolean b, boolean b1) {
 				if (value != null) {
@@ -510,7 +510,7 @@ public class ProjectSettingsForm {
 				: LocalFileSystem.getInstance().findFileByPath(text);
 
 		// 10.5 does not have #chooseFile
-		VirtualFile[] virtualFile = FileChooser.chooseFiles(descriptor, getProject(), toSelect);
+		VirtualFile[] virtualFile = FileChooser.chooseFiles(getProject(), descriptor, toSelect);
 		if (virtualFile != null && virtualFile.length > 0) {
 			target.setText(virtualFile[0].getPath());
 		}
