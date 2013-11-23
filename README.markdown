@@ -11,17 +11,17 @@ Currently supports formatting of
 -  [Download the plugin and install](https://code.google.com/p/eclipse-code-formatter-intellij-plugin/)
 -  Configure it
   -  Get Eclipse formatter settings:
-  	-  Either enable project specific formatter settings to get org.eclipse.jdt.core.prefs
-  	  - Go to Windows | Preferences | Java | Code Style | Formatter and click on "Export all..." button.
+  	- Either export formatter profiles to get *.xml file
+  	  - Go to Eclise | Windows | Preferences | Java | Code Style | Formatter and click on "Export all..." button.
+  	  - Eclipse do not export default profiles, so you have to make your own
+  	  - The result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/format.xml)
+	- Or enable project specific formatter settings to get org.eclipse.jdt.core.prefs
   	  - With your project open in Eclipse's workspace, right-click the project and choose Properties.
   	  - Go to Java Code Style | Formatter and select Enable project specific settings.
   	  - Also in the project properties, go to Java Compiler and select Enable project specific settings. *Make sure that the Compiler compliance level is set right.*
   	  - Click OK to save the settings.
   	  - Go to the .settings directory inside your project's directory. There you will find the org.eclipse.jdt.core.prefs file which contains the Eclipse formatter settings.
-  	  - the result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/org.eclipse.jdt.core.prefs) 
-  	- Or export formatter profiles to get *.xml file
-  	  - Eclipse do not export default profiles, so you have to make your own
-  	  - the result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/format.xml)
+  	  - The result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/org.eclipse.jdt.core.prefs) 
   - Set path to the file (IntelliJ | Settings | Eclipse Code Formatter | field "Eclipse preference file"), 
   - When using exported profiles(xml file), select desired profile in the combobox "Java formatter profile"
   - Check "Optimizing Imports" configuration
@@ -30,7 +30,7 @@ Currently supports formatting of
   	- For versions lower than 4.0 - make sure to keep disabled IntelliJ's Import Optimizing in the reformat dialog (Settings | Editor | Show "Reformat Code" dialog), the plugin will take care of imports anyway 
 -  Format code as usual, notice the green bubble notification about successful formatting 
   -  you can turn notifications off at (Settings | Notifications)
--  Use Ctrl+Alt+O as usual, it was overridden to use this plugin
+-  Use Ctrl+Alt+O as usual, it will use this plugin
 -  Use Ctrl + ~ for quick switch between formatters or icon at the main toolbar
  
 [Quick video](http://www.dropbox.com/s/2vw60a0nmpcxuiq/settingsEclipseFormatter.avi )
