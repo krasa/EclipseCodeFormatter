@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>4.0.0</version>
+	<version>4.0.1</version>
 
 	<idea-version since-build="133.79" until-build=""/>
 
@@ -30,7 +30,9 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>4.0.0 (2013-11-21)
+        <br>4.0.1 (2013-11-23)
+        <br>- Updated libs for Java formatting to Eclipse 4.3.1
+        <br>4.0.0 (2013-11-22)
         <br>- Proper Import Optimizer integration, it is no longer true that IntelliJ's Import Optimizing must be turned off, quite the opposite.
         <br>- Hard-coded using of language level to 1.7 if configured lower in eclipse settings file, to be more user friendly.
         <br>3.9.0 (2013-11-21)
