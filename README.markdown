@@ -36,7 +36,7 @@ Currently supports formatting of
 - Use Ctrl+Alt+O as usual, it will use this plugin
 - Use Ctrl + ~ for quick switch between formatters or icon at the main toolbar
 - [Give it 5 starts] (http://plugins.jetbrains.com/plugin/?idea&id=6546)
-- [Donate some money] (https://www.paypal.com/cz/cgi-bin/webscr?cmd=_flow&SESSION=tvqLtls2p94l1dvuKibTeD5BtbVLdLRFh_QwKC1_0aVdKnGH5qc3z1H8ZxK&dispatch=5885d80a13c0db1f8e263663d3faee8def8934b92a630e40b7fef61ab7e9fe63)
+- [Donate some money] (https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest)
 
 [Quick video](http://www.dropbox.com/s/2vw60a0nmpcxuiq/settingsEclipseFormatter.avi )
 
