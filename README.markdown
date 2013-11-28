@@ -52,15 +52,17 @@ Currently supports formatting of
 
 # Possible problems with Java formatting #
 - nothing was formatted or formatting failed 
+    -for version lower than 4.0 
   - make sure you are using proper language level
-    -for version lower than 4.0 - Java language level is set to 1.5 by default. For 1.6 make sure following lines are in the config file, same goes for 1.7
+  - - Java language level is set to 1.5 by default. For 1.6 make sure following lines are in the config file, same goes for 1.7
       - org.eclipse.jdt.core.compiler.compliance=1.6
       - org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.6
       - org.eclipse.jdt.core.compiler.source=1.6
 - trailing spaces inside javadocs are stripped.  
   - set "Strip trailing spaces on save" to "None" 
-- file seems to be formatted differently
-  - probably tab size and indendation is set differently than in eclipse (Settings-Code Style-Java). Using of either tab only or space only whitespace is recommended.
+- file is formatted differently
+  - The file is actually formatted fine, it just looks different in the editor, as the tab size and indendation are  set differently in IntelliJ (Settings | Code Style | Java) than in Eclipse. Using of either tab only or space only whitespace is recommended.
+  - Or it is a bug.
 - Eclipse indendation is configured for 2 spaces, but a new line gets indented by 4 spaces when Enter is pressed.
   - change code style in IntelliJ. Not all things get formatted by this plugin when you type them.
 - If nothing helps
