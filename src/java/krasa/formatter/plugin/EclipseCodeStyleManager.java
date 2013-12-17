@@ -51,11 +51,10 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	@Nullable
 	private EclipseCodeFormatter eclipseCodeFormatterJs;
 
-	public EclipseCodeStyleManager(@NotNull CodeStyleManager original, @NotNull Settings settings,
-			@NotNull Project project) {
+	public EclipseCodeStyleManager(@NotNull CodeStyleManager original, @NotNull Settings settings) {
 		super(original);
 		this.settings = settings;
-		notifier = new Notifier(project);
+		notifier = new Notifier();
 		eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, new JavaCodeFormatterFacade(
 				settings.getJavaProperties()));
 	}
@@ -85,7 +84,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 				LOG.debug("virtual file is null");
 				Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO, "",
 						Notifier.NO_FILE_TO_FORMAT, NotificationType.ERROR);
-				notifier.showNotification(notification);
+				notifier.showNotification(notification, psiFile.getProject());
 				return;
 			}
 			boolean wholeFileOrSelectedText = isWholeFileOrSelectedText(psiFile, startOffset, endOffset);
@@ -115,7 +114,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 			notifier.notifyFailedFormatting(psiFile, formattedByIntelliJ, e);
 		} catch (final ImportSorterException e) {
 			LOG.error(e);
-			notifier.notifyBrokenImportSorter();
+			notifier.notifyBrokenImportSorter(psiFile.getProject());
 		} catch (final FormattingFailedException e) {
 			LOG.debug("startOffset" + startOffset + ", endOffset:" + endOffset + ", length of file "
 					+ psiFile.getText().length(), e);

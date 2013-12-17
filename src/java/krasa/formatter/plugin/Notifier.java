@@ -2,8 +2,6 @@ package krasa.formatter.plugin;
 
 import krasa.formatter.settings.ProjectSettingsComponent;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -17,13 +15,6 @@ import com.intellij.psi.PsiFile;
 public class Notifier {
 
 	public static final String NO_FILE_TO_FORMAT = "No file to format";
-
-	@NotNull
-	private final Project project;
-
-	public Notifier(Project project) {
-		this.project = project;
-	}
 
 	public void notifyFailedFormatting(PsiFile psiFile, boolean formattedByIntelliJ, Exception e) {
 		String error = e.getMessage() == null ? "" : e.getMessage();
@@ -39,28 +30,28 @@ public class Notifier {
 		}
 		Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR, "", content,
 				NotificationType.ERROR);
-		showNotification(notification);
+		showNotification(notification, psiFile.getProject());
 	}
 
 	void notifyFormattingWasDisabled(PsiFile psiFile) {
 		Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO, "",
 				psiFile.getName() + " - formatting was disabled for this file type", NotificationType.WARNING);
-		showNotification(notification);
+		showNotification(notification, psiFile.getProject());
 	}
 
 	void notifySuccessFormatting(PsiFile psiFile, boolean formattedByIntelliJ) {
 		String content;
 		if (formattedByIntelliJ) {
-			content = psiFile.getName() + " formatted sucessfully by IntelliJ code formatter";
+			content = psiFile.getName() + " formatted successfully by IntelliJ code formatter";
 		} else {
-			content = psiFile.getName() + " formatted sucessfully by Eclipse code formatter";
+			content = psiFile.getName() + " formatted successfully by Eclipse code formatter";
 		}
 		Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO, "", content,
 				NotificationType.INFORMATION);
-		showNotification(notification);
+		showNotification(notification, psiFile.getProject());
 	}
 
-	void showNotification(final Notification notification) {
+	void showNotification(final Notification notification, final Project project) {
 		ApplicationManager.getApplication().invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -69,11 +60,11 @@ public class Notifier {
 		});
 	}
 
-	public void notifyBrokenImportSorter() {
+	public void notifyBrokenImportSorter(Project project) {
 		String content = "Formatting failed due to new Import optimizer.";
 		Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR, "", content,
 				NotificationType.ERROR);
-		showNotification(notification);
+		showNotification(notification, project);
 
 	}
 

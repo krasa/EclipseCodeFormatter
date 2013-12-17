@@ -52,7 +52,7 @@ public class ProjectCodeStyleInstaller {
 	private void installCodeFormatter(@NotNull Settings settings) {
 		CodeStyleManager manager = CodeStyleManager.getInstance(project);
 		if (Settings.Formatter.ECLIPSE.equals(settings.getFormatter())) {
-			registerCodeStyleManager(project, new EclipseCodeStyleManager(manager, settings, project));
+			registerCodeStyleManager(project, new EclipseCodeStyleManager(manager, settings));
 		}
 	}
 
@@ -65,6 +65,14 @@ public class ProjectCodeStyleInstaller {
 
 	}
 
+	/**
+	 * Dmitry Jemerov in unrelated discussion: "Trying to replace IDEA's core components with your custom
+	 * implementations is something that we consider a very bad idea, and it's pretty much guaranteed to break in future
+	 * versions of IntelliJ IDEA. I certainly hope that you won't stomp on any other plugins doing that, because no one
+	 * else is doing it. It would be better to find another approach to solving your problem."
+	 * 
+	 * LoL
+	 */
 	private static void registerCodeStyleManager(@NotNull Project project, @NotNull CodeStyleManager manager) {
 		LOG.info("Registering code style manager '" + manager + "' for project '" + project.getName() + "'");
 		MutablePicoContainer container = (MutablePicoContainer) project.getPicoContainer();
