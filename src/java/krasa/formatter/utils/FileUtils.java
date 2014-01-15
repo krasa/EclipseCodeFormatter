@@ -81,7 +81,7 @@ public class FileUtils {
 			throw new FileDoesNotExistsException(file);
 		}
 		if (profile == null) {
-			throw new IllegalStateException("loading of profile settings failed, selected profile is null");
+			throw new IllegalStateException("no profile selected, go to settings and select proper settings file");
 		}
 		boolean profileFound = false;
 		try { // load file profiles
