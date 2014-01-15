@@ -11,6 +11,7 @@ import java.util.Properties;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.plugin.InvalidPropertyFile;
 
 import org.jetbrains.annotations.NotNull;
@@ -129,7 +130,7 @@ public class FileUtils {
 		return properties;
 	}
 
-	public static List<String> getProfileNamesFromConfigXML(File file) {
+	public static List<String> getProfileNamesFromConfigXML(File file) throws ParsingFailedException {
 		List<String> profileNames = new ArrayList<String>();
 		if (file.exists()) {
 			try { // load file profiles
@@ -150,7 +151,8 @@ public class FileUtils {
 					}
 				}
 			} catch (Exception e) {
-				LOG.error(e);
+				LOG.info(e);
+				throw new ParsingFailedException(e);
 			}
 
 		} else {

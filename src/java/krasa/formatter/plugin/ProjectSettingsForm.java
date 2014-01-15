@@ -22,6 +22,7 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.DocumentEvent;
 
+import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
@@ -63,6 +64,7 @@ import com.intellij.ui.popup.mock.MockConfirmation;
  */
 public class ProjectSettingsForm {
 	private static final Logger LOG = Logger.getInstance(ProjectSettingsForm.class.getName());
+	public static final String PARSING_FAILED = "PARSING FAILED";
 
 	private JPanel rootComponent;
 
@@ -433,7 +435,11 @@ public class ProjectSettingsForm {
 		String text = pathToEclipsePreferenceFile.getText();
 		if (!text.isEmpty()) {
 			if (text.endsWith("xml")) {
-				profilesModel.addAll(FileUtils.getProfileNamesFromConfigXML(new File(text)));
+				try {
+					profilesModel.addAll(FileUtils.getProfileNamesFromConfigXML(new File(text)));
+				} catch (ParsingFailedException e) {
+					profilesModel.add(PARSING_FAILED);
+				}
 			} else {
 				// not xml
 			}
@@ -451,6 +457,7 @@ public class ProjectSettingsForm {
 				profilesModel.setSelectedItem(items.get(0));
 			}
 		}
+
 		return profilesModel;
 	}
 
@@ -608,10 +615,18 @@ public class ProjectSettingsForm {
 		}
 		displayedSettings.setFormatOtherFileTypesWithIntelliJ(formatOtherFilesWithExceptionsRadioButton.isSelected());
 		displayedSettings.setImportOrderFromFile(importOrderConfigurationFromFileRadioButton.isSelected());
-		displayedSettings.setSelectedJavaProfile((String) javaFormatterProfile.getSelectedItem());
-		displayedSettings.setSelectedJavaScriptProfile((String) javaScriptFormatterProfile.getSelectedItem());
+		displayedSettings.setSelectedJavaProfile(profileCheck(javaFormatterProfile.getSelectedItem()));
+		displayedSettings.setSelectedJavaScriptProfile(profileCheck(javaScriptFormatterProfile.getSelectedItem()));
 		getData(displayedSettings);
 		return displayedSettings;
+	}
+
+	private String profileCheck(final Object selectedItem) {
+		final String selectedItem1 = (String) selectedItem;
+		if (PARSING_FAILED.equals(selectedItem1)) {
+			return null;
+		}
+		return selectedItem1;
 	}
 
 	public void validate() throws ConfigurationException {

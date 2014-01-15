@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Properties;
 
 import krasa.formatter.common.ModifiableFile;
+import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 import krasa.formatter.utils.StringUtils;
@@ -28,8 +29,14 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 		List<String> order;
 		if (property != null) {
 			order = StringUtils.trimToList(property);
-		} else {
+		} else if (property == null && file.getName().endsWith(".prefs")) {
+			throw new ParsingFailedException(
+					"File is missing a property 'org.eclipse.jdt.ui.importorder', see instructions.");
+		} else if (file.getName().endsWith(".importorder")) {
 			order = loadImportOrderFile(file);
+		} else {
+			throw new ParsingFailedException(
+					"You must provide either *.importorder file or 'org.eclipse.jdt.ui.prefs' file, see instructions.");
 		}
 		return order;
 	}
@@ -44,7 +51,7 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 		List<String> order = new ArrayList<String>();
 		for (String s : fileLines) {
 			if (s.contains("=")) {
-				order.add(s.substring(s.indexOf("=")+1));
+				order.add(s.substring(s.indexOf("=") + 1));
 			}
 		}
 		return order;

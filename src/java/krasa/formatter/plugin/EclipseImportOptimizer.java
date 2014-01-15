@@ -1,6 +1,7 @@
 package krasa.formatter.plugin;
 
 import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.ProjectSettingsComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
@@ -44,8 +45,8 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 					}
 					process(document, file, new Range(0, 0, true));
 
-				} catch (IncorrectOperationException e) {
-					LOG.error(e);
+				} catch (Exception e) {
+					LOG.error("Eclipse Import Optimizer failed", e);
 				}
 			}
 		};
@@ -85,6 +86,8 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		try {
 			importSorter = getImportSorter(settings);
 			importSorter.sortImports(document);
+		} catch (ParsingFailedException e) {
+			throw e;
 		} catch (FileDoesNotExistsException e) {
 			throw e;
 		} catch (Exception e) {
