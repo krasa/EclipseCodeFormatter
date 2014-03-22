@@ -95,6 +95,12 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		return "ProjectSettingsComponent";
 	}
 
+	public void settingsUpdatedFromOtherProject(Settings updatedSettings) {
+		final Settings.Formatter formatter = settings.getFormatter();
+		settings = GlobalSettings.getInstance().getSettings(updatedSettings, project);
+		settings.setFormatter(formatter);
+		install(settings);
+	}
 	public void projectOpened() {
 		settings = GlobalSettings.getInstance().getSettings(settings, project);
 		install(settings);
@@ -145,6 +151,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		if (form != null) {
 			form.validate();
 			settings = form.exportDisplayedSettings();
+			GlobalSettings.getInstance().updateSettings(settings, project);
 			ProjectUtils.applyToAllOpenedProjects(settings);
 		}
 	}
@@ -163,15 +170,14 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 
 	@NotNull
 	public Settings getState() {
-		return GlobalSettings.getInstance().getSettings(settings, project);
+		return settings;
 	}
 
 	/**
 	 * sets profile for this project
 	 */
 	public void loadState(@NotNull Settings state) {
-		settings = GlobalSettings.getInstance().loadState(state, this);
-		install(settings);
+		settings = state;
 	}
 
 	public static ProjectSettingsComponent getInstance(Project project) {
@@ -187,4 +193,5 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 	public Settings getSettings() {
 		return settings;
 	}
+
 }

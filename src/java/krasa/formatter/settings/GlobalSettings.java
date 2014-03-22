@@ -67,6 +67,12 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 		return newSettings;
 	}
 
+	public Settings clone(Settings settings) {
+		Settings newSettings = new Settings();
+		XmlSerializerUtil.copyBean(settings, newSettings);
+		return newSettings;
+	}
+
 	public void updateSettings(Settings settings, Project project) {
 		if (settings.getId() == null) {
 			addToGlobalSettings(settings, project);
@@ -102,6 +108,10 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 
 	@NotNull
 	public Settings getSettings(@NotNull Settings state, @NotNull Project project) {
+		return clone(getSettingsFromGlobal(state, project));
+	}
+
+	private Settings getSettingsFromGlobal(Settings state, Project project) {
 		if (state.getId() == null && state.getName() == null) {
 			// Settings duplicateSettings = getDuplicateSettings(state);
 			if (isSameAsDefault(state)) {
@@ -178,10 +188,6 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 		deletedSettingsId.add(settings.getId());
 		Settings defaultSettings = getDefaultSettings();// to create default setting when it was deleted
 		ProjectUtils.notifyProjectsWhichUsesThisSettings(settings, project, defaultSettings);
-	}
-
-	public Settings loadState(Settings state, ProjectSettingsComponent projectSettingsComponent) {
-		return getSettings(state, projectSettingsComponent.getProject());
 	}
 
 }

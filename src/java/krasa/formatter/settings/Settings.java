@@ -334,6 +334,23 @@ public class Settings {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Settings settings = (Settings) o;
+
+		if (id != null ? !id.equals(settings.id) : settings.id != null) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
+	}
+
+	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Settings");

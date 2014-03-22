@@ -31,7 +31,7 @@ public class QuickChangeCodeFormatterAction extends QuickSwitchSchemeAction {
 		ProjectSettingsComponent instance = ProjectSettingsComponent.getInstance(project);
 		final Settings state = instance.getState();
 		state.setFormatter(formatter);
-		ProjectUtils.applyToAllOpenedProjects(state);
+		instance.install(state);
 	}
 
 	protected boolean isEnabled() {
