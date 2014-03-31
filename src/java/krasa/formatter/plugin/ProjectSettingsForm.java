@@ -24,6 +24,7 @@ import javax.swing.event.DocumentEvent;
 
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.GlobalSettings;
+import krasa.formatter.settings.ProjectSettingsComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 
@@ -271,7 +272,7 @@ public class ProjectSettingsForm {
 							new Runnable() {
 								@Override
 								public void run() {
-									exportDisplayedSettings();
+									apply();
 									createProfile();
 								}
 							}, new Runnable() {
@@ -300,7 +301,7 @@ public class ProjectSettingsForm {
 							"Profile was modified, save changes to current profile?", "Yes", "No", new Runnable() {
 								@Override
 								public void run() {
-									exportDisplayedSettings();
+									apply();
 									copyProfile();
 								}
 							}, new Runnable() {
@@ -415,6 +416,14 @@ public class ProjectSettingsForm {
 		});
 	}
 
+	private void apply() {
+		try {
+			ProjectSettingsComponent.getInstance(getProject()).apply();
+		} catch (ConfigurationException e1) {
+			throw new RuntimeException(e1);
+		}
+	}
+
 	private void setJavaFormatterProfileModel() {
 		String selectedProfile = displayedSettings != null ? displayedSettings.getSelectedJavaProfile() : null;
 		javaFormatterProfile.setModel(createProfilesModel(pathToEclipsePreferenceFileJava, selectedProfile));
@@ -482,7 +491,7 @@ public class ProjectSettingsForm {
 		createConfirmation("Profile was modified, save changes?", "Yes", "No", new Runnable() {
 			@Override
 			public void run() {
-				exportDisplayedSettings();
+				apply();
 				importFrom(getSelectedItem());
 			}
 		}, new Runnable() {
