@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>14.0.132.637</version>
+	<version>14.1.132.637</version>
 
 	<idea-version since-build="132.637" until-build=""/>
 
@@ -30,8 +30,10 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>14.1 (2014-04-08)
+        <br>- persisting of project specific enabling/disabling of the formatter
         <br>14.0 (2014-03-31)
-        <br>- project specific enabling/disabling
+        <br>- project specific enabling/disabling of the formatter
         <br>13.0.1.1 (2014-01-15)
         <br>- error handling
         <br>4.1.0 (2013-11-24)
