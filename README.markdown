@@ -44,10 +44,6 @@ Currently supports formatting of
 - [Give it 5 stars] (http://plugins.jetbrains.com/plugin/?idea&id=6546)
 - [Donate some money] (https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest)
 
-[Quick video](http://www.dropbox.com/s/2vw60a0nmpcxuiq/settingsEclipseFormatter.avi )
-
-
-
 
 
 # Possible problems with Java formatting #
