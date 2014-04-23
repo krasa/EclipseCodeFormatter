@@ -36,7 +36,7 @@ public class ProjectUtils {
 			if (component != null) {
 				Settings state = component.getSettings();
 				if (updatedSettings.getId().equals(state.getId())) {
-					component.install(updatedSettings);
+					component.settingsUpdatedFromOtherProject(updatedSettings);
 				}
 			}
 		}

@@ -11,6 +11,7 @@ import java.util.Properties;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.plugin.InvalidPropertyFile;
 
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +81,7 @@ public class FileUtils {
 			throw new FileDoesNotExistsException(file);
 		}
 		if (profile == null) {
-			throw new IllegalStateException("loading of profile settings failed, selected profile is null");
+			throw new IllegalStateException("no profile selected, go to settings and select proper settings file");
 		}
 		boolean profileFound = false;
 		try { // load file profiles
@@ -121,15 +122,15 @@ public class FileUtils {
 			throw new InvalidPropertyFile(e.getMessage(), e);
 		}
 		if (!profileFound) {
-			throw new IllegalStateException("profile not found in the file");
+			throw new IllegalStateException("profile not found in the file "+file.getAbsolutePath());
 		}
 		if (properties.size() == defaultSize) {
-			throw new IllegalStateException("no properties loaded, something is broken");
+			throw new IllegalStateException("no properties loaded, something is broken, file:"+file.getAbsolutePath());
 		}
 		return properties;
 	}
 
-	public static List<String> getProfileNamesFromConfigXML(File file) {
+	public static List<String> getProfileNamesFromConfigXML(File file) throws ParsingFailedException {
 		List<String> profileNames = new ArrayList<String>();
 		if (file.exists()) {
 			try { // load file profiles
@@ -150,7 +151,8 @@ public class FileUtils {
 					}
 				}
 			} catch (Exception e) {
-				LOG.error(e);
+				LOG.info(e);
+				throw new ParsingFailedException(e);
 			}
 
 		} else {

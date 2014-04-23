@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>4.1.0a</version>
+	<version>14.1.110.137</version>
 
 	<!--<idea-version since-build="133.79" until-build=""/>-->
 	<idea-version since-build="110.137" until-build="132.637"/>
@@ -31,22 +31,12 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>4.1.0 (2013-11-24)
-        <br>- Updated libs for Java formatting to Eclipse 4.3.1
-        <br>4.0.0 (2013-11-22)
-        <br>- Proper Import Optimizer integration, it is no longer true that IntelliJ's Import Optimizing must be turned off, quite the opposite.
-        <br>- Hard-coded using of language level to 1.7 if configured lower in eclipse settings file, to be more user friendly.
-        <br>3.9.0 (2013-11-21)
-        <br>- IJ 13 API changes
-        <br>3.8.1 (2013-10-17)
-        <br>- better error messages.
-        <br>3.8.0 (2013-10-15)
-        <br>- format "Only VCS changed text" fixed
-        <br>3.7.0 (2013-08-07)
-        <br>- fix for custom static imports order
-        <br>- settings validations
-        <br>3.6.0 (2013-04-22)
-        <br>- import order fix - issue #44
+        <br>14.1 (2014-04-08)
+        <br>- persisting of project specific enabling/disabling of the formatter
+        <br>14.0 (2014-03-31)
+        <br>- project specific enabling/disabling of the formatter
+        <br>13.0.1.1 (2014-01-15)
+        <br>- error handling
       	<br>...
         <br>0.1 (2011-11-01)
         <br>- Initial release

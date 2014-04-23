@@ -179,6 +179,10 @@ public class Settings {
 		return getFormatter() == Formatter.ECLIPSE;
 	}
 
+	boolean isNotSaved() {
+		return getId() == null && getName() == null;
+	}
+
 	public static enum Formatter {
 		DEFAULT,
 		ECLIPSE
@@ -331,6 +335,23 @@ public class Settings {
 
 	public void setImportOrderFromFile(boolean importOrderFromFile) {
 		this.importOrderFromFile = importOrderFromFile;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Settings settings = (Settings) o;
+
+		if (id != null ? !id.equals(settings.id) : settings.id != null) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
 	}
 
 	@Override

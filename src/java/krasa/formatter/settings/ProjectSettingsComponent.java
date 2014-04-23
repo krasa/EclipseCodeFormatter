@@ -17,17 +17,11 @@ import krasa.formatter.plugin.ProjectSettingsForm;
 import krasa.formatter.utils.ProjectUtils;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationsConfiguration;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
@@ -95,6 +89,12 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		return "ProjectSettingsComponent";
 	}
 
+	public void settingsUpdatedFromOtherProject(Settings updatedSettings) {
+		final Settings.Formatter formatter = settings.getFormatter();
+		settings = GlobalSettings.getInstance().getSettings(updatedSettings, project);
+		settings.setFormatter(formatter);
+		install(settings);
+	}
 	public void projectOpened() {
 		settings = GlobalSettings.getInstance().getSettings(settings, project);
 		install(settings);
@@ -145,6 +145,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		if (form != null) {
 			form.validate();
 			settings = form.exportDisplayedSettings();
+			GlobalSettings.getInstance().updateSettings(settings, project);
 			ProjectUtils.applyToAllOpenedProjects(settings);
 		}
 	}
@@ -163,15 +164,14 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 
 	@NotNull
 	public Settings getState() {
-		return GlobalSettings.getInstance().getSettings(settings, project);
+		return settings;
 	}
 
 	/**
 	 * sets profile for this project
 	 */
 	public void loadState(@NotNull Settings state) {
-		settings = GlobalSettings.getInstance().loadState(state, this);
-		install(settings);
+		settings = state;
 	}
 
 	public static ProjectSettingsComponent getInstance(Project project) {
@@ -187,4 +187,5 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 	public Settings getSettings() {
 		return settings;
 	}
+
 }

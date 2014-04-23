@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import krasa.formatter.settings.ProjectSettingsComponent;
 import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.ProjectUtils;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -25,22 +24,26 @@ public class ChangeFormatterToolbarAction extends AnAction {
 	public static final Icon ICON1 = IconLoader.getIcon("/krasa/formatter/IDEA.gif");
 
 	public void actionPerformed(AnActionEvent e) {
-		final Settings state = getSettings(e);
-		if (state != null) {
-			state.setFormatter(Settings.Formatter.DEFAULT == state.getFormatter() ? Settings.Formatter.ECLIPSE
+		Settings settings;
+		Project project = getProject(e);
+		if (project != null) {
+			ProjectSettingsComponent instance = ProjectSettingsComponent.getInstance(project);
+			settings = instance.getSettings();
+			settings.setFormatter(Settings.Formatter.DEFAULT == settings.getFormatter() ? Settings.Formatter.ECLIPSE
 					: Settings.Formatter.DEFAULT);
-			ProjectUtils.applyToAllOpenedProjects(state);
-			updateIcon(state, e.getPresentation());
+			instance.install(settings);
+			updateIcon(settings, e.getPresentation());
 		}
 	}
 
 	private Settings getSettings(AnActionEvent e) {
+		 Settings settings = null;
 		Project project = getProject(e);
 		if (project != null) {
 			ProjectSettingsComponent instance = ProjectSettingsComponent.getInstance(project);
-			return instance.getSettings();
+			settings = instance.getSettings();
 		}
-		return null;
+		return settings;
 	}
 
 	private Project getProject(AnActionEvent e) {

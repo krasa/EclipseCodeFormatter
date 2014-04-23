@@ -67,6 +67,12 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 		return newSettings;
 	}
 
+	public Settings clone(Settings settings) {
+		Settings newSettings = new Settings();
+		XmlSerializerUtil.copyBean(settings, newSettings);
+		return newSettings;
+	}
+
 	public void updateSettings(Settings settings, Project project) {
 		if (settings.getId() == null) {
 			addToGlobalSettings(settings, project);
@@ -102,7 +108,16 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 
 	@NotNull
 	public Settings getSettings(@NotNull Settings state, @NotNull Project project) {
-		if (state.getId() == null && state.getName() == null) {
+		Settings.Formatter formatter = state.getFormatter();
+		Settings clone = clone(getSettingsFromGlobal(state, project));
+		if (!state.isNotSaved()) {
+			clone.setFormatter(formatter);
+		}
+		return clone;
+	}
+
+	private Settings getSettingsFromGlobal(Settings state, Project project) {
+		if (state.isNotSaved()) {
 			// Settings duplicateSettings = getDuplicateSettings(state);
 			if (isSameAsDefault(state)) {
 				return getDefaultSettings();
@@ -111,7 +126,12 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 			return state;
 		} else {
 			for (Settings settings : settingsList) {
-				if (settings.getId().equals(state.getId()) || settings.getName().equals(state.getName())) {
+				if (settings.getId().equals(state.getId())) {
+					return settings;
+				}
+			}
+			for (Settings settings : settingsList) {
+				if (settings.getName().equals(state.getName())) {
 					return settings;
 				}
 			}
@@ -178,10 +198,6 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 		deletedSettingsId.add(settings.getId());
 		Settings defaultSettings = getDefaultSettings();// to create default setting when it was deleted
 		ProjectUtils.notifyProjectsWhichUsesThisSettings(settings, project, defaultSettings);
-	}
-
-	public Settings loadState(Settings state, ProjectSettingsComponent projectSettingsComponent) {
-		return getSettings(state, projectSettingsComponent.getProject());
 	}
 
 }
