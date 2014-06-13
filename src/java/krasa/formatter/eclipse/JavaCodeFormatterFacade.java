@@ -14,6 +14,8 @@ import org.eclipse.text.edits.TextEdit;
 
 import com.intellij.openapi.diagnostic.Logger;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Vojtech Krasa
  */
@@ -102,7 +104,8 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			} else {
 				throw new FormattingFailedException(getErrorMessage());
 			}
-			return doc.get();
+			//return doc.get();
+			return Pattern.compile("^([\\s]+\\*)([\\s]+)$", Pattern.MULTILINE).matcher(doc.get()).replaceAll("$1");
 		} catch (BadLocationException e) {
 			throw new RuntimeException(e);
 		}
