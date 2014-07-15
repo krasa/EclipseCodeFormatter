@@ -2,6 +2,7 @@ package krasa.formatter.eclipse;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
@@ -15,7 +16,9 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Method;
 import java.util.Properties;
 
 /**
@@ -56,8 +59,22 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		return codeFormatter;
 	}
 
-	private LanguageLevel getLanguageLevel(PsiFile psiFile) {
-		return JavaPsiImplementationHelper.getInstance(project).getEffectiveLanguageLevel(psiFile.getVirtualFile());
+	@NotNull
+	private LanguageLevel getLanguageLevel(@NotNull PsiFile psiFile) {
+		JavaPsiImplementationHelper instance = JavaPsiImplementationHelper.getInstance(project);
+		try {
+			Method getClassesLanguageLevel = instance.getClass().getMethod("getClassesLanguageLevel", VirtualFile.class);
+			return (LanguageLevel) getClassesLanguageLevel.invoke(instance, psiFile.getVirtualFile());
+		} catch (Exception e) {
+			try {
+				Method getClassesLanguageLevel = instance.getClass().getMethod("getEffectiveLanguageLevel", VirtualFile.class);
+				return (LanguageLevel) getClassesLanguageLevel.invoke(instance, psiFile.getVirtualFile());
+			} catch (Exception e1) {
+				LOG.error("Please report this", e);
+				LOG.error("Please report this", e1);
+				return LanguageLevel.JDK_1_7;
+			}
+		}
 	}
 
 	protected String formatInternal(String text, int startOffset, int endOffset, PsiFile psiFile) throws FileDoesNotExistsException {
