@@ -179,6 +179,10 @@ public class Settings {
 		return getFormatter() == Formatter.ECLIPSE;
 	}
 
+	boolean isNotSaved() {
+		return getId() == null && getName() == null;
+	}
+
 	public static enum Formatter {
 		DEFAULT,
 		ECLIPSE

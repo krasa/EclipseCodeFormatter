@@ -122,10 +122,10 @@ public class FileUtils {
 			throw new InvalidPropertyFile(e.getMessage(), e);
 		}
 		if (!profileFound) {
-			throw new IllegalStateException("profile not found in the file");
+			throw new IllegalStateException("profile not found in the file "+file.getAbsolutePath());
 		}
 		if (properties.size() == defaultSize) {
-			throw new IllegalStateException("no properties loaded, something is broken");
+			throw new IllegalStateException("no properties loaded, something is broken, file:"+file.getAbsolutePath());
 		}
 		return properties;
 	}
