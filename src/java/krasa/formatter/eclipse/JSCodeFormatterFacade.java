@@ -1,11 +1,11 @@
 package krasa.formatter.eclipse;
 
+import com.intellij.psi.PsiFile;
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.FormattingFailedException;
 import krasa.formatter.plugin.InvalidPropertyFile;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
-
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -38,7 +38,7 @@ public class JSCodeFormatterFacade extends CodeFormatterFacade {
 		return codeFormatter;
 	}
 
-	protected String formatInternal(String text, int startOffset, int endOffset) throws FileDoesNotExistsException {
+	protected String formatInternal(String text, int startOffset, int endOffset, PsiFile psiFile) throws FileDoesNotExistsException {
 		IDocument doc = new Document();
 		try {
 			// format the file (the meat and potatoes)

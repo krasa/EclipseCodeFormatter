@@ -1,10 +1,14 @@
 package krasa.formatter.eclipse;
 
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.JavaPsiImplementationHelper;
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.FormattingFailedException;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
-
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
 import org.eclipse.jface.text.BadLocationException;
@@ -12,7 +16,7 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
-import com.intellij.openapi.diagnostic.Logger;
+import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -20,28 +24,45 @@ import com.intellij.openapi.diagnostic.Logger;
 public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	private static final Logger LOG = Logger.getInstance(JavaCodeFormatterFacade.class.getName());
 
+	private Project project;
 	protected CodeFormatter codeFormatter;
+	private LanguageLevel effectiveLanguageLevel;
 	private JavaPropertiesProvider javaPropertiesProvider;
 	protected ModifiableFile.Monitor lastState;
 
-	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider) {
+	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider, Project project) {
 		this.javaPropertiesProvider = javaPropertiesProvider;
+		this.project = project;
 	}
 
-	private CodeFormatter getCodeFormatter() throws FileDoesNotExistsException {
-		if (codeFormatter == null || javaPropertiesProvider.wasChanged(lastState)) {
-			return newCodeFormatter();
+	private CodeFormatter getCodeFormatter(LanguageLevel level) throws FileDoesNotExistsException {
+		if (codeFormatter == null || javaPropertiesProvider.wasChanged(lastState) || this.effectiveLanguageLevel != level) {
+			return newCodeFormatter(level);
 		}
 		return codeFormatter;
 	}
 
-	private CodeFormatter newCodeFormatter() {
+	private CodeFormatter newCodeFormatter(LanguageLevel level) {
 		lastState = javaPropertiesProvider.getModifiedMonitor();
-		codeFormatter = new DefaultCodeFormatter(javaPropertiesProvider.get());
+		Properties options = javaPropertiesProvider.get();
+		String substring = level.name().replace("_", ".").substring(4);
+		//test
+		new Double(substring);
+		options.setProperty("org.eclipse.jdt.core.compiler.source", substring);
+		options.setProperty("org.eclipse.jdt.core.compiler.codegen.targetPlatform", substring);
+		options.setProperty("org.eclipse.jdt.core.compiler.compliance", substring);
+		this.effectiveLanguageLevel = level;
+		codeFormatter = new DefaultCodeFormatter(options);
 		return codeFormatter;
 	}
 
-	protected String formatInternal(String text, int startOffset, int endOffset) throws FileDoesNotExistsException {
+	private LanguageLevel getLanguageLevel(PsiFile psiFile) {
+		return JavaPsiImplementationHelper.getInstance(project).getEffectiveLanguageLevel(psiFile.getVirtualFile());
+	}
+
+	protected String formatInternal(String text, int startOffset, int endOffset, PsiFile psiFile) throws FileDoesNotExistsException {
+		LanguageLevel level = getLanguageLevel(psiFile);
+
 		LOG.debug("#formatInternal");
 		if (endOffset > text.length()) {
 			endOffset = text.length();
@@ -59,7 +80,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			 * If the offset position is matching a whitespace, the result can include whitespaces. It would be up to
 			 * the caller to get rid of preceding whitespaces.
 			 * </p>
-			 * 
+			 *
 			 * @param kind
 			 *            Use to specify the kind of the code snippet to format. It can be any of these:
 			 *            <ul>
@@ -93,14 +114,14 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			 */
 
 			LOG.debug("#starting to format by eclipse formatter");
-			TextEdit edit = getCodeFormatter().format(
+			TextEdit edit = getCodeFormatter(level).format(
 					CodeFormatter.K_COMPILATION_UNIT | CodeFormatter.F_INCLUDE_COMMENTS, text, startOffset,
 					endOffset - startOffset, 0, Settings.LINE_SEPARATOR);
 			if (edit != null) {
 				LOG.debug("reformatting done");
 				edit.apply(doc);
 			} else {
-				throw new FormattingFailedException(getErrorMessage());
+				throw new FormattingFailedException(getErrorMessage(level));
 			}
 			return doc.get();
 		} catch (BadLocationException e) {
@@ -108,14 +129,8 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		}
 	}
 
-	private String getErrorMessage() {
-		String compliance = javaPropertiesProvider.get().getProperty("org.eclipse.jdt.core.compiler.compliance");
-		String targetPlatform = javaPropertiesProvider.get().getProperty(
-				"org.eclipse.jdt.core.compiler.codegen.targetPlatform");
-		String source = javaPropertiesProvider.get().getProperty("org.eclipse.jdt.core.compiler.source");
-		return "Make sure these properties from configuration file matches your source code level: org.eclipse.jdt.core.compiler.source="
-				+ source + ", org.eclipse.jdt.core.compiler.codegen.targetPlatform" + targetPlatform
-				+ ", org.eclipse.jdt.core.compiler.compliance" + compliance;
+	private String getErrorMessage(LanguageLevel effectiveLanguageLevel) {
+		return "languageLevel=" + effectiveLanguageLevel;
 	}
 
 }

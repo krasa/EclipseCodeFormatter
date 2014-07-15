@@ -1,18 +1,5 @@
 package krasa.formatter.plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import krasa.formatter.eclipse.CodeFormatterFacade;
-import krasa.formatter.eclipse.FileDoesNotExistsException;
-import krasa.formatter.plugin.processor.GWTProcessor;
-import krasa.formatter.plugin.processor.JSCommentsFormatterProcessor;
-import krasa.formatter.plugin.processor.Processor;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.FileUtils;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
@@ -23,6 +10,17 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtilBase;
+import krasa.formatter.eclipse.CodeFormatterFacade;
+import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.plugin.processor.GWTProcessor;
+import krasa.formatter.plugin.processor.JSCommentsFormatterProcessor;
+import krasa.formatter.plugin.processor.Processor;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Vojtech Krasa
@@ -58,13 +56,14 @@ public class EclipseCodeFormatter {
 
 	private void formatWhenEditorIsClosed(PsiFile psiFile) throws FileDoesNotExistsException {
 		LOG.debug("#formatWhenEditorIsClosed " + psiFile.getName());
+
 		VirtualFile virtualFile = psiFile.getVirtualFile();
 		FileDocumentManager fileDocumentManager = FileDocumentManager.getInstance();
 		Document document = fileDocumentManager.getDocument(virtualFile);
 		fileDocumentManager.saveDocument(document); // when file is edited and editor is closed, it is needed to save
 		// the text
 		String text = document.getText();
-		String reformat = reformat(0, text.length(), text);
+		String reformat = reformat(0, text.length(), text, psiFile);
 		document.setText(reformat);
 		postProcess(document, psiFile, new Range(-1, -1, true));
 		fileDocumentManager.saveDocument(document);
@@ -81,7 +80,7 @@ public class EclipseCodeFormatter {
 		PsiDocumentManager.getInstance(editor.getProject()).doPostponedOperationsAndUnblockDocument(document);
 
 		String text = document.getText();
-		String reformat = reformat(range.getStartOffset(), range.getEndOffset(), text);
+		String reformat = reformat(range.getStartOffset(), range.getEndOffset(), text, file);
 		document.setText(reformat);
 		postProcess(document, file, range);
 
@@ -96,8 +95,8 @@ public class EclipseCodeFormatter {
 
 	}
 
-	private String reformat(int startOffset, int endOffset, String text) throws FileDoesNotExistsException {
-		return codeFormatterFacade.format(text, getLineStartOffset(startOffset, text), endOffset);
+	private String reformat(int startOffset, int endOffset, String text, PsiFile psiFile) throws FileDoesNotExistsException {
+		return codeFormatterFacade.format(text, getLineStartOffset(startOffset, text), endOffset, psiFile);
 	}
 
 	/**

@@ -3,7 +3,6 @@ package krasa.formatter.eclipse;
 import junit.framework.Assert;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,19 +36,19 @@ public class JSCodeFormatterFacadeTest {
 
 	@Test
 	public void testFormat() throws Exception {
-		String output = eclipseCodeFormatterFacade.format(INPUT, 0, INPUT.length());
+		String output = eclipseCodeFormatterFacade.format(INPUT, 0, INPUT.length(), null);
 		Assert.assertEquals(FORMATTED, output);
 	}
 
 	@Test
 	public void testFormat2() throws Exception {
-		String output = eclipseCodeFormatterFacade.format(INPUT, 10, INPUT.length() - 10);
+		String output = eclipseCodeFormatterFacade.format(INPUT, 10, INPUT.length() - 10, null);
 		Assert.assertEquals(FORMATTED, output);
 	}
 
 	@Test
 	public void testEndOffset() throws Exception {
-		eclipseCodeFormatterFacade.format(INPUT, INPUT.length() - 11, INPUT.length() - 10);
+		eclipseCodeFormatterFacade.format(INPUT, INPUT.length() - 11, INPUT.length() - 10, null);
 	}
 
 }
