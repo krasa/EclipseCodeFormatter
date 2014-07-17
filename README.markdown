@@ -21,7 +21,6 @@ Currently supports formatting of
 	- Or enable project specific formatter settings to get org.eclipse.jdt.core.prefs
   	  - With your project open in Eclipse's workspace, right-click the project and choose Properties.
   	  - Go to Java Code Style | Formatter and select Enable project specific settings.
-  	  - Also in the project properties, go to Java Compiler and select Enable project specific settings. *Make sure that the Compiler compliance level is set right.*
   	  - Click OK to save the settings.
   	  - Go to the .settings directory inside your project's directory. There you will find the org.eclipse.jdt.core.prefs file which contains the Eclipse formatter settings.
   	  - The result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/org.eclipse.jdt.core.prefs) 
