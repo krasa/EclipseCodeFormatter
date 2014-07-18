@@ -36,6 +36,7 @@ Currently supports formatting of
   	- Value of "Class count to use import with '*'" and "Name count to use static import with '*'" (Settings | Code Style | Imports) - Eclipse uses value of 30 by default
   	- For versions lower than 4.0 - make sure to keep disabled IntelliJ's Import Optimizing in the reformat dialog (Settings | Editor | Show "Reformat Code" dialog), the plugin will take care of imports anyway
   	- For versions higher than 4.0 - imports will be reordered together with normal IntelliJ's import optimizing
+  	- Disable "Optimize imports on the fly"
 -  Format code as usual, notice the green bubble notification about successful formatting 
   -  notifications can be disabled at (Settings | Notifications)
 - Use Ctrl+Alt+O as usual, it will use this plugin
