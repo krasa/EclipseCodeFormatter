@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Vojtech Krasa
  */
@@ -140,7 +142,8 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			} else {
 				throw new FormattingFailedException(getErrorMessage(level));
 			}
-			return doc.get();
+			//return doc.get();
+			return Pattern.compile("^([\\s]+\\*)([\\s]+)$", Pattern.MULTILINE).matcher(doc.get()).replaceAll("$1");
 		} catch (BadLocationException e) {
 			throw new RuntimeException(e);
 		}
