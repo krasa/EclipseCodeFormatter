@@ -48,12 +48,7 @@ Currently supports formatting of
 
 # Possible problems with Java formatting #
 - nothing was formatted or formatting failed 
-    -for version lower than 4.0 
-  - make sure you are using proper language level
-  - - Java language level is set to 1.5 by default. For 1.6 make sure following lines are in the config file, same goes for 1.7
-      - org.eclipse.jdt.core.compiler.compliance=1.6
-      - org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.6
-      - org.eclipse.jdt.core.compiler.source=1.6
+  - make sure you are using proper language level (Main Menu | File | Project Structure) 
 - trailing spaces inside javadocs are stripped.  
   - set "Strip trailing spaces on save" to "None" 
 - file is formatted differently
