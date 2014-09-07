@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>14.2.132.637</version>
+	<version>14.3.132.637</version>
 
 	<idea-version since-build="132.637" until-build=""/>
 
@@ -30,6 +30,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>14.3 (2014-09-08)
+        <br>- StringIndexOutOfBoundsException when formatting during commit
         <br>14.2 (2014-07-16)
         <br>- java formatter from Eclipse 4.4 - supports Java 1.8
         <br>- language level used for formatting is loaded from project settings
