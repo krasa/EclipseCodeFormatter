@@ -1,5 +1,19 @@
 package krasa.formatter.plugin;
 
+import java.util.*;
+
+import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.eclipse.JSCodeFormatterFacade;
+import krasa.formatter.eclipse.JavaCodeFormatterFacade;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.settings.DisabledFileTypeSettings;
+import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.FileUtils;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 
 import krasa.formatter.eclipse.FileDoesNotExistsException;
@@ -30,14 +44,6 @@ import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
 
-/**
- * Supported operations are handled by Eclipse formatter, other by IntelliJ formatter.
- * <p/>
- * TODO proper write action thread handling
- * 
- * @author Vojtech Krasa
- * @since 30.10.20011
- */
 public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
 	private static final Logger LOG = Logger.getInstance(EclipseCodeStyleManager.class.getName());
@@ -59,9 +65,19 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 				settings.getJavaProperties()));
 	}
 
+	private final static Comparator<TextRange> RANGE_COMPARATOR = new Comparator<TextRange>() {
+		@Override
+		public int compare(TextRange range1, TextRange range2) {
+			int startOffsetDiff = range1.getStartOffset() - range2.getStartOffset();
+			return startOffsetDiff != 0 ? startOffsetDiff : range1.getEndOffset() - range2.getEndOffset();
+		}
+	};
+
 	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
 			throws IncorrectOperationException {
-		for (TextRange textRange : textRanges) {
+		List<TextRange> list = new ArrayList<TextRange>(textRanges);
+		Collections.sort(list, Collections.reverseOrder(RANGE_COMPARATOR));
+		for (TextRange textRange : list) {
 			format(psiFile, textRange.getStartOffset(), textRange.getEndOffset(), Mode.ALWAYS_FORMAT);
 		}
 	}
