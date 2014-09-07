@@ -21,7 +21,6 @@ Currently supports formatting of
 	- Or enable project specific formatter settings to get org.eclipse.jdt.core.prefs
   	  - With your project open in Eclipse's workspace, right-click the project and choose Properties.
   	  - Go to Java Code Style | Formatter and select Enable project specific settings.
-  	  - Also in the project properties, go to Java Compiler and select Enable project specific settings. *Make sure that the Compiler compliance level is set right.*
   	  - Click OK to save the settings.
   	  - Go to the .settings directory inside your project's directory. There you will find the org.eclipse.jdt.core.prefs file which contains the Eclipse formatter settings.
   	  - The result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/org.eclipse.jdt.core.prefs) 
@@ -37,6 +36,7 @@ Currently supports formatting of
   	- Value of "Class count to use import with '*'" and "Name count to use static import with '*'" (Settings | Code Style | Imports) - Eclipse uses value of 30 by default
   	- For versions lower than 4.0 - make sure to keep disabled IntelliJ's Import Optimizing in the reformat dialog (Settings | Editor | Show "Reformat Code" dialog), the plugin will take care of imports anyway
   	- For versions higher than 4.0 - imports will be reordered together with normal IntelliJ's import optimizing
+  	- Disable "Optimize imports on the fly"
 -  Format code as usual, notice the green bubble notification about successful formatting 
   -  notifications can be disabled at (Settings | Notifications)
 - Use Ctrl+Alt+O as usual, it will use this plugin
@@ -48,12 +48,7 @@ Currently supports formatting of
 
 # Possible problems with Java formatting #
 - nothing was formatted or formatting failed 
-    -for version lower than 4.0 
-  - make sure you are using proper language level
-  - - Java language level is set to 1.5 by default. For 1.6 make sure following lines are in the config file, same goes for 1.7
-      - org.eclipse.jdt.core.compiler.compliance=1.6
-      - org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.6
-      - org.eclipse.jdt.core.compiler.source=1.6
+  - make sure you are using proper language level (Main Menu | File | Project Structure) 
 - trailing spaces inside javadocs are stripped.  
   - set "Strip trailing spaces on save" to "None" 
 - file is formatted differently
