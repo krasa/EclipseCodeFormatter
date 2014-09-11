@@ -30,7 +30,7 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>14.3 (2014-09-08)
+        <br>14.3 (2014-09-11)
         <br>- StringIndexOutOfBoundsException when formatting during commit
         <br>14.2 (2014-07-16)
         <br>- java formatter from Eclipse 4.4 - supports Java 1.8

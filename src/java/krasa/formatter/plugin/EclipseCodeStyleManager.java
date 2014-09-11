@@ -1,34 +1,23 @@
 package krasa.formatter.plugin;
 
-import java.util.*;
-
-import krasa.formatter.eclipse.FileDoesNotExistsException;
-import krasa.formatter.eclipse.JSCodeFormatterFacade;
-import krasa.formatter.eclipse.JavaCodeFormatterFacade;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.settings.DisabledFileTypeSettings;
-import krasa.formatter.settings.ProjectSettingsComponent;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.FileUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
+import com.intellij.notification.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
+import java.util.*;
+import krasa.formatter.eclipse.*;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.settings.*;
+import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.*;
 
 public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
@@ -48,7 +37,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		this.settings = settings;
 		notifier = new Notifier();
 		eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, new JavaCodeFormatterFacade(
-				settings.getJavaProperties(), original.getProject()));
+		  settings.getJavaProperties(), original.getProject()));
 	}
 
 	private final static Comparator<TextRange> RANGE_COMPARATOR = new Comparator<TextRange>() {
@@ -59,53 +48,60 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		}
 	};
 
+	@Override
 	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
-			throws IncorrectOperationException {
+	  throws IncorrectOperationException {
 		List<TextRange> list = new ArrayList<TextRange>(textRanges);
 		Collections.sort(list, Collections.reverseOrder(RANGE_COMPARATOR));
-		for (TextRange textRange : list) {
-			format(psiFile, textRange.getStartOffset(), textRange.getEndOffset(), Mode.ALWAYS_FORMAT);
-		}
+		format(psiFile, list, Mode.ALWAYS_FORMAT);
 	}
 
+	@Override
 	public void reformatText(@NotNull final PsiFile psiFile, final int startOffset, final int endOffset)
-			throws IncorrectOperationException {
-		format(psiFile, startOffset, endOffset, Mode.WITH_CTRL_SHIFT_ENTER_CHECK);
+	  throws IncorrectOperationException {
+		format(psiFile, Arrays.asList(new TextRange(startOffset, endOffset)), Mode.WITH_CTRL_SHIFT_ENTER_CHECK);
 	}
 
-	private void format(PsiFile psiFile, int startOffset, int endOffset, Mode mode) {
-		LOG.debug("reformatText " + psiFile.getName() + " " + startOffset + " " + endOffset);
+	private void format(PsiFile psiFile, List<TextRange> list, Mode mode) {
 		ApplicationManager.getApplication().assertWriteAccessAllowed();
 		PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
 		boolean formattedByIntelliJ = false;
+		CheckUtil.checkWritable(psiFile);
+		if (psiFile.getVirtualFile() == null) {
+			LOG.debug("virtual file is null");
+			Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO, "",
+			  Notifier.NO_FILE_TO_FORMAT, NotificationType.ERROR);
+			notifier.showNotification(notification, psiFile.getProject());
+			return;
+		}
+		int startOffset = -1;
+		int endOffset = -1;
 		try {
 
-			CheckUtil.checkWritable(psiFile);
+			boolean canReformatWithEclipse = canReformatWithEclipse(psiFile);
+			boolean wholeFileOrSelectedText = wholeFileOrSelectedText(psiFile, list);
+			boolean notify = false;
 
-			if (psiFile.getVirtualFile() == null) {
-				LOG.debug("virtual file is null");
-				Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO, "",
-						Notifier.NO_FILE_TO_FORMAT, NotificationType.ERROR);
-				notifier.showNotification(notification, psiFile.getProject());
-				return;
-			}
-			boolean wholeFileOrSelectedText = isWholeFileOrSelectedText(psiFile, startOffset, endOffset);
-			if (canReformatWithEclipse(psiFile) && shouldReformat(wholeFileOrSelectedText, mode)) {
-				formatWithEclipse(psiFile, startOffset, endOffset);
-				boolean skipSuccessFormattingNotification = shouldSkipNotification(startOffset, endOffset,
-						psiFile.getText());
-				if (!skipSuccessFormattingNotification) {
-					notifier.notifySuccessFormatting(psiFile, false);
-				}
-			} else {
-				if (shouldSkipFormatting(psiFile, startOffset, endOffset)) {
-					notifier.notifyFormattingWasDisabled(psiFile);
+			for (TextRange textRange : list) {
+				startOffset = textRange.getStartOffset();
+				endOffset = textRange.getEndOffset();
+				LOG.debug("format " + psiFile.getName() + " " + startOffset + " " + endOffset);
+
+				if (canReformatWithEclipse && shouldReformat(wholeFileOrSelectedText, mode)) {
+					formatWithEclipse(psiFile, startOffset, endOffset);
+					notify = notify || shouldNotify(psiFile, startOffset, endOffset);
 				} else {
-					formatWithIntelliJ(psiFile, startOffset, endOffset);
-					if (wholeFileOrSelectedText) {
-						notifier.notifySuccessFormatting(psiFile, true);
+					formattedByIntelliJ = true;
+					if (shouldSkipFormatting(psiFile, startOffset, endOffset)) {
+						notifier.notifyFormattingWasDisabled(psiFile);
+					} else {
+						formatWithIntelliJ(psiFile, startOffset, endOffset);
+						notify = notify || wholeFileOrSelectedText;
 					}
 				}
+			}
+			if (notify) {
+				notifier.notifySuccessFormatting(psiFile, formattedByIntelliJ);
 			}
 
 		} catch (final FileDoesNotExistsException e) {
@@ -119,12 +115,37 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 			notifier.notifyBrokenImportSorter(psiFile.getProject());
 		} catch (final FormattingFailedException e) {
 			LOG.debug("startOffset" + startOffset + ", endOffset:" + endOffset + ", length of file "
-					+ psiFile.getText().length(), e);
+			  + psiFile.getText().length(), e);
 			notifier.notifyFailedFormatting(psiFile, formattedByIntelliJ, getReason(e));
 		} catch (final Exception e) {
 			LOG.error("startOffset" + startOffset + ", endOffset:" + endOffset + ", length of file "
-					+ psiFile.getText().length(), e);
+			  + psiFile.getText().length(), e);
 		}
+	}
+
+	private boolean shouldNotify(PsiFile psiFile, int startOffset, int endOffset) {
+		boolean isShort = endOffset - startOffset < settings.getNotifyFromTextLenght();
+		boolean skipSuccessFormattingNotification = isShort && !FileUtils.isWholeFile(startOffset, endOffset, psiFile.getText());
+		return !skipSuccessFormattingNotification;
+	}
+
+	private boolean wholeFileOrSelectedText(PsiFile psiFile, List<TextRange> list) {
+		boolean wholeFileOrSelectedText = false;
+		final Editor editor = PsiUtilBase.findEditor(psiFile);
+		boolean result;
+		if (editor == null) {
+			wholeFileOrSelectedText = true;
+		} else {
+			Document document = editor.getDocument();
+			String text = document.getText();
+			boolean hasSelection = editor.getSelectionModel().hasSelection();
+			for (TextRange textRange : list) {
+				boolean wholeFile = FileUtils.isWholeFile(textRange.getStartOffset(), textRange.getEndOffset(), text);
+				result = hasSelection || wholeFile;
+				wholeFileOrSelectedText = wholeFileOrSelectedText || result;
+			}
+		}
+		return wholeFileOrSelectedText;
 	}
 
 	private String getReason(FormattingFailedException e) {
@@ -152,17 +173,12 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		if (FileUtils.isJavaScript(psiFile)) {
 			if (eclipseCodeFormatterJs == null) {
 				eclipseCodeFormatterJs = new EclipseCodeFormatter(settings, new JSCodeFormatterFacade(
-						settings.getJSProperties()));
+				  settings.getJSProperties()));
 			}
 			eclipseCodeFormatterJs.format(psiFile, startOffset, endOffset);
 		} else {
 			eclipseCodeFormatterJava.format(psiFile, startOffset, endOffset);
 		}
-	}
-
-	private boolean shouldSkipNotification(int startOffset, int endOffset, String text) {
-		boolean isShort = endOffset - startOffset < settings.getNotifyFromTextLenght();
-		return isShort && !FileUtils.isWholeFile(startOffset, endOffset, text);
 	}
 
 	private boolean shouldSkipFormatting(PsiFile psiFile, int startOffset, int endOffset) {
@@ -192,22 +208,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	public boolean canReformatWithEclipse(PsiFile psiFile) {
 		Project project = psiFile.getProject();
 		return psiFile.getVirtualFile().isInLocalFileSystem()
-				&& FileUtils.isWritable(psiFile.getVirtualFile(), project) && fileTypeIsEnabled(psiFile);
-	}
-
-	private boolean isWholeFileOrSelectedText(PsiFile psiFile, int startOffset, int endOffset) {
-
-		final Editor editor = PsiUtilBase.findEditor(psiFile);
-
-		if (editor == null) {
-			return true;
-		} else {
-			Document document = editor.getDocument();
-			String text = document.getText();
-			boolean wholeFile = FileUtils.isWholeFile(startOffset, endOffset, text);
-
-			return editor.getSelectionModel().hasSelection() || wholeFile;
-		}
+		  && FileUtils.isWritable(psiFile.getVirtualFile(), project) && fileTypeIsEnabled(psiFile);
 	}
 
 	private void formatWithIntelliJ(PsiFile psiFile, int startOffset, int endOffset) {
@@ -222,7 +223,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
 	private boolean fileTypeIsEnabled(@NotNull PsiFile psiFile) {
 		return (FileUtils.isJava(psiFile) && settings.isEnableJavaFormatting())
-				|| (FileUtils.isJavaScript(psiFile) && settings.isEnableJSFormatting());
+		  || (FileUtils.isJavaScript(psiFile) && settings.isEnableJSFormatting());
 	}
 
 }
