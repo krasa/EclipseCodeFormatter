@@ -1,5 +1,7 @@
 package krasa.formatter.plugin;
 
+import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
+import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
@@ -47,7 +49,11 @@ public class EclipseCodeFormatter {
 
 		final Editor editor = PsiUtilBase.findEditor(psiFile);
 		if (editor != null) {
-			formatWhenEditorIsOpen(range, psiFile);
+            TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
+            if (templateState != null) {
+                throw new ReformatItInIntelliJ();
+            }
+            formatWhenEditorIsOpen(range, psiFile);
 		} else {
 			formatWhenEditorIsClosed(psiFile);
 		}
