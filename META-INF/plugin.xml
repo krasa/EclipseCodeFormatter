@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>14.1.110.137</version>
+	<version>14.4.110.137</version>
 
 	<!--<idea-version since-build="133.79" until-build=""/>-->
 	<idea-version since-build="110.137" until-build="132.637"/>
@@ -31,6 +31,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>14.4 (2014-09-12)
+        <br>- Live templates formatting fix
         <br>14.3 (2014-09-11)
         <br>- StringIndexOutOfBoundsException when formatting during commit
         <br>14.2 (2014-07-16)

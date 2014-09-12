@@ -86,11 +86,12 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		format(psiFile, list, Mode.ALWAYS_FORMAT);
 	}
 
-	@Override
-	public void reformatText(@NotNull final PsiFile psiFile, final int startOffset, final int endOffset)
-	  throws IncorrectOperationException {
-		format(psiFile, Arrays.asList(new TextRange(startOffset, endOffset)), Mode.WITH_CTRL_SHIFT_ENTER_CHECK);
-	}
+    @Override
+    //todo should I even override this method?
+    public void reformatText(@NotNull final PsiFile psiFile, final int startOffset, final int endOffset)
+            throws IncorrectOperationException {
+        format(psiFile, Arrays.asList(new TextRange(startOffset, endOffset)), Mode.WITH_CTRL_SHIFT_ENTER_CHECK);
+    }
 
 	private void format(PsiFile psiFile, List<TextRange> list, Mode mode) {
 		ApplicationManager.getApplication().assertWriteAccessAllowed();
@@ -118,8 +119,13 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 				LOG.debug("format " + psiFile.getName() + " " + startOffset + " " + endOffset);
 
 				if (canReformatWithEclipse && shouldReformat(wholeFileOrSelectedText, mode)) {
-					formatWithEclipse(psiFile, startOffset, endOffset);
-					notify = notify || shouldNotify(psiFile, startOffset, endOffset);
+                    try {
+                        formatWithEclipse(psiFile, startOffset, endOffset);
+                        notify = notify || shouldNotify(psiFile, startOffset, endOffset);
+                    } catch (ReformatItInIntelliJ e) {
+                        formattedByIntelliJ = true;
+                        formatWithIntelliJ(psiFile, startOffset, endOffset);
+                    }
 				} else {
 					formattedByIntelliJ = true;
 					if (shouldSkipFormatting(psiFile, startOffset, endOffset)) {
