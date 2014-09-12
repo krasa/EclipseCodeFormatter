@@ -21,7 +21,9 @@
        -Java (also emulates Eclipse's imports optimizing)<br>
        -JavaScript<br>
        -GWT<br><br>
-        
+        <br>
+        Plugin for IJ 13 contains a formatter from Eclipse 4.4 which supports Java 1.8, plugins for older IntelliJ contains a formatter from Eclipse 4.3
+        <br>
         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest">Small donations are welcomed.</a>
         ]]></description>
 	<category>Formatting</category>
