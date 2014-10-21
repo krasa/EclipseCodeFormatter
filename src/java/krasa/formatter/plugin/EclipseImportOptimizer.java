@@ -24,33 +24,22 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		if (!(file instanceof PsiJavaFile)) {
 			return EmptyRunnable.getInstance();
 		}
+		final Runnable runnable = new JavaImportOptimizer().processFile(file);
 		return new Runnable() {
 			@Override
 			public void run() {
 				try {
-					process(file);
+					runnable.run();
+					
+					Settings settings = ProjectSettingsComponent.getSettings(file);
+					if (supports(file) && settings.isOptimizeImports() && settings.isEnabled()) {
+						optimizeImportsByEclipse((PsiJavaFile) file, settings);
+					}
 				} catch (Exception e) {
 					LOG.error("Eclipse Import Optimizer failed", e);
 				}
 			}
 		};
-	}
-
-	private boolean process(final PsiFile psiFile) {
-		CodeStyleManagerImpl.setSequentialProcessingAllowed(false);
-
-		optimizeImportsByIntellij(psiFile);
-
-		Settings settings = ProjectSettingsComponent.getSettings(psiFile);
-		if (supports(psiFile) && settings.isOptimizeImports() && settings.isEnabled()) {
-			optimizeImportsByEclipse((PsiJavaFile) psiFile, settings);
-		}
-		CodeStyleManagerImpl.setSequentialProcessingAllowed(true);
-		return true;
-	}
-
-	private static void optimizeImportsByIntellij(PsiFile psiFile) {
-		new JavaImportOptimizer().processFile(psiFile).run();
 	}
 
 	private void optimizeImportsByEclipse(PsiJavaFile psiFile, Settings settings) {
