@@ -2,9 +2,7 @@ package krasa.formatter.plugin;
 
 import krasa.formatter.settings.ProjectSettingsComponent;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
+import com.intellij.notification.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
@@ -28,14 +26,14 @@ public class Notifier {
 		} else {
 			content = psiFile.getName() + " failed to format with IntelliJ code formatter.\n" + reason;
 		}
-		Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR, "", content,
+		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.ERROR);
 		showNotification(notification, psiFile.getProject());
 	}
 
 	void notifyFormattingWasDisabled(PsiFile psiFile) {
-		Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO, "",
-				psiFile.getName() + " - formatting was disabled for this file type", NotificationType.WARNING);
+		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO.createNotification(psiFile.getName()
+				+ " - formatting was disabled for this file type", NotificationType.WARNING);
 		showNotification(notification, psiFile.getProject());
 	}
 
@@ -46,7 +44,7 @@ public class Notifier {
 		} else {
 			content = psiFile.getName() + " formatted successfully by Eclipse code formatter";
 		}
-		Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO, "", content,
+		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO.createNotification(content,
 				NotificationType.INFORMATION);
 		showNotification(notification, psiFile.getProject());
 	}
@@ -62,7 +60,7 @@ public class Notifier {
 
 	public void notifyBrokenImportSorter(Project project) {
 		String content = "Formatting failed due to new Import optimizer.";
-		Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR, "", content,
+		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.ERROR);
 		showNotification(notification, project);
 
@@ -71,8 +69,8 @@ public class Notifier {
 	public static void notifyDeletedSettings(final Project project) {
 		String content = "Eclipse formatter settings profile was deleted for project " + project.getName()
 				+ ". Default settings is used now.";
-		final Notification notification = new Notification(ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR, "",
-				content, NotificationType.ERROR);
+		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+				NotificationType.ERROR);
 		ApplicationManager.getApplication().invokeLater(new Runnable() {
 			@Override
 			public void run() {

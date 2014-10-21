@@ -9,49 +9,31 @@
 package krasa.formatter.plugin;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.DocumentEvent;
+import javax.swing.event.*;
 
 import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.settings.GlobalSettings;
-import krasa.formatter.settings.ProjectSettingsComponent;
-import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.*;
 import krasa.formatter.utils.FileUtils;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.*;
 import org.jetbrains.annotations.NotNull;
 
 import com.centerkey.utils.BareBonesBrowserLaunch;
-import com.intellij.openapi.application.ex.ApplicationEx;
-import com.intellij.openapi.application.ex.ApplicationManagerEx;
+import com.intellij.openapi.application.ex.*;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.fileChooser.*;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupListener;
-import com.intellij.openapi.ui.popup.LightweightWindowEvent;
-import com.intellij.openapi.ui.popup.ListPopup;
-import com.intellij.openapi.ui.popup.PopupStep;
+import com.intellij.openapi.ui.popup.*;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.ui.SortedComboBoxModel;
+import com.intellij.openapi.vfs.*;
+import com.intellij.ui.*;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
@@ -530,7 +512,6 @@ public class ProjectSettingsForm {
 		if (virtualFile != null && virtualFile.length > 0) {
 			target.setText(virtualFile[0].getPath());
 		}
-
 	}
 
 	private void enabledBy(@NotNull JComponent[] targets, @NotNull JToggleButton... control) {
@@ -718,10 +699,6 @@ public class ProjectSettingsForm {
 
 		final ApplicationEx app = ApplicationManagerEx.getApplicationEx();
 		return app == null || !app.isUnitTestMode() ? new ListPopupImpl(step) : new MockConfirmation(step, yesText);
-	}
-
-	private void log(String message) {
-		System.err.println(message);
 	}
 
 	private void createUIComponents() {

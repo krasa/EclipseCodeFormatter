@@ -8,29 +8,21 @@
 
 package krasa.formatter.settings;
 
-import com.intellij.notification.NotificationDisplayType;
-import com.intellij.notification.NotificationsConfiguration;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import javax.swing.*;
+
+import krasa.formatter.*;
+import krasa.formatter.plugin.*;
+import krasa.formatter.utils.ProjectUtils;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.jetbrains.annotations.*;
+
+import com.intellij.notification.*;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.options.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import krasa.formatter.Messages;
-import krasa.formatter.Resources;
-import krasa.formatter.plugin.ProjectCodeStyleInstaller;
-import krasa.formatter.plugin.ProjectSettingsForm;
-import krasa.formatter.utils.ProjectUtils;
-import org.apache.commons.lang.ObjectUtils;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 //import com.intellij.notification.impl.NotificationsConfiguration;
 
@@ -46,9 +38,9 @@ import javax.swing.*;
 @State(name = "EclipseCodeFormatter", storages = { @Storage(id = "other", file = "$PROJECT_FILE$") })
 public class ProjectSettingsComponent implements ProjectComponent, Configurable, PersistentStateComponent<Settings> {
 
-	public static final String GROUP_DISPLAY_ID_INFO = "Eclipse code formatter info";
-	public static final String GROUP_DISPLAY_ID_ERROR = "Eclipse code formatter error";
 	private static final Logger LOG = Logger.getInstance(ProjectSettingsComponent.class.getName());
+	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error", NotificationDisplayType.BALLOON, true);
+	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup("Eclipse code formatter info", NotificationDisplayType.BALLOON, true);
 
 	@NotNull
 	private final ProjectCodeStyleInstaller projectCodeStyle;
@@ -64,10 +56,6 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 	public ProjectSettingsComponent(@NotNull Project project) {
 		this.projectCodeStyle = new ProjectCodeStyleInstaller(project);
 		this.project = project;
-		NotificationsConfiguration.getNotificationsConfiguration().register(GROUP_DISPLAY_ID_INFO,
-				NotificationDisplayType.BALLOON);
-		NotificationsConfiguration.getNotificationsConfiguration().register(GROUP_DISPLAY_ID_ERROR,
-				NotificationDisplayType.BALLOON);
 	}
 
 	public static Settings getSettings(PsiFile psiFile) {
@@ -168,6 +156,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 
 	@NotNull
 	public Settings getState() {
+		System.err.println(settings.getPathToConfigFileJava());
 		return settings;
 	}
 
