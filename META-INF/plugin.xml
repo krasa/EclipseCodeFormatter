@@ -33,6 +33,9 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>14.5 (2014-10-21)
+        <br>- fixed notifications settings for IJ 14
+        <br>- import optimizing fix
         <br>14.4 (2014-09-12)
         <br>- Live templates formatting fix
         <br>14.3 (2014-09-11)

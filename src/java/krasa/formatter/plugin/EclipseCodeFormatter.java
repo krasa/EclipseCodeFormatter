@@ -1,30 +1,19 @@
 package krasa.formatter.plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import krasa.formatter.eclipse.CodeFormatterFacade;
-import krasa.formatter.eclipse.FileDoesNotExistsException;
-import krasa.formatter.plugin.processor.GWTProcessor;
-import krasa.formatter.plugin.processor.JSCommentsFormatterProcessor;
-import krasa.formatter.plugin.processor.Processor;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.FileUtils;
-
-import org.jetbrains.annotations.NotNull;
-
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateState;
+import com.intellij.codeInsight.template.impl.*;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.VisualPosition;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtilBase;
+import krasa.formatter.eclipse.*;
+import krasa.formatter.plugin.processor.*;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
 
 /**
  * @author Vojtech Krasa
@@ -51,11 +40,11 @@ public class EclipseCodeFormatter {
 
 		final Editor editor = PsiUtilBase.findEditor(psiFile);
 		if (editor != null) {
-            TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
-            if (templateState != null) {
-                throw new ReformatItInIntelliJ();
-            }
-            formatWhenEditorIsOpen(range, psiFile);
+			TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
+			if (templateState != null) {
+				throw new ReformatItInIntelliJ();
+			}
+			formatWhenEditorIsOpen(range, psiFile);
 		} else {
 			formatWhenEditorIsClosed(psiFile);
 		}
@@ -100,9 +89,13 @@ public class EclipseCodeFormatter {
 			postProcessor.process(document, file, range);
 		}
 
+		//updates psi, so comments from import statements does not get duplicated
+		final PsiDocumentManager documentManager = PsiDocumentManager.getInstance(file.getProject());
+		documentManager.commitDocument(document);
 	}
 
-	private String reformat(int startOffset, int endOffset, String text) throws FileDoesNotExistsException {
+	private String reformat(int startOffset, int endOffset, String text)
+			throws FileDoesNotExistsException {
 		return codeFormatterFacade.format(text, getLineStartOffset(startOffset, text), endOffset);
 	}
 

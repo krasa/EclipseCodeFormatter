@@ -1,9 +1,8 @@
 package krasa.formatter.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import krasa.formatter.settings.Settings;
+
+import java.util.*;
 
 /**
  * @author Vojtech Krasa
@@ -21,8 +20,8 @@ public class StringUtils {
 			if (order2.length() - 1 == i && order1.length() - 1 != i) {
 				return order1;
 			}
-			char orderChar1 = order1.length()!=0?order1.charAt(i):' ';
-			char orderChar2 = order2.length()!=0?order2.charAt(i):' ';
+			char orderChar1 = order1.length() != 0 ? order1.charAt(i) : ' ';
+			char orderChar2 = order2.length() != 0 ? order2.charAt(i) : ' ';
 			char importChar = anImport.charAt(i);
 
 			if (importChar == orderChar1 && importChar != orderChar2) {
@@ -47,7 +46,7 @@ public class StringUtils {
 		return strings;
 	}
 
-	public static List<String> trimImport(String imports) {
+	public static List<String> trimImports(String imports) {
 		String[] split = imports.split("\n");
 		ArrayList<String> strings = new ArrayList<String>();
 		for (int i = 0; i < split.length; i++) {
@@ -59,6 +58,19 @@ public class StringUtils {
 		}
 		return strings;
 	}
+
+	public static List<String> trimImports(List<String> imports) {
+		ArrayList<String> strings = new ArrayList<String>();
+		for (int i = 0; i < imports.size(); i++) {
+			String s = imports.get(i);
+			if (s.startsWith("import ")) {
+				s = s.substring(7, s.indexOf(";"));
+				strings.add(s.trim());
+			}
+		}
+		return strings;
+	}
+
 
 	public static String generateName(List<Settings> settingsList, int i, String name, String resultName) {
 		if (resultName == null) {
