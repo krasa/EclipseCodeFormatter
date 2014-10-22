@@ -5,7 +5,6 @@ import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
 import krasa.formatter.eclipse.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.*;
@@ -16,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Vojtech Krasa
  */
 public class EclipseImportOptimizer implements ImportOptimizer {
+
 	private static final Logger LOG = Logger.getInstance("#krasa.formatter.plugin.processor.ImportOrderProcessor");
 
 	@NotNull
@@ -24,13 +24,21 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		if (!(file instanceof PsiJavaFile)) {
 			return EmptyRunnable.getInstance();
 		}
-		final Runnable runnable = new JavaImportOptimizer().processFile(file);
+
+		Settings settings = ProjectSettingsComponent.getSettings(file);
+		if (!settings.isEnabled() || !settings.isEnableJavaFormatting()) {
+			// duplicates imports with eclipse formatter, but probably better to leave it be with IJ formatter
+			return new JavaImportOptimizer().processFile(file);
+		}
+
 		return new Runnable() {
+
 			@Override
 			public void run() {
 				try {
+					final Runnable runnable = new JavaImportOptimizer().processFile(file);
 					runnable.run();
-					
+
 					Settings settings = ProjectSettingsComponent.getSettings(file);
 					if (supports(file) && settings.isOptimizeImports() && settings.isEnabled()) {
 						optimizeImportsByEclipse((PsiJavaFile) file, settings);

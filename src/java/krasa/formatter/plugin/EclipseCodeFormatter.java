@@ -19,6 +19,7 @@ import java.util.*;
  * @author Vojtech Krasa
  */
 public class EclipseCodeFormatter {
+
 	private static final Logger LOG = Logger.getInstance(EclipseCodeFormatter.class.getName());
 
 	@NotNull
@@ -88,10 +89,9 @@ public class EclipseCodeFormatter {
 		for (Processor postProcessor : postProcessors) {
 			postProcessor.process(document, file, range);
 		}
-
-		//updates psi, so comments from import statements does not get duplicated
-		final PsiDocumentManager documentManager = PsiDocumentManager.getInstance(file.getProject());
-		documentManager.commitDocument(document);
+		// updates psi, so comments from import statements does not get duplicated
+		final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
+		manager.commitDocument(document);
 	}
 
 	private String reformat(int startOffset, int endOffset, String text)

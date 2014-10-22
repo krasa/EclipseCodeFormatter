@@ -29,7 +29,7 @@ import javax.swing.*;
 /**
  * Takes care of initializing a project's CodeFormatter and disposing of it when the project is closed. Updates the
  * formatter whenever the plugin settings are changed.
- * 
+ *
  * @author Esko Luontola
  * @since 4.12.2007
  */
@@ -37,8 +37,10 @@ import javax.swing.*;
 public class ProjectSettingsComponent implements ProjectComponent, Configurable, PersistentStateComponent<Settings> {
 
 	private static final Logger LOG = Logger.getInstance(ProjectSettingsComponent.class.getName());
-	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error", NotificationDisplayType.BALLOON, true);
-	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup("Eclipse code formatter info", NotificationDisplayType.BALLOON, true);
+	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error",
+			NotificationDisplayType.BALLOON, true);
+	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup("Eclipse code formatter info",
+			NotificationDisplayType.BALLOON, true);
 
 	@NotNull
 	private final ProjectCodeStyleInstaller projectCodeStyle;
@@ -85,6 +87,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		settings.setFormatter(formatter);
 		install(settings);
 	}
+
 	public void projectOpened() {
 		settings = GlobalSettings.getInstance().getSettings(settings, project);
 		install(settings);
@@ -154,7 +157,6 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 
 	@NotNull
 	public Settings getState() {
-		System.err.println(settings.getPathToConfigFileJava());
 		return settings;
 	}
 
