@@ -1,12 +1,11 @@
 package krasa.formatter.plugin;
 
-import java.util.*;
-
+import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.psi.*;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.StringUtils;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
-import com.intellij.psi.*;
+import java.util.*;
 
 /**
  * @author Vojtech Krasa
@@ -24,11 +23,11 @@ public class ImportSorterAdapter {
 		return Arrays.toString(importsOrder.toArray());
 	}
 
-	public void sortImports(PsiJavaFile psiFile) {
+	public void sortImports(PsiJavaFile file) {
 		List<String> imports = new ArrayList<String>();
 		List<PsiElement> nonImports = new ArrayList<PsiElement>();
 
-		PsiImportList importList = psiFile.getImportList();
+		PsiImportList importList = file.getImportList();
 		if (importList == null) {
 			return;
 		}
@@ -36,7 +35,7 @@ public class ImportSorterAdapter {
 		PsiElement[] children = importList.getChildren();
 		for (int i = 0; i < children.length; i++) {
 			PsiElement child = children[i];
-			if (child instanceof PsiImportStatement) {
+			if (child instanceof PsiImportStatementBase) {
 				imports.add(child.getText());
 			} else if (!(child instanceof PsiWhiteSpace)) { //todo wild guess
 				nonImports.add(child);
@@ -54,14 +53,14 @@ public class ImportSorterAdapter {
 			text.append("\n").append(psiElement.getText());
 		}
 
-		PsiFileFactory factory = PsiFileFactory.getInstance(psiFile.getProject());
+		PsiFileFactory factory = PsiFileFactory.getInstance(file.getProject());
 		String ext = StdFileTypes.JAVA.getDefaultExtension();
 		final PsiJavaFile dummyFile = (PsiJavaFile) factory.createFileFromText("_Dummy_." + ext, StdFileTypes.JAVA,
 				text);
 
 		PsiImportList newImportList = dummyFile.getImportList();
 		PsiImportList result = (PsiImportList) newImportList.copy();
-		PsiImportList oldList = psiFile.getImportList();
+		PsiImportList oldList = file.getImportList();
 		if (oldList.isReplaceEquivalent(result))
 			return;
 		if (!nonImports.isEmpty()) {
@@ -69,10 +68,12 @@ public class ImportSorterAdapter {
 			while (firstPrevious != null && firstPrevious.getPrevSibling() != null) {
 				firstPrevious = firstPrevious.getPrevSibling();
 			}
-			for (PsiElement element = firstPrevious; element != null && element != newImportList; element = element.getNextSibling()) {
+			for (PsiElement element = firstPrevious;
+				 element != null && element != newImportList; element = element.getNextSibling()) {
 				result.add(element.copy());
 			}
-			for (PsiElement element = newImportList.getNextSibling(); element != null; element = element.getNextSibling()) {
+			for (PsiElement element = newImportList.getNextSibling();
+				 element != null; element = element.getNextSibling()) {
 				result.add(element.copy());
 			}
 		}
