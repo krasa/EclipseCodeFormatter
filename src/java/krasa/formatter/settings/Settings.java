@@ -8,16 +8,12 @@
 
 package krasa.formatter.settings;
 
-import java.util.List;
-
-import krasa.formatter.settings.provider.ImportOrderProvider;
-import krasa.formatter.settings.provider.JSPropertiesProvider;
-import krasa.formatter.settings.provider.JavaPropertiesProvider;
+import com.intellij.util.xmlb.annotations.Transient;
+import krasa.formatter.settings.provider.*;
 import krasa.formatter.utils.StringUtils;
-
 import org.jetbrains.annotations.NotNull;
 
-import com.intellij.util.xmlb.annotations.Transient;
+import java.util.List;
 
 /**
  * @author Esko Luontola
@@ -57,6 +53,7 @@ public class Settings {
 	protected transient ImportOrderProvider importOrderProvider;
 	private boolean enableJSProcessor;
 	private String selectedJavaScriptProfile;
+	private boolean useForLiveTemplates = false;
 
 	public Settings() {
 	}
@@ -181,6 +178,14 @@ public class Settings {
 
 	boolean isNotSaved() {
 		return getId() == null && getName() == null;
+	}
+
+	public boolean isUseForLiveTemplates() {
+		return useForLiveTemplates;
+	}
+
+	public void setUseForLiveTemplates(final boolean useForLiveTemplates) {
+		this.useForLiveTemplates = useForLiveTemplates;
 	}
 
 	public static enum Formatter {
@@ -380,6 +385,7 @@ public class Settings {
 		sb.append(", javaPropertiesProvider=").append(javaPropertiesProvider);
 		sb.append(", jsPropertiesProvider=").append(jsPropertiesProvider);
 		sb.append(", enableJSProcessor=").append(enableJSProcessor);
+		sb.append(", useForLiveTemplates=").append(useForLiveTemplates);
 		sb.append('}');
 		return sb.toString();
 	}

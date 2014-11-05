@@ -8,22 +8,6 @@
 
 package krasa.formatter.plugin;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.settings.*;
-import krasa.formatter.utils.FileUtils;
-
-import org.apache.commons.lang.*;
-import org.jetbrains.annotations.NotNull;
-
 import com.centerkey.utils.BareBonesBrowserLaunch;
 import com.intellij.openapi.application.ex.*;
 import com.intellij.openapi.diagnostic.Logger;
@@ -37,6 +21,19 @@ import com.intellij.ui.*;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
+import krasa.formatter.exception.ParsingFailedException;
+import krasa.formatter.settings.*;
+import krasa.formatter.utils.FileUtils;
+import org.apache.commons.lang.*;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.util.*;
+import java.util.List;
 
 /**
  * Configuration dialog for changing the {@link krasa.formatter.settings.Settings} of the plugin.
@@ -103,6 +100,7 @@ public class ProjectSettingsForm {
 	private JCheckBox enableJavaScriptCommentsPostProcessor;
 	private JLabel javaScriptFormatterProfileLabel;
 	private JComboBox javaScriptFormatterProfile;
+	private JCheckBox useForLiveTemplates;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -114,7 +112,7 @@ public class ProjectSettingsForm {
 		enabledBy(new JComponent[] { eclipseSupportedFileTypesLabel, enableJavaFormatting, enableJSFormatting,
 				doNotFormatOtherFilesRadioButton, formatOtherFilesWithExceptionsRadioButton,
 				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
-				importOrderConfigurationManualRadioButton, formatSelectedTextInAllFileTypes, }, useEclipseFormatter);
+				importOrderConfigurationManualRadioButton, formatSelectedTextInAllFileTypes, useForLiveTemplates }, useEclipseFormatter);
 
 		enabledBy(new JComponent[] { pathToEclipsePreferenceFileJava, eclipsePrefsExample,
 				eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox, eclipsePreferenceFilePathJavaBrowse,
@@ -717,6 +715,7 @@ public class ProjectSettingsForm {
 		pathToImportOrderPreferenceFile.setText(data.getImportOrderConfigFilePath());
 		enableGWTNativeMethodsCheckBox.setSelected(data.isEnableGWT());
 		enableJavaScriptCommentsPostProcessor.setSelected(data.isEnableJSProcessor());
+		useForLiveTemplates.setSelected(data.isUseForLiveTemplates());
 	}
 
 	public void getData(Settings data) {
@@ -731,6 +730,7 @@ public class ProjectSettingsForm {
 		data.setImportOrderConfigFilePath(pathToImportOrderPreferenceFile.getText());
 		data.setEnableGWT(enableGWTNativeMethodsCheckBox.isSelected());
 		data.setEnableJSProcessor(enableJavaScriptCommentsPostProcessor.isSelected());
+		data.setUseForLiveTemplates(useForLiveTemplates.isSelected());
 	}
 
 	public boolean isModified(Settings data) {
@@ -738,45 +738,40 @@ public class ProjectSettingsForm {
 		if (customIsModified(data)) {
 			return true;
 		}
-
-		if (optimizeImportsCheckBox.isSelected() != data.isOptimizeImports()) {
+		if (optimizeImportsCheckBox.isSelected() != data.isOptimizeImports())
 			return true;
-		}
-		if (formatSelectedTextInAllFileTypes.isSelected() != data.isFormatSeletedTextInAllFileTypes()) {
+		if (formatSelectedTextInAllFileTypes.isSelected() != data.isFormatSeletedTextInAllFileTypes())
 			return true;
-		}
-		if (pathToEclipsePreferenceFileJava.getText() != null ? !pathToEclipsePreferenceFileJava.getText().equals(
-				data.getPathToConfigFileJava()) : data.getPathToConfigFileJava() != null) {
+		if (pathToEclipsePreferenceFileJava.getText() != null ?
+				!pathToEclipsePreferenceFileJava.getText().equals(data.getPathToConfigFileJava()) :
+				data.getPathToConfigFileJava() != null)
 			return true;
-		}
-		if (pathToEclipsePreferenceFileJS.getText() != null ? !pathToEclipsePreferenceFileJS.getText().equals(
-				data.getPathToConfigFileJS()) : data.getPathToConfigFileJS() != null) {
+		if (pathToEclipsePreferenceFileJS.getText() != null ?
+				!pathToEclipsePreferenceFileJS.getText().equals(data.getPathToConfigFileJS()) :
+				data.getPathToConfigFileJS() != null)
 			return true;
-		}
-		if (disabledFileTypes.getText() != null ? !disabledFileTypes.getText().equals(data.getDisabledFileTypes())
-				: data.getDisabledFileTypes() != null) {
+		if (disabledFileTypes.getText() != null ?
+				!disabledFileTypes.getText().equals(data.getDisabledFileTypes()) :
+				data.getDisabledFileTypes() != null)
 			return true;
-		}
-		if (enableJSFormatting.isSelected() != data.isEnableJSFormatting()) {
+		if (enableJSFormatting.isSelected() != data.isEnableJSFormatting())
 			return true;
-		}
-		if (enableJavaFormatting.isSelected() != data.isEnableJavaFormatting()) {
+		if (enableJavaFormatting.isSelected() != data.isEnableJavaFormatting())
 			return true;
-		}
-		if (importOrder.getText() != null ? !importOrder.getText().equals(data.getImportOrder())
-				: data.getImportOrder() != null) {
+		if (importOrder.getText() != null ?
+				!importOrder.getText().equals(data.getImportOrder()) :
+				data.getImportOrder() != null)
 			return true;
-		}
-		if (pathToImportOrderPreferenceFile.getText() != null ? !pathToImportOrderPreferenceFile.getText().equals(
-				data.getImportOrderConfigFilePath()) : data.getImportOrderConfigFilePath() != null) {
+		if (pathToImportOrderPreferenceFile.getText() != null ?
+				!pathToImportOrderPreferenceFile.getText().equals(data.getImportOrderConfigFilePath()) :
+				data.getImportOrderConfigFilePath() != null)
 			return true;
-		}
-		if (enableGWTNativeMethodsCheckBox.isSelected() != data.isEnableGWT()) {
+		if (enableGWTNativeMethodsCheckBox.isSelected() != data.isEnableGWT())
 			return true;
-		}
-		if (enableJavaScriptCommentsPostProcessor.isSelected() != data.isEnableJSProcessor()) {
+		if (enableJavaScriptCommentsPostProcessor.isSelected() != data.isEnableJSProcessor())
 			return true;
-		}
+		if (useForLiveTemplates.isSelected() != data.isUseForLiveTemplates())
+			return true;
 		return false;
 	}
 }

@@ -22,12 +22,14 @@ public class EclipseCodeFormatter {
 
 	private static final Logger LOG = Logger.getInstance(EclipseCodeFormatter.class.getName());
 
+	private Settings settings;
 	@NotNull
 	protected final CodeFormatterFacade codeFormatterFacade;
 
 	private List<Processor> postProcessors;
 
 	public EclipseCodeFormatter(@NotNull Settings settings, @NotNull CodeFormatterFacade codeFormatterFacade1) {
+		this.settings = settings;
 		codeFormatterFacade = codeFormatterFacade1;
 		postProcessors = new ArrayList<Processor>();
 		postProcessors.add(new GWTProcessor(settings));
@@ -42,7 +44,7 @@ public class EclipseCodeFormatter {
 		final Editor editor = PsiUtilBase.findEditor(psiFile);
 		if (editor != null) {
 			TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
-			if (templateState != null) {
+			if (templateState != null && !settings.isUseForLiveTemplates()) {
 				throw new ReformatItInIntelliJ();
 			}
 			formatWhenEditorIsOpen(range, psiFile);

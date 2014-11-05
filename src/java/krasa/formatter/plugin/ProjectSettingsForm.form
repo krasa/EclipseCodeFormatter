@@ -15,7 +15,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="46786" layout-manager="GridLayoutManager" row-count="23" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="46786" layout-manager="GridLayoutManager" row-count="24" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints/>
             <properties/>
@@ -68,7 +68,7 @@
               </component>
               <component id="fcbd9" class="javax.swing.JCheckBox" binding="formatSelectedTextInAllFileTypes">
                 <constraints>
-                  <grid row="21" column="1" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="22" column="1" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.formatAllFilesPartial"/>
@@ -76,7 +76,7 @@
               </component>
               <component id="23982" class="javax.swing.JRadioButton" binding="doNotFormatOtherFilesRadioButton">
                 <constraints>
-                  <grid row="18" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="19" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.formatOtherFileTypesByIntellij"/>
@@ -84,7 +84,7 @@
               </component>
               <component id="7cabf" class="javax.swing.JRadioButton" binding="formatOtherFilesWithExceptionsRadioButton">
                 <constraints>
-                  <grid row="19" column="1" row-span="1" col-span="3" vsize-policy="1" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="20" column="1" row-span="1" col-span="3" vsize-policy="1" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.disableFileTypesFormattingCheckbox"/>
@@ -142,7 +142,7 @@
               </component>
               <component id="36b8b" class="javax.swing.JTextField" binding="disabledFileTypes">
                 <constraints>
-                  <grid row="19" column="4" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="20" column="4" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="20" height="20"/>
                   </grid>
                 </constraints>
@@ -338,7 +338,7 @@
               </component>
               <component id="aaee7" class="javax.swing.JLabel" binding="disabledFileTypesHelpLabel">
                 <constraints>
-                  <grid row="20" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                  <grid row="21" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="20" height="20"/>
                   </grid>
                 </constraints>
@@ -358,7 +358,7 @@
               </component>
               <vspacer id="57011">
                 <constraints>
-                  <grid row="22" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="23" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="79d02" class="javax.swing.JCheckBox" binding="enableJavaScriptCommentsPostProcessor">
@@ -445,6 +445,14 @@
                 <properties>
                   <font style="1"/>
                   <text value="Help"/>
+                </properties>
+              </component>
+              <component id="a9ba" class="javax.swing.JCheckBox" binding="useForLiveTemplates">
+                <constraints>
+                  <grid row="18" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Use for Live Templates (might break caret and selection positioning, if IntelliJ code style is different, e.g. tabs vs spaces)"/>
                 </properties>
               </component>
             </children>

@@ -32,6 +32,9 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>14.6 (2014-11-05)
+        <br>- libs from Eclipse 4.4.1
+        <br>- configurable formatting for Live Templates (default off)
         <br>14.5 (2014-10-22)
         <br>- fixed notifications settings for IJ 14
         <br>- import optimizing fix
