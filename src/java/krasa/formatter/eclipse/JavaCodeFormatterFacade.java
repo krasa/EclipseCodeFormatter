@@ -1,30 +1,31 @@
 package krasa.formatter.eclipse;
 
+import java.lang.reflect.Method;
+import java.util.Properties;
+
+import krasa.formatter.common.ModifiableFile;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.JavaPropertiesProvider;
+
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
+import org.eclipse.jface.text.*;
+import org.eclipse.text.edits.TextEdit;
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
-import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.JavaPropertiesProvider;
-import org.eclipse.jdt.core.formatter.CodeFormatter;
-import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.text.edits.TextEdit;
-import org.jetbrains.annotations.NotNull;
-
-import java.lang.reflect.Method;
-import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
  */
 public class JavaCodeFormatterFacade extends CodeFormatterFacade {
+
 	private static final Logger LOG = Logger.getInstance(JavaCodeFormatterFacade.class.getName());
 
 	private Project project;
@@ -39,7 +40,8 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	}
 
 	private CodeFormatter getCodeFormatter(LanguageLevel level) throws FileDoesNotExistsException {
-		if (codeFormatter == null || javaPropertiesProvider.wasChanged(lastState) || this.effectiveLanguageLevel != level) {
+		if (codeFormatter == null || javaPropertiesProvider.wasChanged(lastState)
+				|| this.effectiveLanguageLevel != level) {
 			return newCodeFormatter(level);
 		}
 		return codeFormatter;
@@ -49,7 +51,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		lastState = javaPropertiesProvider.getModifiedMonitor();
 		Properties options = javaPropertiesProvider.get();
 		String substring = level.name().replace("_", ".").substring(4);
-		//test
+		// test
 		new Double(substring);
 		options.setProperty("org.eclipse.jdt.core.compiler.source", substring);
 		options.setProperty("org.eclipse.jdt.core.compiler.codegen.targetPlatform", substring);
@@ -62,22 +64,28 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	@NotNull
 	private LanguageLevel getLanguageLevel(@NotNull PsiFile psiFile) {
 		JavaPsiImplementationHelper instance = JavaPsiImplementationHelper.getInstance(project);
+		LanguageLevel languageLevel = null;
 		try {
 			Method getClassesLanguageLevel = instance.getClass().getMethod("getClassesLanguageLevel", VirtualFile.class);
-			return (LanguageLevel) getClassesLanguageLevel.invoke(instance, psiFile.getVirtualFile());
+			languageLevel = (LanguageLevel) getClassesLanguageLevel.invoke(instance, psiFile.getVirtualFile());
 		} catch (Exception e) {
 			try {
-				Method getClassesLanguageLevel = instance.getClass().getMethod("getEffectiveLanguageLevel", VirtualFile.class);
-				return (LanguageLevel) getClassesLanguageLevel.invoke(instance, psiFile.getVirtualFile());
+				Method getClassesLanguageLevel = instance.getClass().getMethod("getEffectiveLanguageLevel",
+						VirtualFile.class);
+				languageLevel = (LanguageLevel) getClassesLanguageLevel.invoke(instance, psiFile.getVirtualFile());
 			} catch (Exception e1) {
 				LOG.error("Please report this", e);
 				LOG.error("Please report this", e1);
-				return LanguageLevel.JDK_1_7;
 			}
 		}
+		if (languageLevel == null) {
+			languageLevel = LanguageLevel.JDK_1_7;
+		}
+		return languageLevel;
 	}
 
-	protected String formatInternal(String text, int startOffset, int endOffset, PsiFile psiFile) throws FileDoesNotExistsException {
+	protected String formatInternal(String text, int startOffset, int endOffset, PsiFile psiFile)
+			throws FileDoesNotExistsException {
 		LanguageLevel level = getLanguageLevel(psiFile);
 
 		LOG.debug("#formatInternal");
