@@ -14,7 +14,7 @@ Currently supports formatting of
 -  Configure it
   -  Get Eclipse formatter settings file: 
   	- Either export formatter profiles to get *.xml file
-  	  - Go to Eclise | Windows | Preferences | Java | Code Style | Formatter
+  	  - Go to Eclipse | Windows | Preferences | Java | Code Style | Formatter
   	  - Eclipse do not export default profiles, so you have to make your own ("New" button)
   	  - Export the profile ("Export all..." button.)
   	  - The result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/format.xml)
@@ -24,7 +24,7 @@ Currently supports formatting of
   	  - Click OK to save the settings.
   	  - Go to the .settings directory inside your project's directory. There you will find the org.eclipse.jdt.core.prefs file which contains the Eclipse formatter settings.
   	  - The result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/org.eclipse.jdt.core.prefs) 
-  - Set path to the file (IntelliJ | Settings | Eclipse Code Formatter | field "Eclipse preference file"), 
+  - Set path to the file (IntelliJ | Settings | Other Settings | Eclipse Code Formatter | field "Eclipse preference file"), 
   - When using exported profiles(xml file), select desired profile in the combobox "Java formatter profile"
   - Check "Optimizing Imports" configuration
   	- Set import order
@@ -33,10 +33,10 @@ Currently supports formatting of
     		-  Go to Eclise | Windows | Preferences | Java | Code Style | Organize Imports
     			- Either click on "Export...", ([example](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/bcjur2.importorder))
     			- Or enable project specific settings and use "org.eclipse.jdt.ui.prefs" file which should contain the line "org.eclipse.jdt.ui.importorder=..."
-  	- Value of "Class count to use import with '*'" and "Name count to use static import with '*'" (Settings | Code Style | Imports) - Eclipse uses value of 30 by default
+  	- Value of "Class count to use import with '*'" and "Name count to use static import with '*'" (Settings |  Editor | Code Style | Imports) - Eclipse uses value of 30 by default
   	- For versions lower than 4.0 - make sure to keep disabled IntelliJ's Import Optimizing in the reformat dialog (Settings | Editor | Show "Reformat Code" dialog), the plugin will take care of imports anyway
   	- For versions higher than 4.0 - imports will be reordered together with normal IntelliJ's import optimizing
-  	- Disable "Optimize imports on the fly"
+  	- **Disable "Optimize imports on the fly"**
 -  Format code as usual, notice the green bubble notification about successful formatting 
   -  notifications can be disabled at (Settings | Notifications)
 - Use Ctrl+Alt+O as usual, it will use this plugin
@@ -52,7 +52,7 @@ Currently supports formatting of
 - trailing spaces inside javadocs are stripped.  
   - set "Strip trailing spaces on save" to "None" 
 - file is formatted differently
-  - The file is actually formatted fine, it just looks different in the editor, as the tab size and indendation are  set differently in IntelliJ (Settings | Code Style | Java) than in Eclipse. Using of either tab only or space only whitespace is recommended.
+  - The file is actually formatted fine, it just looks different in the editor, as the tab size and indendation are  set differently in IntelliJ (Settings | Editor | Code Style | Java) than in Eclipse. Using of either tab only or space only whitespace is recommended.
   - Or it is a bug.
 - Eclipse indendation is configured for 2 spaces, but a new line gets indented by 4 spaces when Enter is pressed.
   - change code style in IntelliJ. Not all things get formatted by this plugin when you type them.
