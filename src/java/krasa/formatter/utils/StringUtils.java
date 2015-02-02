@@ -66,7 +66,9 @@ public class StringUtils {
 			if (s.startsWith("import ")) {
 				s = s.substring(7, s.indexOf(";"));
 				strings.add(s.trim());
-			}
+			} else {
+				strings.add(s.trim());
+			} 
 		}
 		return strings;
 	}

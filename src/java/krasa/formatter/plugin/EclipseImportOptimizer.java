@@ -9,6 +9,7 @@ import krasa.formatter.eclipse.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.*;
 import krasa.formatter.settings.provider.ImportOrderProvider;
+import krasa.formatter.utils.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,8 +26,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 			return EmptyRunnable.getInstance();
 		}
 
-		Settings settings = ProjectSettingsComponent.getSettings(file);
-		if (!settings.isEnabled() || !settings.isEnableJavaFormatting()) {
+		if (!isEnabled(file)) {
 			// duplicates imports with eclipse formatter, but probably better to leave it be with IJ formatter
 			return new JavaImportOptimizer().processFile(file);
 		}
@@ -40,7 +40,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 					runnable.run();
 
 					Settings settings = ProjectSettingsComponent.getSettings(file);
-					if (supports(file) && settings.isOptimizeImports() && settings.isEnabled()) {
+					if (isEnabled(settings)) {
 						optimizeImportsByEclipse((PsiJavaFile) file, settings);
 					}
 				} catch (Exception e) {
@@ -86,7 +86,16 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 
 	@Override
 	public boolean supports(PsiFile file) {
-		return file instanceof PsiJavaFile;
+		return FileUtils.isJava(file) && isEnabled(file);
+	}
+
+	private boolean isEnabled(Settings settings) {
+		return settings.isEnabled() && settings.isEnableJavaFormatting() && settings.isOptimizeImports();
+	}
+
+	private boolean isEnabled(PsiFile file) {
+		Settings settings = ProjectSettingsComponent.getSettings(file);
+		return isEnabled(settings);
 	}
 
 }

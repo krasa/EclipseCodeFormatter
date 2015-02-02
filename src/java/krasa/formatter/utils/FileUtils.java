@@ -1,5 +1,6 @@
 package krasa.formatter.utils;
 
+import com.intellij.openapi.fileTypes.StdFileTypes;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +45,7 @@ public class FileUtils {
 	}
 
 	public static boolean isJava(PsiFile psiFile) {
-		return psiFile.getName().endsWith(".java");
+		return StdFileTypes.JAVA.equals(psiFile.getFileType());
 	}
 
 	public static Properties readPropertiesFile(File file, Properties defaultConfig) {

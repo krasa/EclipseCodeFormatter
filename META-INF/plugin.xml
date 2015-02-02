@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>14.6.132.637</version>
+	<version>14.8.132.637</version>
 
 	<idea-version since-build="132.637" until-build=""/>
 
@@ -21,7 +21,7 @@
        -JavaScript<br>
        -GWT<br><br>
        
-        Plugin for IJ 13 contains a formatter from Eclipse 4.4 which supports Java 1.8, plugins for older IntelliJ contains a formatter from Eclipse 4.3
+        Plugin for IJ 13+ contains a formatter from Eclipse 4.4 which supports Java 1.8, plugins for older IntelliJ contains a formatter from Eclipse 4.3
         <br> <br>
         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest">Small donations are welcomed.</a>
         ]]></description> 
@@ -32,6 +32,10 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>14.8 (2015-01-29)
+        <br>- fixed jsp import optimizing
+        <br>14.7 (2014-12-02)
+        <br>- exception fix for Android Studio
         <br>14.6 (2014-11-05)
         <br>- libs from Eclipse 4.4.1
         <br>- configurable formatting for Live Templates (default off)
