@@ -33,7 +33,7 @@ Currently supports formatting of
     		-  Go to Eclise | Windows | Preferences | Java | Code Style | Organize Imports
     			- Either click on "Export...", ([example](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/bcjur2.importorder))
     			- Or enable project specific settings and use "org.eclipse.jdt.ui.prefs" file which should contain the line "org.eclipse.jdt.ui.importorder=..."
-  	- Value of "Class count to use import with '*'" and "Name count to use static import with '*'" (Settings |  Editor | Code Style | Imports) - Eclipse uses value of 30 by default
+  	- Value of "Class count to use import with '*'" and "Name count to use static import with '*'" (Settings |  Editor | Code Style | Java | Imports) for Idea 14 or (Settings |  Editor | Code Style | Imports) for older Idea - Eclipse uses value of 30 by default
   	- For versions lower than 4.0 - make sure to keep disabled IntelliJ's Import Optimizing in the reformat dialog (Settings | Editor | Show "Reformat Code" dialog), the plugin will take care of imports anyway
   	- For versions higher than 4.0 - imports will be reordered together with normal IntelliJ's import optimizing
   	- **Disable "Optimize imports on the fly"**
