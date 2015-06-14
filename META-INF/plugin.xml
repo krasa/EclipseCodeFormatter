@@ -32,7 +32,7 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>14.9 (2015-01-29)
+        <br>14.9 (2015-06-15)
         <br>- fixed reformat only VCS changed text
         <br>14.8 (2015-01-29)
         <br>- fixed jsp import optimizing
