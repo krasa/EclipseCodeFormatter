@@ -47,14 +47,14 @@ public class EclipseCodeFormatter {
 			if (templateState != null && !settings.isUseForLiveTemplates()) {
 				throw new ReformatItInIntelliJ();
 			}
-			formatWhenEditorIsOpen(range, psiFile);
+			formatWhenEditorIsOpen(editor, range, psiFile);
 		} else {
-			formatWhenEditorIsClosed(psiFile);
+			formatWhenEditorIsClosed(range, psiFile);
 		}
 
 	}
 
-	private void formatWhenEditorIsClosed(PsiFile psiFile) throws FileDoesNotExistsException {
+	private void formatWhenEditorIsClosed(Range range, PsiFile psiFile) throws FileDoesNotExistsException {
 		LOG.debug("#formatWhenEditorIsClosed " + psiFile.getName());
 
 		VirtualFile virtualFile = psiFile.getVirtualFile();
@@ -63,16 +63,16 @@ public class EclipseCodeFormatter {
 		fileDocumentManager.saveDocument(document); // when file is edited and editor is closed, it is needed to save
 		// the text
 		String text = document.getText();
-		String reformat = reformat(0, text.length(), text, psiFile);
+		String reformat = reformat(range.getStartOffset(), range.getEndOffset(), text, psiFile);
+
 		document.setText(reformat);
-		postProcess(document, psiFile, new Range(-1, -1, true));
+		postProcess(document, psiFile, range);
 		fileDocumentManager.saveDocument(document);
 	}
 
 	/* when file is being edited, it is important to load text from editor, i think */
-	private void formatWhenEditorIsOpen(Range range, PsiFile file) throws FileDoesNotExistsException {
+	private void formatWhenEditorIsOpen(Editor editor, Range range, PsiFile file) throws FileDoesNotExistsException {
 		LOG.debug("#formatWhenEditorIsOpen " + file.getName());
-		final Editor editor = PsiUtilBase.findEditor(file);
 		int visualColumnToRestore = getVisualColumnToRestore(editor);
 
 		Document document = editor.getDocument();
