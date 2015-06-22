@@ -51,6 +51,12 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		}
 	};
 
+    // 15
+    @Override
+    public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
+        reformatText(psiFile, collection);
+    }
+    
 	@Override
 	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
 			throws IncorrectOperationException {
