@@ -155,4 +155,10 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 			throws IncorrectOperationException {
 		original.reformatText(psiFile, textRanges);
 	}
+
+    // 15
+    @Override
+    public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
+        original.reformatTextWithContext(psiFile, collection);
+    }
 }

@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>14.9.132.637</version>
+	<version>15.0.132.637</version>
 
 	<idea-version since-build="132.637" until-build=""/>
 
@@ -32,8 +32,10 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>15.0 (2015-06-22)
+        <br>- new IJ 15 API
         <br>14.9 (2015-06-15)
-        <br>- fixed reformat only VCS changed text
+        <br>- fixed reformat for 'only VCS changed text'
         <br>14.8 (2015-01-29)
         <br>- fixed jsp import optimizing
         <br>14.7 (2014-12-02)
