@@ -30,7 +30,7 @@ public class Settings {
 	private String pathToConfigFileCpp = "";
 	private boolean enableJavaFormatting = true;
 	private boolean enableJSFormatting = false;
-	private boolean enableCppFormatting = true;
+	private boolean enableCppFormatting = false;
 
 	@NotNull
 	private Formatter formatter = Formatter.DEFAULT;

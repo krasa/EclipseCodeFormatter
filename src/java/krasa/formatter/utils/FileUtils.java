@@ -45,7 +45,8 @@ public class FileUtils {
 	}
 
 	public static boolean isCpp(PsiFile psiFile) {
-		return psiFile.getFileType().getName().equals("C++");
+		String name = psiFile.getFileType().getName();
+		return name.equals("C++") || name.equals("ObjectiveC"); // CLion calls it ObjectiveC... wtf
 	}
 
 	public static boolean isJava(PsiFile psiFile) {
