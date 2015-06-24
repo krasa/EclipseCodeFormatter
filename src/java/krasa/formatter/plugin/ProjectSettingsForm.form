@@ -150,9 +150,7 @@
               </component>
               <component id="e0ba8" class="javax.swing.JCheckBox" binding="enableJSFormatting">
                 <constraints>
-                  <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="50" height="23"/>
-                  </grid>
+                  <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.enableJS"/>
@@ -160,9 +158,7 @@
               </component>
               <component id="5b5d4" class="javax.swing.JCheckBox" binding="enableJavaFormatting">
                 <constraints>
-                  <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="100" height="23"/>
-                  </grid>
+                  <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.enableJava"/>
@@ -449,9 +445,7 @@
               </component>
               <component id="919a" class="javax.swing.JCheckBox" binding="enableCppFormatting">
                 <constraints>
-                  <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="50" height="23"/>
-                  </grid>
+                  <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.enable.cpp"/>
@@ -521,7 +515,7 @@
               </component>
               <component id="3a72e" class="javax.swing.JCheckBox" binding="enableGWTNativeMethodsCheckBox" default-binding="true">
                 <constraints>
-                  <grid row="4" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Enable GWT native methods formatting"/>
