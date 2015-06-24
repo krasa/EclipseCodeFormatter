@@ -84,7 +84,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		return languageLevel;
 	}
 
-	protected String formatInternal(String text, int startOffset, int endOffset, PsiFile psiFile)
+	public String format(String text, int startOffset, int endOffset, PsiFile psiFile)
 			throws FileDoesNotExistsException {
 		LanguageLevel level = getLanguageLevel(psiFile);
 

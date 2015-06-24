@@ -15,7 +15,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="46786" layout-manager="GridLayoutManager" row-count="24" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="46786" layout-manager="GridLayoutManager" row-count="27" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints/>
             <properties/>
@@ -68,7 +68,7 @@
               </component>
               <component id="fcbd9" class="javax.swing.JCheckBox" binding="formatSelectedTextInAllFileTypes">
                 <constraints>
-                  <grid row="22" column="1" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="25" column="1" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.formatAllFilesPartial"/>
@@ -76,7 +76,7 @@
               </component>
               <component id="23982" class="javax.swing.JRadioButton" binding="doNotFormatOtherFilesRadioButton">
                 <constraints>
-                  <grid row="19" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="22" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.formatOtherFileTypesByIntellij"/>
@@ -84,7 +84,7 @@
               </component>
               <component id="7cabf" class="javax.swing.JRadioButton" binding="formatOtherFilesWithExceptionsRadioButton">
                 <constraints>
-                  <grid row="20" column="1" row-span="1" col-span="3" vsize-policy="1" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="23" column="1" row-span="1" col-span="3" vsize-policy="1" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="krasa/formatter/messages" key="settings.disableFileTypesFormattingCheckbox"/>
@@ -142,7 +142,7 @@
               </component>
               <component id="36b8b" class="javax.swing.JTextField" binding="disabledFileTypes">
                 <constraints>
-                  <grid row="20" column="4" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="23" column="4" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="20" height="20"/>
                   </grid>
                 </constraints>
@@ -150,8 +150,8 @@
               </component>
               <component id="e0ba8" class="javax.swing.JCheckBox" binding="enableJSFormatting">
                 <constraints>
-                  <grid row="5" column="3" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="350" height="23"/>
+                  <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="50" height="23"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -160,7 +160,7 @@
               </component>
               <component id="5b5d4" class="javax.swing.JCheckBox" binding="enableJavaFormatting">
                 <constraints>
-                  <grid row="4" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                  <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
                     <preferred-size width="100" height="23"/>
                   </grid>
                 </constraints>
@@ -338,7 +338,7 @@
               </component>
               <component id="aaee7" class="javax.swing.JLabel" binding="disabledFileTypesHelpLabel">
                 <constraints>
-                  <grid row="21" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                  <grid row="24" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="20" height="20"/>
                   </grid>
                 </constraints>
@@ -348,17 +348,9 @@
                   <text resource-bundle="krasa/formatter/messages" key="settings.disableFileTypesHelp"/>
                 </properties>
               </component>
-              <component id="3a72e" class="javax.swing.JCheckBox" binding="enableGWTNativeMethodsCheckBox" default-binding="true">
-                <constraints>
-                  <grid row="4" column="5" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Enable GWT native methods formatting"/>
-                </properties>
-              </component>
               <vspacer id="57011">
                 <constraints>
-                  <grid row="23" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="26" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="79d02" class="javax.swing.JCheckBox" binding="enableJavaScriptCommentsPostProcessor">
@@ -372,7 +364,7 @@
                   <text value="Enable experimental JavaScript comments formatting "/>
                 </properties>
               </component>
-              <component id="47b9f" class="javax.swing.JLabel" binding="javaScriptFormatterProfileLabel">
+              <component id="47b9f" class="javax.swing.JLabel" binding="formatterProfileLabelJS">
                 <constraints>
                   <grid row="16" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                     <preferred-size width="-1" height="27"/>
@@ -383,7 +375,7 @@
                   <text value="JavaScript formatter profile"/>
                 </properties>
               </component>
-              <component id="a0d68" class="javax.swing.JComboBox" binding="javaScriptFormatterProfile">
+              <component id="a0d68" class="javax.swing.JComboBox" binding="formatterProfileJS">
                 <constraints>
                   <grid row="16" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="20" height="23"/>
@@ -449,10 +441,90 @@
               </component>
               <component id="a9ba" class="javax.swing.JCheckBox" binding="useForLiveTemplates">
                 <constraints>
-                  <grid row="18" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="21" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Use for Live Templates (might break caret and selection positioning, if IntelliJ code style is different, e.g. tabs vs spaces)"/>
+                </properties>
+              </component>
+              <component id="919a" class="javax.swing.JCheckBox" binding="enableCppFormatting">
+                <constraints>
+                  <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="50" height="23"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text resource-bundle="krasa/formatter/messages" key="settings.enable.cpp"/>
+                </properties>
+              </component>
+              <component id="9f96b" class="javax.swing.JLabel" binding="eclipsePreferenceFileCppLabel">
+                <constraints>
+                  <grid row="18" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="27"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <labelFor value="4ff2e"/>
+                  <text resource-bundle="krasa/formatter/messages" key="settings.eclipsePrefs.cpp"/>
+                </properties>
+              </component>
+              <component id="92aa9" class="javax.swing.JTextField" binding="pathToEclipsePreferenceFileCpp">
+                <constraints>
+                  <grid row="18" column="3" row-span="1" col-span="3" vsize-policy="1" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="20" height="20"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="2f5f1" class="javax.swing.JLabel" binding="eclipsePrefsExampleCpp">
+                <constraints>
+                  <grid row="19" column="3" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="20" height="20"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background swing-color="Label.background"/>
+                  <foreground swing-color="Label.foreground"/>
+                  <text resource-bundle="krasa/formatter/messages" key="settings.eclipsePrefsExample.cpp"/>
+                </properties>
+              </component>
+              <component id="60928" class="javax.swing.JLabel" binding="formatterProfileLabelCpp">
+                <constraints>
+                  <grid row="20" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="27"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <labelFor value="4ff2e"/>
+                  <text value="C/C++ formatter profile"/>
+                </properties>
+              </component>
+              <component id="977af" class="javax.swing.JComboBox" binding="formatterProfileCpp">
+                <constraints>
+                  <grid row="20" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="20" height="23"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <model/>
+                </properties>
+              </component>
+              <component id="c1e79" class="javax.swing.JButton" binding="eclipsePreferenceFilePathCppBrowse">
+                <constraints>
+                  <grid row="18" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="krasa/formatter/messages" key="action.browse"/>
+                </properties>
+              </component>
+              <component id="3a72e" class="javax.swing.JCheckBox" binding="enableGWTNativeMethodsCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="4" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Enable GWT native methods formatting"/>
                 </properties>
               </component>
             </children>

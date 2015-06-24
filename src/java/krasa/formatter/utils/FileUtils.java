@@ -41,7 +41,11 @@ public class FileUtils {
 	}
 
 	public static boolean isJavaScript(PsiFile psiFile) {
-		return psiFile.getName().endsWith(".js");
+		return StdFileTypes.JS.equals(psiFile.getFileType());
+	}
+
+	public static boolean isCpp(PsiFile psiFile) {
+		return psiFile.getFileType().getName().equals("C++");
 	}
 
 	public static boolean isJava(PsiFile psiFile) {

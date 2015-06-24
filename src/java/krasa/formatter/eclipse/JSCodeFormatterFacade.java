@@ -38,7 +38,8 @@ public class JSCodeFormatterFacade extends CodeFormatterFacade {
 		return codeFormatter;
 	}
 
-	protected String formatInternal(String text, int startOffset, int endOffset, PsiFile psiFile) throws FileDoesNotExistsException {
+	public String format(String text, int startOffset, int endOffset, PsiFile psiFile)
+			throws FileDoesNotExistsException {
 		IDocument doc = new Document();
 		try {
 			// format the file (the meat and potatoes)

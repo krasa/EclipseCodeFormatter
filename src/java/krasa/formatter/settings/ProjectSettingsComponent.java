@@ -22,10 +22,6 @@ import org.jetbrains.annotations.*;
 
 import javax.swing.*;
 
-//import com.intellij.notification.impl.NotificationsConfiguration;
-
-//import com.intellij.notification.impl.NotificationsConfiguration;
-
 /**
  * Takes care of initializing a project's CodeFormatter and disposing of it when the project is closed. Updates the
  * formatter whenever the plugin settings are changed.

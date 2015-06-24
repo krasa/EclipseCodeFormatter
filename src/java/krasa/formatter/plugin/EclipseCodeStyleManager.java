@@ -34,6 +34,8 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	private EclipseCodeFormatter eclipseCodeFormatterJava;
 	@Nullable
 	private EclipseCodeFormatter eclipseCodeFormatterJs;
+	@Nullable
+	private EclipseCodeFormatter eclipseCodeFormatterCpp;
 
 	public EclipseCodeStyleManager(@NotNull CodeStyleManager original, @NotNull Settings settings) {
 		super(original);
@@ -191,6 +193,12 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 						settings.getJSProperties()));
 			}
 			eclipseCodeFormatterJs.format(psiFile, startOffset, endOffset);
+		} else if (FileUtils.isCpp(psiFile)) {
+			if (eclipseCodeFormatterCpp == null) {
+				eclipseCodeFormatterCpp = new EclipseCodeFormatter(settings, new CppCodeFormatterFacade(
+						settings.getCppProperties()));
+			}
+			eclipseCodeFormatterCpp.format(psiFile, startOffset, endOffset);
 		} else {
 			eclipseCodeFormatterJava.format(psiFile, startOffset, endOffset);
 		}
@@ -238,7 +246,8 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
 	private boolean fileTypeIsEnabled(@NotNull PsiFile psiFile) {
 		return (FileUtils.isJava(psiFile) && settings.isEnableJavaFormatting())
-				|| (FileUtils.isJavaScript(psiFile) && settings.isEnableJSFormatting());
+				|| (FileUtils.isJavaScript(psiFile) && settings.isEnableJSFormatting())
+				|| (FileUtils.isCpp(psiFile) && settings.isEnableCppFormatting());
 	}
 
 }

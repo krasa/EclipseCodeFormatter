@@ -19,16 +19,6 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 	}
 
 	@Override
-	protected Properties createDefaultConfig() {
-		return new Properties();
-	}
-
-	@Override
-	protected void validateConfig(Properties config, File file) {
-		super.validateConfig(config, file);
-	}
-
-	@Override
 	protected Properties readFile(File file) throws InvalidPropertyFile {
 		if (file.getName().endsWith("xml")) {
 			return readXmlFile(file, profile);

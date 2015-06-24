@@ -7,8 +7,6 @@ import krasa.formatter.settings.Settings;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -52,8 +50,7 @@ public class ChangeFormatterToolbarAction extends AnAction {
 		} catch (Throwable e1) {
 			// old version
 		}
-		DataContext dataContext = e.getDataContext();
-		return DataKeys.PROJECT.getData(dataContext);
+		return e.getProject();
 	}
 
 	private void updateIcon(Settings state, Presentation presentation) {
