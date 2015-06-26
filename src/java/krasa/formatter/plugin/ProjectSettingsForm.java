@@ -452,7 +452,7 @@ public class ProjectSettingsForm {
 
 	private void setCppFormatterProfileModel() {
 		String selectedProfile = displayedSettings != null ? displayedSettings.getSelectedCppProfile() : null;
-		formatterProfileJS.setModel(createProfilesModel(pathToEclipsePreferenceFileCpp, selectedProfile));
+		formatterProfileCpp.setModel(createProfilesModel(pathToEclipsePreferenceFileCpp, selectedProfile));
 	}
 
 	private ComboBoxModel createProfilesModel(JTextField pathToEclipsePreferenceFile, String selectedProfile) {
