@@ -50,7 +50,7 @@
         <jarDirectory url="file://$MODULE_DIR$/lib/cpp" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" scope="TEST">
       <library name="test">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib/test" />
