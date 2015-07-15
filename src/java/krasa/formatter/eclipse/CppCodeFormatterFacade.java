@@ -10,9 +10,6 @@ import org.eclipse.cdt.core.ToolFactory;
 import org.eclipse.cdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.*;
 import org.eclipse.text.edits.TextEdit;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 /**
  * @author Vojtech Krasa
@@ -35,19 +32,9 @@ public class CppCodeFormatterFacade extends CodeFormatterFacade {
 	}
 
 	private CodeFormatter newCodeFormatter() throws InvalidPropertyFile {
-		codeFormatter = ToolFactory.createDefaultCodeFormatter(getOptions());
-		return codeFormatter;
-	}
-
-	@NotNull
-	private Map<String, Object> getOptions() {
 		modifiedMonitor = propertiesProvider.getModifiedMonitor();
-		Properties properties = propertiesProvider.get();
-		Map<String, Object> options = new HashMap<String, Object>();
-		for (final String name : properties.stringPropertyNames()) {
-			options.put(name, properties.getProperty(name));
-		}
-		return options;
+		codeFormatter = ToolFactory.createDefaultCodeFormatter(toMap(propertiesProvider.get()));
+		return codeFormatter;
 	}
 
 	public String format(String text, int startOffset, int endOffset, PsiFile psiFile)

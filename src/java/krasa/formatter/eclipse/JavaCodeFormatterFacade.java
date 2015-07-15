@@ -57,7 +57,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		options.setProperty("org.eclipse.jdt.core.compiler.codegen.targetPlatform", substring);
 		options.setProperty("org.eclipse.jdt.core.compiler.compliance", substring);
 		this.effectiveLanguageLevel = level;
-		codeFormatter = new DefaultCodeFormatter(options);
+		codeFormatter = new DefaultCodeFormatter(toMap(options));
 		return codeFormatter;
 	}
 

@@ -16,16 +16,16 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/antadapter" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/batch" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/codeassist" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/compiler" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/dom" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/eval" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/formatter" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/model" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/scripts" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/search" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/antadapter" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/batch" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/codeassist" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/compiler" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/dom" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/eval" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/formatter" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/model" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/scripts" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/search" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
@@ -40,18 +40,18 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/lib/gwt" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/antadapter" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/batch" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/codeassist" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/compiler" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/dom" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/eval" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/formatter" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/model" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/scripts" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jdt.core/search" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/antadapter" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/batch" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/codeassist" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/compiler" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/dom" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/eval" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/formatter" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/model" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/scripts" />
+          <root url="file://C:/_eclipse/org.eclipse.jdt.core/search" />
           <root url="jar://$MODULE_DIR$/lib/gwt/gwt-dev.jar!/" />
-          <root url="file://$MODULE_DIR$/../../_eclipse/org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.core/src" />
+          <root url="file://C:/_eclipse/org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.core/src" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib/gwt" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/lib/javascript" recursive="false" />
@@ -72,6 +72,6 @@
       </library>
     </orderEntry>
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="cpp" level="project" />
   </component>
 </module>
-
