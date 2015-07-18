@@ -59,6 +59,7 @@ public class Settings {
 	private String selectedJavaScriptProfile;
 	private String selectedCppProfile;
 	private boolean useForLiveTemplates = false;
+	private boolean useOldEclipseJavaFormatter = false;
 
 	public Settings() {
 	}
@@ -224,6 +225,14 @@ public class Settings {
 		this.useForLiveTemplates = useForLiveTemplates;
 	}
 
+	public boolean isUseOldEclipseJavaFormatter() {
+		return useOldEclipseJavaFormatter;
+	}
+
+	public void setUseOldEclipseJavaFormatter(final boolean useOldEclipseJavaFormatter) {
+		this.useOldEclipseJavaFormatter = useOldEclipseJavaFormatter;
+	}
+
 	public static enum Formatter {
 		DEFAULT,
 		ECLIPSE
@@ -324,6 +333,8 @@ public class Settings {
 		if (enableCppFormatting != settings.enableCppFormatting)
 			return false;
 		if (optimizeImports != settings.optimizeImports)
+			return false;
+		if (useOldEclipseJavaFormatter != settings.useOldEclipseJavaFormatter)
 			return false;
 		if (importOrderFromFile != settings.importOrderFromFile)
 			return false;

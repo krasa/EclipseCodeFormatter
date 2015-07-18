@@ -41,8 +41,8 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		super(original);
 		this.settings = settings;
 		notifier = new Notifier();
-		eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, new JavaCodeFormatterFacade(
-				settings.getJavaProperties(), original.getProject()));
+		JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), original.getProject());
+		eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, facade);
 	}
 
 	private final static Comparator<TextRange> RANGE_COMPARATOR = new Comparator<TextRange>() {

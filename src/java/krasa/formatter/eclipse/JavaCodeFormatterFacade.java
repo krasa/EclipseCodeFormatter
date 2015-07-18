@@ -28,14 +28,16 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 	private static final Logger LOG = Logger.getInstance(JavaCodeFormatterFacade.class.getName());
 
+	private boolean useOldEclipseJavaFormatter;
 	private Project project;
 	protected CodeFormatter codeFormatter;
 	private LanguageLevel effectiveLanguageLevel;
 	private JavaPropertiesProvider javaPropertiesProvider;
 	protected ModifiableFile.Monitor lastState;
 
-	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider, Project project) {
+	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider, boolean useOldEclipseJavaFormatter, Project project) {
 		this.javaPropertiesProvider = javaPropertiesProvider;
+		this.useOldEclipseJavaFormatter = useOldEclipseJavaFormatter;
 		this.project = project;
 	}
 
@@ -57,7 +59,11 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		options.setProperty("org.eclipse.jdt.core.compiler.codegen.targetPlatform", substring);
 		options.setProperty("org.eclipse.jdt.core.compiler.compliance", substring);
 		this.effectiveLanguageLevel = level;
-		codeFormatter = new DefaultCodeFormatter(toMap(options));
+		if (useOldEclipseJavaFormatter) {
+			codeFormatter = new org.eclipse.jdt.old.formatter.DefaultCodeFormatter(options);
+		} else {
+			codeFormatter = new DefaultCodeFormatter(toMap(options));
+		}
 		return codeFormatter;
 	}
 

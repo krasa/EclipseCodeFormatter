@@ -69,7 +69,7 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 		super.setUp();
 		Settings settings = new Settings();
 		settings.setPathToConfigFileJava(PATH_TO_CONFIG_FILE);
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), getProject());
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
 	}
 
 	@Test
@@ -90,7 +90,20 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 		Settings settings = new Settings();
 		settings.setPathToConfigFileJava("test/resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), getProject());
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
+		String output = format(INPUT);
+		Assert.assertEquals(FORMATTED, output);
+		output = format(INPUT2);
+		Assert.assertEquals(FORMATTED2, output);
+	}
+
+	@Test
+	public void testFormatByXML_oldFormatter() throws Exception {
+		Settings settings = new Settings();
+		settings.setPathToConfigFileJava("test/resources/format.xml");
+		settings.setSelectedJavaProfile("kuk");
+		settings.setUseOldEclipseJavaFormatter(true);
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
 		String output = format(INPUT);
 		Assert.assertEquals(FORMATTED, output);
 		output = format(INPUT2);

@@ -37,7 +37,7 @@ import java.util.List;
 
 /**
  * Configuration dialog for changing the {@link krasa.formatter.settings.Settings} of the plugin.
- * 
+ *
  * @author Esko Luontola
  * @author Vojtech Krasa
  * @since 4.12.2007
@@ -109,6 +109,7 @@ public class ProjectSettingsForm {
 	private JButton eclipsePreferenceFilePathCppBrowse;
 	private JLabel formatterProfileLabelCpp;
 	private JLabel eclipsePrefsExampleCpp;
+	private JCheckBox useOldEclipseJavaFormatter;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -125,7 +126,7 @@ public class ProjectSettingsForm {
 
 		enabledBy(new JComponent[] { pathToEclipsePreferenceFileJava, eclipsePrefsExample,
 				eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox, eclipsePreferenceFilePathJavaBrowse,
-				javaFormatterProfileLabel, javaFormatterProfile, enableGWTNativeMethodsCheckBox }, enableJavaFormatting);
+				javaFormatterProfileLabel, javaFormatterProfile, enableGWTNativeMethodsCheckBox, useOldEclipseJavaFormatter }, enableJavaFormatting);
 
 		enabledBy(new JComponent[] { importOrder, pathToImportOrderPreferenceFile,
 				pathToImportOrderPreferenceFileBrowse, importOrderManualExample, importOrderLabel,
@@ -747,6 +748,7 @@ public class ProjectSettingsForm {
 		enableCppFormatting.setSelected(data.isEnableCppFormatting());
 		pathToEclipsePreferenceFileCpp.setText(data.getPathToConfigFileCpp());
 		enableGWTNativeMethodsCheckBox.setSelected(data.isEnableGWT());
+		useOldEclipseJavaFormatter.setSelected(data.isUseOldEclipseJavaFormatter());
 	}
 
 	public void getData(Settings data) {
@@ -764,6 +766,7 @@ public class ProjectSettingsForm {
 		data.setEnableCppFormatting(enableCppFormatting.isSelected());
 		data.setPathToConfigFileCpp(pathToEclipsePreferenceFileCpp.getText());
 		data.setEnableGWT(enableGWTNativeMethodsCheckBox.isSelected());
+		data.setUseOldEclipseJavaFormatter(useOldEclipseJavaFormatter.isSelected());
 	}
 
 	public boolean isModified(Settings data) {
@@ -771,45 +774,27 @@ public class ProjectSettingsForm {
 		if (customIsModified(data)) {
 			return true;
 		}
-		if (optimizeImportsCheckBox.isSelected() != data.isOptimizeImports())
+		if (optimizeImportsCheckBox.isSelected() != data.isOptimizeImports()) return true;
+		if (formatSelectedTextInAllFileTypes.isSelected() != data.isFormatSeletedTextInAllFileTypes()) return true;
+		if (pathToEclipsePreferenceFileJava.getText() != null ? !pathToEclipsePreferenceFileJava.getText().equals(data.getPathToConfigFileJava()) : data.getPathToConfigFileJava() != null)
 			return true;
-		if (formatSelectedTextInAllFileTypes.isSelected() != data.isFormatSeletedTextInAllFileTypes())
+		if (pathToEclipsePreferenceFileJS.getText() != null ? !pathToEclipsePreferenceFileJS.getText().equals(data.getPathToConfigFileJS()) : data.getPathToConfigFileJS() != null)
 			return true;
-		if (pathToEclipsePreferenceFileJava.getText() != null ?
-				!pathToEclipsePreferenceFileJava.getText().equals(data.getPathToConfigFileJava()) :
-				data.getPathToConfigFileJava() != null)
+		if (disabledFileTypes.getText() != null ? !disabledFileTypes.getText().equals(data.getDisabledFileTypes()) : data.getDisabledFileTypes() != null)
 			return true;
-		if (pathToEclipsePreferenceFileJS.getText() != null ?
-				!pathToEclipsePreferenceFileJS.getText().equals(data.getPathToConfigFileJS()) :
-				data.getPathToConfigFileJS() != null)
+		if (enableJSFormatting.isSelected() != data.isEnableJSFormatting()) return true;
+		if (enableJavaFormatting.isSelected() != data.isEnableJavaFormatting()) return true;
+		if (importOrder.getText() != null ? !importOrder.getText().equals(data.getImportOrder()) : data.getImportOrder() != null)
 			return true;
-		if (disabledFileTypes.getText() != null ?
-				!disabledFileTypes.getText().equals(data.getDisabledFileTypes()) :
-				data.getDisabledFileTypes() != null)
+		if (pathToImportOrderPreferenceFile.getText() != null ? !pathToImportOrderPreferenceFile.getText().equals(data.getImportOrderConfigFilePath()) : data.getImportOrderConfigFilePath() != null)
 			return true;
-		if (enableJSFormatting.isSelected() != data.isEnableJSFormatting())
+		if (enableJavaScriptCommentsPostProcessor.isSelected() != data.isEnableJSProcessor()) return true;
+		if (useForLiveTemplates.isSelected() != data.isUseForLiveTemplates()) return true;
+		if (enableCppFormatting.isSelected() != data.isEnableCppFormatting()) return true;
+		if (pathToEclipsePreferenceFileCpp.getText() != null ? !pathToEclipsePreferenceFileCpp.getText().equals(data.getPathToConfigFileCpp()) : data.getPathToConfigFileCpp() != null)
 			return true;
-		if (enableJavaFormatting.isSelected() != data.isEnableJavaFormatting())
-			return true;
-		if (importOrder.getText() != null ?
-				!importOrder.getText().equals(data.getImportOrder()) :
-				data.getImportOrder() != null)
-			return true;
-		if (pathToImportOrderPreferenceFile.getText() != null ?
-				!pathToImportOrderPreferenceFile.getText().equals(data.getImportOrderConfigFilePath()) :
-				data.getImportOrderConfigFilePath() != null)
-			return true;
-		if (enableJavaScriptCommentsPostProcessor.isSelected() != data.isEnableJSProcessor())
-			return true;
-		if (useForLiveTemplates.isSelected() != data.isUseForLiveTemplates())
-			return true;
-		if (enableCppFormatting.isSelected() != data.isEnableCppFormatting())
-			return true;
-		if (pathToEclipsePreferenceFileCpp.getText() != null ? !pathToEclipsePreferenceFileCpp.getText().equals(
-				data.getPathToConfigFileCpp()) : data.getPathToConfigFileCpp() != null)
-			return true;
-		if (enableGWTNativeMethodsCheckBox.isSelected() != data.isEnableGWT())
-			return true;
+		if (enableGWTNativeMethodsCheckBox.isSelected() != data.isEnableGWT()) return true;
+		if (useOldEclipseJavaFormatter.isSelected() != data.isUseOldEclipseJavaFormatter()) return true;
 		return false;
 	}
 }
