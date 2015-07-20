@@ -34,7 +34,7 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>15.1 (2015-06-24)
+        <br>15.1 (2015-07-20)
         <br>- C/C++ support - requires to run IDE with JRE 1.7, matched for file types defined in: 'Settings | Editor | File Types' with 'C++' name
         <br>- better matching of JS file types
         <br>- Java formatter from Eclipse Mars 4.5, configurable use of the old Java formatter from Eclipse 4.4
