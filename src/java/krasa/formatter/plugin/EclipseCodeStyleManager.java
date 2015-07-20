@@ -30,7 +30,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	private Settings settings;
 	@NotNull
 	private Notifier notifier;
-	@NotNull
+	@Nullable
 	private EclipseCodeFormatter eclipseCodeFormatterJava;
 	@Nullable
 	private EclipseCodeFormatter eclipseCodeFormatterJs;
@@ -41,8 +41,6 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		super(original);
 		this.settings = settings;
 		notifier = new Notifier();
-		JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), original.getProject());
-		eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, facade);
 	}
 
 	private final static Comparator<TextRange> RANGE_COMPARATOR = new Comparator<TextRange>() {
@@ -134,8 +132,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 					+ psiFile.getText().length(), e);
 			notifier.notifyFailedFormatting(psiFile, formattedByIntelliJ, getReason(e));
 		} catch (final Exception e) {
-			LOG.error("startOffset" + startOffset + ", endOffset:" + endOffset + ", length of file "
-					+ psiFile.getText().length(), e);
+			LOG.error(e);
 		}
 	}
 
@@ -200,6 +197,10 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 			}
 			eclipseCodeFormatterCpp.format(psiFile, startOffset, endOffset);
 		} else {
+			if (eclipseCodeFormatterJava == null) {
+				JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), original.getProject());
+				eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, facade);
+			}
 			eclipseCodeFormatterJava.format(psiFile, startOffset, endOffset);
 		}
 	}

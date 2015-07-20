@@ -13,6 +13,7 @@ import com.intellij.psi.PsiFile;
 public class Notifier {
 
 	public static final String NO_FILE_TO_FORMAT = "No file to format";
+	public static final String ECLIPSE_4_5 = "Eclipse 4.5";
 
 	public void notifyFailedFormatting(PsiFile psiFile, boolean formattedByIntelliJ, Exception e) {
 		String error = e.getMessage() == null ? "" : e.getMessage();
@@ -77,7 +78,20 @@ public class Notifier {
 				Notifications.Bus.notify(notification, project);
 			}
 		});
+	}
 
+	public static void notifyOldJRE(final Project project) {
+		String content = ECLIPSE_4_5 + " formatter requires JRE 1.7+, using formatter from Eclipse 4.4. " +
+				"You can configure this in the plugin settings.";
+
+		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+				NotificationType.WARNING);
+		ApplicationManager.getApplication().invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				Notifications.Bus.notify(notification, project);
+			}
+		});
 	}
 
 }
