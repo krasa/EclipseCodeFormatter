@@ -12,6 +12,9 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.wst.jsdt.core.formatter.CodeFormatter;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+
 /**
  * @author Vojtech Krasa
  */
@@ -34,10 +37,22 @@ public class JSCodeFormatterFacade extends CodeFormatterFacade {
 
 	private org.eclipse.wst.jsdt.core.formatter.CodeFormatter newCodeFormatter() throws InvalidPropertyFile {
 		modifiedMonitor = propertiesProvider.getModifiedMonitor();
-		codeFormatter = org.eclipse.wst.jsdt.core.ToolFactory.createCodeFormatter(propertiesProvider.get());
+		codeFormatter = createCodeFormatter(propertiesProvider.get());
 		return codeFormatter;
 	}
 
+	public static CodeFormatter createCodeFormatter(Map properties) {
+		try {
+			ClassLoader eclipse44 = Classloaders.getEclipse44();
+			Class<?> aClass = eclipse44.loadClass("org.eclipse.wst.jsdt.core.ToolFactory");
+			Method createCodeFormatter = aClass.getDeclaredMethod("createCodeFormatter", Map.class);
+			return (CodeFormatter) createCodeFormatter.invoke(null, properties);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public String format(String text, int startOffset, int endOffset, PsiFile psiFile)
 			throws FileDoesNotExistsException {
 		IDocument doc = new Document();
@@ -50,12 +65,12 @@ public class JSCodeFormatterFacade extends CodeFormatterFacade {
 			 * <p>
 			 * It returns null if the given string cannot be formatted.
 			 * </p>
-			 * 
+			 *
 			 * <p>
 			 * If the offset position is matching a whitespace, the result can include whitespaces. It would be up to
 			 * the caller to get rid of preceeding whitespaces.
 			 * </p>
-			 * 
+			 *
 			 * @param kind
 			 *            Use to specify the kind of the code snippet to format. It can be any of these: K_EXPRESSION,
 			 *            K_STATEMENTS, K_CLASS_BODY_DECLARATIONS, K_JAVASCRIPT_UNIT, K_UNKNOWN, K_SINGLE_LINE_COMMENT,
@@ -102,12 +117,12 @@ public class JSCodeFormatterFacade extends CodeFormatterFacade {
 			 * <p>
 			 * It returns null if the given string cannot be formatted.
 			 * </p>
-			 * 
+			 *
 			 * <p>
 			 * If the offset position is matching a whitespace, the result can include whitespaces. It would be up to
 			 * the caller to get rid of preceeding whitespaces.
 			 * </p>
-			 * 
+			 *
 			 * @param kind
 			 *            Use to specify the kind of the code snippet to format. It can be any of these: K_EXPRESSION,
 			 *            K_STATEMENTS, K_CLASS_BODY_DECLARATIONS, K_JAVASCRIPT_UNIT, K_UNKNOWN, K_SINGLE_LINE_COMMENT,
@@ -142,7 +157,9 @@ public class JSCodeFormatterFacade extends CodeFormatterFacade {
 		}
 	}
 
-	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel, String lineSeparator) {
+	@Override
+	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
+						   String lineSeparator) {
 		return getCodeFormatter().format(kind, source, offset, length, indentationLevel, lineSeparator);
 	}
 }

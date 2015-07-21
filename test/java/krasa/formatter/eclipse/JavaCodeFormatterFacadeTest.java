@@ -110,6 +110,20 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 		Assert.assertEquals(FORMATTED2, output);
 	}
 
+
+	@Test
+	public void testFormatByXML_oldFormatter_againToTestClassloader() throws Exception {
+		Settings settings = new Settings();
+		settings.setPathToConfigFileJava("test/resources/format.xml");
+		settings.setSelectedJavaProfile("kuk");
+		settings.setUseOldEclipseJavaFormatter(true);
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
+		String output = format(INPUT);
+		Assert.assertEquals(FORMATTED, output);
+		output = format(INPUT2);
+		Assert.assertEquals(FORMATTED2, output);
+	}
+
 	@Test
 	public void testFormat2() throws Exception {
 		String input2 = INPUT2;

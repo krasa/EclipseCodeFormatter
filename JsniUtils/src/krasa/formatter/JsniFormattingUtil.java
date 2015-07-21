@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright 2011 Google Inc. All Rights Reserved.
- *
+ * <p/>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,32 +14,25 @@
  *******************************************************************************/
 package krasa.formatter;
 
+import com.google.gwt.eclipse.core.editors.java.GWTPartitions;
+import com.google.gwt.eclipse.core.validators.java.JsniParser;
+import krasa.formatter.eclipse.JSCodeFormatterFacade;
+import krasa.formatter.plugin.Range;
+import krasa.formatter.settings.Settings;
+import org.eclipse.jdt.core.formatter.IndentManipulation;
+import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
+import org.eclipse.jface.text.*;
+import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.text.edits.ReplaceEdit;
+import org.eclipse.text.edits.TextEdit;
+import org.eclipse.wst.jsdt.core.formatter.CodeFormatter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import krasa.formatter.plugin.Range;
-import krasa.formatter.settings.Settings;
-
-import org.eclipse.jdt.core.formatter.IndentManipulation;
-import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITypedRegion;
-import org.eclipse.jface.text.TypedPosition;
-import org.eclipse.jface.text.TypedRegion;
-import org.eclipse.text.edits.MultiTextEdit;
-import org.eclipse.text.edits.ReplaceEdit;
-import org.eclipse.text.edits.TextEdit;
-import org.eclipse.wst.jsdt.core.ToolFactory;
-import org.eclipse.wst.jsdt.core.formatter.CodeFormatter;
-
-import com.google.gwt.eclipse.core.editors.java.GWTPartitions;
-import com.google.gwt.eclipse.core.validators.java.JsniParser;
 
 /**
  * Utility methods for formatting JSNI methods. This is not a full-blown JavaScript pretty-printer, but it does apply
@@ -68,7 +61,7 @@ public class JsniFormattingUtil {
 
 	/**
 	 * Returns a text edit that formats the given document according to the given settings.
-	 * 
+	 *
 	 * @param document
 	 *            The document to format.
 	 * @param javaFormattingPrefs
@@ -83,8 +76,7 @@ public class JsniFormattingUtil {
 	 * @return A text edit that when applied to the document, will format the jsni methods.
 	 */
 	@SuppressWarnings("unchecked")
-	public static TextEdit format(IDocument document, Map javaFormattingPrefs, Map javaScriptFormattingPrefs,
-			Range range) {
+	public TextEdit format(IDocument document, Map javaFormattingPrefs, Map javaScriptFormattingPrefs,  Range range) {
 		TextEdit combinedEdit = new MultiTextEdit();
 		ITypedRegion[] regions = computePartitioning(document, range);
 
@@ -136,8 +128,8 @@ public class JsniFormattingUtil {
 		return range.isWholeFile() || b || b1 || b2;
 	}
 
-	public static TextEdit format(IDocument document, TypedPosition partition, Map<String, String> javaFormattingPrefs,
-			Map<String, String> javaScriptFormattingPrefs, String original) {
+	public TextEdit format(IDocument document, TypedPosition partition, Map<String, String> javaFormattingPrefs,
+						   Map<String, String> javaScriptFormattingPrefs, String original) {
 		try {
 			// Extract the JSNI block out of the document
 			int offset = partition.getOffset();
@@ -167,7 +159,7 @@ public class JsniFormattingUtil {
 			// with place holder values
 			JsniJavaRefReplacementResult replacementResults = replaceJsniJavaRefs(body);
 			body = replacementResults.getJsni();
-			CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(javaScriptFormattingPrefs);
+			CodeFormatter codeFormatter = JSCodeFormatterFacade.createCodeFormatter(javaScriptFormattingPrefs);
 
 			TextEdit formatEdit = codeFormatter.format(CodeFormatter.K_STATEMENTS, body, 0, body.length(),
 					methodIndentLevel + 1, lineDelimiter);

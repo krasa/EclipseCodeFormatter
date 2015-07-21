@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright 2011 Google Inc. All Rights Reserved.
- *
+ * <p/>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,12 +14,8 @@
  *******************************************************************************/
 package krasa.formatter.eclipse;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import krasa.formatter.JsniFormattingUtil;
 import krasa.formatter.plugin.Range;
-
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.jface.text.Document;
@@ -29,7 +25,8 @@ import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.gwt.eclipse.core.util.Util;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * Test cases for the {@link com.google.gwt.eclipse.core.editors.java.JsniFormattingUtil} class.
@@ -61,8 +58,8 @@ public class JsniFormattingUtilTest {
 		IDocument document = new Document(createString(getTestClasses()));
 
 		// Apply the formatting and test the result
-		TextEdit formatEdit = JsniFormattingUtil.format(document, javaPrefs, javaScriptPrefs, new Range(0,
-				document.get().length(), true));
+		Range range = new Range(0, document.get().length(), true);
+		TextEdit formatEdit = JsniFormattingUtilFacade.format(document, javaPrefs, javaScriptPrefs, range);
 		formatEdit.apply(document);
 		Assert.assertEquals(getFormattedDocument(), document.get());
 		System.err.println("---------------------------");
@@ -72,7 +69,7 @@ public class JsniFormattingUtilTest {
 	}
 
 	protected String[] getTestClasses() {
-		testClass = new String[] { "package com.hello.client;", "", "public class FormattingUtilTest {", "",
+		testClass = new String[]{"package com.hello.client;", "", "public class FormattingUtilTest {", "",
 				"  private static native void jsniMethod()/*-{",
 				"    var obj = @com.hello.client.FormattingUtilTest::new()();", "    var x = 777;", "",
 				"    if (x == 777) {", "     x += 207;", "     alert(\"Hello!\");", "    }", "",
@@ -98,16 +95,16 @@ public class JsniFormattingUtilTest {
 				"                       }-*/;", "",
 				"  private static native void jsniMethodWithDeclarationLineThatWraps(Object o,",
 				"      String s, int x)/*-{", "                       var x = 777;", "                       }-*/;",
-				"", "}" };
+				"", "}"};
 		return testClass;
 	}
 
 	public static String createString(String[] lines) {
-		return Util.join(Arrays.asList(lines), "\n");
+		return StringUtils.join(Arrays.asList(lines), "\n");
 	}
 
 	private String getFormattedDocument() {
-		return createString(new String[] { "package com.hello.client;", "", "public class FormattingUtilTest {", "",
+		return createString(new String[]{"package com.hello.client;", "", "public class FormattingUtilTest {", "",
 				"  private static native void jsniMethod()/*-{",
 				"    var obj = @com.hello.client.FormattingUtilTest::new()();", "    var x = 777;", "",
 				"    if (x == 777) {", "      x += 207;", "      alert(\"Hello!\");", "    }", "",
@@ -130,7 +127,7 @@ public class JsniFormattingUtilTest {
 				"  private static native void emptyJsniMethod()/*-{}-*/;", "",
 				"  private static native void jsniMethodWithSpace() /*-{", "    var x = 777;", "  }-*/;", "",
 				"  private static native void jsniMethodWithDeclarationLineThatWraps(Object o,",
-				"      String s, int x)/*-{", "    var x = 777;", "  }-*/;", "", "}" });
+				"      String s, int x)/*-{", "    var x = 777;", "  }-*/;", "", "}"});
 	}
 
 }

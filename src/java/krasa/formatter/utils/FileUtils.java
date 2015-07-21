@@ -1,6 +1,21 @@
 package krasa.formatter.utils;
 
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.ReadonlyStatusHandler;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.exception.ParsingFailedException;
+import krasa.formatter.plugin.InvalidPropertyFile;
+import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,23 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import krasa.formatter.eclipse.FileDoesNotExistsException;
-import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.plugin.InvalidPropertyFile;
-
-import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.ReadonlyStatusHandler;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
 
 /**
  * @author Vojtech Krasa
@@ -41,7 +39,8 @@ public class FileUtils {
 	}
 
 	public static boolean isJavaScript(PsiFile psiFile) {
-		return StdFileTypes.JS.equals(psiFile.getFileType());
+		FileType fileType = psiFile.getFileType();
+		return StdFileTypes.JS.equals(fileType) || "JavaScript".equals(fileType.getName());
 	}
 
 	public static boolean isCpp(PsiFile psiFile) {
@@ -128,10 +127,10 @@ public class FileUtils {
 			throw new InvalidPropertyFile(e.getMessage(), e);
 		}
 		if (!profileFound) {
-			throw new IllegalStateException("profile not found in the file "+file.getAbsolutePath());
+			throw new IllegalStateException("profile not found in the file " + file.getAbsolutePath());
 		}
 		if (properties.size() == defaultSize) {
-			throw new IllegalStateException("no properties loaded, something is broken, file:"+file.getAbsolutePath());
+			throw new IllegalStateException("no properties loaded, something is broken, file:" + file.getAbsolutePath());
 		}
 		return properties;
 	}
@@ -140,9 +139,9 @@ public class FileUtils {
 		List<String> profileNames = new ArrayList<String>();
 		if (file.exists()) {
 			try { // load file profiles
-					// delete eclipse dependency to fix java.lang.ClassCastException:
-					// org.apache.xerces.jaxp.DocumentBuilderFactoryImpl cannot be cast to
-					// javax.xml.parsers.DocumentBuilderFactory
+				// delete eclipse dependency to fix java.lang.ClassCastException:
+				// org.apache.xerces.jaxp.DocumentBuilderFactoryImpl cannot be cast to
+				// javax.xml.parsers.DocumentBuilderFactory
 
 				org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 				doc.getDocumentElement().normalize();

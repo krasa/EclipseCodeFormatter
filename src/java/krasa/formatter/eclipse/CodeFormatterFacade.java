@@ -1,6 +1,8 @@
 package krasa.formatter.eclipse;
 
 import com.intellij.psi.PsiFile;
+import org.apache.commons.lang.NotImplementedException;
+import org.eclipse.text.edits.TextEdit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -22,13 +24,15 @@ public abstract class CodeFormatterFacade {
 	}
 
 	/**
-	 * @param text
-	 *            to format
-	 * @param startOffset
-	 *            start of formatted area - this should be always start of line
+	 * @param text        to format
+	 * @param startOffset start of formatted area - this should be always start of line
 	 * @param endOffset
 	 */
 	public abstract String format(String text, int startOffset, int endOffset, PsiFile psiFile)
 			throws FileDoesNotExistsException;
 
+	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
+						   String lineSeparator) {
+		throw new NotImplementedException();
+	}
 }

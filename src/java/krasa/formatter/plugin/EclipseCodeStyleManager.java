@@ -1,26 +1,33 @@
 package krasa.formatter.plugin;
 
-import java.util.*;
-
-import krasa.formatter.eclipse.*;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.settings.*;
-import krasa.formatter.utils.FileUtils;
-
-import org.jetbrains.annotations.*;
-
-import com.intellij.notification.*;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.*;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
+import krasa.formatter.eclipse.CppCodeFormatterFacade;
+import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.eclipse.JSCodeFormatterFacade;
+import krasa.formatter.eclipse.JavaCodeFormatterFacade;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.settings.DisabledFileTypeSettings;
+import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
@@ -51,12 +58,13 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		}
 	};
 
-    // 15
-    @Override
-    public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
-        reformatText(psiFile, collection);
-    }
-    
+	// 15
+	@Override
+	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection)
+			throws IncorrectOperationException {
+		reformatText(psiFile, collection);
+	}
+
 	@Override
 	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
 			throws IncorrectOperationException {
@@ -79,7 +87,8 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		CheckUtil.checkWritable(psiFile);
 		if (psiFile.getVirtualFile() == null) {
 			LOG.debug("virtual file is null");
-			Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(Notifier.NO_FILE_TO_FORMAT, NotificationType.ERROR);
+			Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
+					Notifier.NO_FILE_TO_FORMAT, NotificationType.ERROR);
 			notifier.showNotification(notification, psiFile.getProject());
 			return;
 		}
@@ -174,11 +183,11 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	private boolean shouldReformat(boolean wholeFileOrSelectedText, Mode mode) {
 		switch (mode) {
 		/* when formatting only vcs changes, this is needed. */
-		case ALWAYS_FORMAT:
-			return true;
-			/* live templates gets broken without that */
-		case WITH_CTRL_SHIFT_ENTER_CHECK:
-			return wholeFileOrSelectedText;
+			case ALWAYS_FORMAT:
+				return true;
+		/* live templates gets broken without that */
+			case WITH_CTRL_SHIFT_ENTER_CHECK:
+				return wholeFileOrSelectedText;
 		}
 		return true;
 	}
@@ -192,13 +201,14 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 			eclipseCodeFormatterJs.format(psiFile, startOffset, endOffset);
 		} else if (FileUtils.isCpp(psiFile)) {
 			if (eclipseCodeFormatterCpp == null) {
-				eclipseCodeFormatterCpp = new EclipseCodeFormatter(settings, new CppCodeFormatterFacade(
-						settings.getCppProperties()));
+				eclipseCodeFormatterCpp = new EclipseCodeFormatter(settings,
+						new CppCodeFormatterFacade(settings.getCppProperties()));
 			}
 			eclipseCodeFormatterCpp.format(psiFile, startOffset, endOffset);
 		} else {
 			if (eclipseCodeFormatterJava == null) {
-				JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), original.getProject());
+				JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+						settings.isUseOldEclipseJavaFormatter(), original.getProject());
 				eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, facade);
 			}
 			eclipseCodeFormatterJava.format(psiFile, startOffset, endOffset);
@@ -231,8 +241,8 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
 	public boolean canReformatWithEclipse(PsiFile psiFile) {
 		Project project = psiFile.getProject();
-		return psiFile.getVirtualFile().isInLocalFileSystem()
-				&& FileUtils.isWritable(psiFile.getVirtualFile(), project) && fileTypeIsEnabled(psiFile);
+		return psiFile.getVirtualFile().isInLocalFileSystem() && FileUtils.isWritable(psiFile.getVirtualFile(), project)
+				&& fileTypeIsEnabled(psiFile);
 	}
 
 	private void formatWithIntelliJ(PsiFile psiFile, int startOffset, int endOffset) {

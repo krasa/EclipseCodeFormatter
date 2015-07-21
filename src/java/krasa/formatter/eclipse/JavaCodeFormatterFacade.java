@@ -1,27 +1,5 @@
 package krasa.formatter.eclipse;
 
-import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Properties;
-
-import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.plugin.Notifier;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.JavaPropertiesProvider;
-import krasa.formatter.utils.ParentLastURLClassLoader;
-
-import org.eclipse.jdt.core.formatter.CodeFormatter;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.text.edits.TextEdit;
-import org.jetbrains.annotations.NotNull;
-
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
@@ -29,6 +7,22 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
+import krasa.formatter.common.ModifiableFile;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.plugin.Notifier;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.JavaPropertiesProvider;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.text.edits.TextEdit;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -44,40 +38,11 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	private JavaPropertiesProvider javaPropertiesProvider;
 	protected ModifiableFile.Monitor lastState;
 
-	private static ClassLoader eclipse44;
-	private static ClassLoader newEclipse;
-
 	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider, boolean useOldEclipseJavaFormatter,
-			Project project) {
+								   Project project) {
 		this.javaPropertiesProvider = javaPropertiesProvider;
 		this.useOldEclipseJavaFormatter = useOldEclipseJavaFormatter;
 		this.project = project;
-		File pluginHome;
-		if (ApplicationManager.getApplication().isUnitTestMode()) {
-			pluginHome = new File(".");
-		} else {
-			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter");
-		}
-		if (eclipse44 == null) {
-			eclipse44 = classLoader(new File(pluginHome, "lib/org.eclipse.jdt.core_3.10.0.v20140902-0626.jar"));
-		}
-		if (newEclipse == null) {
-			newEclipse = classLoader(new File(pluginHome, "lib/org.eclipse.jdt.core_3.11.0.v20150602-1242.jar"));
-		}
-	}
-
-	@NotNull
-	private ClassLoader classLoader(File jarFile) {
-		if (!jarFile.exists()) {
-			throw new IllegalStateException("Plugin jar file not found: " + jarFile.getAbsolutePath());
-		}
-		try {
-			// return UrlClassLoader.classLoader().urls(jarFile).useCache().get();
-			LOG.info("Creating classloader for " + jarFile.getAbsolutePath());
-			return new ParentLastURLClassLoader(this.getClass().getClassLoader(), jarFile.toURI().toURL());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	private Object getCodeFormatter(LanguageLevel level) throws FileDoesNotExistsException {
@@ -101,12 +66,12 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		try {
 			ClassLoader classLoader;
 			if (useOldEclipseJavaFormatter) {
-				classLoader = eclipse44;
+				classLoader = Classloaders.getEclipse44();
 			} else {
 				if (SystemInfo.isJavaVersionAtLeast("1.7")) {
-					classLoader = newEclipse;
+					classLoader = Classloaders.getNewEclipse();
 				} else {
-					classLoader = eclipse44;
+					classLoader = Classloaders.getEclipse44();
 					Notifier.notifyOldJRE(project);
 				}
 			}
@@ -205,8 +170,8 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		try {
 			edit = (TextEdit) codeFormatter.getClass().getMethod("format", int.class, String.class, int.class,
 					int.class, int.class, String.class).invoke(codeFormatter,
-							CodeFormatter.K_COMPILATION_UNIT | CodeFormatter.F_INCLUDE_COMMENTS, text, startOffset,
-							endOffset - startOffset, 0, Settings.LINE_SEPARATOR);
+					CodeFormatter.K_COMPILATION_UNIT | CodeFormatter.F_INCLUDE_COMMENTS, text, startOffset,
+					endOffset - startOffset, 0, Settings.LINE_SEPARATOR);
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}

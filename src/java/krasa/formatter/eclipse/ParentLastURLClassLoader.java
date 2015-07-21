@@ -1,15 +1,26 @@
-package krasa.formatter.utils;
+package krasa.formatter.eclipse;
 
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A parent-last classloader that will try the child classloader first and then the parent. This takes a fair bit of
  * doing because java really prefers parent-first.
- *
+ * <p/>
  * For those not familiar with class loading trickery, be wary
  */
 public class ParentLastURLClassLoader extends ClassLoader {
+
+	final static Set<String> loadFromParent = new HashSet<String>();
+
+	{
+		{
+			loadFromParent.add("org.eclipse.wst.jsdt.core.formatter.CodeFormatter");
+		}
+	}
+
 	private ChildURLClassLoader childClassLoader;
 
 	/**
@@ -42,6 +53,15 @@ public class ParentLastURLClassLoader extends ClassLoader {
 		@Override
 		public Class<?> findClass(String name) throws ClassNotFoundException {
 			try {
+				if (loadFromParent.contains(name)) {
+					return realParent.loadClass(name);
+				}
+
+				//calling twic #findClass with the same classname, you will get a LinkageError, this fixes it
+				Class<?> loaded = super.findLoadedClass(name);
+				if (loaded != null)
+					return loaded;
+
 				// first try to use the URLClassLoader findClass
 				return super.findClass(name);
 			} catch (ClassNotFoundException e) {
@@ -53,7 +73,8 @@ public class ParentLastURLClassLoader extends ClassLoader {
 
 	public ParentLastURLClassLoader(ClassLoader parent, URL... urls) {
 		super(parent);
-		childClassLoader = new ChildURLClassLoader(urls, new FindClassClassLoader(this.getParent()));
+		childClassLoader = new ChildURLClassLoader(urls,
+				new ParentLastURLClassLoader.FindClassClassLoader(this.getParent()));
 	}
 
 	@Override

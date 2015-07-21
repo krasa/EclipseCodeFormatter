@@ -17,10 +17,10 @@
         for instructions how to use it.     <br><br>
 
        Currently supports formatting of<br>
-       -Java (Eclipse 4.5 and 4.4, also emulates Eclipse's imports optimizing)<br>
-       -JavaScript<br>
-       -C/C++ (Eclipse 4.5 libs, requires JRE 1.7)<br>
-       -GWT
+       -Java (Eclipse 4.5 and 4.4 libs, also emulates Eclipse's imports optimizing)<br>
+       -JavaScript (Eclipse 4.4)<br>
+       -C/C++ (Eclipse 4.5, requires JRE 1.7)<br>
+       -GWT (Eclipse 4.4)
 
         <br> <br>
         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest">Small donations are welcomed.</a>

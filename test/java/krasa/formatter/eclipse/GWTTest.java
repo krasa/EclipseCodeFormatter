@@ -1,15 +1,13 @@
 package krasa.formatter.eclipse;
 
-import java.util.HashMap;
-
 import junit.framework.Assert;
-import krasa.formatter.JsniFormattingUtil;
-
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TypedPosition;
 import org.eclipse.text.edits.TextEdit;
 import org.junit.Test;
+
+import java.util.HashMap;
 
 /**
  * @author Vojtech Krasa
@@ -39,7 +37,7 @@ public class GWTTest {
 		HashMap<String, String> jsMap = TestUtils.getJSProperties();
 
 		IDocument document = new Document(INPUT);
-		TextEdit format1 = JsniFormattingUtil.format(document, partition, javaFormattingPrefs, jsMap, null);
+		TextEdit format1 = JsniFormattingUtilFacade.format(document, partition, javaFormattingPrefs, jsMap, null);
 		// TextEdit format1 = JsniFormattingUtil.format(document,javaFormattingPrefs, jsMap, null);
 		format1.apply(document);
 		Assert.assertEquals(FORMATTED, document.get());

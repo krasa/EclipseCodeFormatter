@@ -63,5 +63,25 @@
         <jarDirectory url="file://$MODULE_DIR$/lib/test" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="eclipse44">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/eclipse44" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/lib/eclipse44" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="generated">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/generated" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/lib/generated" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
