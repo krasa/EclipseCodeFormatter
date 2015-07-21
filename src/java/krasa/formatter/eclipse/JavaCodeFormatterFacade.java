@@ -43,8 +43,9 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	private LanguageLevel effectiveLanguageLevel;
 	private JavaPropertiesProvider javaPropertiesProvider;
 	protected ModifiableFile.Monitor lastState;
-	private final ClassLoader eclipse44;
-	private final ClassLoader newEclipse;
+
+	private static ClassLoader eclipse44;
+	private static ClassLoader newEclipse;
 
 	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider, boolean useOldEclipseJavaFormatter,
 			Project project) {
@@ -57,9 +58,12 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		} else {
 			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter");
 		}
-		//todo make singletons
-		eclipse44 = classLoader(new File(pluginHome, "lib/org.eclipse.jdt.core_3.10.0.v20140902-0626.jar"));
-		newEclipse = classLoader(new File(pluginHome, "lib/org.eclipse.jdt.core_3.11.0.v20150602-1242.jar"));
+		if (eclipse44 == null) {
+			eclipse44 = classLoader(new File(pluginHome, "lib/org.eclipse.jdt.core_3.10.0.v20140902-0626.jar"));
+		}
+		if (newEclipse == null) {
+			newEclipse = classLoader(new File(pluginHome, "lib/org.eclipse.jdt.core_3.11.0.v20150602-1242.jar"));
+		}
 	}
 
 	@NotNull
@@ -69,6 +73,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		}
 		try {
 			// return UrlClassLoader.classLoader().urls(jarFile).useCache().get();
+			LOG.info("Creating classloader for " + jarFile.getAbsolutePath());
 			return new ParentLastURLClassLoader(this.getClass().getClassLoader(), jarFile.toURI().toURL());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
