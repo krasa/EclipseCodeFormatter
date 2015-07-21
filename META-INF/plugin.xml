@@ -17,13 +17,11 @@
         for instructions how to use it.     <br><br>
 
        Currently supports formatting of<br>
-       -Java (also emulates Eclipse's imports optimizing)<br>
+       -Java (Eclipse 4.5 and 4.4, also emulates Eclipse's imports optimizing)<br>
        -JavaScript<br>
-       -C/C++ (Eclipse 4.5.0 libs, requires JRE 1.7)<br>
-       -GWT<br><br>
+       -C/C++ (Eclipse 4.5 libs, requires JRE 1.7)<br>
+       -GWT
 
-
-        Plugin for IJ 13+ contains a formatter from Eclipse 4.5 which supports Java 1.8, plugins for older IntelliJ contains a formatter from Eclipse 4.3
         <br> <br>
         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest">Small donations are welcomed.</a>
         ]]></description> 
@@ -38,7 +36,7 @@
         <br>- C/C++ support - requires to run IDE with JRE 1.7, matched for file types defined in: 'Settings | Editor | File Types' with 'C++' name
         <br>- better matching of JS file types
         <br>- upgraded Java formatter from Eclipse Mars 4.5 - requires JRE 1.7
-        <br>- configurable use of the old Java formatter from Eclipse 4.4 - requiresJRE 1.6
+        <br>- configurable use of the old Java formatter from Eclipse 4.4 - requires JRE 1.6
         <br>15.0 (2015-06-22)
         <br>- new IJ 15 API
         <br>14.9 (2015-06-15)
