@@ -82,7 +82,7 @@ public class Notifier {
 
 	public static void notifyOldJRE(final Project project) {
 		String content = ECLIPSE_4_5 + " formatter requires JRE 1.7+, using formatter from Eclipse 4.4. " +
-				"You can configure this in the plugin settings.";
+				"You can configure to use 4.4 in the plugin settings to avoid this warning.";
 
 		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.WARNING);
