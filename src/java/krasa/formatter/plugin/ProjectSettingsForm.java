@@ -50,6 +50,8 @@ public class ProjectSettingsForm {
 
 	private JRadioButton useDefaultFormatter;
 	private JRadioButton useEclipseFormatter;
+	
+	private JCheckBox enableSuccessfulFormattingConfirmationPopup;
 
 	private JLabel eclipseSupportedFileTypesLabel;
 
@@ -118,8 +120,8 @@ public class ProjectSettingsForm {
 
 	private void updateComponents() {
 		hidePopups();
-		enabledBy(new JComponent[] { eclipseSupportedFileTypesLabel, enableJavaFormatting, enableJSFormatting,
-				enableCppFormatting,
+		enabledBy(new JComponent[] { enableSuccessfulFormattingConfirmationPopup, eclipseSupportedFileTypesLabel, 
+				enableJavaFormatting, enableJSFormatting, enableCppFormatting,
 				doNotFormatOtherFilesRadioButton, formatOtherFilesWithExceptionsRadioButton,
 				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
 				importOrderConfigurationManualRadioButton, formatSelectedTextInAllFileTypes, useForLiveTemplates }, useEclipseFormatter);
@@ -200,7 +202,7 @@ public class ProjectSettingsForm {
 		JToggleButton[] modifiableButtons = new JToggleButton[] { useDefaultFormatter, useEclipseFormatter,
 				optimizeImportsCheckBox, enableJavaFormatting, doNotFormatOtherFilesRadioButton,
 				formatOtherFilesWithExceptionsRadioButton, formatSelectedTextInAllFileTypes, enableJSFormatting,
-				enableCppFormatting,
+				enableCppFormatting, enableSuccessfulFormattingConfirmationPopup,
 				importOrderConfigurationManualRadioButton, importOrderConfigurationFromFileRadioButton,
 				enableGWTNativeMethodsCheckBox };
 		for (JToggleButton button : modifiableButtons) {
@@ -734,6 +736,7 @@ public class ProjectSettingsForm {
 	}
 
 	public void setData(Settings data) {
+		enableSuccessfulFormattingConfirmationPopup.setSelected(data.isEnableSuccessfulFormattingConfirmationPopup());
 		optimizeImportsCheckBox.setSelected(data.isOptimizeImports());
 		formatSelectedTextInAllFileTypes.setSelected(data.isFormatSeletedTextInAllFileTypes());
 		pathToEclipsePreferenceFileJava.setText(data.getPathToConfigFileJava());
@@ -752,6 +755,7 @@ public class ProjectSettingsForm {
 	}
 
 	public void getData(Settings data) {
+		data.setEnableSuccessfulFormattingConfirmationPopup(enableSuccessfulFormattingConfirmationPopup.isSelected());
 		data.setOptimizeImports(optimizeImportsCheckBox.isSelected());
 		data.setFormatSeletedTextInAllFileTypes(formatSelectedTextInAllFileTypes.isSelected());
 		data.setPathToConfigFileJava(pathToEclipsePreferenceFileJava.getText());
@@ -774,6 +778,7 @@ public class ProjectSettingsForm {
 		if (customIsModified(data)) {
 			return true;
 		}
+		if (enableSuccessfulFormattingConfirmationPopup.isSelected() != data.isEnableSuccessfulFormattingConfirmationPopup()) return true;
 		if (optimizeImportsCheckBox.isSelected() != data.isOptimizeImports()) return true;
 		if (formatSelectedTextInAllFileTypes.isSelected() != data.isFormatSeletedTextInAllFileTypes()) return true;
 		if (pathToEclipsePreferenceFileJava.getText() != null ? !pathToEclipsePreferenceFileJava.getText().equals(data.getPathToConfigFileJava()) : data.getPathToConfigFileJava() != null)
