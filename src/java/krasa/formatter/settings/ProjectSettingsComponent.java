@@ -36,7 +36,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error",
 			NotificationDisplayType.BALLOON, true);
 	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup("Eclipse code formatter info",
-			NotificationDisplayType.BALLOON, true);
+			NotificationDisplayType.NONE, false);
 
 	@NotNull
 	private final ProjectCodeStyleInstaller projectCodeStyle;
