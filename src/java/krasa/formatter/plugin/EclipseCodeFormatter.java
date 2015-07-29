@@ -79,12 +79,17 @@ public class EclipseCodeFormatter {
 		// http://code.google.com/p/eclipse-code-formatter-intellij-plugin/issues/detail?id=7
 		PsiDocumentManager.getInstance(editor.getProject()).doPostponedOperationsAndUnblockDocument(document);
 
+		int caretOffset = editor.getCaretModel().getOffset();
+		RangeMarker rangeMarker = document.createRangeMarker(caretOffset, caretOffset);
+
 		String text = document.getText();
 		String reformat = reformat(range.getStartOffset(), range.getEndOffset(), text, file);
 		document.setText(reformat);
 		postProcess(document, file, range);
 
-		restoreVisualColumn(editor, visualColumnToRestore);
+		restoreVisualColumn(editor, visualColumnToRestore, rangeMarker);
+		rangeMarker.dispose();
+
 		LOG.debug("#formatWhenEditorIsOpen done");
 	}
 
@@ -112,8 +117,11 @@ public class EclipseCodeFormatter {
 		return text.substring(0, startOffset).lastIndexOf(Settings.LINE_SEPARATOR) + 1;
 	}
 
-	private void restoreVisualColumn(Editor editor, int visualColumnToRestore) {
+	private void restoreVisualColumn(Editor editor, int visualColumnToRestore, RangeMarker rangeMarker) {
 		if (visualColumnToRestore < 0) {
+			// CaretImpl.updateCaretPosition() contains some magic which moves the caret on bad position, this should
+			// restore it on a better place
+			editor.getCaretModel().moveToOffset(rangeMarker.getEndOffset());
 		} else {
 			CaretModel caretModel = editor.getCaretModel();
 			VisualPosition position = caretModel.getVisualPosition();
@@ -131,7 +139,7 @@ public class EclipseCodeFormatter {
 	// Formatter removes such white spaces, i.e. keeps only line feed symbol. But we want to preserve caret position
 	// then.
 	// So, we check if it should be preserved and restore it after formatting if necessary
-
+	/** copypaste from intellij, todo update it from IJ 15?*/
 	private int getVisualColumnToRestore(Editor editor) {
 		int visualColumnToRestore = -1;
 
