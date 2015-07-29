@@ -123,7 +123,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 					}
 				}
 			}
-			if (notify) {
+			if (notify && settings.isEnableSuccessfulFormattingConfirmationPopup()) {
 				notifier.notifySuccessFormatting(psiFile, formattedByIntelliJ);
 			}
 

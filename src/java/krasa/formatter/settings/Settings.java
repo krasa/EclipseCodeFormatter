@@ -25,6 +25,8 @@ public class Settings {
 
 	private String name = null;
 	private Long id = null;
+    
+    private boolean enableSuccessfulFormattingConfirmationPopup = true;
 
 	private String pathToConfigFileJS = "";
 	private String pathToConfigFileCpp = "";
@@ -68,8 +70,17 @@ public class Settings {
 		this.id = id;
 		this.name = name;
 	}
+    
+    public boolean isEnableSuccessfulFormattingConfirmationPopup() {
+        return enableSuccessfulFormattingConfirmationPopup;
+    }
 
-	public DisabledFileTypeSettings geDisabledFileTypeSettings() {
+    public void setEnableSuccessfulFormattingConfirmationPopup(
+            final boolean enableSuccessfulFormattingConfirmationPopup) {
+        this.enableSuccessfulFormattingConfirmationPopup = enableSuccessfulFormattingConfirmationPopup;
+    }
+
+    public DisabledFileTypeSettings geDisabledFileTypeSettings() {
 		return new DisabledFileTypeSettings(disabledFileTypes);
 	}
 
