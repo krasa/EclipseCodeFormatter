@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>15.1.132.637.1</version>
+    <version>15.2.132.637.0</version>
 
 	<idea-version since-build="132.637" until-build=""/>
 
@@ -32,7 +32,9 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>15.1 (2015-07-20)
+        <br>15.2 (2015-07-29)
+        <br>- cursor jumping after formatting fix
+        <br>15.1 (2015-07-21)
         <br>- C/C++ support - requires to run IDE with JRE 1.7, matched for file types defined in: 'Settings | Editor | File Types' with 'C++' name
         <br>- better matching of JS file types
         <br>- upgraded Java formatter from Eclipse Mars 4.5 - requires JRE 1.7
