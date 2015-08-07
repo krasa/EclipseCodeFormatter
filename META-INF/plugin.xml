@@ -4,13 +4,13 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>15.2.132.637.0</version>
+    <version>15.2.132.637.1</version>
 
 	<idea-version since-build="132.637" until-build=""/>
 
 	<description><![CDATA[
         Allows using Eclipse's code formatter directly from IntelliJ.<br>
-        Solves the problem of maintaining a common code style in team environments where both IDEA and Eclipse are used. <br> 
+        Solves the problem of maintaining a common code style in team environments where both IDEA and Eclipse are used. <br>
         <br>
 
         Go to <a href="https://github.com/krasa/EclipseCodeFormatter#instructions">https://github.com/krasa/EclipseCodeFormatter#instructions</a>
@@ -24,7 +24,7 @@
 
         <br> <br>
         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest">Small donations are welcomed.</a>
-        ]]></description> 
+        ]]></description>
 	<category>Formatting</category>
 
 	<vendor url="https://github.com/krasa/EclipseCodeFormatter" email="vojta.krasa@gmail.com">Vojtech
@@ -32,8 +32,10 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>15.2 (2015-07-29)
-        <br>- cursor jumping after formatting fix
+        <br>15.2 (2015-08-07)
+        <br>- fixed cursor jumping after formatting
+        <br>- probably fixed 'Attempt to modify PSI for non-committed Document!' after import optimizing
+        <br>- disabled info notifications
         <br>15.1 (2015-07-21)
         <br>- C/C++ support - requires to run IDE with JRE 1.7, matched for file types defined in: 'Settings | Editor | File Types' with 'C++' name
         <br>- better matching of JS file types
