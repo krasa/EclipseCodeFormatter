@@ -1,16 +1,20 @@
 package krasa.formatter.plugin;
 
+import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.exception.ParsingFailedException;
+import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.ImportOrderProvider;
+import krasa.formatter.utils.FileUtils;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.psi.*;
-import krasa.formatter.eclipse.FileDoesNotExistsException;
-import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.settings.*;
-import krasa.formatter.settings.provider.ImportOrderProvider;
-import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vojtech Krasa
@@ -54,6 +58,9 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		ImportSorterAdapter importSorter = null;
 		try {
 			importSorter = getImportSorter(settings);
+
+			commitDocument(psiFile);
+
 			importSorter.sortImports(psiFile);
 		} catch (ParsingFailedException e) {
 			throw e;
@@ -72,6 +79,15 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 			String message = "imports: " + stringBuilder.toString() + ", settings: "
 					+ (importSorter != null ? importSorter.getImportsOrderAsString() : null);
 			throw new ImportSorterException(message, e);
+		}
+	}
+
+	/** very strange, https://github.com/krasa/EclipseCodeFormatter/issues/59 */
+	private void commitDocument(PsiJavaFile psiFile) {
+		PsiDocumentManager e = PsiDocumentManager.getInstance(psiFile.getProject());
+		Document document = e.getDocument(psiFile);
+		if (document != null) {
+			e.commitDocument(document);
 		}
 	}
 
