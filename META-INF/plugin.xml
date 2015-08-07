@@ -35,7 +35,7 @@
         <br>15.2 (2015-08-07)
         <br>- fixed cursor jumping after formatting
         <br>- probably fixed 'Attempt to modify PSI for non-committed Document!' after import optimizing
-        <br>- disabled info notifications
+        <br>- disabled info notification popups
         <br>15.1 (2015-07-21)
         <br>- C/C++ support - requires to run IDE with JRE 1.7, matched for file types defined in: 'Settings | Editor | File Types' with 'C++' name
         <br>- better matching of JS file types
