@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>15.2.132.637.1</version>
+    <version>15.2.132.637.2</version>
 
 	<idea-version since-build="132.637" until-build=""/>
 
@@ -32,6 +32,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>15.2.x.2 (2015-08-13)
+        <br>- IndexOutOfBoundsException fix
         <br>15.2 (2015-08-07)
         <br>- fixed cursor jumping after formatting
         <br>- probably fixed 'Attempt to modify PSI for non-committed Document!' after import optimizing

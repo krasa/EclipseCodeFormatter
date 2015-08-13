@@ -128,7 +128,10 @@ public class EclipseCodeFormatter {
 	private void restoreVisualColumn(Editor editor, int visualColumnToRestore, RangeMarker rangeMarker) {
 		// CaretImpl.updateCaretPosition() contains some magic which moves the caret on bad position, this should
 		// restore it on a better place
-		editor.getCaretModel().moveToOffset(rangeMarker.getEndOffset());
+		int endOffset = rangeMarker.getEndOffset();
+		if (endOffset < editor.getDocument().getTextLength()) {
+			editor.getCaretModel().moveToOffset(endOffset);
+		}
 
 		if (visualColumnToRestore < 0) {
 		} else {
