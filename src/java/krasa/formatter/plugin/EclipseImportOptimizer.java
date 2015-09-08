@@ -26,23 +26,21 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 	@NotNull
 	@Override
 	public Runnable processFile(final PsiFile file) {
+		final Runnable intellijRunnable = new JavaImportOptimizer().processFile(file);
 		if (!(file instanceof PsiJavaFile)) {
-			return EmptyRunnable.getInstance();
+			return intellijRunnable;
 		}
 
 		if (!isEnabled(file)) {
-			// duplicates imports with eclipse formatter, but probably better to leave it be with IJ formatter
-			return new JavaImportOptimizer().processFile(file);
+			return intellijRunnable;
 		}
 
 		return new Runnable() {
 
 			@Override
 			public void run() {
+				intellijRunnable.run();
 				try {
-					final Runnable runnable = new JavaImportOptimizer().processFile(file);
-					runnable.run();
-
 					Settings settings = ProjectSettingsComponent.getSettings(file);
 					if (isEnabled(settings)) {
 						optimizeImportsByEclipse((PsiJavaFile) file, settings);
