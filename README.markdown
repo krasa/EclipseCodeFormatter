@@ -17,13 +17,13 @@ Currently supports formatting of
   	  - Go to Eclipse | Windows | Preferences | Java | Code Style | Formatter
   	  - Eclipse do not export default profiles, so you have to make your own ("New" button)
   	  - Export the profile ("Export all..." button.)
-  	  - The result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/format.xml)
+  	  - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/format.xml)
 	- Or enable project specific formatter settings to get org.eclipse.jdt.core.prefs
   	  - With your project open in Eclipse's workspace, right-click the project and choose Properties.
   	  - Go to Java Code Style | Formatter and select Enable project specific settings.
   	  - Click OK to save the settings.
   	  - Go to the .settings directory inside your project's directory. There you will find the org.eclipse.jdt.core.prefs file which contains the Eclipse formatter settings.
-  	  - The result should look like [this](http://code.google.com/p/eclipse-code-formatter-intellij-plugin/source/browse/EclipseFormatter/test/resources/org.eclipse.jdt.core.prefs) 
+  	  - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/org.eclipse.jdt.core.prefs) 
   - Set path to the file (IntelliJ | Settings | Other Settings | Eclipse Code Formatter | field "Eclipse preference file"), 
   - When using exported profiles(xml file), select desired profile in the combobox "Java formatter profile"
   - Check "Optimizing Imports" configuration
