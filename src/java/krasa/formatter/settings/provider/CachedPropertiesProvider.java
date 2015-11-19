@@ -21,6 +21,7 @@ public class CachedPropertiesProvider extends CachedProvider<Properties> {
 	/**
 	 * Return a Java Properties object representing the options that are in the specified configuration file.
 	 */
+	@Override
 	protected Properties readFile(File file) throws InvalidPropertyFile {
 		final Properties formatterOptions = FileUtils.readPropertiesFile(file, createDefaultConfig());
 		// Properties.load() does not trim trailing whitespace from prop values, so trim it ourselves, since it would

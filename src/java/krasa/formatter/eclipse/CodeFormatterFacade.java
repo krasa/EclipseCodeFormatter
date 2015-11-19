@@ -1,13 +1,14 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.psi.PsiFile;
-import org.apache.commons.lang.NotImplementedException;
-import org.eclipse.text.edits.TextEdit;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import krasa.formatter.exception.FileDoesNotExistsException;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.intellij.psi.PsiFile;
 
 /**
  * @author Vojtech Krasa
@@ -31,8 +32,4 @@ public abstract class CodeFormatterFacade {
 	public abstract String format(String text, int startOffset, int endOffset, PsiFile psiFile)
 			throws FileDoesNotExistsException;
 
-	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
-						   String lineSeparator) {
-		throw new NotImplementedException();
-	}
 }

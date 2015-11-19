@@ -11,13 +11,9 @@ import krasa.formatter.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.ExportableApplicationComponent;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
@@ -31,13 +27,15 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 	private List<Long> deletedSettingsId = new ArrayList<Long>();
 
 	public static GlobalSettings getInstance() {
-		return ServiceManager.getService(GlobalSettings.class);
+		return ApplicationManager.getApplication().getComponent(GlobalSettings.class);
 	}
 
+	@Override
 	public GlobalSettings getState() {
 		return this;
 	}
 
+	@Override
 	public void loadState(GlobalSettings state) {
 		XmlSerializerUtil.copyBean(state, this);
 	}

@@ -8,32 +8,49 @@
 
 package krasa.formatter.plugin;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.DocumentEvent;
+
+import krasa.formatter.exception.ParsingFailedException;
+import krasa.formatter.settings.GlobalSettings;
+import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.FileUtils;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
 import com.centerkey.utils.BareBonesBrowserLaunch;
-import com.intellij.openapi.application.ex.*;
+import com.intellij.openapi.application.ex.ApplicationEx;
+import com.intellij.openapi.application.ex.ApplicationManagerEx;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileChooser.*;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.*;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
-import com.intellij.openapi.vfs.*;
-import com.intellij.ui.*;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.DocumentAdapter;
+import com.intellij.ui.ListCellRendererWrapper;
+import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
-import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.settings.*;
-import krasa.formatter.utils.FileUtils;
-import org.apache.commons.lang.*;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.util.*;
-import java.util.List;
 
 /**
  * Configuration dialog for changing the {@link krasa.formatter.settings.Settings} of the plugin.
@@ -205,6 +222,7 @@ public class ProjectSettingsForm {
 				enableGWTNativeMethodsCheckBox };
 		for (JToggleButton button : modifiableButtons) {
 			button.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					updateComponents();
 				}
@@ -216,6 +234,7 @@ public class ProjectSettingsForm {
 				pathToImportOrderPreferenceFile };
 		for (JTextField field : modifiableFields) {
 			field.getDocument().addDocumentListener(new DocumentAdapter() {
+				@Override
 				protected void textChanged(DocumentEvent e) {
 					updateComponents();
 				}
@@ -223,27 +242,32 @@ public class ProjectSettingsForm {
 		}
 
 		eclipsePreferenceFilePathJavaBrowse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				browseForFile(pathToEclipsePreferenceFileJava);
 			}
 		});
 		pathToImportOrderPreferenceFileBrowse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				browseForFile(pathToImportOrderPreferenceFile);
 			}
 		});
 		eclipsePreferenceFilePathJSBrowse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				browseForFile(pathToEclipsePreferenceFileJS);
 			}
 		});
 		eclipsePreferenceFilePathCppBrowse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				browseForFile(pathToEclipsePreferenceFileCpp);
 			}
 		});
 
 		rootComponent.addAncestorListener(new AncestorListener() {
+			@Override
 			public void ancestorAdded(AncestorEvent event) {
 				// Called when component becomes visible, to ensure that the
 				// popups
@@ -251,9 +275,11 @@ public class ProjectSettingsForm {
 				updateComponents();
 			}
 
+			@Override
 			public void ancestorRemoved(AncestorEvent event) {
 			}
 
+			@Override
 			public void ancestorMoved(AncestorEvent event) {
 			}
 		});
@@ -707,6 +733,7 @@ public class ProjectSettingsForm {
 			final Runnable onNo, int defaultOptionIndex) {
 
 		final BaseListPopupStep<String> step = new BaseListPopupStep<String>(title, new String[] { yesText, noText }) {
+			@Override
 			public PopupStep onChosen(String selectedValue, final boolean finalChoice) {
 				if (selectedValue.equals(yesText)) {
 					onYes.run();
@@ -716,9 +743,11 @@ public class ProjectSettingsForm {
 				return FINAL_CHOICE;
 			}
 
+			@Override
 			public void canceled() {
 			}
 
+			@Override
 			public boolean isMnemonicsNavigationEnabled() {
 				return true;
 			}

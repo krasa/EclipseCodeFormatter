@@ -8,19 +8,31 @@
 
 package krasa.formatter.settings;
 
-import com.intellij.notification.*;
-import com.intellij.openapi.components.*;
+import javax.swing.*;
+
+import krasa.formatter.Messages;
+import krasa.formatter.Resources;
+import krasa.formatter.plugin.ProjectCodeStyleInstaller;
+import krasa.formatter.plugin.ProjectSettingsForm;
+import krasa.formatter.utils.ProjectUtils;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationGroup;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.options.*;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import krasa.formatter.*;
-import krasa.formatter.plugin.*;
-import krasa.formatter.utils.ProjectUtils;
-import org.apache.commons.lang.ObjectUtils;
-import org.jetbrains.annotations.*;
-
-import javax.swing.*;
 
 /**
  * Takes care of initializing a project's CodeFormatter and disposing of it when the project is closed. Updates the
@@ -66,12 +78,15 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		projectCodeStyle.changeFormatterTo(null);
 	}
 
+	@Override
 	public void initComponent() {
 	}
 
+	@Override
 	public void disposeComponent() {
 	}
 
+	@Override
 	@NotNull
 	public String getComponentName() {
 		return "ProjectSettingsComponent";
@@ -84,17 +99,20 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		install(settings);
 	}
 
+	@Override
 	public void projectOpened() {
 		settings = GlobalSettings.getInstance().getSettings(settings, project);
 		install(settings);
 	}
 
+	@Override
 	public void projectClosed() {
 		uninstall();
 	}
 
 	// implements Configurable
 
+	@Override
 	@Nls
 	public String getDisplayName() {
 		return Messages.message("action.pluginSettings");
@@ -108,12 +126,14 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		return icon;
 	}
 
+	@Override
 	@Nullable
 	@NonNls
 	public String getHelpTopic() {
 		return "EclipseCodeFormatter.Configuration";
 	}
 
+	@Override
 	@NotNull
 	public JComponent createComponent() {
 		if (form == null) {
@@ -122,6 +142,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		return form.getRootComponent();
 	}
 
+	@Override
 	public boolean isModified() {
 		return form != null && (form.isModified(settings) || (form.getDisplayedSettings() != null && !isSameId()));
 	}
@@ -130,6 +151,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		return ObjectUtils.equals(form.getDisplayedSettings().getId(), settings.getId());
 	}
 
+	@Override
 	public void apply() throws ConfigurationException {
 		if (form != null) {
 			form.validate();
@@ -139,18 +161,21 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 		}
 	}
 
+	@Override
 	public void reset() {
 		if (form != null) {
 			form.importFrom(settings);
 		}
 	}
 
+	@Override
 	public void disposeUIResources() {
 		form = null;
 	}
 
 	// implements PersistentStateComponent
 
+	@Override
 	@NotNull
 	public Settings getState() {
 		return settings;
@@ -159,6 +184,7 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 	/**
 	 * sets profile for this project
 	 */
+	@Override
 	public void loadState(@NotNull Settings state) {
 		settings = state;
 	}

@@ -1,5 +1,22 @@
 package krasa.formatter.plugin;
 
+import java.util.*;
+
+import krasa.formatter.eclipse.Classloaders;
+import krasa.formatter.eclipse.CodeFormatterFacade;
+import krasa.formatter.eclipse.JavaCodeFormatterFacade;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.settings.DisabledFileTypeSettings;
+import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.CppPropertiesProvider;
+import krasa.formatter.settings.provider.JSPropertiesProvider;
+import krasa.formatter.utils.FileUtils;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -15,19 +32,6 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
-import krasa.formatter.eclipse.CppCodeFormatterFacade;
-import krasa.formatter.eclipse.FileDoesNotExistsException;
-import krasa.formatter.eclipse.JSCodeFormatterFacade;
-import krasa.formatter.eclipse.JavaCodeFormatterFacade;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.settings.DisabledFileTypeSettings;
-import krasa.formatter.settings.ProjectSettingsComponent;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
@@ -195,14 +199,16 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	private void formatWithEclipse(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {
 		if (FileUtils.isJavaScript(psiFile)) {
 			if (eclipseCodeFormatterJs == null) {
-				eclipseCodeFormatterJs = new EclipseCodeFormatter(settings, new JSCodeFormatterFacade(
-						settings.getJSProperties()));
+				JSPropertiesProvider jsProperties = settings.getJSProperties();
+				CodeFormatterFacade jsFormatter = Classloaders.getJsFormatter(jsProperties);
+				eclipseCodeFormatterJs = new EclipseCodeFormatter(settings, jsFormatter);
 			}
 			eclipseCodeFormatterJs.format(psiFile, startOffset, endOffset);
 		} else if (FileUtils.isCpp(psiFile)) {
 			if (eclipseCodeFormatterCpp == null) {
-				eclipseCodeFormatterCpp = new EclipseCodeFormatter(settings,
-						new CppCodeFormatterFacade(settings.getCppProperties()));
+				CppPropertiesProvider cppProperties = settings.getCppProperties();
+				CodeFormatterFacade cpp = Classloaders.getCppFormatter(cppProperties);
+				eclipseCodeFormatterCpp = new EclipseCodeFormatter(settings, cpp);
 			}
 			eclipseCodeFormatterCpp.format(psiFile, startOffset, endOffset);
 		} else {

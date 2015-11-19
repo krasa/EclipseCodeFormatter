@@ -47,70 +47,85 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 		return original;
 	}
 
+	@Override
 	@NotNull
 	public Project getProject() {
 		return original.getProject();
 	}
 
+	@Override
 	@NotNull
 	public PsiElement reformat(@NotNull PsiElement element) throws IncorrectOperationException {
 		return original.reformat(element);
 	}
 
+	@Override
 	@NotNull
 	public PsiElement reformat(@NotNull PsiElement element, boolean canChangeWhiteSpacesOnly)
 			throws IncorrectOperationException {
 		return original.reformat(element, canChangeWhiteSpacesOnly);
 	}
 
+	@Override
 	public PsiElement reformatRange(@NotNull PsiElement element, int startOffset, int endOffset)
 			throws IncorrectOperationException {
 		return original.reformatRange(element, startOffset, endOffset);
 	}
 
+	@Override
 	public PsiElement reformatRange(@NotNull PsiElement element, int startOffset, int endOffset,
 			boolean canChangeWhiteSpacesOnly) throws IncorrectOperationException {
 		return original.reformatRange(element, startOffset, endOffset, canChangeWhiteSpacesOnly);
 	}
 
+	@Override
 	public void reformatText(@NotNull PsiFile element, int startOffset, int endOffset)
 			throws IncorrectOperationException {
 		original.reformatText(element, startOffset, endOffset);
 	}
 
+	@Override
 	public void adjustLineIndent(@NotNull PsiFile file, TextRange rangeToAdjust) throws IncorrectOperationException {
 		original.adjustLineIndent(file, rangeToAdjust);
 	}
 
+	@Override
 	public int adjustLineIndent(@NotNull PsiFile file, int offset) throws IncorrectOperationException {
 		return original.adjustLineIndent(file, offset);
 	}
 
+	@Override
 	public int adjustLineIndent(@NotNull Document document, int offset) {
 		return original.adjustLineIndent(document, offset);
 	}
 
+	@Override
 	public boolean isLineToBeIndented(@NotNull PsiFile file, int offset) {
 		return original.isLineToBeIndented(file, offset);
 	}
 
+	@Override
 	@Nullable
 	public String getLineIndent(@NotNull PsiFile file, int offset) {
 		return original.getLineIndent(file, offset);
 	}
 
+	@Override
 	public Indent getIndent(String text, FileType fileType) {
 		return original.getIndent(text, fileType);
 	}
 
+	@Override
 	public String fillIndent(Indent indent, FileType fileType) {
 		return original.fillIndent(indent, fileType);
 	}
 
+	@Override
 	public Indent zeroIndent() {
 		return original.zeroIndent();
 	}
 
+	@Override
 	public void reformatNewlyAddedElement(@NotNull ASTNode block, @NotNull ASTNode addedElement)
 			throws IncorrectOperationException {
 		original.reformatNewlyAddedElement(block, addedElement);
@@ -151,6 +166,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 	}
 	// 11.1
 	// @Override
+	@Override
 	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
 			throws IncorrectOperationException {
 		original.reformatText(psiFile, textRanges);

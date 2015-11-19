@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test/resources" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/JsniUtils/src" isTestSource="false" />
     </content>
     <orderEntry type="module-library">
       <library name="lib">
@@ -40,7 +41,7 @@
       </library>
     </orderEntry>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" scope="RUNTIME">
       <library name="cpp">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib/cpp" />
@@ -63,7 +64,7 @@
         <jarDirectory url="file://$MODULE_DIR$/lib/test" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" scope="RUNTIME">
       <library name="eclipse44">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib/eclipse44" />
@@ -83,5 +84,6 @@
         <jarDirectory url="file://$MODULE_DIR$/lib/generated" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="RUNTIME" name="eclipse45" level="project" />
   </component>
 </module>

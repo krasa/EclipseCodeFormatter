@@ -1,21 +1,5 @@
 package krasa.formatter.utils;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.ReadonlyStatusHandler;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import krasa.formatter.eclipse.FileDoesNotExistsException;
-import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.plugin.InvalidPropertyFile;
-import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +7,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.ParsingFailedException;
+import krasa.formatter.plugin.InvalidPropertyFile;
+
+import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.ReadonlyStatusHandler;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 
 /**
  * @author Vojtech Krasa

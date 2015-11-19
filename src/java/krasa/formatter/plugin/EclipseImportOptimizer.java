@@ -1,6 +1,6 @@
 package krasa.formatter.plugin;
 
-import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.ProjectSettingsComponent;
 import krasa.formatter.settings.Settings;
@@ -13,7 +13,6 @@ import com.intellij.lang.ImportOptimizer;
 import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.psi.*;
 
 /**

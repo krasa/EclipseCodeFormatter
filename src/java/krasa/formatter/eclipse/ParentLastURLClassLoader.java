@@ -21,6 +21,15 @@ public class ParentLastURLClassLoader extends ClassLoader {
 		}
 	}
 
+	final static Set<String> neverLoadFromParentWithPrefix = new HashSet<String>();
+
+	{
+		{
+			neverLoadFromParentWithPrefix.add("org.eclipse.");
+			neverLoadFromParentWithPrefix.add("krasa.formatter.adapter.");
+		}
+	}
+
 	private ChildURLClassLoader childClassLoader;
 
 	/**
@@ -65,6 +74,12 @@ public class ParentLastURLClassLoader extends ClassLoader {
 				// first try to use the URLClassLoader findClass
 				return super.findClass(name);
 			} catch (ClassNotFoundException e) {
+				for (String forbiddenParentPrefixes : neverLoadFromParentWithPrefix) {
+					if (name.startsWith(forbiddenParentPrefixes)) {
+						throw new RuntimeException(
+								name + " not found in child classloader, and cannot be loaded from parent", e);
+					}
+				}
 				// if that fails, we ask our real parent classloader to load the class (we give up)
 				return realParent.loadClass(name);
 			}

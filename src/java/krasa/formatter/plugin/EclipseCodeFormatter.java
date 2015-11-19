@@ -3,11 +3,10 @@ package krasa.formatter.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import krasa.formatter.eclipse.Classloaders;
 import krasa.formatter.eclipse.CodeFormatterFacade;
-import krasa.formatter.eclipse.FileDoesNotExistsException;
-import krasa.formatter.plugin.processor.GWTProcessor;
-import krasa.formatter.plugin.processor.JSCommentsFormatterProcessor;
-import krasa.formatter.plugin.processor.Processor;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.processor.Processor;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 
@@ -40,8 +39,8 @@ public class EclipseCodeFormatter {
 		this.settings = settings;
 		codeFormatterFacade = codeFormatterFacade1;
 		postProcessors = new ArrayList<Processor>();
-		postProcessors.add(new GWTProcessor(settings));
-		postProcessors.add(new JSCommentsFormatterProcessor(settings));
+		postProcessors.add(Classloaders.getGWTProcessor(settings));
+		postProcessors.add(Classloaders.getJSCommentsFormatterProcessor(settings));
 	}
 
 	public void format(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {

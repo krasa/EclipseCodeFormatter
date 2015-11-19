@@ -21,6 +21,7 @@ public class ChangeFormatterToolbarAction extends AnAction {
 	public static final Icon ICON = IconLoader.getIcon("/krasa/formatter/eclipse.gif");
 	public static final Icon ICON1 = IconLoader.getIcon("/krasa/formatter/IDEA.gif");
 
+	@Override
 	public void actionPerformed(AnActionEvent e) {
 		Settings settings;
 		Project project = getProject(e);

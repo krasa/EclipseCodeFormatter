@@ -3,6 +3,7 @@ package krasa.formatter.eclipse;
 import junit.framework.Assert;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class JSCodeFormatterFacadeTest {
 	public void setUp() throws Exception {
 		Settings settings = new Settings();
 		settings.setPathToConfigFileJS(PATH_TO_CONFIG_FILE);
-		eclipseCodeFormatterFacade = new JSCodeFormatterFacade(new JSPropertiesProvider(settings));
+		eclipseCodeFormatterFacade = Classloaders.getJsFormatter(new JSPropertiesProvider(settings));
 	}
 
 	protected CodeFormatterFacade eclipseCodeFormatterFacade;

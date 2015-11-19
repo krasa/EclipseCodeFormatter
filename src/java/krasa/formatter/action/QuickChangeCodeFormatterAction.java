@@ -2,7 +2,6 @@ package krasa.formatter.action;
 
 import krasa.formatter.settings.ProjectSettingsComponent;
 import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.ProjectUtils;
 
 import com.intellij.ide.actions.QuickSwitchSchemeAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -16,10 +15,12 @@ import com.intellij.openapi.project.Project;
  */
 public class QuickChangeCodeFormatterAction extends QuickSwitchSchemeAction {
 
+	@Override
 	protected void fillActions(final Project project, DefaultActionGroup group, DataContext dataContext) {
 		Settings.Formatter formatter = ProjectSettingsComponent.getInstance(project).getState().getFormatter();
 		for (final Settings.Formatter lf : Settings.Formatter.values()) {
 			group.add(new DumbAwareAction(lf.name(), "", lf == formatter ? ourCurrentAction : ourNotCurrentAction) {
+				@Override
 				public void actionPerformed(AnActionEvent e) {
 					changeFormatter(project, lf);
 				}
@@ -34,6 +35,7 @@ public class QuickChangeCodeFormatterAction extends QuickSwitchSchemeAction {
 		instance.install(state);
 	}
 
+	@Override
 	protected boolean isEnabled() {
 		return true;
 	}

@@ -1,14 +1,16 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import java.io.UnsupportedEncodingException;
+
 import junit.framework.Assert;
 import krasa.formatter.settings.Settings;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 /**
  * @author Vojtech Krasa
@@ -64,6 +66,7 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 	public static final String PATH_TO_CONFIG_FILE = "test/resources/org.eclipse.jdt.core.prefs";
 	protected JavaCodeFormatterFacade eclipseCodeFormatterFacade;
 
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();

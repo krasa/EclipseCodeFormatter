@@ -1,14 +1,15 @@
 package krasa.formatter.settings.provider;
 
 import java.io.File;
+import java.io.IOException;
 
 import junit.framework.Assert;
 import krasa.formatter.common.ModifiableFile;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gwt.dev.util.Util;
 import com.intellij.openapi.util.io.FileUtil;
 
 /**
@@ -26,7 +27,11 @@ public class CachedProviderTest {
 
 			@Override
 			protected String readFile(File file) {
-				return Util.readFileAsString(file);
+				try {
+					return FileUtils.readFileToString(file);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		};
 	}

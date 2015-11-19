@@ -65,21 +65,25 @@ public class StringUtilsTest {
 		public MyDummyProject() {
 		}
 
+		@Override
 		public VirtualFile getProjectFile() {
 			return null;
 		}
 
+		@Override
 		@NotNull
 		public String getName() {
 			return "dummy";
 		}
 
+		@Override
 		@Nullable
 		@NonNls
 		public String getPresentableUrl() {
 			return null;
 		}
 
+		@Override
 		@NotNull
 		@NonNls
 		public String getLocationHash() {
@@ -92,50 +96,61 @@ public class StringUtilsTest {
 			throw new UnsupportedOperationException("Method getLocation not implemented in " + getClass());
 		}
 
+		@Override
 		@NotNull
 		public String getProjectFilePath() {
 			return "";
 		}
 
+		@Override
 		public VirtualFile getWorkspaceFile() {
 			return null;
 		}
 
+		@Override
 		@Nullable
 		public VirtualFile getBaseDir() {
 			return null;
 		}
 
 		// @Override
+		@Override
 		public String getBasePath() {
 			return null;
 		}
 
+		@Override
 		public void save() {
 		}
 
+		@Override
 		public BaseComponent getComponent(String name) {
 			return null;
 		}
 
+		@Override
 		public <T> T getComponent(Class<T> interfaceClass) {
 			return null;
 		}
 
+		@Override
 		public boolean hasComponent(@NotNull Class interfaceClass) {
 			return false;
 		}
 
+		@Override
 		@NotNull
 		public <T> T[] getComponents(Class<T> baseClass) {
 			return (T[]) ArrayUtil.EMPTY_OBJECT_ARRAY;
 		}
 
+		@Override
 		@NotNull
 		public PicoContainer getPicoContainer() {
 			throw new UnsupportedOperationException("getPicoContainer is not implement in : " + getClass());
 		}
 
+		@Override
 		public <T> T getComponent(Class<T> interfaceClass, T defaultImplementation) {
 			return null;
 		}
@@ -146,13 +161,16 @@ public class StringUtilsTest {
 			return new Class[0];
 		}
 
+		@Override
 		public boolean isDisposed() {
 			return false;
 		}
 
+		@Override
 		@NotNull
 		public Condition getDisposed() {
 			return new Condition() {
+				@Override
 				public boolean value(final Object o) {
 					return isDisposed();
 				}
@@ -169,25 +187,31 @@ public class StringUtilsTest {
 			return null;
 		}
 
+		@Override
 		public boolean isOpen() {
 			return false;
 		}
 
+		@Override
 		public boolean isInitialized() {
 			return false;
 		}
 
+		@Override
 		public boolean isDefault() {
 			return false;
 		}
 
+		@Override
 		public MessageBus getMessageBus() {
 			return null;
 		}
 
+		@Override
 		public void dispose() {
 		}
 
+		@Override
 		public <T> T[] getExtensions(final ExtensionPointName<T> extensionPointName) {
 			throw new UnsupportedOperationException("getExtensions()");
 		}

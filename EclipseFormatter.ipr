@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactManager">
+    <artifact type="jar" build-on-make="true" name="adapter44">
+      <output-path>$PROJECT_DIR$/lib/eclipse44</output-path>
+      <root id="archive" name="adapter44.jar">
+        <element id="module-output" name="EclipseAdapter44" />
+        <element id="module-output" name="EclipseAdapter45" />
+      </root>
+    </artifact>
+    <artifact type="jar" build-on-make="true" name="adapter45">
+      <output-path>$PROJECT_DIR$/lib/eclipse45</output-path>
+      <root id="archive" name="adapter45.jar">
+        <element id="module-output" name="EclipseAdapter45" />
+      </root>
+    </artifact>
+  </component>
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions />
@@ -33,14 +48,34 @@
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="EclipseCodeFormatter">
-    <option name="id" value="1340636340667" />
-    <option name="name" value="sdpapi" />
-    <option name="pathToConfigFileJava" value="$PROJECT_DIR$/test/resources/format.xml" />
-    <option name="selectedJavaProfile" value="kuk" />
+    <option name="formatter" value="ECLIPSE" />
+    <option name="id" value="2" />
+    <option name="name" value="EclipseFormatter" />
+    <option name="pathToConfigFileJava" value="$PROJECT_DIR$/../../../format.xml" />
+    <option name="selectedJavaProfile" value="Ales" />
   </component>
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
+  </component>
+  <component name="InspectionProjectProfileManager">
+    <profile version="1.0">
+      <option name="myName" value="Project Default" />
+      <option name="myLocal" value="true" />
+      <inspection_tool class="LoggerInitializedWithForeignClass" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="loggerClassName" value="org.apache.log4j.Logger,org.slf4j.LoggerFactory,org.apache.commons.logging.LogFactory,java.util.logging.Logger" />
+        <option name="loggerFactoryMethodName" value="getLogger,getLogger,getLog,getLogger" />
+      </inspection_tool>
+      <inspection_tool class="MissingOverrideAnnotation" enabled="true" level="WARNING" enabled_by_default="true">
+        <option name="ignoreObjectMethods" value="true" />
+        <option name="ignoreAnonymousClassMethods" value="false" />
+      </inspection_tool>
+    </profile>
+    <option name="PROJECT_PROFILE" value="Project Default" />
+    <option name="USE_PROJECT_PROFILE" value="true" />
+    <version value="1.0" />
   </component>
   <component name="IntelliCalc">
     <mode value="0" />
@@ -220,14 +255,27 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DependencyDownloader/DependencyDownloader.iml" filepath="$PROJECT_DIR$/DependencyDownloader/DependencyDownloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EclipseAdapter44/EclipseAdapter44.iml" filepath="$PROJECT_DIR$/EclipseAdapter44/EclipseAdapter44.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EclipseAdapter45/EclipseAdapter45.iml" filepath="$PROJECT_DIR$/EclipseAdapter45/EclipseAdapter45.iml" />
       <module fileurl="file://$PROJECT_DIR$/EclipseFormatter.iml" filepath="$PROJECT_DIR$/EclipseFormatter.iml" />
     </modules>
   </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA IU-138.2458.8 IDEA CUSTOM" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="IntelliJ IDEA 143.869.1" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="PublishConfigData">
+    <serverData>
+      <paths name="aa">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
   </component>
   <component name="SvnBranchConfigurationManager">
     <option name="myConfigurationMap">
@@ -254,6 +302,14 @@
     <mapping directory="" vcs="Git" />
   </component>
   <component name="libraryTable">
+    <library name="eclipse45">
+      <CLASSES>
+        <root url="file://$PROJECT_DIR$/lib/eclipse45" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+      <jarDirectory url="file://$PROJECT_DIR$/lib/eclipse45" recursive="false" />
+    </library>
     <library name="Maven: cglib:cglib-nodep:2.2.2">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2.jar!/" />

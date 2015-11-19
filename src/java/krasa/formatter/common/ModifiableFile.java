@@ -2,7 +2,7 @@ package krasa.formatter.common;
 
 import java.io.File;
 
-import krasa.formatter.eclipse.FileDoesNotExistsException;
+import krasa.formatter.exception.FileDoesNotExistsException;
 
 /**
  * @author Vojtech Krasa
