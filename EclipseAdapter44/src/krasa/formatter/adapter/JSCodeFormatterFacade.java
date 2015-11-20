@@ -1,10 +1,6 @@
 package krasa.formatter.adapter;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
 import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.eclipse.Classloaders;
 import krasa.formatter.eclipse.CodeFormatterFacade;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
@@ -42,19 +38,8 @@ public class JSCodeFormatterFacade extends CodeFormatterFacade {
 
 	private org.eclipse.wst.jsdt.core.formatter.CodeFormatter newCodeFormatter() throws InvalidPropertyFile {
 		modifiedMonitor = propertiesProvider.getModifiedMonitor();
-		codeFormatter = createCodeFormatter(propertiesProvider.get());
+		codeFormatter = org.eclipse.wst.jsdt.core.ToolFactory.createCodeFormatter(propertiesProvider.get());
 		return codeFormatter;
-	}
-
-	public static CodeFormatter createCodeFormatter(Map properties) {
-		try {
-			ClassLoader eclipse44 = Classloaders.getEclipse44();
-			Class<?> aClass = eclipse44.loadClass("org.eclipse.wst.jsdt.core.ToolFactory");
-			Method createCodeFormatter = aClass.getDeclaredMethod("createCodeFormatter", Map.class);
-			return (CodeFormatter) createCodeFormatter.invoke(null, properties);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Override

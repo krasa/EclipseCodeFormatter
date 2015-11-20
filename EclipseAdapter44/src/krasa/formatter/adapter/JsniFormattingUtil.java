@@ -30,6 +30,7 @@ import org.eclipse.jface.text.*;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
+import org.eclipse.wst.jsdt.core.ToolFactory;
 import org.eclipse.wst.jsdt.core.formatter.CodeFormatter;
 
 import com.google.gwt.eclipse.core.editors.java.GWTPartitions;
@@ -160,7 +161,7 @@ public class JsniFormattingUtil {
 			// with place holder values
 			JsniJavaRefReplacementResult replacementResults = replaceJsniJavaRefs(body);
 			body = replacementResults.getJsni();
-			CodeFormatter codeFormatter = JSCodeFormatterFacade.createCodeFormatter(javaScriptFormattingPrefs);
+			CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(javaScriptFormattingPrefs);
 
 			TextEdit formatEdit = codeFormatter.format(CodeFormatter.K_STATEMENTS, body, 0, body.length(),
 					methodIndentLevel + 1, lineDelimiter);

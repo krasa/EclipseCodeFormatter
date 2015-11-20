@@ -12,8 +12,8 @@ import krasa.formatter.utils.FileUtils;
 public class TestUtils {
 
 	public static final String TEST_RESOURCES_ORG_ECLIPSE_JDT_CORE_PREFS = "test/resources/org.eclipse.jdt.core.prefs";
-	public static final String TEST_RESOURCES_ORG_ECLIPSE_JDT_CORE_PREFS_DEFAULT = "test/resources/org.eclipse.jdt.core_DEFAULT.prefs";
-	public static final String TEST_RESOURCES_ORG_ECLIPSE_WST_JSDT_CORE_PREFS = "test/resources/org.eclipse.wst.jsdt.core.prefs";
+	public static final String TEST_RESOURCES_ORG_ECLIPSE_JDT_CORE_PREFS_DEFAULT = "../test/resources/org.eclipse.jdt.core_DEFAULT.prefs";
+	public static final String TEST_RESOURCES_ORG_ECLIPSE_WST_JSDT_CORE_PREFS = "../test/resources/org.eclipse.wst.jsdt.core.prefs";
 
 	public static HashMap<String, String> getJSProperties() {
 		HashMap<String, String> jsMap = new HashMap<String, String>();
