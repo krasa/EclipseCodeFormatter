@@ -13,7 +13,7 @@ import org.junit.Test;
 public class FileUtilsTest {
 	@Test
 	public void testGetProfileNamesFromConfigXML() throws Exception {
-		File file = new File("test/resources/format.xml");
+		File file = new File("resources/format.xml");
 		System.err.println(file.getAbsolutePath());
 		List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(file);
 		Assert.assertFalse(profileNamesFromConfigXML.isEmpty());

@@ -57,7 +57,7 @@ public class Classloaders {
 					"org.eclipse.jdt.core_3.11.1.v20150902-1521.jar", "org.eclipse.osgi_3.10.101.v20150820-1432.jar",
 					"org.eclipse.text_3.5.400.v20150505-1044.jar",
 					"org.eclipse.equinox.preferences_3.5.300.v20150408-1437.jar",
-					"org.eclipse.cdt.core_5.10.0.201506070905.jar"
+					"org.eclipse.cdt.core_5.11.0.201509131935.jar"
 			);
 		}
 		return newEclipse;
@@ -67,7 +67,7 @@ public class Classloaders {
 	private static File getPluginLibHomeEclipse45() {
 		File pluginHome;
 		if (ApplicationManager.getApplication().isUnitTestMode()) {
-			pluginHome = new File("./lib/eclipse45");
+			pluginHome = new File("../lib/eclipse45");
 		} else {
 			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter/lib/");
 		}
@@ -78,7 +78,7 @@ public class Classloaders {
 	private static File getPluginLibHomeEclipse44() {
 		File pluginHome;
 		if (ApplicationManager.getApplication() == null || ApplicationManager.getApplication().isUnitTestMode()) {
-			pluginHome = new File("./lib/eclipse44/");
+			pluginHome = new File("../lib/eclipse44/");
 		} else {
 			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter/lib/");
 		}

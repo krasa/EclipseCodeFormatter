@@ -42,7 +42,7 @@ import com.intellij.psi.PsiFile;
  * @since 4.12.2007
  */
 @State(name = "EclipseCodeFormatter", storages = { @Storage(id = "other", file = "$PROJECT_FILE$") })
-public class ProjectSettingsComponent implements ProjectComponent, Configurable, PersistentStateComponent<Settings> {
+public class ProjectSettingsComponent implements ProjectComponent, PersistentStateComponent<Settings> {
 
 	private static final Logger LOG = Logger.getInstance(ProjectSettingsComponent.class.getName());
 	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error",
@@ -54,8 +54,6 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 	private final ProjectCodeStyleInstaller projectCodeStyle;
 	@NotNull
 	private Settings settings = new Settings();
-	@Nullable
-	private ProjectSettingsForm form;
 	@Nullable
 	private ImageIcon icon;
 	@NotNull
@@ -111,66 +109,71 @@ public class ProjectSettingsComponent implements ProjectComponent, Configurable,
 	}
 
 	// implements Configurable
+	public class MyConfigurable implements Configurable {
+        
+		@Nullable
+		private ProjectSettingsForm form;
 
-	@Override
-	@Nls
-	public String getDisplayName() {
-		return Messages.message("action.pluginSettings");
-	}
-
-	@Nullable
-	public Icon getIcon() {
-		if (icon == null) {
-			icon = new ImageIcon(Resources.PROGRAM_LOGO_32);
+		@Override
+		@Nls
+		public String getDisplayName() {
+			return Messages.message("action.pluginSettings");
 		}
-		return icon;
-	}
 
-	@Override
-	@Nullable
-	@NonNls
-	public String getHelpTopic() {
-		return "EclipseCodeFormatter.Configuration";
-	}
-
-	@Override
-	@NotNull
-	public JComponent createComponent() {
-		if (form == null) {
-			form = new ProjectSettingsForm(project);
+		@Nullable
+		public Icon getIcon() {
+			if (icon == null) {
+				icon = new ImageIcon(Resources.PROGRAM_LOGO_32);
+			}
+			return icon;
 		}
-		return form.getRootComponent();
-	}
 
-	@Override
-	public boolean isModified() {
-		return form != null && (form.isModified(settings) || (form.getDisplayedSettings() != null && !isSameId()));
-	}
-
-	private boolean isSameId() {
-		return ObjectUtils.equals(form.getDisplayedSettings().getId(), settings.getId());
-	}
-
-	@Override
-	public void apply() throws ConfigurationException {
-		if (form != null) {
-			form.validate();
-			settings = form.exportDisplayedSettings();
-			GlobalSettings.getInstance().updateSettings(settings, project);
-			ProjectUtils.applyToAllOpenedProjects(settings);
+		@Override
+		@Nullable
+		@NonNls
+		public String getHelpTopic() {
+			return "EclipseCodeFormatter.Configuration";
 		}
-	}
 
-	@Override
-	public void reset() {
-		if (form != null) {
-			form.importFrom(settings);
+		@Override
+		@NotNull
+		public JComponent createComponent() {
+			if (form == null) {
+				form = new ProjectSettingsForm(project, this);
+			}
+			return form.getRootComponent();
 		}
-	}
 
-	@Override
-	public void disposeUIResources() {
-		form = null;
+		@Override
+		public boolean isModified() {
+			return form != null && (form.isModified(settings) || (form.getDisplayedSettings() != null && !isSameId()));
+		}
+
+		private boolean isSameId() {
+			return ObjectUtils.equals(form.getDisplayedSettings().getId(), settings.getId());
+		}
+
+		@Override
+		public void apply() throws ConfigurationException {
+			if (form != null) {
+				form.validate();
+				settings = form.exportDisplayedSettings();
+				GlobalSettings.getInstance().updateSettings(settings, project);
+				ProjectUtils.applyToAllOpenedProjects(settings);
+			}
+		}
+
+		@Override
+		public void reset() {
+			if (form != null) {
+				form.importFrom(settings);
+			}
+		}
+
+		@Override
+		public void disposeUIResources() {
+			form = null;
+		}
 	}
 
 	// implements PersistentStateComponent

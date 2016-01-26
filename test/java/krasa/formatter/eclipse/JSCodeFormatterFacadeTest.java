@@ -24,7 +24,7 @@ public class JSCodeFormatterFacadeTest {
 			+ "\tvar waitMethod = objClazz.getMethod('wait', null);\n" + "\twaitMethod.invoke(object, null);\n" + "}\n"
 			+ "wait.docString = \"convenient wrapper for java.lang.Object.wait method\";";
 
-	public static final String PATH_TO_CONFIG_FILE = "test/resources/org.eclipse.wst.jsdt.core.prefs";
+	public static final String PATH_TO_CONFIG_FILE = "resources/org.eclipse.wst.jsdt.core.prefs";
 
 	@Before
 	public void setUp() throws Exception {

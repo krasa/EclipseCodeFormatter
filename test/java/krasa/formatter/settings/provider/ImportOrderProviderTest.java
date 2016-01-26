@@ -15,7 +15,7 @@ public class ImportOrderProviderTest {
 	@Test
 	public void testReadFile() throws Exception {
 		Settings settings = new Settings();
-		File file = FileUtils.getFile("test/resources/bcjur2.importorder");
+		File file = FileUtils.getFile("resources/bcjur2.importorder");
 		settings.setImportOrderConfigFilePath(file.getAbsolutePath());
 		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
 		List<String> stringList = importOrderProvider.get();

@@ -1,1 +1,3 @@
-org.eclipse.cdt.core_5.10.0.201506070905.jar - C++ formatter
+org.eclipse.cdt.core - C++ formatter
+
+update krasa.formatter.eclipse.Classloaders

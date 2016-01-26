@@ -19,5 +19,15 @@
         <jarDirectory url="file://$MODULE_DIR$/../lib/eclipse45" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="test" scope="TEST" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../lib/commons-io-2.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

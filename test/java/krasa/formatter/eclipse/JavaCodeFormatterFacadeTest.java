@@ -63,7 +63,7 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 			+ "\t\tSystem.err.println(\"\" + \"\" + \"\" + \"\" + \"\");\n"
 			+ "\t\tSystem.err.println(\"\" + \"\" + \"\" + \"\" + \"\");\n" + "\n" + "\t}\n" + "\n" + "}";
 
-	public static final String PATH_TO_CONFIG_FILE = "test/resources/org.eclipse.jdt.core.prefs";
+	public static final String PATH_TO_CONFIG_FILE = "resources/org.eclipse.jdt.core.prefs";
 	protected JavaCodeFormatterFacade eclipseCodeFormatterFacade;
 
 	@Override
@@ -91,7 +91,7 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 	@Test
 	public void testFormatByXML() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava("test/resources/format.xml");
+		settings.setPathToConfigFileJava("resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
 		String output = format(INPUT);
@@ -103,7 +103,7 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 	@Test
 	public void testFormatByXML_oldFormatter() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava("test/resources/format.xml");
+		settings.setPathToConfigFileJava("resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 		settings.setUseOldEclipseJavaFormatter(true);
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
@@ -117,7 +117,7 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 	@Test
 	public void testFormatByXML_oldFormatter_againToTestClassloader() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava("test/resources/format.xml");
+		settings.setPathToConfigFileJava("resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 		settings.setUseOldEclipseJavaFormatter(true);
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());

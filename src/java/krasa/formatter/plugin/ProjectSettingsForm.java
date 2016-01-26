@@ -132,6 +132,7 @@ public class ProjectSettingsForm {
 	@NotNull
 	private Project project;
 	protected SortedComboBoxModel<Settings> profilesModel;
+	private ProjectSettingsComponent.MyConfigurable myConfigurable;
 
 	private void updateComponents() {
 		hidePopups();
@@ -210,7 +211,8 @@ public class ProjectSettingsForm {
 		}
 	}
 
-	public ProjectSettingsForm(final Project project) {
+	public ProjectSettingsForm(final Project project, ProjectSettingsComponent.MyConfigurable myConfigurable) {
+		this.myConfigurable = myConfigurable;
 		DONATEButton.setBorder(BorderFactory.createEmptyBorder());
 		DONATEButton.setContentAreaFilled(false);
 		this.project = project;
@@ -461,7 +463,7 @@ public class ProjectSettingsForm {
 
 	private void apply() {
 		try {
-			ProjectSettingsComponent.getInstance(getProject()).apply();
+			myConfigurable.apply();
 		} catch (ConfigurationException e1) {
 			throw new RuntimeException(e1);
 		}
