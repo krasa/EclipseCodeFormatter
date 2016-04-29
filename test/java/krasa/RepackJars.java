@@ -1,6 +1,8 @@
 package krasa;
 
-import static java.util.jar.Pack200.Packer.*;
+import com.google.common.io.Files;
+import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.*;
@@ -9,39 +11,41 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
 
-import org.apache.commons.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.io.Files;
+import static java.util.jar.Pack200.Packer.*;
 
 @SuppressWarnings("Duplicates")
 public class RepackJars {
-	private static final Logger log = LoggerFactory.getLogger(RepackJars.class);
 	private static final String SOURCE = "lib/eclipse45";
+//	private static final String SOURCE = "lib/eclipse44";
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		new RepackJars().execute();
 	}
+
+	StringBuilder log = new StringBuilder();
 
 	public void execute() throws IOException, InterruptedException {
 		List<File> files = getJars(new File(SOURCE));
 		// List<File> files = Arrays.asList(new
 		// File("F:\\workspace\\_projekty\\Github\\EclipseCodeFormatter4\\lib\\eclipse45\\org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"));
 
-		for (File jar : files) {
-			File destDir = new File(jar.getParent(), "temp");
-			destDir.mkdir();
-			File destJar = new File(destDir, jar.getName());
+		try {
+			for (File jar : files) {
+				File destDir = new File(jar.getParent(), "temp");
+				destDir.mkdir();
+				File destJar = new File(destDir, jar.getName());
 
-			removeCrap(jar, destJar);
-			repack(destJar);
+				removeCrap(jar, destJar);
+				repack(destJar);
+			}
+		} finally {
+			System.out.println("-----------------");
+			System.out.println(log);
 		}
-
 	}
 
 	public void removeCrap(File srcJarFile, File dest) throws IOException {
+		print("removing crap from " + srcJarFile);
 		File tmpJarFile = File.createTempFile("tempJar", ".tmp");
 		tmpJarFile.deleteOnExit();
 		JarFile jarFile = new JarFile(srcJarFile);
@@ -54,8 +58,8 @@ public class RepackJars {
 				Enumeration jarEntries = jarFile.entries();
 				while (jarEntries.hasMoreElements()) {
 					JarEntry entry = (JarEntry) jarEntries.nextElement();
-					if (!entry.getName().startsWith("org")) {
-						// System.err.println("removing crap: " + entry.getName());
+					if (!entry.getName().startsWith("org") && !entry.getName().startsWith("com") && !entry.getName().startsWith("krasa")) {
+						System.out.println("\t\tremoving crap: " + entry.getName());
 						continue;
 					}
 					InputStream entryInputStream = jarFile.getInputStream(entry);
@@ -85,11 +89,15 @@ public class RepackJars {
 		if (jarUpdated) {
 			FileUtils.deleteQuietly(dest);
 			tmpJarFile.renameTo(dest);
-			System.out.println(
-					"crap removed: " + dest.getName() + " (" + size(dest) + ", original " + size(srcJarFile) + ")");
+			print("\tcrap removed: " + dest.getName() + " (" + size(dest) + ", original " + size(srcJarFile) + ")");
 		} else {
 			throw new RuntimeException(srcJarFile.getAbsolutePath() + " not updated.");
 		}
+	}
+
+	private void print(String s) {
+		log.append(s).append("\n");
+		System.out.println(s);
 	}
 
 	@NotNull
@@ -97,10 +105,7 @@ public class RepackJars {
 		List<File> files = new ArrayList<File>();
 		for (File next : Files.fileTreeTraverser().children(dir)) {
 			String name = next.getName();
-			int i = name.indexOf("_");
-			if (i <= 0)
-				continue;
-			if (name.endsWith(".jar")) {
+			if (name.endsWith(".jar") || name.endsWith(".zip")) {
 				files.add(next);
 			}
 		}
@@ -111,7 +116,7 @@ public class RepackJars {
 	private void repack(File file) throws IOException {
 		try {
 			Pack200Utils.normalize(file, properties());
-			System.out.println("compressed:   " + file.getName() + " (" + size(file) + ")");
+			print("\tcompressed:   " + file.getName() + " (" + size(file) + ")");
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe);
 		}
@@ -135,10 +140,11 @@ public class RepackJars {
 		p.put(Pack200.Packer.KEEP_FILE_ORDER, Pack200.Packer.FALSE);
 		p.put(Pack200.Packer.MODIFICATION_TIME, Pack200.Packer.LATEST);
 		p.put(Pack200.Packer.DEFLATE_HINT, Pack200.Packer.TRUE); // compression enabled
-		p.put("com.sun.java.util.jar.pack.verbose", Pack200.Packer.FALSE);
-		String[] attributes = { UNKNOWN_ATTRIBUTE, CLASS_ATTRIBUTE_PFX, FIELD_ATTRIBUTE_PFX, METHOD_ATTRIBUTE_PFX,
-				CODE_ATTRIBUTE_PFX, };
-		String[] stripCodeAttributes = { "SourceFile", "LineNumberTable", "LocalVariableTable", "Deprecated" };
+		// p.put("com.sun.java.util.jar.pack.verbose", Pack200.Packer.FALSE);
+		// p.put("com.sun.java.util.jar.pack.nolog", Pack200.Packer.TRUE);
+		String[] attributes = {UNKNOWN_ATTRIBUTE, CLASS_ATTRIBUTE_PFX, FIELD_ATTRIBUTE_PFX, METHOD_ATTRIBUTE_PFX,
+				CODE_ATTRIBUTE_PFX,};
+		String[] stripCodeAttributes = {"SourceFile", "LineNumberTable", "LocalVariableTable", "Deprecated"};
 		for (String attribute : attributes) {
 			for (String attributeName : stripCodeAttributes) {
 				p.put(attribute + attributeName, Pack200.Packer.STRIP);

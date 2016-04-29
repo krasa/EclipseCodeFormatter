@@ -1,17 +1,16 @@
 package krasa.formatter.adapter;
 
-import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.apache.commons.io.FileUtils.write;
+import com.google.common.base.Predicate;
+import com.google.common.io.Files;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
-
-import com.google.common.base.Predicate;
-import com.google.common.io.Files;
+import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.apache.commons.io.FileUtils.write;
 
 public class UpdateLibs {
 
@@ -22,7 +21,7 @@ public class UpdateLibs {
 	}
 
 	private void run() throws IOException {
-		String from = "F:\\workspace\\eclipse-jee 4.5.2";
+		String from = "F:\\workspace\\eclipse-cpp-mars-2-win32";
 		File currentJars = new File("lib/eclipse45");
 		File copyTo = new File(currentJars + "/temp");
 

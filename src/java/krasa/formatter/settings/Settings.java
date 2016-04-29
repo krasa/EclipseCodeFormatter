@@ -9,7 +9,10 @@
 package krasa.formatter.settings;
 
 import com.intellij.util.xmlb.annotations.Transient;
-import krasa.formatter.settings.provider.*;
+import krasa.formatter.settings.provider.CppPropertiesProvider;
+import krasa.formatter.settings.provider.ImportOrderProvider;
+import krasa.formatter.settings.provider.JSPropertiesProvider;
+import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import krasa.formatter.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,9 +62,28 @@ public class Settings {
 	private String selectedJavaScriptProfile;
 	private String selectedCppProfile;
 	private boolean useForLiveTemplates = false;
+	@Transient
 	private boolean useOldEclipseJavaFormatter = false;
+	private FormatterVersion eclipseVersion = null;
+	private String pathToEclipse = "";
 
 	public Settings() {
+	}
+
+	public String getPathToEclipse() {
+		return pathToEclipse;
+	}
+
+	public FormatterVersion getEclipseVersion() {
+		return eclipseVersion;
+	}
+
+	public void setEclipseVersion(FormatterVersion eclipseVersion) {
+		this.eclipseVersion = eclipseVersion;
+	}
+
+	public void setPathToEclipse(String pathToEclipse) {
+		this.pathToEclipse = pathToEclipse;
 	}
 
 	public Settings(Long id, String name) {
@@ -231,6 +253,19 @@ public class Settings {
 
 	public void setUseOldEclipseJavaFormatter(final boolean useOldEclipseJavaFormatter) {
 		this.useOldEclipseJavaFormatter = useOldEclipseJavaFormatter;
+		if (eclipseVersion == null) {
+			if (useOldEclipseJavaFormatter) {
+				eclipseVersion = FormatterVersion.ECLIPSE_44;
+			} else {
+				eclipseVersion = FormatterVersion.NEWEST;
+			}
+		}
+	}
+
+	public static enum FormatterVersion {
+		ECLIPSE_44,
+		NEWEST,
+		CUSTOM
 	}
 
 	public static enum Formatter {
@@ -396,12 +431,15 @@ public class Settings {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
 		Settings settings = (Settings) o;
 
-		if (id != null ? !id.equals(settings.id) : settings.id != null) return false;
+		if (id != null ? !id.equals(settings.id) : settings.id != null)
+			return false;
 
 		return true;
 	}

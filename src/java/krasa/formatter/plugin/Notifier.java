@@ -1,11 +1,12 @@
 package krasa.formatter.plugin;
 
-import krasa.formatter.settings.ProjectSettingsComponent;
-
-import com.intellij.notification.*;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import krasa.formatter.settings.ProjectSettingsComponent;
 
 /**
  * @author Vojtech Krasa
@@ -86,12 +87,14 @@ public class Notifier {
 
 		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.WARNING);
+//		if (ApplicationManager.getApplication() != null) {//tests hack
 		ApplicationManager.getApplication().invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				Notifications.Bus.notify(notification, project);
 			}
 		});
+//		}
 	}
 
 }

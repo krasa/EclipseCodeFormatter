@@ -1,22 +1,5 @@
 package krasa.formatter.plugin;
 
-import java.util.*;
-
-import krasa.formatter.eclipse.Classloaders;
-import krasa.formatter.eclipse.CodeFormatterFacade;
-import krasa.formatter.eclipse.JavaCodeFormatterFacade;
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.settings.DisabledFileTypeSettings;
-import krasa.formatter.settings.ProjectSettingsComponent;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.CppPropertiesProvider;
-import krasa.formatter.settings.provider.JSPropertiesProvider;
-import krasa.formatter.utils.FileUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -32,6 +15,21 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
+import krasa.formatter.eclipse.Classloaders;
+import krasa.formatter.eclipse.CodeFormatterFacade;
+import krasa.formatter.eclipse.JavaCodeFormatterFacade;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.settings.DisabledFileTypeSettings;
+import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.CppPropertiesProvider;
+import krasa.formatter.settings.provider.JSPropertiesProvider;
+import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
@@ -176,6 +174,9 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	}
 
 	private String getReason(FormattingFailedException e) {
+		if (e.isUserError() && e.getMessage() != null) {
+			return e.getMessage();
+		}
 		String result = "Probably due to syntax error or wrong configuration file.";
 		String message = e.getMessage();
 		if (message != null) {
@@ -214,7 +215,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		} else {
 			if (eclipseCodeFormatterJava == null) {
 				JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
-						settings.isUseOldEclipseJavaFormatter(), original.getProject());
+						settings.getEclipseVersion(), original.getProject(), settings.getPathToEclipse());
 				eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, facade);
 			}
 			eclipseCodeFormatterJava.format(psiFile, startOffset, endOffset);

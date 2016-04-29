@@ -1,12 +1,10 @@
 package krasa.formatter.adapter;
 
-import java.util.Map;
-
+import com.intellij.pom.java.LanguageLevel;
 import krasa.formatter.eclipse.EclipseFormatterAdapter;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
 import krasa.formatter.settings.Settings;
-
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
 import org.eclipse.jface.text.BadLocationException;
@@ -14,15 +12,14 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.pom.java.LanguageLevel;
+import java.util.Map;
 
 @SuppressWarnings("Duplicates")
 public class EclipseJavaFormatterAdapter45 extends EclipseFormatterAdapter {
 	protected DefaultCodeFormatter defaultCodeFormatter;
 
-	public EclipseJavaFormatterAdapter45(Project project, Map options) {
-		super(project);
+	@SuppressWarnings("unused")
+	public EclipseJavaFormatterAdapter45(Map options) {
 		defaultCodeFormatter = new DefaultCodeFormatter(options);
 	}
 

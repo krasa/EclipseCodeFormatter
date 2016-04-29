@@ -1,26 +1,19 @@
 package krasa.formatter.eclipse;
 
-import java.io.UnsupportedEncodingException;
-
+import com.intellij.openapi.command.impl.DummyProject;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.util.PsiUtilCore;
 import junit.framework.Assert;
 import krasa.formatter.settings.Settings;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author Vojtech Krasa
  */
-public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase {
-
-	@Override
-	protected LightProjectDescriptor getProjectDescriptor() {
-		return JAVA_1_7;
-	}
+public class JavaCodeFormatterFacadeTest {
 
 	public static final String INPUT = "public class EclipseCodeFormatterFacadeTest {\n"
 			+ "\n"
@@ -66,13 +59,16 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 	public static final String PATH_TO_CONFIG_FILE = "resources/org.eclipse.jdt.core.prefs";
 	protected JavaCodeFormatterFacade eclipseCodeFormatterFacade;
 
-	@Override
+	public static Project getProject() {
+		return DummyProject.getInstance();
+	}
+
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		Settings settings = new Settings();
 		settings.setPathToConfigFileJava(PATH_TO_CONFIG_FILE);
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 	}
 
 	@Test
@@ -84,16 +80,16 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 	}
 
 	private String format(String input) {
-		return eclipseCodeFormatterFacade.format(input, 0, input.length(), createLightFile(JavaFileType.INSTANCE, "foo"));
+		return eclipseCodeFormatterFacade.format(input, 0, input.length(), PsiUtilCore.NULL_PSI_FILE);
 	}
-
 
 	@Test
 	public void testFormatByXML() throws Exception {
 		Settings settings = new Settings();
 		settings.setPathToConfigFileJava("resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 		String output = format(INPUT);
 		Assert.assertEquals(FORMATTED, output);
 		output = format(INPUT2);
@@ -106,13 +102,13 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 		settings.setPathToConfigFileJava("resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 		settings.setUseOldEclipseJavaFormatter(true);
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 		String output = format(INPUT);
 		Assert.assertEquals(FORMATTED, output);
 		output = format(INPUT2);
 		Assert.assertEquals(FORMATTED2, output);
 	}
-
 
 	@Test
 	public void testFormatByXML_oldFormatter_againToTestClassloader() throws Exception {
@@ -120,7 +116,8 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 		settings.setPathToConfigFileJava("resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 		settings.setUseOldEclipseJavaFormatter(true);
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(), settings.isUseOldEclipseJavaFormatter(), getProject());
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 		String output = format(INPUT);
 		Assert.assertEquals(FORMATTED, output);
 		output = format(INPUT2);
@@ -130,17 +127,19 @@ public class JavaCodeFormatterFacadeTest extends LightCodeInsightFixtureTestCase
 	@Test
 	public void testFormat2() throws Exception {
 		String input2 = INPUT2;
-		String output = eclipseCodeFormatterFacade.format(input2, 10, input2.length() - 10, createLightFile(JavaFileType.INSTANCE, "foo"));
+		String output = eclipseCodeFormatterFacade.format(input2, 10, input2.length() - 10, PsiUtilCore.NULL_PSI_FILE);
 		Assert.assertEquals(FORMATTED2, output);
 	}
 
 	@Test
 	public void testEndOffset() throws Exception {
 		String input2 = FORMATTED2;
-		String output = eclipseCodeFormatterFacade.format(input2, input2.length() - 20, input2.length() - 10, createLightFile(JavaFileType.INSTANCE, "foo"));
+		String output = eclipseCodeFormatterFacade.format(input2, input2.length() - 20, input2.length() - 10,
+				PsiUtilCore.NULL_PSI_FILE);
 		Assert.assertEquals(FORMATTED2, output);
 		input2 = INPUT;
-		eclipseCodeFormatterFacade.format(input2, input2.length() - 20, input2.length() - 10, createLightFile(JavaFileType.INSTANCE, "foo"));
+		eclipseCodeFormatterFacade.format(input2, input2.length() - 20, input2.length() - 10,
+				PsiUtilCore.NULL_PSI_FILE);
 	}
 
 	public String convert(String s, String utf8) throws UnsupportedEncodingException {

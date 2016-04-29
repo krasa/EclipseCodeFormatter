@@ -1,21 +1,20 @@
 package krasa.formatter.eclipse;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.diagnostic.Logger;
+import krasa.formatter.processor.Processor;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.CppPropertiesProvider;
+import krasa.formatter.settings.provider.JSPropertiesProvider;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-
-import krasa.formatter.processor.Processor;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.CppPropertiesProvider;
-import krasa.formatter.settings.provider.JSPropertiesProvider;
-
-import org.jetbrains.annotations.NotNull;
-
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.diagnostic.Logger;
+import java.util.List;
 
 public class Classloaders {
 	private static final Logger LOG = Logger.getInstance(Classloaders.class.getName());
@@ -26,47 +25,64 @@ public class Classloaders {
 	public static ClassLoader getEclipse44() {
 		if (eclipse44 == null) {
 			eclipse44 = classLoader(getPluginLibHomeEclipse44(),
-                    "adapter44.jar",
+					"adapter44.jar",
 					"org.eclipse.jdt.core_3.10.0.v20140902-0626.jar",
 					"org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar",
 					"org.eclipse.core.jobs_3.6.0.v20140424-0053.jar",
 					"org.eclipse.core.runtime_3.10.0.v20140318-2214.jar",
-					"org.eclipse.equinox.registry_3.5.400.v20140428-1507.jar",//js formatter dependency
+					"org.eclipse.equinox.registry_3.5.400.v20140428-1507.jar", // js formatter dependency
 					"com.google.gwt.eclipse.core_2.6.1.v201205091048-rel-r36.zip",
 					"gwt-dev.jar",
-					"org.eclipse.wst.jsdt.core_1.3.200.v201409111605.jar", "org.eclipse.osgi_3.10.1.v20140909-1633.jar",
+					"org.eclipse.wst.jsdt.core_1.3.200.v201409111605.jar",
+					"org.eclipse.osgi_3.10.1.v20140909-1633.jar",
 					"org.eclipse.text_3.5.300.v20130515-1451.jar",
 					"org.eclipse.equinox.common_3.6.200.v20130402-1505.jar",
 					"org.eclipse.equinox.app_1.3.200.v20130910-1609.jar",
-					"org.eclipse.core.resources_3.9.1.v20140825-1431.jar",
-					"org.eclipse.core.resources.win32.x86_3.5.100.v20140124-1940.jar");
+					"org.eclipse.core.resources_3.9.1.v20140825-1431.jar"
+			);
 		}
 		return eclipse44;
 	}
 
 	public static ClassLoader getEclipse45() {
 		if (newEclipse == null) {
-			newEclipse = classLoader(getPluginLibHomeEclipse45(), "adapter45.jar",
+			newEclipse = classLoader(getPluginLibHomeEclipse45(),
+					"adapter45.jar",
 					"org.eclipse.core.contenttype_3.5.0.v20150421-2214.jar",
 					"org.eclipse.core.jobs_3.7.0.v20150330-2103.jar",
-					"org.eclipse.core.resources.win32.x86_3.5.100.v20140124-1940.jar",
 					"org.eclipse.core.resources_3.10.1.v20150725-1910.jar",
 					"org.eclipse.core.runtime_3.11.1.v20150903-1804.jar",
 					"org.eclipse.equinox.app_1.3.300.v20150423-1356.jar",
 					"org.eclipse.equinox.common_3.7.0.v20150402-1709.jar",
-					"org.eclipse.jdt.core_3.11.1.v20150902-1521.jar", "org.eclipse.osgi_3.10.101.v20150820-1432.jar",
+					"org.eclipse.jdt.core_3.11.2.v20160128-0629.jar",
+					"org.eclipse.osgi_3.10.102.v20160118-1700.jar",
 					"org.eclipse.text_3.5.400.v20150505-1044.jar",
 					"org.eclipse.equinox.preferences_3.5.300.v20150408-1437.jar",
-					"org.eclipse.cdt.core_5.11.0.201509131935.jar"
-			);
+					"org.eclipse.cdt.core_5.11.0.201602051005.jar");
 		}
 		return newEclipse;
+	}
+
+	public static ClassLoader getCustomClassloader(List<URL> jars) {
+		try {
+			jars.add(new File(getPluginLibHomeEclipse45(), "adapter45.jar").toURI().toURL());
+			for (URL jar : jars) {
+				if (!new File(jar.toURI()).exists()) {
+					throw new IllegalStateException("Plugin jar file not found: " + jar.toURI());
+				}
+			}
+			URL[] a = jars.toArray(new URL[jars.size()]);
+			LOG.info("Creating classloader for " + Arrays.toString(a));
+			return new ParentLastURLClassLoader(Classloaders.class.getClassLoader(), a);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@NotNull
 	private static File getPluginLibHomeEclipse45() {
 		File pluginHome;
-		if (ApplicationManager.getApplication().isUnitTestMode()) {
+		if (isUnitTest()) {
 			pluginHome = new File("../lib/eclipse45");
 		} else {
 			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter/lib/");
@@ -74,10 +90,14 @@ public class Classloaders {
 		return pluginHome;
 	}
 
+	private static boolean isUnitTest() {
+		return ApplicationManager.getApplication() == null || ApplicationManager.getApplication().isUnitTestMode();
+	}
+
 	@NotNull
 	private static File getPluginLibHomeEclipse44() {
 		File pluginHome;
-		if (ApplicationManager.getApplication() == null || ApplicationManager.getApplication().isUnitTestMode()) {
+		if (isUnitTest()) {
 			pluginHome = new File("../lib/eclipse44/");
 		} else {
 			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter/lib/");
@@ -163,4 +183,5 @@ public class Classloaders {
 		}
 		return (Processor) o;
 	}
+
 }

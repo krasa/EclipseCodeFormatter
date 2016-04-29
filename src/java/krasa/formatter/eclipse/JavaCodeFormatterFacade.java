@@ -1,17 +1,6 @@
 package krasa.formatter.eclipse;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Properties;
-
-import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.plugin.Notifier;
-import krasa.formatter.settings.provider.JavaPropertiesProvider;
-
-import org.jetbrains.annotations.NotNull;
-
+import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
@@ -19,6 +8,20 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
+import krasa.formatter.common.ModifiableFile;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.plugin.Notifier;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.JavaPropertiesProvider;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -27,18 +30,20 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 	private static final Logger LOG = Logger.getInstance(JavaCodeFormatterFacade.class.getName());
 
-	private boolean useOldEclipseJavaFormatter;
+	private Settings.FormatterVersion version;
 	private Project project;
+	private String pathToEclipse;
 	protected EclipseFormatterAdapter codeFormatter;
 	private LanguageLevel effectiveLanguageLevel;
 	private JavaPropertiesProvider javaPropertiesProvider;
 	protected ModifiableFile.Monitor lastState;
 
-	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider, boolean useOldEclipseJavaFormatter,
-								   Project project) {
+	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider, Settings.FormatterVersion version,
+								   Project project, String pathToEclipse) {
 		this.javaPropertiesProvider = javaPropertiesProvider;
-		this.useOldEclipseJavaFormatter = useOldEclipseJavaFormatter;
+		this.version = version;
 		this.project = project;
+		this.pathToEclipse = pathToEclipse;
 	}
 
 	@Override
@@ -69,23 +74,41 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 		try {
 			Class<?> aClass;
-			if (useOldEclipseJavaFormatter) {
+			if (version == Settings.FormatterVersion.ECLIPSE_44) {
 				aClass = getAdapter44();
 			} else {
-				if (SystemInfo.isJavaVersionAtLeast("1.7")) {
+				if (version == Settings.FormatterVersion.CUSTOM) {
+					aClass = getCustomAdapter45(pathToEclipse);
+				} else if (SystemInfo.isJavaVersionAtLeast("1.7")) {
 					aClass = getAdapter45();
 				} else {
 					aClass = getAdapter44();
 					Notifier.notifyOldJRE(project);
 				}
 			}
-			Constructor<?> constructor = aClass.getConstructor(Project.class, Map.class);
-			codeFormatter = (EclipseFormatterAdapter) constructor.newInstance(project, toMap(options));
+			Constructor<?> constructor = aClass.getConstructor(Map.class);
+			codeFormatter = (EclipseFormatterAdapter) constructor.newInstance(toMap(options));
+		} catch (FormattingFailedException e) {
+			throw e;
 		} catch (Throwable e) {
 			// rethrow to have this plugin as a cause of the error report
 			throw new RuntimeException(e);
 		}
 		return codeFormatter;
+	}
+
+	/**
+	 * TODO CACHE BETWEEN PROJECTS
+	 */
+	private Class<?> getCustomAdapter45(String pathToEclipse) throws ClassNotFoundException {
+		ConfigurableEclipseLocation configurableEclipseLocation = new ConfigurableEclipseLocation();
+		List<URL> urlList = configurableEclipseLocation.run(pathToEclipse.trim());
+		if (urlList.isEmpty()) {
+			throw new FormattingFailedException("Invalid path to Eclipse, no jars found in '" + pathToEclipse + "'", true);
+		}
+		ClassLoader classLoader = Classloaders.getCustomClassloader(urlList);
+		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter45", true, classLoader);
+		return aClass;
 	}
 
 	private Class<?> getAdapter44() throws ClassNotFoundException {
@@ -102,6 +125,9 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 	@NotNull
 	protected LanguageLevel getLanguageLevel(@NotNull PsiFile psiFile) {
+		if (DummyProject.getInstance() == project) {
+			return LanguageLevel.JDK_1_7; // tests hack
+		}
 		JavaPsiImplementationHelper instance = JavaPsiImplementationHelper.getInstance(project);
 		LanguageLevel languageLevel = null;
 		try {

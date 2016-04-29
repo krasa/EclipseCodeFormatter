@@ -1,19 +1,17 @@
 package krasa.formatter.plugin;
 
+import com.intellij.lang.ImportOptimizer;
+import com.intellij.lang.java.JavaImportOptimizer;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
+import com.intellij.psi.*;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.ProjectSettingsComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.FileUtils;
-
 import org.jetbrains.annotations.NotNull;
-
-import com.intellij.lang.ImportOptimizer;
-import com.intellij.lang.java.JavaImportOptimizer;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.psi.*;
 
 /**
  * @author Vojtech Krasa
@@ -79,7 +77,9 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		}
 	}
 
-	/** very strange, https://github.com/krasa/EclipseCodeFormatter/issues/59 */
+	/**
+	 * very strange, https://github.com/krasa/EclipseCodeFormatter/issues/59
+	 */
 	private void commitDocument(PsiJavaFile psiFile) {
 		PsiDocumentManager e = PsiDocumentManager.getInstance(psiFile.getProject());
 		Document document = e.getDocument(psiFile);
