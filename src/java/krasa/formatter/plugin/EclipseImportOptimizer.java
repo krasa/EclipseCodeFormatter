@@ -91,9 +91,9 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 	protected ImportSorterAdapter getImportSorter(Settings settings) {
 		if (settings.isImportOrderFromFile()) {
 			final ImportOrderProvider importOrderProviderFromFile = settings.getImportOrderProvider();
-			return new ImportSorterAdapter(importOrderProviderFromFile.get());
+			return new ImportSorterAdapter(settings.getImportOrdering(), importOrderProviderFromFile.get());
 		} else {
-			return new ImportSorterAdapter(settings.getImportOrderAsList());
+			return new ImportSorterAdapter(settings.getImportOrdering(), settings.getImportOrderAsList());
 		}
 	}
 

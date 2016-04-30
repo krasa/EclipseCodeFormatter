@@ -65,6 +65,7 @@ public class Settings {
 	@Transient
 	private boolean useOldEclipseJavaFormatter = false;
 	private FormatterVersion eclipseVersion = null;
+	private ImportOrdering importOrdering = null;
 	private String pathToEclipse = "";
 
 	public Settings() {
@@ -80,6 +81,21 @@ public class Settings {
 
 	public void setEclipseVersion(FormatterVersion eclipseVersion) {
 		this.eclipseVersion = eclipseVersion;
+		if (importOrdering == null) {
+			if (eclipseVersion == FormatterVersion.ECLIPSE_44) {
+				importOrdering = ImportOrdering.ECLIPSE_451;
+			} else {
+				importOrdering = ImportOrdering.ECLIPSE_452;
+			}
+		}
+	}
+
+	public ImportOrdering getImportOrdering() {
+		return importOrdering;
+	}
+
+	public void setImportOrdering(ImportOrdering importOrdering) {
+		this.importOrdering = importOrdering;
 	}
 
 	public void setPathToEclipse(String pathToEclipse) {
@@ -266,6 +282,11 @@ public class Settings {
 		ECLIPSE_44,
 		NEWEST,
 		CUSTOM
+	}
+
+	public static enum ImportOrdering {
+		ECLIPSE_451,
+		ECLIPSE_452,
 	}
 
 	public static enum Formatter {

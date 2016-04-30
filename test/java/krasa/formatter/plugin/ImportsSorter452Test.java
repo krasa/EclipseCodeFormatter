@@ -11,50 +11,103 @@ import java.util.List;
 /**
  * @author Vojtech Krasa
  */
-public class ImportsSorterTest {
+public class ImportsSorter452Test {
 
 	public static final String N = "\n";
 	public static final List<String> DEFAULT_ORDER = Arrays.asList("java", "javax", "org", "com");
 
 	@Test
 	public void test() throws Exception {
-		String expected = "import java.util.HashMap;\n" + "import java.util.Map;\n" + "\n"
-				+ "import org.jingle.mocquer.MockControl;\n" + N + "import sun.security.action.GetLongAction;\n"
-				+ "import tmplatform.authorisation.ApiClientLink;\n"
-				+ "import tmplatform.comms.common.caaa.EvasLdapInterfaceProfileWrapper;\n"
-				+ "import base.LoadUnitTestDataTestCase;\n" + N + "import com.sun.rmi.rmid.ExecOptionPermission;" + N;
 
-		List<String> imports = Arrays.asList("java.util.HashMap",
-				"tmplatform.comms.common.caaa.EvasLdapInterfaceProfileWrapper",
-				"com.sun.rmi.rmid.ExecOptionPermission", "java.util.Map", "base.LoadUnitTestDataTestCase",
-				"org.jingle.mocquer.MockControl", "tmplatform.authorisation.ApiClientLink",
-				"sun.security.action.GetLongAction");
+		//@formatter:off
+		String expected =
+				"import static aaa.XAAA.aaa;\n" +
+						"import static com.google.common.collect.Multimaps.forMap;\n" +
+						"import static foo.bar.XFOO.foo;\n" +
+						"\n" +
+						"import static org.easymock.EasyMock.createControl;\n" +
+						"\n" +
+						"import static java.util.Collections.EMPTY_LIST;\n" +
+						"\n" +
+						"import java.util.ArrayList;\n" +
+						"import java.util.HashMap;\n" +
+						"import java.util.List;\n" +
+						"\n" +
+						"import org.easymock.IMocksControl;\n" +
+						"\n" +
+						"import com.google.common.collect.SetMultimap;\n" +
+						"\n" +
+						"import aaa.XAAA;\n" +
+						"import foo.bar.XFOO;\n";
 
-		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
+		String imports =
+				"\n" +
+						"import static aaa.XAAA.aaa;\n" +
+						"import static com.google.common.collect.Multimaps.forMap;\n" +
+						"import static foo.bar.XFOO.foo;\n" +
+						"import static org.easymock.EasyMock.createControl;\n" +
+						"import static java.util.Collections.EMPTY_LIST;\n" +
+						"import java.util.ArrayList;\n" +
+						"import java.util.HashMap;\n" +
+						"import java.util.List;\n" +
+						"import org.easymock.IMocksControl;\n" +
+						"import com.google.common.collect.SetMultimap;\n" +
+						"import aaa.XAAA;\n" +
+						"import foo.bar.XFOO;\n";
 
-		List<String> strings = ImportsSorter451.sort(imports, importsOrder);
+		//@formatter:on
+
+		List<String> importsOrder = Arrays.asList("\\#org", "\\#java", "java", "javax", "org", "com");
+
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
 	@Test
 	public void test2() throws Exception {
-		String expected = "import static com.MyUtil.kuk;\n" + "import static org.junit.Assert.assertNotNull;\n"
-				+ "import static tmutil.StringUtil.replaceText;\n\n" + "import java.util.HashMap;\n"
-				+ "import java.util.Map;\n" + "\n" + "import org.jingle.mocquer.MockControl;\n" + N
-				+ "import sun.security.action.GetLongAction;\n" + "import tmplatform.authorisation.ApiClientLink;\n"
-				+ "import tmplatform.comms.common.caaa.EvasLdapInterfaceProfileWrapper;\n"
-				+ "import base.LoadUnitTestDataTestCase;\n";
+		String expected =
+				"import static org.easymock.EasyMock.createControl;\n" +
+						"\n" +
+						"import java.util.ArrayList;\n" +
+						"import java.util.HashMap;\n" +
+						"import java.util.List;\n" +
+						"\n" +
+						"import org.easymock.IMocksControl;\n" +
+						"\n" +
+						"import com.google.common.collect.SetMultimap;\n" +
+						"\n" +
+						"import aaa.XAAA;\n" +
+						"import foo.bar.XFOO;\n" +
+						"\n" +
+						"import static aaa.XAAA.aaa;\n" +
+						"import static com.google.common.collect.Multimaps.forMap;\n" +
+						"import static foo.bar.XFOO.foo;\n";
 
-		String imports = "import static com.MyUtil.kuk;\n" + "import java.util.Map;\n" + "\n"
-				+ "import static org.junit.Assert.assertNotNull;\n"
-				+ "import tmplatform.authorisation.ApiClientLink;\n" + "import java.util.HashMap;\n"
-				+ "import sun.security.action.GetLongAction;\n" + "import org.jingle.mocquer.MockControl;\n"
-				+ "import tmplatform.comms.common.caaa.EvasLdapInterfaceProfileWrapper;\n" + N
-				+ "import static tmutil.StringUtil.replaceText;\n\n" + "import base.LoadUnitTestDataTestCase;\n";
+		String imports =
+				"import static org.easymock.EasyMock.createControl;\n" +
+						"\n" +
+						"import java.util.ArrayList;\n" +
+						"import java.util.HashMap;\n" +
+						"import java.util.List;\n" +
+						"\n" +
+						"import org.easymock.IMocksControl;\n" +
+						"\n" +
+						"import com.google.common.collect.SetMultimap;\n" +
+						"\n" +
+						"import aaa.XAAA;\n" +
+						"import foo.bar.XFOO;\n" +
+						"\n" +
+						"import static aaa.XAAA.aaa;\n" +
+						"import static com.google.common.collect.Multimaps.forMap;\n" +
+						"import static foo.bar.XFOO.foo;\n";
+		List<String> importsOrder = Arrays.asList("\\#org", "\\#java", "java", "javax", "org", "com", "", "\\#");
 
-		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
 
-		List<String> strings = ImportsSorter451.sort(StringUtils.trimImports(imports), importsOrder);
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -78,23 +131,10 @@ public class ImportsSorterTest {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, DEFAULT_ORDER);
+		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 
-	@Test
-	public void test4() throws Exception {
-		String expected = "import java.util.Arrays;\n" + "\n" + "import models.Deployment;\n"
-				+ "import play.jobs.Job;\n" + "import play.mvc.Before;\n" + "import controllers.deadbolt.Restrict;\n";
-
-		String imports = "import controllers.deadbolt.Restrict;\n" + "import java.util.Arrays;\n"
-				+ "import play.mvc.Before;\n" + "import models.Deployment;\n" + "import play.jobs.Job;\n";
-
-		List<String> imports1 = StringUtils.trimImports(imports);
-		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, DEFAULT_ORDER);
-		printAndAssert(expected, strings);
-	}
 
 	@Test
 	public void test5() throws Exception {
@@ -113,7 +153,7 @@ public class ImportsSorterTest {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, importsOrder);
+		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -152,7 +192,7 @@ public class ImportsSorterTest {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, DEFAULT_ORDER);
+		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 
@@ -166,7 +206,7 @@ public class ImportsSorterTest {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, importsOrder);
+		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -180,7 +220,7 @@ public class ImportsSorterTest {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, importsOrder);
+		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -194,7 +234,7 @@ public class ImportsSorterTest {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, importsOrder);
+		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -211,25 +251,10 @@ public class ImportsSorterTest {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, importsOrder);
+		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
-	@Test
-	public void test13() throws Exception {
-		String imports = "import static foo.JettyStart.startJetty;\n" + "import org.apache.commons.lang3.ArrayUtils;\n"
-				+ "import static foo.Tomcat7Start.startTomcat;\n";
-
-		String expected = "import org.apache.commons.lang3.ArrayUtils;\n" + "\n"
-				+ "import static foo.JettyStart.startJetty;\n" + "\n" + "import static foo.Tomcat7Start.startTomcat;\n";
-
-		List<String> importsOrder = Arrays.asList("", "\\#foo.Tomcat7Start");
-
-		List<String> imports1 = StringUtils.trimImports(imports);
-		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, importsOrder);
-		printAndAssert(expected, strings);
-	}
 
 	@Test
 	public void test8() throws Exception {
@@ -239,7 +264,7 @@ public class ImportsSorterTest {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter451.sort(imports1, DEFAULT_ORDER);
+		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 

@@ -131,6 +131,8 @@ public class ProjectSettingsForm {
 	private JRadioButton useEclipseNewest;
 	private JRadioButton useEclipseCustom;
 	private JLabel javaFormatterVersionLabel;
+	private JRadioButton importOrdering451;
+	private JRadioButton importOrdering452;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -144,7 +146,7 @@ public class ProjectSettingsForm {
 				enableCppFormatting, doNotFormatOtherFilesRadioButton, formatOtherFilesWithExceptionsRadioButton,
 				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
 				importOrderConfigurationManualRadioButton, useEclipse44, useEclipseNewest, useEclipseCustom,
-				formatSelectedTextInAllFileTypes, useForLiveTemplates}, useEclipseFormatter);
+				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452}, useEclipseFormatter);
 
 		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, eclipsePrefsExample,
 				eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox, eclipsePreferenceFilePathJavaBrowse,
@@ -475,6 +477,19 @@ public class ProjectSettingsForm {
 				BareBonesBrowserLaunch.openURL("http://plugins.intellij.net/plugin/?idea&id=6546");
 			}
 		});
+		useEclipse44.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				importOrdering451.setSelected(true);
+
+			}
+		});
+		useEclipseNewest.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				importOrdering452.setSelected(true);
+			}
+		});
 	}
 
 	private void apply() {
@@ -658,6 +673,8 @@ public class ProjectSettingsForm {
 		useEclipse44.setSelected(in.getEclipseVersion().equals(Settings.FormatterVersion.ECLIPSE_44));
 		useEclipseNewest.setSelected(in.getEclipseVersion().equals(Settings.FormatterVersion.NEWEST));
 		useEclipseCustom.setSelected(in.getEclipseVersion().equals(Settings.FormatterVersion.CUSTOM));
+		importOrdering451.setSelected(in.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_451));
+		importOrdering452.setSelected(in.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_452));
 		importOrderConfigurationFromFileRadioButton.setSelected(in.isImportOrderFromFile());
 		importOrderConfigurationManualRadioButton.setSelected(!in.isImportOrderFromFile());
 		javaFormatterProfile.setSelectedItem(in.getSelectedJavaProfile());
@@ -672,6 +689,11 @@ public class ProjectSettingsForm {
 			displayedSettings.setFormatter(Settings.Formatter.ECLIPSE);
 		} else {
 			displayedSettings.setFormatter(Settings.Formatter.DEFAULT);
+		}
+		if (importOrdering451.isSelected()) {
+			displayedSettings.setImportOrdering(Settings.ImportOrdering.ECLIPSE_451);
+		} else if (importOrdering452.isSelected()) {
+			displayedSettings.setImportOrdering(Settings.ImportOrdering.ECLIPSE_452);
 		}
 		if (useEclipse44.isSelected()) {
 			displayedSettings.setEclipseVersion(Settings.FormatterVersion.ECLIPSE_44);
@@ -750,10 +772,16 @@ public class ProjectSettingsForm {
 		if (useEclipseCustom.isSelected() != data.getEclipseVersion().equals(Settings.FormatterVersion.CUSTOM)) {
 			return true;
 		}
+		if (importOrdering451.isSelected() != data.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_451)) {
+			return true;
+		}
+		if (importOrdering452.isSelected() != data.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_452)) {
+			return true;
+		}
 		if (formatOtherFilesWithExceptionsRadioButton.isSelected() != data.isFormatOtherFileTypesWithIntelliJ()) {
 			return true;
 		}
-		if (doNotFormatOtherFilesRadioButton.isSelected() != !data.isFormatOtherFileTypesWithIntelliJ()) {
+		if (doNotFormatOtherFilesRadioButton.isSelected() == data.isFormatOtherFileTypesWithIntelliJ()) {
 			return true;
 		}
 		if (importOrderConfigurationFromFileRadioButton.isSelected() != data.isImportOrderFromFile()) {

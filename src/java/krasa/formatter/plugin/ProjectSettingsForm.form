@@ -613,6 +613,26 @@
                 </constraints>
                 <properties/>
               </component>
+              <component id="115c9" class="javax.swing.JRadioButton" binding="importOrdering451">
+                <constraints>
+                  <grid row="8" column="5" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="23"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Import ordering style for Eclipse -4.5.1"/>
+                </properties>
+              </component>
+              <component id="570a2" class="javax.swing.JRadioButton" binding="importOrdering452">
+                <constraints>
+                  <grid row="9" column="5" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="23"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Import ordering style for Eclipse 4.5.2+"/>
+                </properties>
+              </component>
             </children>
           </grid>
         </children>
@@ -649,6 +669,10 @@
       <member id="ccecd"/>
       <member id="19c70"/>
       <member id="77e2f"/>
+    </group>
+    <group name="importOrderingStyle">
+      <member id="115c9"/>
+      <member id="570a2"/>
     </group>
   </buttonGroups>
   <inspectionSuppressions>

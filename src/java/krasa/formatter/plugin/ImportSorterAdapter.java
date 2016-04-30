@@ -4,8 +4,11 @@ import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.*;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Vojtech Krasa
@@ -13,9 +16,11 @@ import java.util.*;
 public class ImportSorterAdapter {
 	public static final String N = Settings.LINE_SEPARATOR;
 
+	private Settings.ImportOrdering importOrdering;
 	private List<String> importsOrder;
 
-	public ImportSorterAdapter(List<String> importsOrder) {
+	public ImportSorterAdapter(Settings.ImportOrdering importOrdering, List<String> importsOrder) {
+		this.importOrdering = importOrdering;
 		this.importsOrder = new ArrayList<String>(importsOrder);
 	}
 
@@ -42,7 +47,7 @@ public class ImportSorterAdapter {
 			}
 		}
 
-		List<String> sort = ImportsSorter.sort(StringUtils.trimImports(imports), importsOrder);
+		List<String> sort = getImportsSorter().sort(StringUtils.trimImports(imports));
 
 		StringBuilder text = new StringBuilder();
 		for (int i = 0; i < sort.size(); i++) {
@@ -78,6 +83,17 @@ public class ImportSorterAdapter {
 			}
 		}
 		importList.replace(result);
+	}
+
+	@NotNull
+	private ImportsSorter getImportsSorter() {
+		switch (importOrdering) {
+			case ECLIPSE_451:
+				return new ImportsSorter451(importsOrder);
+			case ECLIPSE_452:
+				return new ImportsSorter452(importsOrder);
+		}
+		throw new RuntimeException(String.valueOf(importOrdering));
 	}
 
 }
