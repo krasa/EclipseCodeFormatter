@@ -51,6 +51,10 @@ public class ProjectCodeStyleInstaller {
 
 	private void installCodeFormatter(@NotNull Settings settings) {
 		CodeStyleManager manager = CodeStyleManager.getInstance(project);
+		String canonicalName = manager.getClass().getCanonicalName();
+		if (!canonicalName.startsWith("com.intellij") && !canonicalName.startsWith("krasa")) {
+			throw new RuntimeException("CodeStyleManager conflict, another formatter plugin is probably installed: " + canonicalName);
+		}
 		if (Settings.Formatter.ECLIPSE.equals(settings.getFormatter())) {
 			registerCodeStyleManager(project, new EclipseCodeStyleManager(manager, settings));
 		}
