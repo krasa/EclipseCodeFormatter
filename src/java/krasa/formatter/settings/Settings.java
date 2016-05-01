@@ -62,10 +62,10 @@ public class Settings {
 	private String selectedJavaScriptProfile;
 	private String selectedCppProfile;
 	private boolean useForLiveTemplates = false;
-	@Transient
+	@Deprecated
 	private boolean useOldEclipseJavaFormatter = false;
-	private FormatterVersion eclipseVersion = null;
-	private ImportOrdering importOrdering = null;
+	private FormatterVersion eclipseVersion = FormatterVersion.NEWEST;
+	private ImportOrdering importOrdering = ImportOrdering.ECLIPSE_452;
 	private String pathToEclipse = "";
 
 	public Settings() {
@@ -81,12 +81,17 @@ public class Settings {
 
 	public void setEclipseVersion(FormatterVersion eclipseVersion) {
 		this.eclipseVersion = eclipseVersion;
-		if (importOrdering == null) {
-			if (eclipseVersion == FormatterVersion.ECLIPSE_44) {
-				importOrdering = ImportOrdering.ECLIPSE_451;
-			} else {
-				importOrdering = ImportOrdering.ECLIPSE_452;
-			}
+		switch (eclipseVersion) {
+
+			case ECLIPSE_44:
+				useOldEclipseJavaFormatter = true;
+				break;
+			case NEWEST:
+				useOldEclipseJavaFormatter = false;
+				break;
+			case CUSTOM:
+				useOldEclipseJavaFormatter = false;
+				break;
 		}
 	}
 
@@ -263,18 +268,16 @@ public class Settings {
 		this.useForLiveTemplates = useForLiveTemplates;
 	}
 
+	@Deprecated
 	public boolean isUseOldEclipseJavaFormatter() {
 		return useOldEclipseJavaFormatter;
 	}
 
+	@Deprecated
 	public void setUseOldEclipseJavaFormatter(final boolean useOldEclipseJavaFormatter) {
 		this.useOldEclipseJavaFormatter = useOldEclipseJavaFormatter;
-		if (eclipseVersion == null) {
-			if (useOldEclipseJavaFormatter) {
-				eclipseVersion = FormatterVersion.ECLIPSE_44;
-			} else {
-				eclipseVersion = FormatterVersion.NEWEST;
-			}
+		if (useOldEclipseJavaFormatter) {
+			eclipseVersion = FormatterVersion.ECLIPSE_44;
 		}
 	}
 
