@@ -142,7 +142,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 			LOG.debug("startOffset" + startOffset + ", endOffset:" + endOffset + ", length of file "
 					+ psiFile.getText().length(), e);
 			notifier.notifyFailedFormatting(psiFile, formattedByIntelliJ, getReason(e));
-		} catch (final Exception e) {
+		} catch (final Throwable e) {
 			LOG.error(e);
 		}
 	}
@@ -175,7 +175,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
 	private String getReason(FormattingFailedException e) {
 		if (e.isUserError() && e.getMessage() != null) {
-			return e.getMessage();
+			return "<br>" + e.getMessage();
 		}
 		String result = "Probably due to syntax error or wrong configuration file.";
 		String message = e.getMessage();

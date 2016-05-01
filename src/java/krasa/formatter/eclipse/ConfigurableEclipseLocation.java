@@ -2,6 +2,7 @@ package krasa.formatter.eclipse;
 
 import com.google.common.io.Files;
 import com.intellij.openapi.diagnostic.Logger;
+import krasa.formatter.exception.FormattingFailedException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -12,21 +13,23 @@ import java.util.*;
 
 public class ConfigurableEclipseLocation {
 	private static final Logger LOG = Logger.getInstance(ConfigurableEclipseLocation.class.getName());
+	private static final int TIMEOUT = 5000;
 
-
-	String[] JAR_NAMES = {"org.eclipse.cdt.core_",
+	//@formatter:off
+	String[] JAR_NAMES = {
 			"org.eclipse.core.contenttype_",
 			"org.eclipse.core.jobs_",
-			"org.eclipse.core.resources.win32.x86_",
 			"org.eclipse.core.resources_",
 			"org.eclipse.core.runtime_",
-			"org.eclipse.equinox.app_",
+			"org.eclipse.equinox.app_",//probably useless
 			"org.eclipse.equinox.common_",
 			"org.eclipse.equinox.preferences_",
 			"org.eclipse.jdt.core_",
 			"org.eclipse.osgi_",
 			"org.eclipse.text_"
 	};
+	//@formatter:on
+
 	public Set<String> jarNames;
 
 	public ConfigurableEclipseLocation() {
@@ -46,9 +49,12 @@ public class ConfigurableEclipseLocation {
 		long start = System.currentTimeMillis();
 		List<URL> jars = null;
 		try {
-			jars = findJars(new File(from));
+			jars = findJars(start, new File(from));
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
+		}
+		if (!jarNames.isEmpty()) {
+			throw new FormattingFailedException("Not all jars found in '" + from + "': " + jarNames.toString(), true);
 		}
 
 		long total = System.currentTimeMillis() - start;
@@ -57,20 +63,26 @@ public class ConfigurableEclipseLocation {
 	}
 
 	@NotNull
-	private List<URL> findJars(File from) throws MalformedURLException {
+	private List<URL> findJars(long start, File from) throws MalformedURLException {
+		if (System.currentTimeMillis() - start > TIMEOUT) {
+			throw new FormattingFailedException("Timeout, aborting search for jars.", true);
+		}
+
 		List<URL> files = new ArrayList<URL>();
 		Iterator<File> iterator = Files.fileTreeTraverser().children(from).iterator();
 		while (iterator.hasNext()) {
 			File next = iterator.next();
 			if (next.isDirectory()) {
-				files.addAll(findJars(next));
+				files.addAll(findJars(start, next));
 			} else {
 				String name = next.getName();
 				if (name.endsWith(".jar")) {
 					int i = name.indexOf("_");
 					if (i <= 0)
 						continue;
-					if (jarNames.contains(name.substring(0, i + 1))) {
+					String jarName = name.substring(0, i + 1);
+					if (jarNames.contains(jarName)) {
+						jarNames.remove(jarName);
 						files.add(next.toURI().toURL());
 					}
 				}
