@@ -4,6 +4,7 @@ import com.intellij.lang.ImportOptimizer;
 import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.psi.*;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
@@ -57,6 +58,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 			commitDocument(psiFile);
 
 			importSorter.sortImports(psiFile);
+			commitDocument(psiFile);
 		} catch (ParsingFailedException e) {
 			throw e;
 		} catch (FileDoesNotExistsException e) {
@@ -85,6 +87,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		Document document = e.getDocument(psiFile);
 		if (document != null) {
 			e.commitDocument(document);
+			FileDocumentManager.getInstance().saveDocument(document);
 		}
 	}
 

@@ -1,17 +1,5 @@
 package krasa.formatter.plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import krasa.formatter.eclipse.Classloaders;
-import krasa.formatter.eclipse.CodeFormatterFacade;
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.processor.Processor;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.FileUtils;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.openapi.diagnostic.Logger;
@@ -21,6 +9,16 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtilBase;
+import krasa.formatter.eclipse.Classloaders;
+import krasa.formatter.eclipse.CodeFormatterFacade;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.processor.Processor;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Vojtech Krasa
@@ -73,8 +71,7 @@ public class EclipseCodeFormatter {
 		String reformat = reformat(range.getStartOffset(), range.getEndOffset(), text, psiFile);
 
 		document.setText(reformat);
-		postProcess(document, psiFile, range);
-		fileDocumentManager.saveDocument(document);
+		postProcess(document, psiFile, range, fileDocumentManager);
 	}
 
 	/* when file is being edited, it is important to load text from editor, i think */
@@ -92,7 +89,7 @@ public class EclipseCodeFormatter {
 		String text = document.getText();
 		String reformat = reformat(range.getStartOffset(), range.getEndOffset(), text, file);
 		document.setText(reformat);
-		postProcess(document, file, range);
+		postProcess(document, file, range, FileDocumentManager.getInstance());
 
 		restoreVisualColumn(editor, visualColumnToRestore, rangeMarker);
 		rangeMarker.dispose();
@@ -100,13 +97,14 @@ public class EclipseCodeFormatter {
 		LOG.debug("#formatWhenEditorIsOpen done");
 	}
 
-	private void postProcess(Document document, PsiFile file, Range range) {
+	private void postProcess(Document document, PsiFile file, Range range, FileDocumentManager fileDocumentManager) {
 		for (Processor postProcessor : postProcessors) {
 			postProcessor.process(document, file, range);
 		}
 		// updates psi, so comments from import statements does not get duplicated
 		final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
 		manager.commitDocument(document);
+		fileDocumentManager.saveDocument(document);
 	}
 
 	private String reformat(int startOffset, int endOffset, String text, PsiFile psiFile)
