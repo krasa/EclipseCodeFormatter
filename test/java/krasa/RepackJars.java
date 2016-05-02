@@ -36,7 +36,7 @@ public class RepackJars {
 				File destJar = new File(tempDir, jar.getName());
 
 				removeCrap(jar, destJar, new Condition<JarEntry>() {
-					public boolean value(JarEntry entry) {
+					public boolean isCrap(JarEntry entry) {
 						return !entry.getName().startsWith("org") && !entry.getName().startsWith("com");
 					}
 				});
@@ -49,7 +49,7 @@ public class RepackJars {
 	}
 
 	public interface Condition<T> {
-	    boolean value(T var1);
+	    boolean isCrap(T var1);
 	}
 
 	public void removeCrap(File srcJarFile, File dest, Condition<JarEntry> condition) throws IOException {
@@ -66,7 +66,7 @@ public class RepackJars {
 				Enumeration jarEntries = jarFile.entries();
 				while (jarEntries.hasMoreElements()) {
 					JarEntry entry = (JarEntry) jarEntries.nextElement();
-					if (condition.value(entry)) {
+					if (condition.isCrap(entry)) {
 						System.out.println("\t\tremoving crap: " + entry.getName());
 						continue;
 					}
