@@ -4,7 +4,7 @@ Currently supports formatting of
  - Java (also emulates Eclipse's imports optimizing)
  - JavaScript 
  - GWT
-
+ - C/C++
 
 
 # Instructions #
@@ -63,11 +63,8 @@ Currently supports formatting of
 
 
 # Troubleshooting #
-If it is mysteriously not working, edit IntelliJ IDEA XX\bin\log.xml:
-add following lines before < root >:
+If it is mysteriously not working, go to `Main Menu | Help | Edit Debug Settings` and add:
 ```
-	<category name="krasa.formatter">
-		<level value="DEBUG"/>
-	</category>
+krasa.formatter
 ````
-and restart. Try to reformat something and send me the log...
+Try to reformat something and send me the log...
