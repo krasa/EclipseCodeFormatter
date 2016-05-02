@@ -15,8 +15,8 @@ import static java.util.jar.Pack200.Packer.*;
 
 @SuppressWarnings("Duplicates")
 public class RepackJars {
-	private static final String SOURCE = "lib/eclipse45";
-//	private static final String SOURCE = "lib/eclipse44";
+	private static final File SOURCE_DIR = new File("lib/eclipse45");
+//	private static final File SOURCE_DIR = new File("lib/eclipse44");
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		new RepackJars().execute();
@@ -25,17 +25,21 @@ public class RepackJars {
 	StringBuilder log = new StringBuilder();
 
 	public void execute() throws IOException, InterruptedException {
-		List<File> files = getJars(new File(SOURCE));
+		List<File> files = getJars(SOURCE_DIR);
 		// List<File> files = Arrays.asList(new
 		// File("F:\\workspace\\_projekty\\Github\\EclipseCodeFormatter4\\lib\\eclipse45\\org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"));
+		File tempDir = new File(SOURCE_DIR, "temp");
+		tempDir.mkdir();
 
 		try {
 			for (File jar : files) {
-				File destDir = new File(jar.getParent(), "temp");
-				destDir.mkdir();
-				File destJar = new File(destDir, jar.getName());
+				File destJar = new File(tempDir, jar.getName());
 
-				removeCrap(jar, destJar);
+				removeCrap(jar, destJar, new Condition<JarEntry>() {
+					public boolean value(JarEntry entry) {
+						return !entry.getName().startsWith("org") && !entry.getName().startsWith("com");
+					}
+				});
 				repack(destJar);
 			}
 		} finally {
@@ -44,7 +48,11 @@ public class RepackJars {
 		}
 	}
 
-	public void removeCrap(File srcJarFile, File dest) throws IOException {
+	public interface Condition<T> {
+	    boolean value(T var1);
+	}
+
+	public void removeCrap(File srcJarFile, File dest, Condition<JarEntry> condition) throws IOException {
 		print("removing crap from " + srcJarFile);
 		File tmpJarFile = File.createTempFile("tempJar", ".tmp");
 		tmpJarFile.deleteOnExit();
@@ -58,7 +66,7 @@ public class RepackJars {
 				Enumeration jarEntries = jarFile.entries();
 				while (jarEntries.hasMoreElements()) {
 					JarEntry entry = (JarEntry) jarEntries.nextElement();
-					if (!entry.getName().startsWith("org") && !entry.getName().startsWith("com") && !entry.getName().startsWith("krasa")) {
+					if (condition.value(entry)) {
 						System.out.println("\t\tremoving crap: " + entry.getName());
 						continue;
 					}
@@ -105,6 +113,9 @@ public class RepackJars {
 		List<File> files = new ArrayList<File>();
 		for (File next : Files.fileTreeTraverser().children(dir)) {
 			String name = next.getName();
+			if (name.startsWith("adapter")) {
+				continue;
+			}
 			if (name.endsWith(".jar") || name.endsWith(".zip")) {
 				files.add(next);
 			}
