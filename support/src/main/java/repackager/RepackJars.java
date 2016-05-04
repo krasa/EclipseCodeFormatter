@@ -1,58 +1,78 @@
-package krasa;
+package repackager;
 
-import com.google.common.io.Files;
-import org.apache.commons.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
+import static java.util.jar.Pack200.Packer.CLASS_ATTRIBUTE_PFX;
+import static java.util.jar.Pack200.Packer.CODE_ATTRIBUTE_PFX;
+import static java.util.jar.Pack200.Packer.FIELD_ATTRIBUTE_PFX;
+import static java.util.jar.Pack200.Packer.METHOD_ATTRIBUTE_PFX;
+import static java.util.jar.Pack200.Packer.UNKNOWN_ATTRIBUTE;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
 
-import static java.util.jar.Pack200.Packer.*;
+import org.apache.commons.io.FileUtils;
+
+import com.google.common.io.Files;
 
 @SuppressWarnings("Duplicates")
 public class RepackJars {
-	private static final File SOURCE_DIR = new File("lib/eclipse45");
-//	private static final File SOURCE_DIR = new File("lib/eclipse44");
+	static StringBuilder log = new StringBuilder();
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		new RepackJars().execute();
-	}
-
-	StringBuilder log = new StringBuilder();
-
-	public void execute() throws IOException, InterruptedException {
-		List<File> files = getJars(SOURCE_DIR);
-		// List<File> files = Arrays.asList(new
-		// File("F:\\workspace\\_projekty\\Github\\EclipseCodeFormatter4\\lib\\eclipse45\\org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"));
-		File tempDir = new File(SOURCE_DIR, "temp");
-		tempDir.mkdir();
-
 		try {
-			for (File jar : files) {
-				File destJar = new File(tempDir, jar.getName());
-
-				removeCrap(jar, destJar, new Condition<JarEntry>() {
-					public boolean isCrap(JarEntry entry) {
-						return !entry.getName().startsWith("org") && !entry.getName().startsWith("com");
-					}
-				});
-				repack(destJar);
-			}
+			new RepackJars().execute(new File("lib/eclipse44"));
+			new RepackJars().execute(new File("lib/eclipse45"));
 		} finally {
 			System.out.println("-----------------");
 			System.out.println(log);
 		}
 	}
 
-	public interface Condition<T> {
-	    boolean isCrap(T var1);
+	private void execute(File sourceDir) throws IOException, InterruptedException {
+		List<File> files = getJars(sourceDir);
+		// List<File> files = Arrays.asList(new
+		// File("F:\\workspace\\_projekty\\Github\\EclipseCodeFormatter4\\lib\\eclipse45\\org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"));
+		File tempDir = new File(sourceDir, "temp");
+		tempDir.mkdir();
+
+		for (File jar : files) {
+			File destJar = new File(tempDir, jar.getName());
+
+			removeCrap(jar, destJar, new Condition<JarEntry>() {
+				@Override
+				public boolean isCrap(JarEntry entry) {
+					return !entry.getName().startsWith("org") && !entry.getName().startsWith("com");
+				}
+			});
+			repack(destJar);
+			moveJar(destJar, jar);
+		}
+
 	}
 
-	public void removeCrap(File srcJarFile, File dest, Condition<JarEntry> condition) throws IOException {
+	private void moveJar(File destJar, File jar) {
+		print("moving " + destJar.getAbsolutePath() + " to " + jar.getAbsolutePath());
+		if (destJar.renameTo(jar)) {
+			throw new RuntimeException("moving failed: " + destJar.getAbsolutePath() + " to " + jar.getAbsolutePath());
+		}
+	}
+
+	private interface Condition<T> {
+		boolean isCrap(T var1);
+	}
+
+	private void removeCrap(File srcJarFile, File dest, Condition<JarEntry> condition) throws IOException {
 		print("removing crap from " + srcJarFile);
 		File tmpJarFile = File.createTempFile("tempJar", ".tmp");
 		tmpJarFile.deleteOnExit();
@@ -108,8 +128,8 @@ public class RepackJars {
 		System.out.println(s);
 	}
 
-	@NotNull
-	private List<File> getJars(File dir) {
+	private List<File> getJars(File dir) throws IOException {
+		print("searching for jars in " + dir.getCanonicalPath());
 		List<File> files = new ArrayList<File>();
 		for (File next : Files.fileTreeTraverser().children(dir)) {
 			String name = next.getName();
@@ -123,9 +143,9 @@ public class RepackJars {
 		return files;
 	}
 
-	@NotNull
 	private void repack(File file) throws IOException {
 		try {
+			print("repackaging:   " + file.getName());
 			Pack200Utils.normalize(file, properties());
 			print("\tcompressed:   " + file.getName() + " (" + size(file) + ")");
 		} catch (IOException ioe) {
@@ -134,14 +154,12 @@ public class RepackJars {
 
 	}
 
-	@NotNull
 	private String size(File file) {
 		double bytes = file.length();
 		long kilobytes = (long) (bytes / 1024);
 		return kilobytes + " kb";
 	}
 
-	@NotNull
 	private Map<String, String> properties() {
 		// Create the Packer object
 		Pack200.Packer packer = Pack200.newPacker();
@@ -153,9 +171,9 @@ public class RepackJars {
 		p.put(Pack200.Packer.DEFLATE_HINT, Pack200.Packer.TRUE); // compression enabled
 		// p.put("com.sun.java.util.jar.pack.verbose", Pack200.Packer.FALSE);
 		// p.put("com.sun.java.util.jar.pack.nolog", Pack200.Packer.TRUE);
-		String[] attributes = {UNKNOWN_ATTRIBUTE, CLASS_ATTRIBUTE_PFX, FIELD_ATTRIBUTE_PFX, METHOD_ATTRIBUTE_PFX,
-				CODE_ATTRIBUTE_PFX,};
-		String[] stripCodeAttributes = {"SourceFile", "LineNumberTable", "LocalVariableTable", "Deprecated"};
+		String[] attributes = { UNKNOWN_ATTRIBUTE, CLASS_ATTRIBUTE_PFX, FIELD_ATTRIBUTE_PFX, METHOD_ATTRIBUTE_PFX,
+				CODE_ATTRIBUTE_PFX, };
+		String[] stripCodeAttributes = { "SourceFile", "LineNumberTable", "LocalVariableTable", "Deprecated" };
 		for (String attribute : attributes) {
 			for (String attributeName : stripCodeAttributes) {
 				p.put(attribute + attributeName, Pack200.Packer.STRIP);
