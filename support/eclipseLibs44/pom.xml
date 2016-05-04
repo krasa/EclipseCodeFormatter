@@ -30,7 +30,7 @@
 						<configuration>
 							<resources>
 								<resource>
-									<directory>${basedir}/libs</directory>
+									<directory>${basedir}/lib</directory>
 								</resource>
 							</resources>
 						</configuration>

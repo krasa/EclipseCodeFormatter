@@ -1,15 +1,18 @@
 package repackager;
 
-import com.google.common.base.Predicate;
-import com.google.common.io.Files;
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.apache.commons.io.FileUtils.write;
+import org.apache.commons.io.FileUtils;
+
+import com.google.common.base.Predicate;
+import com.google.common.io.Files;
 
 public class UpdateLibs {
 
@@ -42,16 +45,14 @@ public class UpdateLibs {
 			String oldJar = oldJars.get(prefix);
 			s = s.replace(oldJar, file.getName());
 		}
-		FileUtils.write(CLASSLOADERS, s);
+		FileUtils.writeStringToFile(CLASSLOADERS, s);
 	}
 
-	
 	private String jarPrefix(String name) {
 		int i = name.indexOf("_");
 		return name.substring(0, i);
 	}
 
-	
 	private Map<String, String> getJarsToUpdate(File t) {
 		Map<String, String> oldJars = new HashMap<String, String>();
 		Iterator<File> iterator = Files.fileTreeTraverser().children(t).iterator();
@@ -72,7 +73,6 @@ public class UpdateLibs {
 		return oldJars;
 	}
 
-	
 	private List<File> getJarsToCopy(Set<String> jarNames, File root) {
 		List<File> jarsToCopy = new ArrayList<File>();
 		Iterator<File> eclipseJars = Files.fileTreeTraverser().breadthFirstTraversal(root).filter(

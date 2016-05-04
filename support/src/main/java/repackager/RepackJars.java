@@ -30,13 +30,24 @@ public class RepackJars {
 	static StringBuilder log = new StringBuilder();
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		try {
-			new RepackJars().execute(new File("lib/eclipse44"));
-			new RepackJars().execute(new File("lib/eclipse45"));
-		} finally {
-			System.out.println("-----------------");
-			System.out.println(log);
+		new RepackJars().execute(rootFile("lib/eclipse44"));
+		new RepackJars().execute(rootFile("lib/eclipse45"));
+		System.out.println("-----------------");
+		System.out.println("-----------------");
+		System.out.println("-----------------");
+		System.out.println(log);
+	}
+
+	private static File rootFile(String s) throws IOException {
+		File file = new File(s);
+		if (file.exists()) {
+			return file;
 		}
+		file = new File("../", s);
+		if (file.exists()) {
+			return file;
+		}
+		throw new RuntimeException(file.getCanonicalPath() + " does not exists");
 	}
 
 	private void execute(File sourceDir) throws IOException, InterruptedException {
@@ -48,7 +59,7 @@ public class RepackJars {
 
 		for (File jar : files) {
 			File destJar = new File(tempDir, jar.getName());
-
+//
 			removeCrap(jar, destJar, new Condition<JarEntry>() {
 				@Override
 				public boolean isCrap(JarEntry entry) {
@@ -57,15 +68,18 @@ public class RepackJars {
 			});
 			repack(destJar);
 			moveJar(destJar, jar);
+			System.out.println("-----------------");
 		}
 
 	}
 
-	private void moveJar(File destJar, File jar) {
-		print("moving " + destJar.getAbsolutePath() + " to " + jar.getAbsolutePath());
-		if (destJar.renameTo(jar)) {
-			throw new RuntimeException("moving failed: " + destJar.getAbsolutePath() + " to " + jar.getAbsolutePath());
+	private void moveJar(File from, File to) throws IOException {
+		print("moving " + from.getCanonicalPath() + " to " + to.getCanonicalPath());
+		if (!to.delete()) {
+			throw new RuntimeException("delete failed: " + to.getCanonicalPath()+ " exists:"+to.exists());
 		}
+		FileUtils.copyFile(from, to);
+		from.delete();
 	}
 
 	private interface Condition<T> {
@@ -115,11 +129,11 @@ public class RepackJars {
 		}
 
 		if (jarUpdated) {
-			FileUtils.deleteQuietly(dest);
+			dest.delete();
 			tmpJarFile.renameTo(dest);
 			print("\tcrap removed: " + dest.getName() + " (" + size(dest) + ", original " + size(srcJarFile) + ")");
 		} else {
-			throw new RuntimeException(srcJarFile.getAbsolutePath() + " not updated.");
+			throw new RuntimeException(srcJarFile.getCanonicalPath() + " not updated.");
 		}
 	}
 
