@@ -38,6 +38,7 @@
 		<br>- added new import ordering implementation to match Eclipse 4.5.2 
 		<br>- fixed: editor tab changes to blue when there's no changes after format
 		<br>- repacked and compressed jars to reduce size
+		<br>- settings scrollbar fixed
         <br>15.4 (2016-01-25)
 		<br>- upgraded C, Java formatter from Eclipse Mars (4.5.1) - requires JRE 1.7
 		<br>- fixed settings form for new IJ 15, 16
