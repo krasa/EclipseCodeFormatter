@@ -77,7 +77,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			if (version == Settings.FormatterVersion.ECLIPSE_44) {
 				aClass = getAdapter44();
 			} else {
-				if (version == Settings.FormatterVersion.CUSTOM) {
+				if (version == Settings.FormatterVersion.CUSTOM && SystemInfo.isJavaVersionAtLeast("1.7")) {
 					aClass = getCustomAdapter45(pathToEclipse);
 				} else if (SystemInfo.isJavaVersionAtLeast("1.7")) {
 					aClass = getAdapter45();

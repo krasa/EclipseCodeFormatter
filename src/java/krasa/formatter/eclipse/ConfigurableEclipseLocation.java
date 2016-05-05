@@ -54,7 +54,7 @@ public class ConfigurableEclipseLocation {
 			throw new RuntimeException(e);
 		}
 		if (!jarNames.isEmpty()) {
-			throw new FormattingFailedException("Not all jars found in '" + from + "': " + jarNames.toString(), true);
+			throw new FormattingFailedException("Required jars found in '" + from + "': " + jarNames.toString(), true);
 		}
 
 		long total = System.currentTimeMillis() - start;

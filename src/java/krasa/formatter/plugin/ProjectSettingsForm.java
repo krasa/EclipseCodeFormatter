@@ -759,7 +759,7 @@ public class ProjectSettingsForm {
 				throw new ConfigurationException("Path to Import Order file is not valid - file does not exist");
 			}
 		}
-		if (useEclipseCustom.isEnabled()) {
+		if (pathToCustomEclipse.isEnabled()) {
 			if (StringUtils.isBlank(pathToCustomEclipse.getText())) {
 				throw new ConfigurationException("Path to custom Eclipse folder is not valid");
 			}
