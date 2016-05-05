@@ -32,7 +32,7 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>15.5 (2016-05-01)
+        <br>15.5 (2016-05-06)
 		<br>- upgraded C, Java formatter from Eclipse 4.5.2 
 		<br>- installed Eclipse (4.5+) can be chosen to format Java code
 		<br>- added new import ordering implementation to match Eclipse 4.5.2 
