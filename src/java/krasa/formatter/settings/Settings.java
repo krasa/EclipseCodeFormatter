@@ -68,6 +68,9 @@ public class Settings {
 	private ImportOrdering importOrdering = ImportOrdering.ECLIPSE_452;
 	private String pathToEclipse = "";
 
+	/**
+	 * NEVER FORGET: add fields to #equalsContent !!
+	 */
 	public Settings() {
 	}
 
@@ -409,6 +412,8 @@ public class Settings {
 			return false;
 		if (useForLiveTemplates != settings.useForLiveTemplates)
 			return false;
+		if (useOldEclipseJavaFormatter != settings.useOldEclipseJavaFormatter)
+			return false;
 		if (pathToConfigFileJS != null ? !pathToConfigFileJS.equals(settings.pathToConfigFileJS)
 				: settings.pathToConfigFileJS != null)
 			return false;
@@ -436,8 +441,14 @@ public class Settings {
 		if (selectedJavaScriptProfile != null ? !selectedJavaScriptProfile.equals(settings.selectedJavaScriptProfile)
 				: settings.selectedJavaScriptProfile != null)
 			return false;
-		return !(selectedCppProfile != null ? !selectedCppProfile.equals(settings.selectedCppProfile)
-				: settings.selectedCppProfile != null);
+		if (selectedCppProfile != null ? !selectedCppProfile.equals(settings.selectedCppProfile)
+				: settings.selectedCppProfile != null)
+			return false;
+		if (eclipseVersion != settings.eclipseVersion)
+			return false;
+		if (importOrdering != settings.importOrdering)
+			return false;
+		return pathToEclipse != null ? pathToEclipse.equals(settings.pathToEclipse) : settings.pathToEclipse == null;
 
 	}
 
