@@ -5,7 +5,11 @@ import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiImportList;
+import com.intellij.psi.PsiImportStatementBase;
+import com.intellij.psi.PsiJavaFile;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.ProjectSettingsComponent;
@@ -55,10 +59,11 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		try {
 			importSorter = getImportSorter(settings);
 
-			commitDocument(psiFile);
+			PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(psiFile.getProject());
+			commitDocument(psiFile, psiDocumentManager);
 
 			importSorter.sortImports(psiFile);
-			commitDocument(psiFile);
+			commitDocumentAndSave(psiFile, psiDocumentManager);
 		} catch (ParsingFailedException e) {
 			throw e;
 		} catch (FileDoesNotExistsException e) {
@@ -82,11 +87,18 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 	/**
 	 * very strange, https://github.com/krasa/EclipseCodeFormatter/issues/59
 	 */
-	private void commitDocument(PsiJavaFile psiFile) {
-		PsiDocumentManager e = PsiDocumentManager.getInstance(psiFile.getProject());
-		Document document = e.getDocument(psiFile);
+	private void commitDocument(PsiJavaFile psiFile, PsiDocumentManager psiDocumentManager) {
+		Document document = psiDocumentManager.getDocument(psiFile);
 		if (document != null) {
-			e.commitDocument(document);
+			psiDocumentManager.commitDocument(document);
+		}
+	}
+
+	private void commitDocumentAndSave(PsiJavaFile psiFile, PsiDocumentManager psiDocumentManager) {
+		Document document = psiDocumentManager.getDocument(psiFile);
+		if (document != null) {
+			psiDocumentManager.doPostponedOperationsAndUnblockDocument(document);
+			psiDocumentManager.commitDocument(document);
 			FileDocumentManager.getInstance().saveDocument(document);
 		}
 	}
