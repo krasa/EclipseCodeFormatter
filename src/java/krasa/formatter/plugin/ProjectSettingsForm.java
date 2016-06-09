@@ -30,7 +30,7 @@ import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.GlobalSettings;
-import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.MyConfigurable;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 import org.apache.commons.lang.ObjectUtils;
@@ -139,8 +139,8 @@ public class ProjectSettingsForm {
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
 	private Project project;
-	protected SortedComboBoxModel<Settings> profilesModel;
-	private ProjectSettingsComponent.MyConfigurable myConfigurable;
+	protected SortedComboBoxModel profilesModel;
+	private MyConfigurable myConfigurable;
 
 	private void updateComponents() {
 		hidePopups();
@@ -225,7 +225,7 @@ public class ProjectSettingsForm {
 		}
 	}
 
-	public ProjectSettingsForm(final Project project, ProjectSettingsComponent.MyConfigurable myConfigurable) {
+	public ProjectSettingsForm(final Project project, MyConfigurable myConfigurable) {
 		this.myConfigurable = myConfigurable;
 		DONATEButton.setBorder(BorderFactory.createEmptyBorder());
 		DONATEButton.setContentAreaFilled(false);
@@ -525,7 +525,8 @@ public class ProjectSettingsForm {
 	}
 
 	private ComboBoxModel createProfilesModel(JTextField pathToEclipsePreferenceFile, String selectedProfile) {
-		SortedComboBoxModel<String> profilesModel = new SortedComboBoxModel<String>(new Comparator<String>() {
+		@SuppressWarnings("unchecked")
+		SortedComboBoxModel profilesModel = new SortedComboBoxModel(new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
 				return o1.compareTo(o2);
@@ -560,8 +561,9 @@ public class ProjectSettingsForm {
 		return profilesModel;
 	}
 
-	private SortedComboBoxModel<Settings> createProfilesModel() {
-		SortedComboBoxModel<Settings> settingsSortedComboBoxModel = new SortedComboBoxModel<Settings>(
+	private SortedComboBoxModel createProfilesModel() {
+		//noinspection unchecked
+		SortedComboBoxModel settingsSortedComboBoxModel = new SortedComboBoxModel(
 				new Comparator<Settings>() {
 					@Override
 					public int compare(Settings o1, Settings o2) {
