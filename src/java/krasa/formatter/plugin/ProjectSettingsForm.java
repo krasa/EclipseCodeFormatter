@@ -155,7 +155,7 @@ public class ProjectSettingsForm {
 				eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox, eclipsePreferenceFilePathJavaBrowse,
 				javaFormatterProfileLabel, javaFormatterProfile, enableGWTNativeMethodsCheckBox,
 				customEclipseLocationBrowse, pathToCustomEclipse, useEclipse44, useEclipseNewest, useEclipseCustom,
-				javaFormatterVersionLabel, }, enableJavaFormatting);
+				javaFormatterVersionLabel, importOrdering451, importOrdering452}, enableJavaFormatting);
 
 		enabledBy(new JComponent[] { pathToCustomEclipse, customEclipseLocationBrowse, }, useEclipseCustom);
 
