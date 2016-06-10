@@ -1,8 +1,9 @@
 package krasa.formatter.eclipse;
 
-import com.google.common.io.Files;
 import com.intellij.openapi.diagnostic.Logger;
 import krasa.formatter.exception.FormattingFailedException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -69,7 +70,7 @@ public class ConfigurableEclipseLocation {
 		}
 
 		List<URL> files = new ArrayList<URL>();
-		Iterator<File> iterator = Files.fileTreeTraverser().children(from).iterator();
+		Iterator<File> iterator = FileUtils.iterateFiles(from, FileFilterUtils.trueFileFilter(), FileFilterUtils.trueFileFilter());
 		while (iterator.hasNext()) {
 			File next = iterator.next();
 			if (next.isDirectory()) {
