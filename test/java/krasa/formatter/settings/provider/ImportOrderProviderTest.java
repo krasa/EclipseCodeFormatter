@@ -1,16 +1,16 @@
 package krasa.formatter.settings.provider;
 
-import java.io.File;
-import java.util.List;
-
 import krasa.formatter.settings.Settings;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
+import java.io.File;
+import java.util.List;
+
 public class ImportOrderProviderTest {
 
-	public static final String[] ORDER = new String[] { "java", "javax", "org", "com", "br.gov.bcb" };
+	public static final String[] ORDER = new String[] { "java", "javax", "org", "com", "br.gov.bcb", "foo" };
 
 	@Test
 	public void testReadFile() throws Exception {

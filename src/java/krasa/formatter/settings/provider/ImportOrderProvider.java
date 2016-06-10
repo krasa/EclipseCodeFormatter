@@ -1,17 +1,14 @@
 package krasa.formatter.settings.provider;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 import krasa.formatter.utils.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author Vojtech Krasa
@@ -33,7 +30,7 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 			throw new ParsingFailedException(
 					"File is missing a property 'org.eclipse.jdt.ui.importorder', see instructions.");
 		} else if (file.getName().endsWith(".importorder")) {
-			order = loadImportOrderFile(file);
+			order = loadImportOrderFile(properties);
 		} else {
 			throw new ParsingFailedException(
 					"You must provide either *.importorder file or 'org.eclipse.jdt.ui.prefs' file, see instructions.");
@@ -41,10 +38,15 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 		return order;
 	}
 
-	private List<String> loadImportOrderFile(File file) {
-		List<String> fileLines = loadFile(file);
-		Collections.sort(fileLines);
-		return toImportOrder(fileLines);
+	private List<String> loadImportOrderFile(Properties file) {
+		TreeMap treeMap = new TreeMap(new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				return Integer.parseInt(o1) - Integer.parseInt(o2);
+			}
+		});
+		treeMap.putAll(file);
+		return new ArrayList<String>(treeMap.values());
 	}
 
 	private List<String> toImportOrder(List<String> fileLines) {

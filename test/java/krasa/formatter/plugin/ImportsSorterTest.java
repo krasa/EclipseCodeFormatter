@@ -1,6 +1,9 @@
 package krasa.formatter.plugin;
 
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.StringUtils;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,6 +18,21 @@ public class ImportsSorterTest {
 
 	public static final String N = "\n";
 	public static final List<String> DEFAULT_ORDER = Arrays.asList("java", "javax", "org", "com");
+
+	@Test
+	public void testIssue() throws Exception {
+		String expected = "import mockit.MockUp;\n" + "\n" + "import org.junit.Before;\n" + "\n"
+				+ "import java.io.IOException;" + N;
+
+		List<String> imports = Arrays.asList("mockit.MockUp", "org.junit.Before", "java.io.IOException");
+
+		Settings settings = new Settings();
+		settings.setImportOrderFromFile(true);
+		settings.setImportOrderConfigFilePath("resources/eclipse.importorder");
+		List<String> importsOrder1 = new ImportOrderProvider(settings).get();
+		List<String> strings = ImportsSorter451.sort(imports, importsOrder1);
+		printAndAssert(expected, strings);
+	}
 
 	@Test
 	public void test() throws Exception {

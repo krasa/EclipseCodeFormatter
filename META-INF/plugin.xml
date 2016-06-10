@@ -43,6 +43,7 @@
         <br>15.6 (2016-06-10)
 		<br>- configuration enabled for default project 
         <br>- external Eclipse location fix for IJ 13 
+        <br>- import order edge case fixed
         <br>15.5 (2016-05-06)
 		<br>- upgraded C, Java formatter from Eclipse 4.5.2 
 		<br>- installed Eclipse (4.5+) can be chosen to format Java code
