@@ -4,8 +4,16 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>15.5.132.637.4</version>
+    <version>15.6.132.637.0</version>
 
+
+    <!--145	IntelliJ IDEA 2016.1, AppCode 2016.1, CLion 2016.1, DataGrip 2016.1, PhpStorm 2016.1, PyCharm 2016.1, RubyMine 2016.1, WebStorm 2016.1-->
+    <!--143	IntelliJ IDEA 15, AppCode 3.3, CLion 1.2, DataGrip 1.0, PhpStorm 10, PyCharm 5, RubyMine 8, WebStorm 11-->
+    <!--141	IntelliJ IDEA 14.1, Android Studio 1.3, PyCharm 4.1, WebStorm 10-->
+    <!--139	IntelliJ IDEA 14, PhpStorm 8, PyCharm 4, RubyMine 7, WebStorm 9-->
+    <!--135	IntelliJ IDEA 13.1, WebStorm 8-->
+    <!--133	IntelliJ IDEA 13, PhpStorm 7, PyCharm 3.1, WebStorm 7-->
+    <!--131	PhpStorm 7, PyCharm 3.0, WebStorm 7-->
 	<idea-version since-build="132.637" until-build=""/>
 
 	<description><![CDATA[
@@ -32,6 +40,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>15.6 (2016-06-10)
+		<br>- configuration enabled for default project 
         <br>15.5 (2016-05-06)
 		<br>- upgraded C, Java formatter from Eclipse 4.5.2 
 		<br>- installed Eclipse (4.5+) can be chosen to format Java code
@@ -131,8 +141,10 @@
 	<extensions defaultExtensionNs="com.intellij">
 		<lang.importOptimizer order="FIRST" language="JAVA"
 							  implementationClass="krasa.formatter.plugin.EclipseImportOptimizer"/>
-		<projectConfigurable instance="krasa.formatter.settings.MyConfigurable" id="EclipseFormatter"
-							 displayName="Eclipse Code Formatter"/>
+        <projectConfigurable provider="krasa.formatter.settings.MyConfigurableProvider" id="EclipseFormatter"
+                             displayName="Eclipse Code Formatter"/>
+        <projectService
+                serviceImplementation="krasa.formatter.settings.ProjectPersistentStateComponent"/>
 	</extensions>
 
 </idea-plugin>

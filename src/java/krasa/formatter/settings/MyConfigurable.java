@@ -2,8 +2,8 @@ package krasa.formatter.settings;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
 import krasa.formatter.Messages;
-import krasa.formatter.Resources;
 import krasa.formatter.plugin.ProjectSettingsForm;
 import krasa.formatter.utils.ProjectUtils;
 import org.apache.commons.lang.ObjectUtils;
@@ -17,12 +17,17 @@ import javax.swing.*;
 // implements Configurable
 public class MyConfigurable implements Configurable {
 
-    private ProjectSettingsComponent projectSettingsComponent;
+    private ProjectPersistentStateComponent stateComponent;
+    private Project project;
     @Nullable
     private ProjectSettingsForm form;
 
-    public MyConfigurable(ProjectSettingsComponent projectSettingsComponent) {
-        this.projectSettingsComponent = projectSettingsComponent;
+    public MyConfigurable(ProjectPersistentStateComponent stateComponent, Project project) {
+        this.stateComponent = stateComponent;
+        this.project = project;
+        if (project.isDefault()) {
+            stateComponent.loadState(stateComponent.getState());
+        }
     }
 
     @Override
@@ -31,13 +36,6 @@ public class MyConfigurable implements Configurable {
         return Messages.message("action.pluginSettings");
     }
 
-    @Nullable
-    public Icon getIcon() {
-        if (projectSettingsComponent.icon == null) {
-            projectSettingsComponent.icon = new ImageIcon(Resources.PROGRAM_LOGO_32);
-        }
-        return projectSettingsComponent.icon;
-    }
 
     @Override
     @Nullable
@@ -50,34 +48,34 @@ public class MyConfigurable implements Configurable {
     @NotNull
     public JComponent createComponent() {
         if (form == null) {
-            form = new ProjectSettingsForm(projectSettingsComponent.project, this);
+            form = new ProjectSettingsForm(project, this);
         }
         return form.getRootComponent();
     }
 
     @Override
     public boolean isModified() {
-        return form != null && (form.isModified(projectSettingsComponent.settings) || (form.getDisplayedSettings() != null && !isSameId()));
+        return form != null && (form.isModified(stateComponent.getState()) || (form.getDisplayedSettings() != null && !isSameId()));
     }
 
     private boolean isSameId() {
-        return ObjectUtils.equals(form.getDisplayedSettings().getId(), projectSettingsComponent.settings.getId());
+        return ObjectUtils.equals(form.getDisplayedSettings().getId(), stateComponent.getState().getId());
     }
 
     @Override
     public void apply() throws ConfigurationException {
         if (form != null) {
             form.validate();
-            projectSettingsComponent.settings = form.exportDisplayedSettings();
-            GlobalSettings.getInstance().updateSettings(projectSettingsComponent.settings, projectSettingsComponent.project);
-            ProjectUtils.applyToAllOpenedProjects(projectSettingsComponent.settings);
+            stateComponent.setState(form.exportDisplayedSettings());
+            GlobalSettings.getInstance().updateSettings(stateComponent.getState(), project);
+            ProjectUtils.applyToAllOpenedProjects(stateComponent.getState());
         }
     }
 
     @Override
     public void reset() {
         if (form != null) {
-            form.importFrom(projectSettingsComponent.settings);
+            form.importFrom(stateComponent.getState());
         }
     }
 

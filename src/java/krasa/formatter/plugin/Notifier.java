@@ -87,14 +87,14 @@ public class Notifier {
 
 		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.WARNING);
-//		if (ApplicationManager.getApplication() != null) {//tests hack
-		ApplicationManager.getApplication().invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				Notifications.Bus.notify(notification, project);
-			}
-		});
-//		}
+		if (ApplicationManager.getApplication() != null) {//tests hack
+			ApplicationManager.getApplication().invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					Notifications.Bus.notify(notification, project);
+				}
+			});
+		}
 	}
 
 }
