@@ -2,7 +2,6 @@ package krasa.formatter.settings;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
 import krasa.formatter.Messages;
 import krasa.formatter.Resources;
 import krasa.formatter.plugin.ProjectSettingsForm;
@@ -22,8 +21,8 @@ public class MyConfigurable implements Configurable {
     @Nullable
     private ProjectSettingsForm form;
 
-    public MyConfigurable(@NotNull Project project) {
-        this.projectSettingsComponent = ProjectSettingsComponent.getInstance(project);
+    public MyConfigurable(ProjectSettingsComponent projectSettingsComponent) {
+        this.projectSettingsComponent = projectSettingsComponent;
     }
 
     @Override
