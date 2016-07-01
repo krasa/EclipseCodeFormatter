@@ -7,7 +7,6 @@ import krasa.formatter.utils.FileUtils;
 import krasa.formatter.utils.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -49,24 +48,6 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 		return new ArrayList<String>(treeMap.values());
 	}
 
-	private List<String> toImportOrder(List<String> fileLines) {
-		List<String> order = new ArrayList<String>();
-		for (String s : fileLines) {
-			if (s.contains("=")) {
-				order.add(s.substring(s.indexOf("=") + 1));
-			}
-		}
-		return order;
-	}
 
-	private List<String> loadFile(File file) {
-		List<String> stringList;
-		try {
-			stringList = org.apache.commons.io.FileUtils.readLines(file);
-		} catch (IOException e) {
-			throw new RuntimeException("Loading of import order from file failed", e);
-		}
-		return stringList;
-	}
 
 }

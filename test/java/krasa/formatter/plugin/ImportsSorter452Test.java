@@ -18,6 +18,28 @@ public class ImportsSorter452Test {
 	public static final List<String> DEFAULT_ORDER = Arrays.asList("java", "javax", "org", "com");
 
 	@Test
+	public void issue104() throws Exception {
+		//@formatter:off
+		String expected =
+		"import com.mycorp.DateUtils;\n" +
+		"\n" +
+		"import static com.google.common.base.MoreObjects.firstNonNull;\n";
+
+		String imports =
+				"import static com.google.common.base.MoreObjects.firstNonNull;\n"+
+		"import com.mycorp.DateUtils;\n" ;
+
+		//@formatter:on
+
+		List<String> importsOrder = Arrays.asList("com.mycorp", "\\#com.mycorp", "com", "\\#com");
+
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		printAndAssert(expected, strings);
+	}
+
+	@Test
 	public void test() throws Exception {
 
 		//@formatter:off
