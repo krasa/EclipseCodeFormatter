@@ -1,7 +1,9 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.openapi.diagnostic.Logger;
 import krasa.formatter.exception.FormattingFailedException;
+
+import com.intellij.openapi.diagnostic.Logger;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +57,7 @@ public class ConfigurableEclipseLocation {
 			throw new RuntimeException(e);
 		}
 		if (!jarNames.isEmpty()) {
-			throw new FormattingFailedException("Required jars found in '" + from + "': " + jarNames.toString(), true);
+			throw new FormattingFailedException("Required jars not found in '" + from + "': " + jarNames.toString(), true);
 		}
 
 		long total = System.currentTimeMillis() - start;
