@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ImportOrderProviderTest {
 
-	public static final String[] ORDER = new String[] { "java", "javax", "org", "com", "br.gov.bcb", "foo" };
+	public static final String[] ORDER = new String[] { "java", "javax", "org", "com", "br.gov.bcb", "foo", "#" };
 	private static final String[] ORDER_2 = { "com.mycorp", "#com.mycorp", "com", "#com" };
 
 	@Test

@@ -1,23 +1,8 @@
 package krasa.formatter.utils;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.plugin.InvalidPropertyFile;
-
-import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
@@ -26,6 +11,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * @author Vojtech Krasa
@@ -65,7 +63,9 @@ public class FileUtils {
 		try {
 			stream = new BufferedInputStream(new FileInputStream(file));
 			formatterOptions = new Properties(defaultConfig);
-			formatterOptions.load(stream);
+			String s = IOUtils.toString(stream);
+			StringReader reader = new StringReader(s.replace("=\\#", "=#"));
+			formatterOptions.load(reader);
 		} catch (IOException e) {
 			throw new RuntimeException("config file read error", e);
 		} finally {
