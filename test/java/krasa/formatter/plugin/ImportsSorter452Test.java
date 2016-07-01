@@ -1,6 +1,7 @@
 package krasa.formatter.plugin;
 
 import krasa.formatter.utils.StringUtils;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -104,6 +105,50 @@ public class ImportsSorter452Test {
 						"import static foo.bar.XFOO.foo;\n";
 		List<String> importsOrder = Arrays.asList("\\#org", "\\#java", "java", "javax", "org", "com", "", "\\#");
 
+
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		printAndAssert(expected, strings);
+	}
+
+	@Test
+	public void test3a() throws Exception {
+		String expected = "import static aaa.XAAA.aaa;\n"
+				+ "import static com.google.common.collect.Multimaps.forMap;\n" + "import static foo.bar.XFOO.foo;\n"
+				+ "import static org.easymock.EasyMock.createControl;\n" + "\n" + "import java.util.ArrayList;\n"
+				+ "import java.util.HashMap;\n" + "import java.util.List;\n" + "\n"
+				+ "import org.easymock.IMocksControl;\n" + "\n" + "import com.google.common.collect.SetMultimap;\n"
+				+ "\n" + "import aaa.XAAA;\n" + "import foo.bar.XFOO;\n";
+
+		String imports = "import static org.easymock.EasyMock.createControl;\n" + "\n" + "import java.util.ArrayList;\n"
+				+ "import java.util.HashMap;\n" + "import java.util.List;\n" + "\n"
+				+ "import org.easymock.IMocksControl;\n" + "\n" + "import com.google.common.collect.SetMultimap;\n"
+				+ "\n" + "import aaa.XAAA;\n" + "import foo.bar.XFOO;\n" + "\n" + "import static aaa.XAAA.aaa;\n"
+				+ "import static com.google.common.collect.Multimaps.forMap;\n" + "import static foo.bar.XFOO.foo;\n";
+		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
+
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		printAndAssert(expected, strings);
+	}
+
+	@Test
+	public void test3b() throws Exception {
+		String expected = "import static aaa.XAAA.aaa;\n"
+				+ "import static com.google.common.collect.Multimaps.forMap;\n" + "import static foo.bar.XFOO.foo;\n"
+				+ "import static org.easymock.EasyMock.createControl;\n" + "\n" + "import aaa.XAAA;\n"
+				+ "import com.google.common.collect.SetMultimap;\n" + "import foo.bar.XFOO;\n"
+				+ "import java.util.ArrayList;\n" + "import java.util.HashMap;\n" + "import java.util.List;\n"
+				+ "import org.easymock.IMocksControl;\n";
+
+		String imports = "import static org.easymock.EasyMock.createControl;\n" + "\n" + "import java.util.ArrayList;\n"
+				+ "import java.util.HashMap;\n" + "import java.util.List;\n" + "\n"
+				+ "import org.easymock.IMocksControl;\n" + "\n" + "import com.google.common.collect.SetMultimap;\n"
+				+ "\n" + "import aaa.XAAA;\n" + "import foo.bar.XFOO;\n" + "\n" + "import static aaa.XAAA.aaa;\n"
+				+ "import static com.google.common.collect.Multimaps.forMap;\n" + "import static foo.bar.XFOO.foo;\n";
+		List<String> importsOrder = Arrays.asList();
 
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
