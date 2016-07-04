@@ -1,16 +1,16 @@
 package krasa.formatter.plugin;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.StringUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Vojtech Krasa
@@ -46,13 +46,22 @@ public class ImportsSorter452Test {
 	public void issue104a() throws Exception {
 		//@formatter:off
 		String expected =
-				"import com.mycorp.DateUtils;\n" +
+				"import com.mycorp.Foo;\n" +
 						"\n" +
-						"import static com.google.common.base.MoreObjects.firstNonNull;\n";
+						"import static com.mycorp.Foo.foo;\n" +
+						"\n" +
+						"import com.google.bar;\n" +
+						"\n" +
+						"import static com.google.bar.bar;\n";
 
 		String imports =
-				"import static com.google.common.base.MoreObjects.firstNonNull;\n" +
-						"import com.mycorp.DateUtils;\n";
+				
+				"" +
+"import static com.google.bar.bar;\n" +
+"import com.google.bar;\n" +
+"import static com.mycorp.Foo.foo;\n" +
+"import com.mycorp.Foo;\n" +
+						"";
 
 		//@formatter:on
 
