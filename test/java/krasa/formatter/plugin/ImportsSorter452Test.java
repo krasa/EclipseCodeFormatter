@@ -1,10 +1,13 @@
 package krasa.formatter.plugin;
 
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.StringUtils;
-
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +39,33 @@ public class ImportsSorter452Test {
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
 		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		printAndAssert(expected, strings);
+	}
+
+	@Test
+	public void issue104a() throws Exception {
+		//@formatter:off
+		String expected =
+				"import com.mycorp.DateUtils;\n" +
+						"\n" +
+						"import static com.google.common.base.MoreObjects.firstNonNull;\n";
+
+		String imports =
+				"import static com.google.common.base.MoreObjects.firstNonNull;\n" +
+						"import com.mycorp.DateUtils;\n";
+
+		//@formatter:on
+
+
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+
+		Settings settings = new Settings();
+		File file = FileUtils.getFile("resources/issue104.importorder");
+		settings.setImportOrderConfigFilePath(file.getAbsolutePath());
+		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
+
+		List<String> strings = ImportsSorter452.sort(importsList, importOrderProvider.get());
 		printAndAssert(expected, strings);
 	}
 

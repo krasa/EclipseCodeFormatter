@@ -1,9 +1,7 @@
 package krasa.formatter.plugin;
 
-import krasa.formatter.utils.StringUtils;
-
 import com.intellij.openapi.util.MultiValuesMap;
-
+import krasa.formatter.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -104,7 +102,7 @@ class ImportsSorter452 implements ImportsSorter {
 		for (int i = 0; i < allImportOrderItems.size(); i++) {
 			String s = allImportOrderItems.get(i);
 			if (s.startsWith("\\#") || s.startsWith("#")) {
-				allImportOrderItems.set(i, s.replace("\\#", "static "));
+				allImportOrderItems.set(i, s.replace("\\#", "static ").replace("#", "static "));
 			}
 		}
 	}
