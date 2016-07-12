@@ -607,7 +607,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Import ordering style for Eclipse -4.5.1"/>
+          <text value="Import ordering style for Eclipse -4.5.0"/>
         </properties>
       </component>
       <component id="570a2" class="javax.swing.JRadioButton" binding="importOrdering452">
@@ -617,7 +617,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Import ordering style for Eclipse 4.5.2+"/>
+          <text value="Import ordering style for Eclipse 4.5.1+"/>
         </properties>
       </component>
     </children>

@@ -5,12 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.ImportOrderProvider;
-import krasa.formatter.utils.StringUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.ImportOrderProvider;
+import krasa.formatter.utils.StringUtils;
 
 /**
  * @author Vojtech Krasa
@@ -19,6 +20,66 @@ public class ImportsSorter452Test {
 
 	public static final String N = "\n";
 	public static final List<String> DEFAULT_ORDER = Arrays.asList("java", "javax", "org", "com");
+
+	@Test
+	public void issue105() throws Exception {
+		//@formatter:off
+		String expected =
+				"import importorder.example.root.BFoo;\n" +
+				"import importorder.example.root.CFoo;\n" +
+				"import importorder.example.root.A.AFoo;\n";
+
+		String imports =
+				"import importorder.example.root.BFoo;\n" +
+				"import importorder.example.root.CFoo;\n" +
+				"import importorder.example.root.A.AFoo;\n";
+
+		//@formatter:on
+
+		List<String> importsOrder = Arrays.asList();
+
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		printAndAssert(expected, strings);
+	}
+
+	@Test
+	public void issue105a() throws Exception {
+		//@formatter:off
+			String expected =
+					"import importorder.example.root.AAAA;\n" +
+					"import importorder.example.root.BFoo;\n" +
+					"import importorder.example.root.DFoo;\n" +
+					"import importorder.example.root.aaa;\n" +
+					"import importorder.example.root.Aa.AFoo;\n" +
+					"import importorder.example.root.Aaa.AaaFoo;\n" +
+					"import importorder.example.root.Bb.bb;\n" +
+					"import importorder.example.root.aB.Ab;\n" +
+					"import importorder.example.root.ba.ba;\n" +
+					"import importorder.example.root.bc.bc;\n";
+	
+			String imports =
+					"import importorder.example.root.AAAA;\n" +
+					"import importorder.example.root.BFoo;\n" +
+					"import importorder.example.root.DFoo;\n" +
+					"import importorder.example.root.aaa;\n" +
+					"import importorder.example.root.Aa.AFoo;\n" +
+					"import importorder.example.root.Aaa.AaaFoo;\n" +
+					"import importorder.example.root.Bb.bb;\n" +
+					"import importorder.example.root.aB.Ab;\n" +
+					"import importorder.example.root.ba.ba;\n" +
+					"import importorder.example.root.bc.bc;\n";
+	
+			//@formatter:on
+
+		List<String> importsOrder = Arrays.asList();
+
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		printAndAssert(expected, strings);
+	}
 
 	@Test
 	public void issue104() throws Exception {
@@ -55,12 +116,10 @@ public class ImportsSorter452Test {
 						"import static com.google.bar.bar;\n";
 
 		String imports =
-				
-				"" +
-"import static com.google.bar.bar;\n" +
-"import com.google.bar;\n" +
-"import static com.mycorp.Foo.foo;\n" +
-"import com.mycorp.Foo;\n" +
+				"import static com.google.bar.bar;\n" +
+				"import com.google.bar;\n" +
+				"import static com.mycorp.Foo.foo;\n" +
+				"import com.mycorp.Foo;\n" +
 						"";
 
 		//@formatter:on
@@ -79,7 +138,7 @@ public class ImportsSorter452Test {
 	}
 
 	@Test
-	public void test() throws Exception {
+	public void test452() throws Exception {
 
 		//@formatter:off
 		String expected =
@@ -129,6 +188,7 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test2() throws Exception {
+		//@formatter:off
 		String expected =
 				"import static org.easymock.EasyMock.createControl;\n" +
 						"\n" +
@@ -164,6 +224,7 @@ public class ImportsSorter452Test {
 						"import static aaa.XAAA.aaa;\n" +
 						"import static com.google.common.collect.Multimaps.forMap;\n" +
 						"import static foo.bar.XFOO.foo;\n";
+		//@formatter:on
 		List<String> importsOrder = Arrays.asList("\\#org", "\\#java", "java", "javax", "org", "com", "", "\\#");
 
 
@@ -175,6 +236,7 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test3a() throws Exception {
+		//@formatter:off
 		String expected = "import static aaa.XAAA.aaa;\n"
 				+ "import static com.google.common.collect.Multimaps.forMap;\n" + "import static foo.bar.XFOO.foo;\n"
 				+ "import static org.easymock.EasyMock.createControl;\n" + "\n" + "import java.util.ArrayList;\n"
@@ -187,6 +249,7 @@ public class ImportsSorter452Test {
 				+ "import org.easymock.IMocksControl;\n" + "\n" + "import com.google.common.collect.SetMultimap;\n"
 				+ "\n" + "import aaa.XAAA;\n" + "import foo.bar.XFOO;\n" + "\n" + "import static aaa.XAAA.aaa;\n"
 				+ "import static com.google.common.collect.Multimaps.forMap;\n" + "import static foo.bar.XFOO.foo;\n";
+		//@formatter:on
 		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
 
 		List<String> importsList = StringUtils.trimImports(imports);
@@ -197,7 +260,8 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test3b() throws Exception {
-		String expected = "import static aaa.XAAA.aaa;\n"
+		//@formatter:off
+			String expected = "import static aaa.XAAA.aaa;\n"
 				+ "import static com.google.common.collect.Multimaps.forMap;\n" + "import static foo.bar.XFOO.foo;\n"
 				+ "import static org.easymock.EasyMock.createControl;\n" + "\n" + "import aaa.XAAA;\n"
 				+ "import com.google.common.collect.SetMultimap;\n" + "import foo.bar.XFOO;\n"
@@ -209,6 +273,7 @@ public class ImportsSorter452Test {
 				+ "import org.easymock.IMocksControl;\n" + "\n" + "import com.google.common.collect.SetMultimap;\n"
 				+ "\n" + "import aaa.XAAA;\n" + "import foo.bar.XFOO;\n" + "\n" + "import static aaa.XAAA.aaa;\n"
 				+ "import static com.google.common.collect.Multimaps.forMap;\n" + "import static foo.bar.XFOO.foo;\n";
+		//@formatter:on
 		List<String> importsOrder = Arrays.asList();
 
 		List<String> importsList = StringUtils.trimImports(imports);
@@ -219,6 +284,7 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test3() throws Exception {
+		//@formatter:off	
 		String expected = "import static com.MyUtil.kuk;\n" + "import static org.junit.Assert.assertNotNull;\n"
 				+ "import static tmutil.StringUtil.replaceText;\n\n" + "import java.util.ArrayList;\n" + "\n"
 				+ "import org.w3c.dom.DOMConfiguration;\n" + "import org.w3c.dom.DOMException;\n"
@@ -241,9 +307,58 @@ public class ImportsSorter452Test {
 		printAndAssert(expected, strings);
 	}
 
+	@Test
+	public void test() 	
+throws Exception {
+		//@formatter:off
+		String expected = "import java.util.HashMap;\n" +
+				"import java.util.Map;\n" +
+				"\n" +
+				"import org.jingle.mocquer.MockControl;\n" +
+				"\n" +
+				"import com.sun.rmi.rmid.ExecOptionPermission;\n" +
+				"\n" +
+				"import base.LoadUnitTestDataTestCase;\n" +
+				"import sun.security.action.GetLongAction;\n" +
+				"import tmplatform.authorisation.ApiClientLink;\n" +
+				"import tmplatform.comms.common.caaa.EvasLdapInterfaceProfileWrapper;\n";
+
+		List<String> imports = Arrays.asList("java.util.HashMap",
+				"tmplatform.comms.common.caaa.EvasLdapInterfaceProfileWrapper",
+				"com.sun.rmi.rmid.ExecOptionPermission", "java.util.Map", "base.LoadUnitTestDataTestCase",
+				"org.jingle.mocquer.MockControl", "tmplatform.authorisation.ApiClientLink",
+				"sun.security.action.GetLongAction");
+		//@formatter:on
+
+		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
+
+		List<String> strings = ImportsSorter452.sort(imports, importsOrder);
+		printAndAssert(expected, strings);
+	}
 
 	@Test
-	public void test5() throws Exception {
+	public void test4() throws Exception {
+		//@formatter:off
+		String expected = "import java.util.Arrays;\n" +
+                "\n" +
+                "import comtrollers.deadbolt.Restrict;\n" +
+                "import models.Deployment;\n" +
+                "import play.jobs.Job;\n" +
+                "import play.mvc.Before;\n";
+
+		String imports = "import comtrollers.deadbolt.Restrict;\n" + "import java.util.Arrays;\n"
+				+ "import play.mvc.Before;\n" + "import models.Deployment;\n" + "import play.jobs.Job;\n";
+
+		List<String> imports1 = StringUtils.trimImports(imports);
+		System.err.println(Arrays.toString(imports1.toArray()));
+		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
+		printAndAssert(expected, strings);
+	}
+
+	@Test
+	public void test5()		
+			 throws Exception {
+		//@formatter:off
 		String expected = "import static java.lang.Integer.numberOfLeadingZeros;\n"
 				+ "import static java.lang.Integer.valueOf;\n" + "\n" + "import java.sql.Date;\n"
 				+ "import java.util.List;\n" + "import java.util.Map;\n"
@@ -254,6 +369,7 @@ public class ImportsSorter452Test {
 				+ "import java.util.List;\n" + "import static java.lang.Integer.numberOfLeadingZeros;\n"
 				+ "import java.sql.Date;\n" + "\n" + "import static java.lang.Integer.valueOf;\n"
 				+ "import java.util.Map;\n" + "import org.w3c.dom.stylesheets.StyleSheetList;\n";
+		//@formatter:on
 
 		List<String> importsOrder = Collections.emptyList();
 
@@ -280,7 +396,8 @@ public class ImportsSorter452Test {
 //	+ "import java.io.InputStream;\n" + "import java.math.BigInteger;\n" + "\n" + "/**\n"
 //	+ " * User: divxer Date: 12-6-4 Time: 上午12:17\n" + " */\n" + "// @Every(\"7h\")\n"
 //	+ "// @OnApplicationStart(async=true)\n" + "public class Picture4493Crawler extends Job {\n\n}";
-//	
+	//			//@formatter:on
+
 //	List<String> importsOrder = Collections.emptyList();
 //	ImportSorterAdapter importSorter = new ImportSorterAdapter(importsOrder);
 //	MockDocument document1 = new MockDocument(document);
@@ -290,6 +407,7 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test9() throws Exception {
+		//@formatter:off	
 		String expected = "import android.content.Context;\n" + "import android.view.LayoutInflater;\n"
 				+ "import android.view.View;\n" + "import android.widget.TextView;\n";
 
@@ -304,9 +422,11 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test7() throws Exception {
+		//@formatter:off
 		String imports = "import java.util.Calendar;";
 
 		String expected = "import java.util.Calendar;\n";
+		//@formatter:on
 
 		List<String> importsOrder = Arrays.asList("com", "java", "javax", "org");
 
@@ -318,9 +438,11 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test10() throws Exception {
+		//@formatter:off
 		String imports = "\n" + "import static org.junit.Assert.assertSame;\n" + "import org.junit.Test;";
 
 		String expected = "import org.junit.Test;\n" + "\n" + "import static org.junit.Assert.assertSame;\n";
+		//@formatter:on
 
 		List<String> importsOrder = Arrays.asList("", "\\#");
 
@@ -332,9 +454,11 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test11() throws Exception {
+		//@formatter:off
 		String imports = "import static org.junit.Assert.assertSame;\n" + "import org.junit.Test;";
 
 		String expected = "import static org.junit.Assert.assertSame;\n" + "\n" + "import org.junit.Test;\n";
+		//@formatter:on
 
 		List<String> importsOrder = Arrays.asList("\\#", "");
 
@@ -346,12 +470,14 @@ public class ImportsSorter452Test {
 
 	@Test
 	public void test12() throws Exception {
+		//@formatter:off
 		String imports = "import static foo.JettyStart.startJetty;\n" + "import org.apache.commons.lang3.ArrayUtils;\n"
 				+ "import static foo.Tomcat7Start.startTomcat;\n";
 
 		String expected = "import static foo.JettyStart.startJetty;\n" + "\n"
 				+ "import org.apache.commons.lang3.ArrayUtils;\n" + "\n"
 				+ "import static foo.Tomcat7Start.startTomcat;\n";
+		//@formatter:on
 
 		List<String> importsOrder = Arrays.asList("\\#", "", "\\#foo.Tomcat7Start");
 

@@ -1,9 +1,10 @@
 package krasa.formatter.utils;
 
+import static krasa.formatter.utils.StringUtils.getQualifier;
+import static krasa.formatter.utils.StringUtils.getSimpleName;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import krasa.formatter.settings.Settings;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +23,24 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.messages.MessageBus;
 
+import krasa.formatter.settings.Settings;
+
 /**
  * @author Vojtech Krasa
  */
 public class StringUtilsTest {
+	@Test
+	public void test_getSimpleName() throws Exception {
+		Assert.assertEquals("b", getSimpleName("a.a.b"));
+		Assert.assertEquals("b", getSimpleName("b"));
+	}
+
+	@Test
+	public void test_getQualifier() throws Exception {
+		Assert.assertEquals("a.a", getQualifier("a.a.b"));
+		Assert.assertEquals("", getQualifier("b"));
+	}
+
 	@Test
 	public void testBetterMatching() throws Exception {
 		String order1 = "com.foo";

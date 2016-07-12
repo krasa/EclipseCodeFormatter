@@ -8,15 +8,17 @@
 
 package krasa.formatter.settings;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.util.xmlb.annotations.Transient;
+
 import krasa.formatter.settings.provider.CppPropertiesProvider;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import krasa.formatter.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author Esko Luontola
@@ -104,6 +106,9 @@ public class Settings {
 
 	public void setImportOrdering(ImportOrdering importOrdering) {
 		this.importOrdering = importOrdering;
+		if (this.importOrdering == ImportOrdering.ECLIPSE_451) {
+			this.importOrdering = ImportOrdering.ECLIPSE_44;
+		}
 	}
 
 	public void setPathToEclipse(String pathToEclipse) {
@@ -291,7 +296,11 @@ public class Settings {
 	}
 
 	public static enum ImportOrdering {
+		/** not matching imports -> between groups */
+		ECLIPSE_44,
+		@Deprecated
 		ECLIPSE_451,
+		/** not matching imports -> on the end, actually since Eclipse 4.5.1 :( oops */
 		ECLIPSE_452,
 	}
 

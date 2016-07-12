@@ -1,14 +1,16 @@
 package krasa.formatter.plugin;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
-import com.intellij.psi.*;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.psi.*;
+
+import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.StringUtils;
 
 /**
  * @author Vojtech Krasa
@@ -88,8 +90,8 @@ public class ImportSorterAdapter {
 	@NotNull
 	private ImportsSorter getImportsSorter() {
 		switch (importOrdering) {
-			case ECLIPSE_451:
-				return new ImportsSorter451(importsOrder);
+		case ECLIPSE_44:
+			return new ImportsSorter450(importsOrder);
 			case ECLIPSE_452:
 				return new ImportsSorter452(importsOrder);
 		}

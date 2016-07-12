@@ -1,20 +1,22 @@
 package krasa.formatter.plugin;
 
-import com.intellij.openapi.util.MultiValuesMap;
-import krasa.formatter.utils.StringUtils;
-
 import java.util.*;
 
+import com.intellij.openapi.util.MultiValuesMap;
+
+import krasa.formatter.utils.StringUtils;
+
 /*not thread safe*/
-class ImportsSorter451 implements ImportsSorter {
+class ImportsSorter450 implements ImportsSorter {
 
 	private List<String> template = new ArrayList<String>();
 	private MultiValuesMap<String, String> matchingImports = new MultiValuesMap<String, String>();
 	private ArrayList<String> notMatching = new ArrayList<String>();
 	private Set<String> allImportOrderItems = new HashSet<String>();
+	private Comparator<String> comparator;
 
 	static List<String> sort(List<String> imports, List<String> importsOrder) {
-		ImportsSorter importsSorter = new ImportsSorter451(importsOrder);
+		ImportsSorter importsSorter = new ImportsSorter450(importsOrder);
 		return importsSorter.sort(imports);
 	}
 
@@ -28,12 +30,28 @@ class ImportsSorter451 implements ImportsSorter {
 		return getResult();
 	}
 
-	public ImportsSorter451(List<String> importOrder) {
+	public ImportsSorter450(List<String> importOrder) {
 		List<String> importOrderCopy = new ArrayList<String>(importOrder);
 		normalizeStaticOrderItems(importOrderCopy);
 		putStaticItemIfNotExists(importOrderCopy);
 		template.addAll(importOrderCopy);
 		this.allImportOrderItems.addAll(importOrderCopy);
+		comparator = new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				String containerName1 = allImportOrderItems.contains(o1) ? o1 : StringUtils.getQualifier(o1);
+				String simpleName1 = allImportOrderItems.contains(o1) ? "" : StringUtils.getSimpleName(o1);
+
+				String containerName2 = allImportOrderItems.contains(o2) ? o2 : StringUtils.getQualifier(o2);
+				String simpleName2 = allImportOrderItems.contains(o2) ? "" : StringUtils.getSimpleName(o2);
+				int i = containerName1.compareTo(containerName2);
+
+				if (i == 0) {
+					i = simpleName1.compareTo(simpleName2);
+				}
+				return i;
+			}
+		};
 	}
 
 	private void putStaticItemIfNotExists(List<String> allImportOrderItems) {
@@ -95,7 +113,7 @@ class ImportsSorter451 implements ImportsSorter {
 	 * not matching means it does not match any order item, so it will be appended before or after order items
 	 */
 	private void mergeNotMatchingItems(boolean staticItems) {
-		Collections.sort(notMatching);
+		Collections.sort(notMatching, comparator);
 
 		int firstIndexOfOrderItem = getFirstIndexOfOrderItem(notMatching, staticItems);
 		int indexOfOrderItem = 0;
@@ -170,7 +188,7 @@ class ImportsSorter451 implements ImportsSorter {
 					continue;
 				}
 				ArrayList<String> matchingItems = new ArrayList<String>(strings);
-				Collections.sort(matchingItems);
+				Collections.sort(matchingItems, comparator);
 
 				// replace order item by matching import statements
 				// this is a mess and it is only a luck that it works :-]

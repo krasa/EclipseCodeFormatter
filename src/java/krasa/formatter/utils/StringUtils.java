@@ -1,6 +1,7 @@
 package krasa.formatter.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import krasa.formatter.settings.Settings;
 
@@ -90,5 +91,21 @@ public class StringUtils {
 	public static String generateName(List<Settings> settingsList, int i, String name) {
 		return generateName(settingsList, i, name, name);
 
+	}
+
+	public static String getSimpleName(String s) {
+		int lastDot = s.lastIndexOf(".");
+		if (lastDot == -1) {
+			return s;
+		}
+		return s.substring(lastDot + 1, s.length());
+	}
+
+	public static String getQualifier(String s) {
+		int lastDot = s.lastIndexOf(".");
+		if (lastDot == -1) {
+			return "";
+		}
+		return s.substring(0, lastDot);
 	}
 }

@@ -1,10 +1,14 @@
 package krasa.formatter.plugin;
 
-import com.intellij.openapi.util.MultiValuesMap;
-import krasa.formatter.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import static krasa.formatter.plugin.ImportsComparator.IMPORTS_COMPARATOR;
 
 import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.intellij.openapi.util.MultiValuesMap;
+
+import krasa.formatter.utils.StringUtils;
 
 /*not thread safe*/
 @SuppressWarnings("Duplicates")
@@ -125,7 +129,9 @@ class ImportsSorter452 implements ImportsSorter {
 	private String getBestMatchingImportOrderItem(String anImport) {
 		String matchingImport = null;
 		for (String orderItem : allImportOrderItems) {
-			if (anImport.startsWith(orderItem)) {
+			if (anImport.startsWith(
+					// 4.5.1+ matches exact package name
+					orderItem.equals("static ") || orderItem.equals("") ? orderItem : orderItem + ".")) {
 				if (matchingImport == null) {
 					matchingImport = orderItem;
 				} else {
@@ -140,7 +146,7 @@ class ImportsSorter452 implements ImportsSorter {
 	 * not matching means it does not match any order item, so it will be appended before or after order items
 	 */
 	private void mergeNotMatchingItems() {
-		Collections.sort(notMatching);
+		Collections.sort(notMatching, IMPORTS_COMPARATOR);
 
 		template.add(ImportSorterAdapter.N);
 		for (int i = 0; i < notMatching.size(); i++) {
@@ -180,7 +186,7 @@ class ImportsSorter452 implements ImportsSorter {
 					continue;
 				}
 				ArrayList<String> matchingItems = new ArrayList<String>(strings);
-				Collections.sort(matchingItems);
+				Collections.sort(matchingItems, IMPORTS_COMPARATOR);
 
 				// replace order item by matching import statements
 				// this is a mess and it is only a luck that it works :-]
