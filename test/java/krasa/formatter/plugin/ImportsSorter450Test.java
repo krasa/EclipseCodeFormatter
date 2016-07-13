@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.StringUtils;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Vojtech Krasa
@@ -182,6 +182,22 @@ public class ImportsSorter450Test {
 
 		String imports = "import comtrollers.deadbolt.Restrict;\n" + "import java.util.Arrays;\n"
 				+ "import play.mvc.Before;\n" + "import models.Deployment;\n" + "import play.jobs.Job;\n";
+
+		List<String> imports1 = StringUtils.trimImports(imports);
+		System.err.println(Arrays.toString(imports1.toArray()));
+		List<String> strings = ImportsSorter450.sort(imports1, DEFAULT_ORDER);
+		printAndAssert(expected, strings);
+	}
+
+	@Test
+	public void test4b() throws Exception {
+		String expected = "import java.util.Arrays;\n" + "\n" + "import javax.Javax;\n" + "\n"
+				+ "import models.Deployment;\n" + "import play.jobs.Job;\n" + "import play.mvc.Before;\n" + "\n"
+				+ "import comtrollers.deadbolt.Restrict;\n" + "\n" + "import controllers.deadbolt.Restricts;\n";
+
+		String imports = "\n" + "import java.util.Arrays;\n" + "import models.Deployment;\n" + "import play.jobs.Job;\n"
+				+ "import play.mvc.Before;\n" + "import javax.Javax;\n" + "import comtrollers.deadbolt.Restrict;\n"
+				+ "import controllers.deadbolt.Restricts;\n";
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));

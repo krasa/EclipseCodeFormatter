@@ -5,13 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
-import org.junit.Test;
-
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.StringUtils;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Vojtech Krasa
@@ -354,7 +354,30 @@ throws Exception {
 		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
-
+	@Test
+		public void test4b() throws Exception {
+			String expected = 
+					"import java.util.Arrays;\n" +
+					"\n" +
+					"import comtrollers.deadbolt.Restrict;\n" +
+					"import controllers.deadbolt.Restricts;\n" +
+					"import models.Deployment;\n" +
+					"import play.jobs.Job;\n" +
+					"import play.mvc.Before;\n";
+	
+			String imports = 
+					"import java.util.Arrays;\n" +
+					"import comtrollers.deadbolt.Restrict;\n" +
+					"import controllers.deadbolt.Restricts;\n" +
+					"import models.Deployment;\n" +
+					"import play.jobs.Job;\n" +
+					"import play.mvc.Before;\n";
+	
+			List<String> imports1 = StringUtils.trimImports(imports);
+			System.err.println(Arrays.toString(imports1.toArray()));
+			List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
+			printAndAssert(expected, strings);
+		}
 	@Test
 	public void test5()		
 			 throws Exception {

@@ -2,9 +2,9 @@ package krasa.formatter.plugin;
 
 import java.util.*;
 
-import com.intellij.openapi.util.MultiValuesMap;
-
 import krasa.formatter.utils.StringUtils;
+
+import com.intellij.openapi.util.MultiValuesMap;
 
 /*not thread safe*/
 class ImportsSorter450 implements ImportsSorter {
@@ -197,15 +197,11 @@ class ImportsSorter450 implements ImportsSorter {
 					template.add(i, ImportSorterAdapter.N);
 					i++;
 				}
-				if (i + 1 < template.size() && !template.get(i + 1).equals(ImportSorterAdapter.N)
+				if (i < template.size() && !template.get(i).equals(ImportSorterAdapter.N)
 						&& !template.get(i).equals(ImportSorterAdapter.N)) {
 					template.add(i, ImportSorterAdapter.N);
 				}
 				template.addAll(i, matchingItems);
-				if (i != 0 && !template.get(i - 1).equals(ImportSorterAdapter.N)) {
-					template.add(i, ImportSorterAdapter.N);
-				}
-
 			}
 		}
 		// if there is \n on the end, remove it
