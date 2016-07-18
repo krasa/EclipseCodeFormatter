@@ -40,7 +40,7 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>15.8 (2016-07-18)
+        <br>15.9 (2016-07-18)
 		<br>- Another import order fix for inner classes
         <br>15.8 (2016-07-16)
 		<br>- Another import order fix 
