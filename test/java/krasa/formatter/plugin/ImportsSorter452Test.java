@@ -11,7 +11,10 @@ import krasa.formatter.utils.StringUtils;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import com.intellij.psi.PsiClass;
 
 /**
  * @author Vojtech Krasa
@@ -20,6 +23,45 @@ public class ImportsSorter452Test {
 
 	public static final String N = "\n";
 	public static final List<String> DEFAULT_ORDER = Arrays.asList("java", "javax", "org", "com");
+
+	static List<String> sort(List<String> imports, List<String> importsOrder) {
+		ImportsSorter452 importsSorter = new ImportsSorter452(importsOrder, new ImportsComparator() {
+			@Override
+			protected PsiClass getPsiClass(String qualified) {
+				// todo testing import of inner classes
+				return null;
+			}
+		});
+		return importsSorter.sort(imports);
+	}
+
+	@Ignore
+	@Test
+	public void issue107() throws Exception {
+		//@formatter:off
+		String expected =
+				"import com.model.Ethernet;\n" +
+				"import com.model.Ethernet.B;\n" +
+				"import com.model.Ethernet.PortS;\n" +
+				"import com.model.Ethernet.PortT;\n" +
+				"import com.model.Id;\n";
+
+		String imports =
+				"import com.model.Ethernet;\n" +
+				"import com.model.Id;\n" +
+				"import com.model.Ethernet.B;\n" +
+				"import com.model.Ethernet.PortS;\n" +
+				"import com.model.Ethernet.PortT;\n\n";
+
+		//@formatter:on
+
+		List<String> importsOrder = DEFAULT_ORDER;
+
+		List<String> importsList = StringUtils.trimImports(imports);
+		Collections.shuffle(importsList);
+		List<String> strings = sort(importsList, importsOrder);
+		printAndAssert(expected, strings);
+	}
 
 	@Test
 	public void issue105() throws Exception {
@@ -40,7 +82,7 @@ public class ImportsSorter452Test {
 
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
-		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		List<String> strings = sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -77,7 +119,7 @@ public class ImportsSorter452Test {
 
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
-		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		List<String> strings = sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -99,7 +141,7 @@ public class ImportsSorter452Test {
 
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
-		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		List<String> strings = sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -133,7 +175,7 @@ public class ImportsSorter452Test {
 		settings.setImportOrderConfigFilePath(file.getAbsolutePath());
 		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
 
-		List<String> strings = ImportsSorter452.sort(importsList, importOrderProvider.get());
+		List<String> strings = sort(importsList, importOrderProvider.get());
 		printAndAssert(expected, strings);
 	}
 
@@ -182,7 +224,7 @@ public class ImportsSorter452Test {
 
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
-		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		List<String> strings = sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -230,7 +272,7 @@ public class ImportsSorter452Test {
 
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
-		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		List<String> strings = sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -254,7 +296,7 @@ public class ImportsSorter452Test {
 
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
-		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		List<String> strings = sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -278,7 +320,7 @@ public class ImportsSorter452Test {
 
 		List<String> importsList = StringUtils.trimImports(imports);
 		Collections.shuffle(importsList);
-		List<String> strings = ImportsSorter452.sort(importsList, importsOrder);
+		List<String> strings = sort(importsList, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -303,7 +345,7 @@ public class ImportsSorter452Test {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
+		List<String> strings = sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 
@@ -332,7 +374,7 @@ throws Exception {
 
 		List<String> importsOrder = Arrays.asList("java", "javax", "org", "com");
 
-		List<String> strings = ImportsSorter452.sort(imports, importsOrder);
+		List<String> strings = sort(imports, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -351,7 +393,7 @@ throws Exception {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
+		List<String> strings = sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 	@Test
@@ -375,7 +417,7 @@ throws Exception {
 	
 			List<String> imports1 = StringUtils.trimImports(imports);
 			System.err.println(Arrays.toString(imports1.toArray()));
-			List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
+			List<String> strings = sort(imports1, DEFAULT_ORDER);
 			printAndAssert(expected, strings);
 		}
 	@Test
@@ -398,7 +440,7 @@ throws Exception {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
+		List<String> strings = sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -439,7 +481,7 @@ throws Exception {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
+		List<String> strings = sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 
@@ -455,7 +497,7 @@ throws Exception {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
+		List<String> strings = sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -471,7 +513,7 @@ throws Exception {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
+		List<String> strings = sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -487,7 +529,7 @@ throws Exception {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
+		List<String> strings = sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -506,7 +548,7 @@ throws Exception {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, importsOrder);
+		List<String> strings = sort(imports1, importsOrder);
 		printAndAssert(expected, strings);
 	}
 
@@ -519,7 +561,7 @@ throws Exception {
 
 		List<String> imports1 = StringUtils.trimImports(imports);
 		System.err.println(Arrays.toString(imports1.toArray()));
-		List<String> strings = ImportsSorter452.sort(imports1, DEFAULT_ORDER);
+		List<String> strings = sort(imports1, DEFAULT_ORDER);
 		printAndAssert(expected, strings);
 	}
 

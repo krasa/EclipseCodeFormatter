@@ -101,7 +101,7 @@ public class StringUtils {
 		return s.substring(lastDot + 1, s.length());
 	}
 
-	public static String getQualifier(String s) {
+	public static String getPackage(String s) {
 		int lastDot = s.lastIndexOf(".");
 		if (lastDot == -1) {
 			return "";

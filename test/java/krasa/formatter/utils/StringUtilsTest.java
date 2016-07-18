@@ -1,10 +1,12 @@
 package krasa.formatter.utils;
 
-import static krasa.formatter.utils.StringUtils.getQualifier;
+import static krasa.formatter.utils.StringUtils.getPackage;
 import static krasa.formatter.utils.StringUtils.getSimpleName;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import krasa.formatter.settings.Settings;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -23,8 +25,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.messages.MessageBus;
 
-import krasa.formatter.settings.Settings;
-
 /**
  * @author Vojtech Krasa
  */
@@ -36,9 +36,10 @@ public class StringUtilsTest {
 	}
 
 	@Test
-	public void test_getQualifier() throws Exception {
-		Assert.assertEquals("a.a", getQualifier("a.a.b"));
-		Assert.assertEquals("", getQualifier("b"));
+	public void test_getPackage() throws Exception {
+		Assert.assertEquals("a.a", getPackage("a.a.b"));
+		Assert.assertEquals("", getPackage("b"));
+		Assert.assertEquals("com.model", getPackage("com.model.Ethernet"));
 	}
 
 	@Test

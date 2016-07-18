@@ -39,10 +39,10 @@ class ImportsSorter450 implements ImportsSorter {
 		comparator = new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
-				String containerName1 = allImportOrderItems.contains(o1) ? o1 : StringUtils.getQualifier(o1);
+				String containerName1 = allImportOrderItems.contains(o1) ? o1 : StringUtils.getPackage(o1);
 				String simpleName1 = allImportOrderItems.contains(o1) ? "" : StringUtils.getSimpleName(o1);
 
-				String containerName2 = allImportOrderItems.contains(o2) ? o2 : StringUtils.getQualifier(o2);
+				String containerName2 = allImportOrderItems.contains(o2) ? o2 : StringUtils.getPackage(o2);
 				String simpleName2 = allImportOrderItems.contains(o2) ? "" : StringUtils.getSimpleName(o2);
 				int i = containerName1.compareTo(containerName2);
 

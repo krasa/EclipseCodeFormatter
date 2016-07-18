@@ -1,14 +1,12 @@
 package krasa.formatter.plugin;
 
-import static krasa.formatter.plugin.ImportsComparator.IMPORTS_COMPARATOR;
-
 import java.util.*;
+
+import krasa.formatter.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.util.MultiValuesMap;
-
-import krasa.formatter.utils.StringUtils;
 
 /*not thread safe*/
 @SuppressWarnings("Duplicates")
@@ -18,13 +16,10 @@ class ImportsSorter452 implements ImportsSorter {
 	private MultiValuesMap<String, String> matchingImports = new MultiValuesMap<String, String>();
 	private ArrayList<String> notMatching = new ArrayList<String>();
 	private Set<String> allImportOrderItems = new HashSet<String>();
+	private Comparator<? super String> importsComparator;
 
-	static List<String> sort(List<String> imports, List<String> importsOrder) {
-		ImportsSorter452 importsSorter = new ImportsSorter452(importsOrder);
-		return importsSorter.sort(imports);
-	}
-
-	public ImportsSorter452(List<String> importOrder) {
+	public ImportsSorter452(List<String> importOrder, ImportsComparator comparator) {
+		importsComparator = comparator;
 		List<String> importOrderCopy = new ArrayList<String>(importOrder);
 		normalizeStaticOrderItems(importOrderCopy);
 		putStaticItemIfNotExists(importOrderCopy);
@@ -146,7 +141,7 @@ class ImportsSorter452 implements ImportsSorter {
 	 * not matching means it does not match any order item, so it will be appended before or after order items
 	 */
 	private void mergeNotMatchingItems() {
-		Collections.sort(notMatching, IMPORTS_COMPARATOR);
+		Collections.sort(notMatching, importsComparator);
 
 		template.add(ImportSorterAdapter.N);
 		for (int i = 0; i < notMatching.size(); i++) {
@@ -186,7 +181,7 @@ class ImportsSorter452 implements ImportsSorter {
 					continue;
 				}
 				ArrayList<String> matchingItems = new ArrayList<String>(strings);
-				Collections.sort(matchingItems, IMPORTS_COMPARATOR);
+				Collections.sort(matchingItems, importsComparator);
 
 				// replace order item by matching import statements
 				// this is a mess and it is only a luck that it works :-]

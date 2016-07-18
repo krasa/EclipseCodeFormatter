@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.StringUtils;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.*;
-
-import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.StringUtils;
 
 /**
  * @author Vojtech Krasa
@@ -49,7 +49,7 @@ public class ImportSorterAdapter {
 			}
 		}
 
-		List<String> sort = getImportsSorter().sort(StringUtils.trimImports(imports));
+		List<String> sort = getImportsSorter(file).sort(StringUtils.trimImports(imports));
 
 		StringBuilder text = new StringBuilder();
 		for (int i = 0; i < sort.size(); i++) {
@@ -88,12 +88,12 @@ public class ImportSorterAdapter {
 	}
 
 	@NotNull
-	private ImportsSorter getImportsSorter() {
+	private ImportsSorter getImportsSorter(PsiJavaFile file) {
 		switch (importOrdering) {
 		case ECLIPSE_44:
 			return new ImportsSorter450(importsOrder);
 			case ECLIPSE_452:
-				return new ImportsSorter452(importsOrder);
+			return new ImportsSorter452(importsOrder, new ImportsComparator(file.getProject()));
 		}
 		throw new RuntimeException(String.valueOf(importOrdering));
 	}
