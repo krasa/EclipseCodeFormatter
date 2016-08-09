@@ -2,12 +2,7 @@ package repackager;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 
@@ -23,8 +18,8 @@ public class UpdateLibs {
 	}
 
 	private void run() throws IOException {
-		String from = "F:\\workspace\\eclipse-cpp-mars-2-win32";
-		File currentJars = new File("support/eclipseLibs45/libs");
+		String from = "F:\\workspace\\eclipse-jee-neon-R-win32";
+		File currentJars = new File("support/eclipseLibs45/lib");
 		File copyTo = new File(currentJars + "/temp");
 
 		Map<String, String> oldJars = getJarsToUpdate(currentJars);
