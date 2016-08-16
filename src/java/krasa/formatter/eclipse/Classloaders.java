@@ -1,20 +1,22 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.diagnostic.Logger;
-import krasa.formatter.processor.Processor;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.CppPropertiesProvider;
-import krasa.formatter.settings.provider.JSPropertiesProvider;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
+import krasa.formatter.processor.Processor;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.CppPropertiesProvider;
+import krasa.formatter.settings.provider.JSPropertiesProvider;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.diagnostic.Logger;
 
 public class Classloaders {
 	private static final Logger LOG = Logger.getInstance(Classloaders.class.getName());
@@ -58,29 +60,32 @@ public class Classloaders {
 	}
 
 	@NotNull
+	private static File getPluginLibHomeEclipse44() {
+		return getPluginHome("eclipse44");
+	}
+
+	@NotNull
 	private static File getPluginLibHomeEclipse45() {
+		return getPluginHome("eclipse45");
+	}
+
+	@NotNull
+	private static File getPluginHome(String eclipseVersion) {
 		File pluginHome;
 		if (isUnitTest()) {
-			pluginHome = new File("../lib/eclipse45");
+			pluginHome = new File("../lib/" + eclipseVersion);
 		} else {
 			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter/lib/");
+			File preInstalled = new File(PathManager.getPreInstalledPluginsPath(), "EclipseFormatter/lib/");
+			if (!pluginHome.exists() && preInstalled.exists()) {
+				pluginHome = preInstalled;
+			}
 		}
 		return pluginHome;
 	}
 
 	private static boolean isUnitTest() {
 		return ApplicationManager.getApplication() == null || ApplicationManager.getApplication().isUnitTestMode();
-	}
-
-	@NotNull
-	private static File getPluginLibHomeEclipse44() {
-		File pluginHome;
-		if (isUnitTest()) {
-			pluginHome = new File("../lib/eclipse44/");
-		} else {
-			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter/lib/");
-		}
-		return pluginHome;
 	}
 
 	@NotNull
