@@ -1,12 +1,13 @@
 package krasa.formatter.plugin;
 
+import krasa.formatter.settings.ProjectSettingsComponent;
+
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import krasa.formatter.settings.ProjectSettingsComponent;
 
 /**
  * @author Vojtech Krasa
@@ -34,8 +35,8 @@ public class Notifier {
 	}
 
 	void notifyFormattingWasDisabled(PsiFile psiFile) {
-		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO.createNotification(psiFile.getName()
-				+ " - formatting was disabled for this file type", NotificationType.WARNING);
+		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO.createNotification(
+				psiFile.getName() + " - formatting was disabled for this file type", NotificationType.WARNING);
 		showNotification(notification, psiFile.getProject());
 	}
 
@@ -82,12 +83,12 @@ public class Notifier {
 	}
 
 	public static void notifyOldJRE(final Project project) {
-		String content = ECLIPSE_4_5 + " formatter requires JRE 1.7+, using formatter from Eclipse 4.4. " +
-				"You can configure to use 4.4 in the plugin settings to avoid this warning.";
+		String content = ECLIPSE_4_5 + " formatter requires JRE 1.7+, using formatter from Eclipse 4.4. "
+				+ "You can configure to use 4.4 in the plugin settings to avoid this warning.";
 
 		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.WARNING);
-		if (ApplicationManager.getApplication() != null) {//tests hack
+		if (ApplicationManager.getApplication() != null) {// tests hack
 			ApplicationManager.getApplication().invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -97,4 +98,9 @@ public class Notifier {
 		}
 	}
 
+	public void configurationError(Exception e, Project project) {
+		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
+				"Eclipse Formatter configuration error: " + e.getMessage(), NotificationType.ERROR);
+		showNotification(notification, project);
+	}
 }

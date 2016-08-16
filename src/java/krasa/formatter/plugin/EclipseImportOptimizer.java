@@ -1,22 +1,20 @@
 package krasa.formatter.plugin;
 
-import com.intellij.lang.ImportOptimizer;
-import com.intellij.lang.java.JavaImportOptimizer;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStatementBase;
-import com.intellij.psi.PsiJavaFile;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.ProjectSettingsComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.FileUtils;
+
 import org.jetbrains.annotations.NotNull;
+
+import com.intellij.lang.ImportOptimizer;
+import com.intellij.lang.java.JavaImportOptimizer;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.psi.*;
 
 /**
  * @author Vojtech Krasa
@@ -24,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 public class EclipseImportOptimizer implements ImportOptimizer {
 
 	private static final Logger LOG = Logger.getInstance("#krasa.formatter.plugin.processor.ImportOrderProcessor");
+
+	private Notifier notifier = new Notifier();
 
 	@NotNull
 	@Override
@@ -47,6 +47,12 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 					if (isEnabled(settings)) {
 						optimizeImportsByEclipse((PsiJavaFile) file, settings);
 					}
+				} catch (ParsingFailedException e) {
+					notifier.configurationError(e, file.getProject());
+					LOG.info("Eclipse Import Optimizer failed", e);
+				} catch (FileDoesNotExistsException e) {
+					notifier.configurationError(e, file.getProject());
+					LOG.info("Eclipse Import Optimizer failed", e);
 				} catch (Exception e) {
 					LOG.error("Eclipse Import Optimizer failed", e);
 				}
