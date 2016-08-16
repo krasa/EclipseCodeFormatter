@@ -1,0 +1,5 @@
+-download new eclipse
+-run UpdateLibs
+-run RepackJars
+-run mvn package on support/eclipseLibs/pom.xml
+-commit to git

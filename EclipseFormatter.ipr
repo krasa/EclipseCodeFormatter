@@ -5,13 +5,12 @@
       <output-path>$PROJECT_DIR$/lib/eclipse44</output-path>
       <root id="archive" name="adapter44.jar">
         <element id="module-output" name="EclipseAdapter44" />
-        <element id="module-output" name="EclipseAdapter45" />
       </root>
     </artifact>
-    <artifact type="jar" build-on-make="true" name="adapter45">
-      <output-path>$PROJECT_DIR$/lib/eclipse45</output-path>
-      <root id="archive" name="adapter45.jar">
-        <element id="module-output" name="EclipseAdapter45" />
+    <artifact type="jar" build-on-make="true" name="adapter">
+      <output-path>$PROJECT_DIR$/lib/eclipse</output-path>
+      <root id="archive" name="adapter.jar">
+        <element id="module-output" name="EclipseAdapter" />
       </root>
     </artifact>
   </component>
@@ -36,22 +35,48 @@
       </profile>
       <profile default="false" name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="DependencyDownloader" />
         <module name="DependencyHandler" />
+        <module name="eclipse" />
+        <module name="eclipse44" />
+        <module name="eclipse45" />
+        <module name="eclipseLibs" />
+        <module name="FormatterTest" />
+        <module name="krasa.formattertest" />
         <module name="untitled" />
       </profile>
+      <profile default="false" name="Annotation profile for krasa.formattertest" enabled="true">
+        <sourceOutputDir name="../FormatterTest/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../FormatterTest/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="testProject" />
+      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="eclipse" target="1.5" />
+      <module name="eclipse44" target="1.5" />
+      <module name="eclipse45" target="1.5" />
+      <module name="eclipseLibs" target="1.5" />
+      <module name="repackager" target="1.6" />
+      <module name="testProject" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="" />
   <component name="DependencyValidationManager">
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="EclipseCodeFormatter">
+    <option name="defaultSettings" value="true" />
     <option name="formatter" value="ECLIPSE" />
-    <option name="id" value="2" />
-    <option name="name" value="EclipseFormatter" />
+    <option name="id" value="1462535080417" />
+    <option name="importOrderConfigFilePath" value="$PROJECT_DIR$/test/resources/eclipse.importorder" />
+    <option name="importOrdering" value="ECLIPSE_44" />
+    <option name="name" value="default" />
     <option name="pathToConfigFileJava" value="$PROJECT_DIR$/../../../format.xml" />
+    <option name="pathToEclipse" value="C:\Users\Meo\.p2\pool" />
     <option name="selectedJavaProfile" value="Ales" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
@@ -64,6 +89,7 @@
     <profile version="1.0">
       <option name="myName" value="Project Default" />
       <option name="myLocal" value="true" />
+      <inspection_tool class="EqualsBetweenInconvertibleTypes" enabled="true" level="ERROR" enabled_by_default="true" />
       <inspection_tool class="LoggerInitializedWithForeignClass" enabled="false" level="WARNING" enabled_by_default="false">
         <option name="loggerClassName" value="org.apache.log4j.Logger,org.slf4j.LoggerFactory,org.apache.commons.logging.LogFactory,java.util.logging.Logger" />
         <option name="loggerFactoryMethodName" value="getLogger,getLogger,getLog,getLogger" />
@@ -111,7 +137,19 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/untitled/pom.xml" />
+        <option value="$PROJECT_DIR$/FormatterTest/pom.xml" />
+        <option value="$PROJECT_DIR$/Repackager44/pom.xml" />
+        <option value="$PROJECT_DIR$/repackager/pom.xml" />
+        <option value="$PROJECT_DIR$/support/pom.xml" />
+        <option value="$PROJECT_DIR$/support/eclipseLibs/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/support/eclipse44/pom.xml" />
+        <option value="$PROJECT_DIR$/support/eclipse45/pom.xml" />
+        <option value="$PROJECT_DIR$/testProject/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="Palette2">
@@ -251,20 +289,26 @@
   </component>
   <component name="ProjectDictionaryState">
     <dictionary name="UNICORN" />
+    <dictionary name="Meo" />
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DependencyDownloader/DependencyDownloader.iml" filepath="$PROJECT_DIR$/DependencyDownloader/DependencyDownloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EclipseAdapter/EclipseAdapter.iml" filepath="$PROJECT_DIR$/EclipseAdapter/EclipseAdapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/EclipseAdapter44/EclipseAdapter44.iml" filepath="$PROJECT_DIR$/EclipseAdapter44/EclipseAdapter44.iml" />
-      <module fileurl="file://$PROJECT_DIR$/EclipseAdapter45/EclipseAdapter45.iml" filepath="$PROJECT_DIR$/EclipseAdapter45/EclipseAdapter45.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EclipseAdapter/EclipseAdapter45.iml" filepath="$PROJECT_DIR$/EclipseAdapter/EclipseAdapter45.iml" />
       <module fileurl="file://$PROJECT_DIR$/EclipseFormatter.iml" filepath="$PROJECT_DIR$/EclipseFormatter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support/eclipseLibs44/eclipse44.iml" filepath="$PROJECT_DIR$/support/eclipseLibs44/eclipse44.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support/eclipseLibs/eclipse45.iml" filepath="$PROJECT_DIR$/support/eclipseLibs/eclipse45.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support/eclipseLibs/eclipseLibs.iml" filepath="$PROJECT_DIR$/support/eclipseLibs/eclipseLibs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support/repackager.iml" filepath="$PROJECT_DIR$/support/repackager.iml" />
       <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testProject/testProject.iml" filepath="$PROJECT_DIR$/testProject/testProject.iml" />
     </modules>
   </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="IJ 1.6" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="IntelliJ IDEA 16" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="PublishConfigData">
@@ -303,45 +347,34 @@
     <mapping directory="" vcs="Git" />
   </component>
   <component name="libraryTable">
-    <library name="eclipse45">
+    <library name="eclipse">
       <CLASSES>
-        <root url="file://$PROJECT_DIR$/lib/eclipse45" />
+        <root url="file://$PROJECT_DIR$/lib/eclipse" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
-      <jarDirectory url="file://$PROJECT_DIR$/lib/eclipse45" recursive="false" />
+      <jarDirectory url="file://$PROJECT_DIR$/lib/eclipse" recursive="false" />
     </library>
-    <library name="Maven: cglib:cglib-nodep:2.2.2">
+    <library name="Maven: com.google.guava:guava:18.0">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/18.0/guava-18.0.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/18.0/guava-18.0-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/18.0/guava-18.0-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.easymock:easymock:3.1">
+    <library name="Maven: commons-io:commons-io:1.3.2">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/3.1/easymock-3.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/1.3.2/commons-io-1.3.2.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/3.1/easymock-3.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/1.3.2/commons-io-1.3.2-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/3.1/easymock-3.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.objenesis:objenesis:1.2">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/1.2/objenesis-1.2.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/1.2/objenesis-1.2-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/1.2/objenesis-1.2-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/1.3.2/commons-io-1.3.2-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="test">

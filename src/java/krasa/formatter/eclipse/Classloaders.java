@@ -34,18 +34,16 @@ public class Classloaders {
 		return eclipse44;
 	}
 
-	public static ClassLoader getEclipse45() {
+	public static ClassLoader getEclipse() {
 		if (newEclipse == null) {
-			newEclipse = classLoader(getPluginLibHomeEclipse45(),
-					"adapter45.jar",
-					"eclipse45.jar");
+			newEclipse = classLoader(getPluginLibHomeEclipse(), "adapter.jar", "eclipse.jar");
 		}
 		return newEclipse;
 	}
 
 	public static ClassLoader getCustomClassloader(List<URL> jars) {
 		try {
-			jars.add(new File(getPluginLibHomeEclipse45(), "adapter45.jar").toURI().toURL());
+			jars.add(new File(getPluginLibHomeEclipse(), "adapter.jar").toURI().toURL());
 			for (URL jar : jars) {
 				if (!new File(jar.toURI()).exists()) {
 					throw new IllegalStateException("Plugin jar file not found: " + jar.toURI());
@@ -65,8 +63,8 @@ public class Classloaders {
 	}
 
 	@NotNull
-	private static File getPluginLibHomeEclipse45() {
-		return getPluginHome("eclipse45");
+	private static File getPluginLibHomeEclipse() {
+		return getPluginHome("eclipse");
 	}
 
 	@NotNull
@@ -116,7 +114,7 @@ public class Classloaders {
 	public static CodeFormatterFacade getCppFormatter(CppPropertiesProvider cppProperties) {
 		Object o = null;
 		try {
-			ClassLoader classLoader = getEclipse45();
+			ClassLoader classLoader = getEclipse();
 			Class<?> aClass = Class.forName("krasa.formatter.adapter.CppCodeFormatterFacade", true, classLoader);
 			Constructor<?> constructor = aClass.getConstructor(CppPropertiesProvider.class);
 			o = constructor.newInstance(cppProperties);

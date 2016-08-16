@@ -1,5 +1,21 @@
 package krasa.formatter.eclipse;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import krasa.formatter.common.ModifiableFile;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.plugin.Notifier;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.JavaPropertiesProvider;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -8,20 +24,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
-import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.plugin.Notifier;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.JavaPropertiesProvider;
-import org.jetbrains.annotations.NotNull;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -78,9 +80,9 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 				aClass = getAdapter44();
 			} else {
 				if (version == Settings.FormatterVersion.CUSTOM && SystemInfo.isJavaVersionAtLeast("1.7")) {
-					aClass = getCustomAdapter45(pathToEclipse);
+					aClass = getCustomAdapter(pathToEclipse);
 				} else if (SystemInfo.isJavaVersionAtLeast("1.7")) {
-					aClass = getAdapter45();
+					aClass = getAdapter();
 				} else {
 					aClass = getAdapter44();
 					Notifier.notifyOldJRE(project);
@@ -100,14 +102,14 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	/**
 	 * TODO CACHE BETWEEN PROJECTS
 	 */
-	private Class<?> getCustomAdapter45(String pathToEclipse) throws ClassNotFoundException {
+	private Class<?> getCustomAdapter(String pathToEclipse) throws ClassNotFoundException {
 		ConfigurableEclipseLocation configurableEclipseLocation = new ConfigurableEclipseLocation();
 		List<URL> urlList = configurableEclipseLocation.run(pathToEclipse.trim());
 		if (urlList.isEmpty()) {
 			throw new FormattingFailedException("Invalid path to Eclipse, no jars found in '" + pathToEclipse + "'", true);
 		}
 		ClassLoader classLoader = Classloaders.getCustomClassloader(urlList);
-		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter45", true, classLoader);
+		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter", true, classLoader);
 		return aClass;
 	}
 
@@ -117,9 +119,9 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		return aClass;
 	}
 
-	private Class<?> getAdapter45() throws ClassNotFoundException {
-		ClassLoader classLoader = Classloaders.getEclipse45();
-		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter45", true, classLoader);
+	private Class<?> getAdapter() throws ClassNotFoundException {
+		ClassLoader classLoader = Classloaders.getEclipse();
+		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter", true, classLoader);
 		return aClass;
 	}
 

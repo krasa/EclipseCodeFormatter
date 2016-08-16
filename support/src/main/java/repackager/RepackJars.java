@@ -1,21 +1,9 @@
 package repackager;
 
-import static java.util.jar.Pack200.Packer.CLASS_ATTRIBUTE_PFX;
-import static java.util.jar.Pack200.Packer.CODE_ATTRIBUTE_PFX;
-import static java.util.jar.Pack200.Packer.FIELD_ATTRIBUTE_PFX;
-import static java.util.jar.Pack200.Packer.METHOD_ATTRIBUTE_PFX;
-import static java.util.jar.Pack200.Packer.UNKNOWN_ATTRIBUTE;
+import static java.util.jar.Pack200.Packer.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -30,8 +18,9 @@ public class RepackJars {
 	static StringBuilder log = new StringBuilder();
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		new RepackJars().execute(rootFile("lib/eclipse44"));
-		new RepackJars().execute(rootFile("lib/eclipse45"));
+		// new RepackJars().execute(rootFile("lib/eclipse44"));
+		// new RepackJars().execute(rootFile("lib/eclipse"));
+		new RepackJars().execute(rootFile("support/eclipseLibs/lib"));
 		System.out.println("-----------------");
 		System.out.println("-----------------");
 		System.out.println("-----------------");
@@ -53,7 +42,7 @@ public class RepackJars {
 	private void execute(File sourceDir) throws IOException, InterruptedException {
 		List<File> files = getJars(sourceDir);
 		// List<File> files = Arrays.asList(new
-		// File("F:\\workspace\\_projekty\\Github\\EclipseCodeFormatter4\\lib\\eclipse45\\org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"));
+		// File("F:\\workspace\\_projekty\\Github\\EclipseCodeFormatter4\\lib\\eclipse\\org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"));
 		File tempDir = new File(sourceDir, "temp");
 		tempDir.mkdir();
 
