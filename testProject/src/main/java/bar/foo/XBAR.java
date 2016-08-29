@@ -1,18 +1,20 @@
 package bar.foo;
 
-import aaa.XAAA;
-import com.google.common.collect.SetMultimap;
-import foo.bar.XFOO;
-import org.easymock.IMocksControl;
+import static aaa.XAAA.aaa;
+import static com.google.common.collect.Multimaps.forMap;
+import static foo.bar.XFOO.foo;
+import static org.easymock.EasyMock.createControl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static aaa.XAAA.aaa;
-import static com.google.common.collect.Multimaps.forMap;
-import static foo.bar.XFOO.foo;
-import static org.easymock.EasyMock.createControl;
+import org.easymock.IMocksControl;
+
+import com.google.common.collect.SetMultimap;
+
+import aaa.XAAA;
+import foo.bar.XFOO;
 
 public class XBAR {
 
