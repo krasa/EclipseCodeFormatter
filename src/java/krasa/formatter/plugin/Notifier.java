@@ -15,7 +15,7 @@ import com.intellij.psi.PsiFile;
 public class Notifier {
 
 	public static final String NO_FILE_TO_FORMAT = "No file to format";
-	public static final String ECLIPSE_4_5 = "Eclipse 4.5";
+	public static final String ECLIPSE_4_6 = "Eclipse 4.6";
 
 	public void notifyFailedFormatting(PsiFile psiFile, boolean formattedByIntelliJ, Exception e) {
 		String error = e.getMessage() == null ? "" : e.getMessage();
@@ -83,8 +83,8 @@ public class Notifier {
 	}
 
 	public static void notifyOldJRE(final Project project) {
-		String content = ECLIPSE_4_5 + " formatter requires JRE 1.7+, using formatter from Eclipse 4.4. "
-				+ "You can configure to use 4.4 in the plugin settings to avoid this warning.";
+		String content = ECLIPSE_4_6 + " formatter requires JRE 1.8+, using formatter from Eclipse 4.4. "
+				+ "You can configure to use 4.4 in the plugin settings to avoid this warning, or use a custom eclipse location for Eclipse 4.5 (JDK 1.7).";
 
 		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.WARNING);
