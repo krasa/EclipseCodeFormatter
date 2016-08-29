@@ -1,20 +1,7 @@
 package krasa.formatter.plugin;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.impl.CheckUtil;
-import com.intellij.psi.util.PsiUtilBase;
-import com.intellij.util.IncorrectOperationException;
+import java.util.*;
+
 import krasa.formatter.eclipse.Classloaders;
 import krasa.formatter.eclipse.CodeFormatterFacade;
 import krasa.formatter.eclipse.JavaCodeFormatterFacade;
@@ -26,10 +13,26 @@ import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.CppPropertiesProvider;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
 import krasa.formatter.utils.FileUtils;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.ChangedRangesInfo;
+import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.psi.impl.CheckUtil;
+import com.intellij.psi.util.PsiUtilBase;
+import com.intellij.util.IncorrectOperationException;
 
 public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
@@ -65,6 +68,14 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection)
 			throws IncorrectOperationException {
 		reformatText(psiFile, collection);
+	}
+
+	// 16.3
+	@Override
+	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull ChangedRangesInfo changedRangesInfo)
+			throws IncorrectOperationException {
+		List<TextRange> allChangedRanges = changedRangesInfo.allChangedRanges;
+		reformatText(psiFile, allChangedRanges);
 	}
 
 	@Override
@@ -188,11 +199,11 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	private boolean shouldReformat(boolean wholeFileOrSelectedText, Mode mode) {
 		switch (mode) {
 		/* when formatting only vcs changes, this is needed. */
-			case ALWAYS_FORMAT:
-				return true;
+		case ALWAYS_FORMAT:
+			return true;
 		/* live templates gets broken without that */
-			case WITH_CTRL_SHIFT_ENTER_CHECK:
-				return wholeFileOrSelectedText;
+		case WITH_CTRL_SHIFT_ENTER_CHECK:
+			return wholeFileOrSelectedText;
 		}
 		return true;
 	}

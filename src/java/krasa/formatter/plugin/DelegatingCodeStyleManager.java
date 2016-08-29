@@ -21,6 +21,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.ChangedRangesInfo;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.Indent;
 import com.intellij.util.IncorrectOperationException;
@@ -172,7 +173,13 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 		original.reformatText(psiFile, textRanges);
 	}
 
-    // 15
+	// 16.3
+	@Override
+	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull ChangedRangesInfo changedRangesInfo) throws IncorrectOperationException {
+		original.reformatTextWithContext(psiFile, changedRangesInfo);
+	}
+
+	// 15
     @Override
     public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
         original.reformatTextWithContext(psiFile, collection);

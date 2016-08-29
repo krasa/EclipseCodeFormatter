@@ -40,9 +40,11 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>16.9 (2016-07-18)
-		<br>- Another import order fix for inner classes
+        <br>16.9 (2016-08-29)
+		<br>- Import order fix for inner classes
 		<br>- bundled formatters from Eclipse 4.6
+		<br>- support for installation location in a default plugins folder 
+		<br>- IntelliJ 2016.3 compatibility
         <br>15.8 (2016-07-16)
 		<br>- Another import order fix 
         <br>15.7 (2016-07-01)
