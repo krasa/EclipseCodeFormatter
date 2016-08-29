@@ -41,8 +41,8 @@
 
 	<change-notes><![CDATA[
         <br>16.9 (2016-08-29)
+		<br>- bundled formatters from Eclipse 4.6 - requires JDK 1.8
 		<br>- Import order fix for inner classes
-		<br>- bundled formatters from Eclipse 4.6
 		<br>- support for installation location in a default plugins folder 
         <br>15.8 (2016-07-16)
 		<br>- Another import order fix 

@@ -56,13 +56,16 @@
   </component>
   <component name="EclipseCodeFormatter">
     <option name="defaultSettings" value="true" />
+    <option name="eclipseVersion" value="ECLIPSE_44" />
     <option name="formatter" value="ECLIPSE" />
     <option name="id" value="1462535080417" />
     <option name="importOrderConfigFilePath" value="$PROJECT_DIR$/test/resources/eclipse.importorder" />
+    <option name="importOrdering" value="ECLIPSE_44" />
     <option name="name" value="default" />
     <option name="pathToConfigFileJava" value="$PROJECT_DIR$/../../../format.xml" />
     <option name="pathToEclipse" value="C:\Users\Meo\.p2\pool" />
     <option name="selectedJavaProfile" value="Ales" />
+    <option name="useOldEclipseJavaFormatter" value="true" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/src/java/krasa/formatter/plugin/EclipseImportOptimizer.java" charset="GBK" />
