@@ -15,8 +15,6 @@
     </artifact>
   </component>
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Javac" />
-    <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="?*.properties" />
       <entry name="?*.xml" />
@@ -30,14 +28,10 @@
       <entry name="?*.ftl" />
     </wildcardResourcePatterns>
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="false">
-        <processorPath useClasspath="true" />
-      </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
         <module name="DependencyHandler" />
         <module name="eclipse" />
         <module name="eclipse44" />
@@ -47,12 +41,10 @@
         <module name="krasa.formattertest" />
         <module name="untitled" />
       </profile>
-      <profile default="false" name="Annotation profile for krasa.formattertest" enabled="true">
+      <profile name="Annotation profile for krasa.formattertest" enabled="true">
         <sourceOutputDir name="../FormatterTest/target/generated-sources/annotations" />
         <sourceTestOutputDir name="../FormatterTest/target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="testProject" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -70,6 +62,7 @@
   </component>
   <component name="EclipseCodeFormatter">
     <option name="defaultSettings" value="true" />
+    <option name="eclipseVersion" value="ECLIPSE_44" />
     <option name="formatter" value="ECLIPSE" />
     <option name="id" value="1462535080417" />
     <option name="importOrderConfigFilePath" value="$PROJECT_DIR$/test/resources/eclipse.importorder" />
@@ -78,30 +71,13 @@
     <option name="pathToConfigFileJava" value="$PROJECT_DIR$/../../../format.xml" />
     <option name="pathToEclipse" value="C:\Users\Meo\.p2\pool" />
     <option name="selectedJavaProfile" value="Ales" />
+    <option name="useOldEclipseJavaFormatter" value="true" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="PROJECT" charset="UTF-8" />
   </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
-  </component>
-  <component name="InspectionProjectProfileManager">
-    <profile version="1.0">
-      <option name="myName" value="Project Default" />
-      <option name="myLocal" value="true" />
-      <inspection_tool class="EqualsBetweenInconvertibleTypes" enabled="true" level="ERROR" enabled_by_default="true" />
-      <inspection_tool class="LoggerInitializedWithForeignClass" enabled="false" level="WARNING" enabled_by_default="false">
-        <option name="loggerClassName" value="org.apache.log4j.Logger,org.slf4j.LoggerFactory,org.apache.commons.logging.LogFactory,java.util.logging.Logger" />
-        <option name="loggerFactoryMethodName" value="getLogger,getLogger,getLog,getLogger" />
-      </inspection_tool>
-      <inspection_tool class="MissingOverrideAnnotation" enabled="true" level="WARNING" enabled_by_default="true">
-        <option name="ignoreObjectMethods" value="true" />
-        <option name="ignoreAnonymousClassMethods" value="false" />
-      </inspection_tool>
-    </profile>
-    <option name="PROJECT_PROFILE" value="Project Default" />
-    <option name="USE_PROJECT_PROFILE" value="true" />
-    <version value="1.0" />
   </component>
   <component name="IntelliCalc">
     <mode value="0" />
@@ -302,13 +278,12 @@
       <module fileurl="file://$PROJECT_DIR$/support/eclipseLibs/eclipseLibs.iml" filepath="$PROJECT_DIR$/support/eclipseLibs/eclipseLibs.iml" />
       <module fileurl="file://$PROJECT_DIR$/support/repackager.iml" filepath="$PROJECT_DIR$/support/repackager.iml" />
       <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/testProject/testProject.iml" filepath="$PROJECT_DIR$/testProject/testProject.iml" />
     </modules>
   </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="IntelliJ IDEA 16" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" project-jdk-name="IntelliJ IDEA 16" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="PublishConfigData">
