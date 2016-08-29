@@ -14,7 +14,7 @@
     <!--135	IntelliJ IDEA 13.1, WebStorm 8-->
     <!--133	IntelliJ IDEA 13, PhpStorm 7, PyCharm 3.1, WebStorm 7-->
     <!--131	PhpStorm 7, PyCharm 3.0, WebStorm 7-->
-	<idea-version since-build="132.637" until-build=""/>
+	<idea-version since-build="132.637" until-build="163.2999"/>
 
 	<description><![CDATA[
         Allows using Eclipse's code formatter directly from IntelliJ.<br>
@@ -40,9 +40,10 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>16.9 (2016-07-18)
-		<br>- Another import order fix for inner classes
+        <br>16.9 (2016-08-29)
+		<br>- Import order fix for inner classes
 		<br>- bundled formatters from Eclipse 4.6
+		<br>- support for installation location in a default plugins folder 
         <br>15.8 (2016-07-16)
 		<br>- Another import order fix 
         <br>15.7 (2016-07-01)
