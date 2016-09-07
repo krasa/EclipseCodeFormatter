@@ -106,7 +106,7 @@ public class JavaCodeFormatterFacadeTest {
 	}
 
 	@Test
-	public void testFormatByXML_brokenCode() throws Exception {
+	public void testFormatByXML_assertionError() throws Exception {
 		Settings settings = new Settings();
 		settings.setPathToConfigFileJava("resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
