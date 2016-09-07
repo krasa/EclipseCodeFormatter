@@ -90,6 +90,7 @@ public class ParentLastURLClassLoader extends ClassLoader {
 		super(parent);
 		childClassLoader = new ChildURLClassLoader(urls,
 				new ParentLastURLClassLoader.FindClassClassLoader(this.getParent()));
+		childClassLoader.setDefaultAssertionStatus(false);
 	}
 
 	@Override

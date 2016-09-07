@@ -1,14 +1,16 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.openapi.command.impl.DummyProject;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.util.PsiUtilCore;
-import junit.framework.Assert;
-import krasa.formatter.settings.Settings;
+import java.io.UnsupportedEncodingException;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
+import com.intellij.openapi.command.impl.DummyProject;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.util.PsiUtilCore;
+
+import junit.framework.Assert;
+import krasa.formatter.settings.Settings;
 
 /**
  * @author Vojtech Krasa
@@ -57,6 +59,13 @@ public class JavaCodeFormatterFacadeTest {
 			+ "\t\tSystem.err.println(\"\" + \"\" + \"\" + \"\" + \"\");\n" + "\n" + "\t}\n" + "\n" + "}";
 
 	public static final String PATH_TO_CONFIG_FILE = "resources/org.eclipse.jdt.core.prefs";
+
+	private static final String INPUT_3 = "public class Class1 {\n" + "  private void method1(Event event) {\n"
+			+ "    Map<String, Map<String, List<Index>>> indexes = event.getIndexes();\n" + "  }\n" + "}";
+
+	private static final String EXPECTED_3 = "public class Class1 {\n" + "\tprivate void method1(Event event) {\n"
+			+ "\t\tMap<String, Map<String, List<Index>>> indexes = event.getIndexes();\n" + "\t}\n" + "}";
+
 	protected JavaCodeFormatterFacade eclipseCodeFormatterFacade;
 
 	public static Project getProject() {
@@ -94,6 +103,18 @@ public class JavaCodeFormatterFacadeTest {
 		Assert.assertEquals(FORMATTED, output);
 		output = format(INPUT2);
 		Assert.assertEquals(FORMATTED2, output);
+	}
+
+	@Test
+	public void testFormatByXML_brokenCode() throws Exception {
+		Settings settings = new Settings();
+		settings.setPathToConfigFileJava("resources/format.xml");
+		settings.setSelectedJavaProfile("kuk");
+
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
+		String output = format(INPUT_3);
+		Assert.assertEquals(EXPECTED_3, output);
 	}
 
 	@Test
