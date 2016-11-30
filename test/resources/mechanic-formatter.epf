@@ -1,0 +1,7 @@
+# @title Formatter
+# @description Formatter DEsc
+# @task_type LASTMOD
+#
+# Created by the Workspace Mechanic Preference Recorder
+#Tue Jan 05 21:49:39 CET 2016
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.alignment_for_enum_constants=70
