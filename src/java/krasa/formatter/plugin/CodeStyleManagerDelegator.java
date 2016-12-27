@@ -7,7 +7,6 @@ import java.util.Arrays;
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
 
 import com.intellij.psi.codeStyle.CodeStyleManager;
@@ -63,7 +62,7 @@ public class CodeStyleManagerDelegator implements MethodInterceptor, Callback {
 			Object overridingObject) {
 		throw new IllegalStateException(StringJoiner.join(new Object[] {
 				"IntelliJ API changed, install proper/updated version of Eclipse Formatter plugin.",
-				"Incompatible return types when calling: " + mockMethod + " on: " + (new MockUtil()).getMockName(mock),
+				"Incompatible return types when calling: " + mockMethod + " on: " + mock.getClass().getSimpleName(),
 				"return type should be: " + mockMethod.getReturnType().getSimpleName() + ", but was: "
 						+ overridingMethod.getReturnType().getSimpleName(),
 				"(delegate instance had type: " + overridingObject.getClass().getSimpleName() + ")" }));
