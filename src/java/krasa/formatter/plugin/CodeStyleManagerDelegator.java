@@ -1,15 +1,16 @@
 package krasa.formatter.plugin;
 
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import com.intellij.psi.codeStyle.CodeStyleManager;
 
 public class CodeStyleManagerDelegator implements MethodInterceptor, Callback {
     private static final com.intellij.openapi.diagnostic.Logger log = com.intellij.openapi.diagnostic.Logger.getInstance(CodeStyleManagerDelegator.class.getName());
@@ -32,7 +33,7 @@ public class CodeStyleManagerDelegator implements MethodInterceptor, Callback {
             Method delegateMethod = getDelegateMethod(invokedMethod);
 
             if (!compatibleReturnTypes(invokedMethod.getReturnType(), delegateMethod.getReturnType())) {
-                delegatedMethodHasWrongReturnType(invokedMethod, delegateMethod, obj, delegatedObject);
+				delegatedMethodHasWrongReturnType(invokedMethod, delegateMethod, obj, overridingObject);
             }
 
             log.debug("invoking overriding {}({})", invokedMethod.getName(), Arrays.toString(rawArguments));
