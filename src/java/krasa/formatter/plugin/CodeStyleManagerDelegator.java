@@ -54,8 +54,12 @@ public class CodeStyleManagerDelegator implements MethodInterceptor, Callback {
 	}
 
 	private Object PLEASE_REPORT_BUGS_TO_JETBRAINS_IF_IT_FAILS_HERE____ORIGINAL_INTELLIJ_FORMATTER_WAS_USED(
-			Method invokedMethod, Object[] rawArguments) throws IllegalAccessException, InvocationTargetException {
-		return invokedMethod.invoke(delegatedObject, rawArguments);
+			Method invokedMethod, Object[] rawArguments) throws Throwable {
+		try {
+			return invokedMethod.invoke(delegatedObject, rawArguments);
+		} catch (InvocationTargetException e) {
+			throw e.getCause();
+		}
 	}
 
 	public void overridingMethodHasWrongReturnType(Method mockMethod, Method overridingMethod, Object mock,
