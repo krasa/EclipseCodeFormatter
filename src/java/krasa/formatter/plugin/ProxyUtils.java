@@ -4,27 +4,14 @@ import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
-import org.mockito.internal.creation.settings.CreationSettings;
-import org.mockito.internal.util.reflection.LenientCopyTool;
 
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
 
 public class ProxyUtils {
 	public static CodeStyleManager createProxy(CodeStyleManagerImpl manager, EclipseCodeStyleManager overridingObject) {
-		CreationSettings<CodeStyleManagerImpl> creationSettings = new CreationSettings<CodeStyleManagerImpl>();
-		creationSettings.setTypeToMock(CodeStyleManagerImpl.class);
-        MethodInterceptor mockHandler = new CodeStyleManagerDelegator(manager, overridingObject);
-
-		CodeStyleManagerImpl mock = ClassImposterizer.INSTANCE.imposterise(mockHandler, CodeStyleManagerImpl.class,
-				new Class<?>[0]);
-
-        Object spiedInstance = creationSettings.getSpiedInstance();
-        if (spiedInstance != null) {
-            new LenientCopyTool().copyToMock(spiedInstance, mock);
-        }
-
-        return mock;
+		MethodInterceptor interceptor = new CodeStyleManagerDelegator(manager, overridingObject);
+		return ClassImposterizer.INSTANCE.imposterise(interceptor, CodeStyleManagerImpl.class, new Class<?>[0]);
     }
 
     public static boolean isMyProxy(Object mock) {
