@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>16.0.171.1834.0</version>
+	<version>16.1.132.637.0</version>
 
 
     <!--145	IntelliJ IDEA 2016.1, AppCode 2016.1, CLion 2016.1, DataGrip 2016.1, PhpStorm 2016.1, PyCharm 2016.1, RubyMine 2016.1, WebStorm 2016.1-->
@@ -14,7 +14,7 @@
     <!--135	IntelliJ IDEA 13.1, WebStorm 8-->
     <!--133	IntelliJ IDEA 13, PhpStorm 7, PyCharm 3.1, WebStorm 7-->
     <!--131	PhpStorm 7, PyCharm 3.0, WebStorm 7-->
-	<idea-version since-build="171.1834" until-build=""/>
+	<idea-version since-build="132.637" until-build=""/>
 
 	<description><![CDATA[
         Allows using Eclipse's code formatter directly from IntelliJ.<br>
@@ -40,6 +40,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>16.1 (2016-12-27)
+        <br>- hooking on IntelliJ API with dynamic proxies
         <br>16.0 (2016-09-07)
         <br>- disabled asserts
         <br>15.9 (2016-08-29)

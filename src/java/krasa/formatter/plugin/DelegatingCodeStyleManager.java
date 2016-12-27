@@ -8,7 +8,6 @@
 
 package krasa.formatter.plugin;
 
-import com.intellij.formatting.FormattingMode;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileType;
@@ -28,10 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 /**
- * Wrapper for intercepting the method calls to a {@link CodeStyleManager} instance.
- * 
- * @author Esko Luontola
- * @since 2.12.2007
+ * for tracking api changes only
  */
 @SuppressWarnings({ "deprecation" })
 public class DelegatingCodeStyleManager extends CodeStyleManager {
@@ -96,9 +92,14 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 	}
 
 	@Override
-    public int adjustLineIndent(@NotNull Document document, int i, FormattingMode formattingMode) {
-        return original.adjustLineIndent(document, i, formattingMode);
+    public int adjustLineIndent(@NotNull Document document, int i) {
+        return original.adjustLineIndent(document, i);
     }
+    //	2017.1 EAP
+//	@Override
+//    public int adjustLineIndent(@NotNull Document document, int i, FormattingMode formattingMode) {
+//        return original.adjustLineIndent(document, i, formattingMode);
+//    }
 
 	@Override
 	public boolean isLineToBeIndented(@NotNull PsiFile file, int offset) {
@@ -166,10 +167,11 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 
 	}
 
-    @Override
-    public FormattingMode getCurrentFormattingMode() {
-        return original.getCurrentFormattingMode();
-    }
+//	2017.1 EAP
+//    @Override
+//    public FormattingMode getCurrentFormattingMode() {
+//        return original.getCurrentFormattingMode();
+//    }
 
 	// 11.1
 	// @Override
