@@ -106,6 +106,18 @@ public class JavaCodeFormatterFacadeTest {
 	}
 
 	@Test
+	public void testFormatByEPF() throws Exception {
+		Settings settings = new Settings();
+		settings.setPathToConfigFileJava("resources/mechanic-formatter.epf");
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
+		String output = format(INPUT);
+		Assert.assertEquals(FORMATTED, output);
+		output = format(INPUT2);
+		Assert.assertEquals(FORMATTED2, output);
+	}
+
+	@Test
 	public void testFormatByXML_assertionError() throws Exception {
 		Settings settings = new Settings();
 		settings.setPathToConfigFileJava("resources/format.xml");

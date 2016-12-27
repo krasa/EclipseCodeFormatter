@@ -22,10 +22,26 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 	protected Properties readFile(File file) throws InvalidPropertyFile {
 		if (file.getName().endsWith("xml")) {
 			return readXmlFile(file, profile);
+		} else if (file.getName().endsWith("epf")) {
+			return readConfigFromWorkspaceMechanicFile(file);
 		} else {
 			// properties file
 			return super.readFile(file);
 		}
+	}
+
+	private Properties readConfigFromWorkspaceMechanicFile(final File file) {
+		Properties result = new Properties();
+		Properties properties = super.readFile(file);
+		final String prefix = "/instance/org.eclipse.jdt.core/";
+		for (Object object : properties.keySet()) {
+			String key = (String) object;
+			if (key.startsWith(prefix)) {
+				String value = properties.getProperty(key);
+				result.put(key.substring(prefix.length()), value);
+			}
+		}
+		return result;
 	}
 
 }

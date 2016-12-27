@@ -24,6 +24,8 @@ Currently supports formatting of
   	  - Click OK to save the settings.
   	  - Go to the .settings directory inside your project's directory. There you will find the org.eclipse.jdt.core.prefs file which contains the Eclipse formatter settings.
   	  - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/org.eclipse.jdt.core.prefs) 
+  	- Or export a [Workspace Mechanic] (http://marketplace.eclipse.org/content/workspace-mechanic/) configuration to get *.epf file
+  	  - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/mechanic-formatter.epf) 
   - Open a project in IntelliJ
   - Set path to the config file (IntelliJ | Settings | Other Settings | Eclipse Code Formatter | field "Eclipse preference file")
   - When using exported profiles(xml file), select desired profile in the combobox "Java formatter profile"
@@ -31,7 +33,7 @@ Currently supports formatting of
   	- Set import order
   	  - Either leave the default
   	  - Or set path to Eclipse configuration file:
-    		-  Go to Eclise | Windows | Preferences | Java | Code Style | Organize Imports
+    		-  Go to Eclipse | Windows | Preferences | Java | Code Style | Organize Imports
     			- Either click on "Export...", ([example](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/bcjur2.importorder))
     			- Or enable project specific settings and use "org.eclipse.jdt.ui.prefs" file which should contain the line "org.eclipse.jdt.ui.importorder=..."
   	- Value of "Class count to use import with ''" and "Name count to use static import with ''" (Settings | Editor | Code Style | Java | Imports) for Idea 14 or (Settings | Editor | Code Style | Imports) for older Idea - Eclipse uses value of 99 by default

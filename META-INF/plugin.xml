@@ -25,7 +25,7 @@
         for instructions how to use it.     <br><br>
 
        Currently supports formatting of<br>
-       -Java (bundled Eclipse 4.6 (requires JRE 1.8) and 4.4 libs, also emulates Eclipse's imports optimizing, configurable external Eclipse location for Eclipse 4.5+)<br>
+       -Java (bundled Eclipse 4.6 (requires JRE 1.8) and 4.4 libs, also emulates Eclipse's imports optimizing, configurable external Eclipse location for Eclipse 4.5+, Workspace Mechanic support)<br>
        -C/C++ (Eclipse 4.6 (requires JRE 1.7))<br>
        -JavaScript (Eclipse 4.4)<br>
        -GWT (Eclipse 4.4)
@@ -40,7 +40,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>16.1 (2016-12-27)
+        <br>16.1 (2016-11-30)
+        <br>- Support for Workspace Mechanic configuration files (*.epf) (Java formatter only)
         <br>- hooking on IntelliJ API with dynamic proxies
         <br>16.0 (2016-09-07)
         <br>- disabled asserts
