@@ -1,7 +1,5 @@
 package krasa.formatter.plugin;
 
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.cglib.proxy.MethodInterceptor;
@@ -9,14 +7,17 @@ import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 
-public class ProxyUtils {
+import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
 
-    public static CodeStyleManager createProxy(CodeStyleManager manager, EclipseCodeStyleManager overridingObject) {
-        CreationSettings<CodeStyleManager> creationSettings = new CreationSettings<CodeStyleManager>();
-        creationSettings.setTypeToMock(CodeStyleManager.class);
+public class ProxyUtils {
+	public static CodeStyleManager createProxy(CodeStyleManagerImpl manager, EclipseCodeStyleManager overridingObject) {
+		CreationSettings<CodeStyleManagerImpl> creationSettings = new CreationSettings<CodeStyleManagerImpl>();
+		creationSettings.setTypeToMock(CodeStyleManagerImpl.class);
         MethodInterceptor mockHandler = new CodeStyleManagerDelegator(manager, overridingObject);
 
-        CodeStyleManager mock = ClassImposterizer.INSTANCE.imposterise(mockHandler, CodeStyleManagerImpl.class, new Class<?>[0]);
+		CodeStyleManagerImpl mock = ClassImposterizer.INSTANCE.imposterise(mockHandler, CodeStyleManagerImpl.class,
+				new Class<?>[0]);
 
         Object spiedInstance = creationSettings.getSpiedInstance();
         if (spiedInstance != null) {

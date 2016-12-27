@@ -8,16 +8,18 @@
 
 package krasa.formatter.plugin;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
-import krasa.formatter.settings.Settings;
+import static krasa.formatter.plugin.ProxyUtils.*;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.picocontainer.MutablePicoContainer;
 
-import static krasa.formatter.plugin.ProxyUtils.*;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
+
+import krasa.formatter.settings.Settings;
 
 /**
  * Switches a project's {@link CodeStyleManager} to a eclipse formatter and back.
@@ -58,18 +60,18 @@ public class ProjectCodeStyleInstaller {
 		}
 		if (Settings.Formatter.ECLIPSE.equals(settings.getFormatter()) && !isMyProxy(manager)) {
 			EclipseCodeStyleManager overridingObject;
-			if (apiCompatibleWith_2016_3()) {
+			if (compatibleWith_2016_3_API()) {
 				overridingObject = new EclipseCodeStyleManager_IJ_2016_3(manager, settings);
 			} else {
 				overridingObject = new EclipseCodeStyleManager(manager, settings);
 			}
-			CodeStyleManager proxy = createProxy(manager, overridingObject);
+			CodeStyleManager proxy = createProxy((CodeStyleManagerImpl) manager, overridingObject);
 
 			registerCodeStyleManager(project, proxy);
 		}
 	}
 
-	private boolean apiCompatibleWith_2016_3() {
+	private boolean compatibleWith_2016_3_API() {
 		Class<?> aClass = null;
 		try {
 			aClass = Class.forName("com.intellij.psi.codeStyle.ChangedRangesInfo");
