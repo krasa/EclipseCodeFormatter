@@ -8,7 +8,7 @@
 
 package krasa.formatter.plugin;
 
-import krasa.formatter.settings.Settings;
+import static krasa.formatter.plugin.ProxyUtils.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +17,9 @@ import org.picocontainer.MutablePicoContainer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
+
+import krasa.formatter.settings.Settings;
 
 /**
  * Switches a project's {@link CodeStyleManager} to a eclipse formatter and back.
@@ -52,22 +55,39 @@ public class ProjectCodeStyleInstaller {
 	private void installCodeFormatter(@NotNull Settings settings) {
 		CodeStyleManager manager = CodeStyleManager.getInstance(project);
 		String canonicalName = manager.getClass().getCanonicalName();
-		if (!canonicalName.startsWith("com.intellij") && !canonicalName.startsWith("krasa")) {
+		if (!(manager instanceof CodeStyleManagerImpl)) {
 			throw new RuntimeException("CodeStyleManager conflict, another formatter plugin is probably installed: " + canonicalName);
 		}
-		if (Settings.Formatter.ECLIPSE.equals(settings.getFormatter())) {
-			registerCodeStyleManager(project, new EclipseCodeStyleManager(manager, settings));
+		if (Settings.Formatter.ECLIPSE.equals(settings.getFormatter()) && !isMyProxy(manager)) {
+			EclipseCodeStyleManager overridingObject;
+			if (compatibleWith_2016_3_API()) {
+				overridingObject = new EclipseCodeStyleManager_IJ_2016_3(manager, settings);
+			} else {
+				overridingObject = new EclipseCodeStyleManager(manager, settings);
+			}
+			CodeStyleManager proxy = createProxy((CodeStyleManagerImpl) manager, overridingObject);
+
+			registerCodeStyleManager(project, proxy);
 		}
 	}
+
+	private boolean compatibleWith_2016_3_API() {
+		Class<?> aClass = null;
+		try {
+			aClass = Class.forName("com.intellij.psi.codeStyle.ChangedRangesInfo");
+		} catch (ClassNotFoundException e) {
+		}
+		return aClass != null;
+	}
+
 
 	private void uninstallCodeFormatter() {
-		CodeStyleManager manager = CodeStyleManager.getInstance(project);
-		while (manager instanceof EclipseCodeStyleManager) {
-			manager = ((EclipseCodeStyleManager) manager).getOriginal();
-			registerCodeStyleManager(project, manager);
+		CodeStyleManager delegate = getDelegate(CodeStyleManager.getInstance(project));
+		if (delegate != null) {
+			registerCodeStyleManager(project, delegate);
 		}
-
 	}
+
 
 	/**
 	 * Dmitry Jemerov in unrelated discussion: "Trying to replace IDEA's core components with your custom
@@ -83,5 +103,4 @@ public class ProjectCodeStyleInstaller {
 		container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
 		container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, manager);
 	}
-
 }

@@ -1,22 +1,5 @@
 package krasa.formatter.plugin;
 
-import java.util.*;
-
-import krasa.formatter.eclipse.Classloaders;
-import krasa.formatter.eclipse.CodeFormatterFacade;
-import krasa.formatter.eclipse.JavaCodeFormatterFacade;
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.settings.DisabledFileTypeSettings;
-import krasa.formatter.settings.ProjectSettingsComponent;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.CppPropertiesProvider;
-import krasa.formatter.settings.provider.JSPropertiesProvider;
-import krasa.formatter.utils.FileUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -28,16 +11,32 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.ChangedRangesInfo;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
+import krasa.formatter.eclipse.Classloaders;
+import krasa.formatter.eclipse.CodeFormatterFacade;
+import krasa.formatter.eclipse.JavaCodeFormatterFacade;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.settings.DisabledFileTypeSettings;
+import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.CppPropertiesProvider;
+import krasa.formatter.settings.provider.JSPropertiesProvider;
+import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
+import java.util.*;
 
-	private static final Logger LOG = Logger.getInstance(EclipseCodeStyleManager.class.getName());
+public class EclipseCodeStyleManager {
 
+	private final Logger LOG = Logger.getInstance(this.getClass().getName());
+
+	@NotNull
+	private final CodeStyleManager original;
 	@NotNull
 	private Settings settings;
 	@NotNull
@@ -50,7 +49,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	private EclipseCodeFormatter eclipseCodeFormatterCpp;
 
 	public EclipseCodeStyleManager(@NotNull CodeStyleManager original, @NotNull Settings settings) {
-		super(original);
+		this.original = original;
 		this.settings = settings;
 		notifier = new Notifier();
 	}
@@ -64,21 +63,14 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	};
 
 	// 15
-	@Override
+//	@Override
 	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection)
 			throws IncorrectOperationException {
 		reformatText(psiFile, collection);
 	}
 
-	// 16.3
-	@Override
-	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull ChangedRangesInfo changedRangesInfo)
-			throws IncorrectOperationException {
-		List<TextRange> allChangedRanges = changedRangesInfo.allChangedRanges;
-		reformatText(psiFile, allChangedRanges);
-	}
 
-	@Override
+	//	@Override
 	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
 			throws IncorrectOperationException {
 		List<TextRange> list = new ArrayList<TextRange>(textRanges);
@@ -86,7 +78,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 		format(psiFile, list, Mode.ALWAYS_FORMAT);
 	}
 
-	@Override
+	//	@Override
 	// todo should I even override this method?
 	public void reformatText(@NotNull final PsiFile psiFile, final int startOffset, final int endOffset)
 			throws IncorrectOperationException {
@@ -95,7 +87,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 
 	private void format(PsiFile psiFile, List<TextRange> list, Mode mode) {
 		ApplicationManager.getApplication().assertWriteAccessAllowed();
-		PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
+		PsiDocumentManager.getInstance(original.getProject()).commitAllDocuments();
 		boolean formattedByIntelliJ = false;
 		CheckUtil.checkWritable(psiFile);
 		if (psiFile.getVirtualFile() == null) {
@@ -264,6 +256,7 @@ public class EclipseCodeStyleManager extends DelegatingCodeStyleManager {
 	}
 
 	private void formatWithIntelliJ(PsiFile psiFile, int startOffset, int endOffset) {
+		LOG.debug("formatting with IntelliJ formatter");
 		original.reformatText(psiFile, startOffset, endOffset);
 	}
 
