@@ -40,7 +40,7 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>16.1 (2016-11-30)
+        <br>16.1 (2017-01-10)
         <br>- Support for Workspace Mechanic configuration files (*.epf) (Java formatter only)
         <br>- hooking on IntelliJ API with dynamic proxies
         <br>16.0 (2016-09-07)
