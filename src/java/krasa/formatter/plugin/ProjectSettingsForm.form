@@ -545,7 +545,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Eclipse 4.4"/>
+          <text value="Eclipse 4.4 Luna"/>
         </properties>
       </component>
       <component id="6d94a" class="javax.swing.JLabel" binding="javaFormatterVersionLabel">
@@ -573,7 +573,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Custom Eclipse location (4.5+)"/>
+          <text value="Custom Eclipse location (4.5+ / Mars+)"/>
         </properties>
       </component>
       <component id="6e4e8" class="javax.swing.JTextField" binding="pathToCustomEclipse">
