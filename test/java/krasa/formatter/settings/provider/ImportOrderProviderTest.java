@@ -1,11 +1,9 @@
 package krasa.formatter.settings.provider;
 
 import krasa.formatter.settings.Settings;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.List;
 
 public class ImportOrderProviderTest {
@@ -15,23 +13,30 @@ public class ImportOrderProviderTest {
 
 	@Test
 	public void testReadFile() throws Exception {
-		Settings settings = new Settings();
-		File file = FileUtils.getFile("resources/bcjur2.importorder");
-		settings.setImportOrderConfigFilePath(file.getAbsolutePath());
-		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
-		List<String> stringList = importOrderProvider.get();
+		List<String> importOrder = getOrderFromFile("resources/bcjur2.importorder");
 
-		org.junit.Assert.assertArrayEquals(ORDER, stringList.toArray(new String[stringList.size()]));
+		org.junit.Assert.assertArrayEquals(ORDER, importOrder.toArray(new String[importOrder.size()]));
 	}
 
 	@Test
 	public void issue104() throws Exception {
-		Settings settings = new Settings();
-		File file = FileUtils.getFile("resources/issue104.importorder");
-		settings.setImportOrderConfigFilePath(file.getAbsolutePath());
-		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
-		List<String> stringList = importOrderProvider.get();
+		List<String> importOrder = getOrderFromFile("resources/issue104.importorder");
 
-		org.junit.Assert.assertArrayEquals(ORDER_2, stringList.toArray(new String[stringList.size()]));
+		org.junit.Assert.assertArrayEquals(ORDER_2, importOrder.toArray(new String[importOrder.size()]));
+	}
+
+	@Test
+	public void issue130_incorrect_parsing_of_import_order_from_prefs() throws Exception {
+		List<String> importOrder = getOrderFromFile("resources/issue130.importorder");
+		List<String> importOrder2 = getOrderFromFile("resources/issue130.prefs");
+
+		org.junit.Assert.assertEquals(importOrder, importOrder2);
+	}
+
+	private List<String> getOrderFromFile(String s) {
+		Settings settings = new Settings();
+		settings.setImportOrderConfigFilePath(FileUtils.getFile(s).getAbsolutePath());
+		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
+		return importOrderProvider.get();
 	}
 }

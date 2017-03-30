@@ -1,9 +1,9 @@
 package krasa.formatter.utils;
 
+import krasa.formatter.settings.Settings;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import krasa.formatter.settings.Settings;
 
 /**
  * @author Vojtech Krasa
@@ -40,9 +40,7 @@ public class StringUtils {
 		String[] split = importOrder1.split(";");
 		for (String s : split) {
 			String trim = s.trim();
-			if (!trim.isEmpty()) {
-				strings.add(trim);
-			}
+			strings.add(trim);
 		}
 		return strings;
 	}

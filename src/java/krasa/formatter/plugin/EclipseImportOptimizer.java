@@ -1,7 +1,5 @@
 package krasa.formatter.plugin;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
@@ -9,13 +7,13 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.psi.*;
-
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.ProjectSettingsComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vojtech Krasa
@@ -119,7 +117,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 			final ImportOrderProvider importOrderProviderFromFile = settings.getImportOrderProvider();
 			return new ImportSorterAdapter(settings.getImportOrdering(), importOrderProviderFromFile.get());
 		} else {
-			return new ImportSorterAdapter(settings.getImportOrdering(), settings.getImportOrderAsList());
+			return new ImportSorterAdapter(settings.getImportOrdering(), ImportOrderProvider.toList(settings.getImportOrder()));
 		}
 	}
 

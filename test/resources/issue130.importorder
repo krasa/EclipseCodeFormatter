@@ -1,0 +1,16 @@
+#Organize Import Order
+#Thu Mar 30 14:07:30 CDT 2017
+9=
+8=com.datalogics
+7=com.adobe
+6=\#javax
+5=\#java
+13=javax
+4=\#com
+12=java
+3=\#org
+11=com
+2=\#
+10=org
+1=\#com.datalogics
+0=\#com.adobe

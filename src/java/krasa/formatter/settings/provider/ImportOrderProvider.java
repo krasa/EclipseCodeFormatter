@@ -18,13 +18,17 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 		super(new ModifiableFile(settings.getImportOrderConfigFilePath()));
 	}
 
+	public static List<String> toList(String importOrder) {
+		return StringUtils.trimToList(importOrder);
+	}
+
 	@Override
 	protected List<String> readFile(File file) {
 		Properties properties = FileUtils.readPropertiesFile(file);
 		String property = properties.getProperty("org.eclipse.jdt.ui.importorder");
 		List<String> order;
 		if (property != null) {
-			order = StringUtils.trimToList(property);
+			order = toList(property);
 		} else if (property == null && file.getName().endsWith(".prefs")) {
 			throw new ParsingFailedException(
 					"File is missing a property 'org.eclipse.jdt.ui.importorder', see instructions.");

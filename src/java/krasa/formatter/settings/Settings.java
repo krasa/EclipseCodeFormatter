@@ -8,17 +8,12 @@
 
 package krasa.formatter.settings;
 
-import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.util.xmlb.annotations.Transient;
-
 import krasa.formatter.settings.provider.CppPropertiesProvider;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
-import krasa.formatter.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
@@ -180,10 +175,6 @@ public class Settings {
 
 	public void setEnableJSFormatting(final boolean enableJSFormatting) {
 		this.enableJSFormatting = enableJSFormatting;
-	}
-
-	public List<String> getImportOrderAsList() {
-		return StringUtils.trimToList(importOrder);
 	}
 
 	public String getImportOrder() {

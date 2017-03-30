@@ -1,20 +1,5 @@
 package krasa.formatter.utils;
 
-import static krasa.formatter.utils.StringUtils.getPackage;
-import static krasa.formatter.utils.StringUtils.getSimpleName;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import krasa.formatter.settings.Settings;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
-import org.picocontainer.PicoContainer;
-
 import com.intellij.openapi.components.BaseComponent;
 import com.intellij.openapi.components.ComponentConfig;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -24,6 +9,19 @@ import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.messages.MessageBus;
+import krasa.formatter.settings.Settings;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.junit.Assert;
+import org.junit.Test;
+import org.picocontainer.PicoContainer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static krasa.formatter.utils.StringUtils.getPackage;
+import static krasa.formatter.utils.StringUtils.getSimpleName;
 
 /**
  * @author Vojtech Krasa
@@ -55,9 +53,9 @@ public class StringUtilsTest {
 	@Test
 	public void testTrimToList() throws Exception {
 		List<String> strings = StringUtils.trimToList("");
-		Assert.assertTrue(strings.isEmpty());
+		Assert.assertFalse(strings.isEmpty());
 		strings = StringUtils.trimToList(" ");
-		Assert.assertTrue(strings.isEmpty());
+		Assert.assertFalse(strings.isEmpty());
 	}
 
 	@Test
