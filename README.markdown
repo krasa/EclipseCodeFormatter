@@ -51,7 +51,7 @@ Currently supports formatting of
 
 # Possible problems with Java formatting #
 - @formatter:off is not working 
-  - >> https://github.com/krasa/EclipseCodeFormatter/issues/64
+  - https://github.com/krasa/EclipseCodeFormatter/issues/64
 - nothing was formatted or formatting failed 
   - make sure you are using proper language level (Main Menu | File | Project Structure) 
 - trailing spaces inside javadocs are stripped.  
