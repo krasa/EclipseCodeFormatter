@@ -30,7 +30,7 @@ public class ChangeFormatterToolbarAction extends AnAction {
 			settings = instance.getSettings();
 			settings.setFormatter(Settings.Formatter.DEFAULT == settings.getFormatter() ? Settings.Formatter.ECLIPSE
 					: Settings.Formatter.DEFAULT);
-			instance.install(settings);
+			instance.installOrUpdate(settings);
 			updateIcon(settings, e.getPresentation());
 		}
 	}

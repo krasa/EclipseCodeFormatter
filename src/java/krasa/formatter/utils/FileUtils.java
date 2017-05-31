@@ -1,8 +1,17 @@
 package krasa.formatter.utils;
 
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.plugin.InvalidPropertyFile;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
@@ -12,18 +21,9 @@ import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 
-import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilderFactory;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.ParsingFailedException;
+import krasa.formatter.plugin.InvalidPropertyFile;
 
 /**
  * @author Vojtech Krasa
@@ -31,6 +31,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class FileUtils {
 	private static final Logger LOG = Logger.getInstance(FileUtils.class.getName());
 
+	public static boolean isWritable(PsiFile psiFile) {
+		return isWritable(psiFile.getVirtualFile(), psiFile.getProject());
+	}
+	      
 	public static boolean isWritable(@NotNull VirtualFile file, @NotNull Project project) {
 		return !ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(file).hasReadonlyFiles();
 	}
@@ -168,4 +172,5 @@ public class FileUtils {
 		}
 		return profileNames;
 	}
+
 }

@@ -1,12 +1,16 @@
 package krasa.formatter.plugin;
 
+import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -15,6 +19,7 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
+
 import krasa.formatter.eclipse.Classloaders;
 import krasa.formatter.eclipse.CodeFormatterFacade;
 import krasa.formatter.eclipse.JavaCodeFormatterFacade;
@@ -26,34 +31,37 @@ import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.CppPropertiesProvider;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
 import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class EclipseCodeStyleManager {
 
 	private final Logger LOG = Logger.getInstance(this.getClass().getName());
 
 	@NotNull
-	private final CodeStyleManager original;
+	protected final CodeStyleManager original;
 	@NotNull
-	private Settings settings;
+	protected volatile Settings settings;
 	@NotNull
 	private Notifier notifier;
 	@Nullable
-	private EclipseCodeFormatter eclipseCodeFormatterJava;
+	private volatile EclipseCodeFormatter eclipseCodeFormatterJava;
 	@Nullable
-	private EclipseCodeFormatter eclipseCodeFormatterJs;
+	private volatile EclipseCodeFormatter eclipseCodeFormatterJs;
 	@Nullable
-	private EclipseCodeFormatter eclipseCodeFormatterCpp;
+	private volatile EclipseCodeFormatter eclipseCodeFormatterCpp;
 
 	public EclipseCodeStyleManager(@NotNull CodeStyleManager original, @NotNull Settings settings) {
 		this.original = original;
 		this.settings = settings;
 		notifier = new Notifier();
 	}
-
+	       
+	public void updateSettings(@NotNull Settings settings) {
+		this.settings = settings;
+		eclipseCodeFormatterJava = null;
+		eclipseCodeFormatterJs = null;
+		eclipseCodeFormatterCpp = null;
+	}
+	
 	private final static Comparator<TextRange> RANGE_COMPARATOR = new Comparator<TextRange>() {
 		@Override
 		public int compare(TextRange range1, TextRange range2) {
@@ -63,33 +71,44 @@ public class EclipseCodeStyleManager {
 	};
 
 	// 15
-//	@Override
+	// @Override
 	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection)
 			throws IncorrectOperationException {
-		reformatText(psiFile, collection);
+		if (!shouldReformatByEclipse(psiFile)) {
+			original.reformatTextWithContext(psiFile, collection);
+		} else {
+			reformatText(psiFile, collection);
+		}
 	}
 
-
-	//	@Override
+	// @Override
 	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
 			throws IncorrectOperationException {
-		List<TextRange> list = new ArrayList<TextRange>(textRanges);
-		Collections.sort(list, Collections.reverseOrder(RANGE_COMPARATOR));
-		format(psiFile, list, Mode.ALWAYS_FORMAT);
+		if (!shouldReformatByEclipse(psiFile)) {
+			original.reformatText(psiFile, textRanges);
+		} else {
+			List<TextRange> list = new ArrayList<TextRange>(textRanges);
+			Collections.sort(list, Collections.reverseOrder(RANGE_COMPARATOR));
+			formatInternal(psiFile, list, Mode.ALWAYS_FORMAT);
+		}
 	}
 
-	//	@Override
+	// @Override
 	// todo should I even override this method?
 	public void reformatText(@NotNull final PsiFile psiFile, final int startOffset, final int endOffset)
 			throws IncorrectOperationException {
-		format(psiFile, Arrays.asList(new TextRange(startOffset, endOffset)), Mode.WITH_CTRL_SHIFT_ENTER_CHECK);
+		if (!shouldReformatByEclipse(psiFile)) {
+			original.reformatText(psiFile, startOffset, endOffset);
+		} else {
+			formatInternal(psiFile, Arrays.asList(new TextRange(startOffset, endOffset)), Mode.WITH_CTRL_SHIFT_ENTER_CHECK);
+		}
 	}
 
-	private void format(PsiFile psiFile, List<TextRange> list, Mode mode) {
+	private void formatInternal(PsiFile psiFile, List<TextRange> list, Mode mode) {
 		ApplicationManager.getApplication().assertWriteAccessAllowed();
 		PsiDocumentManager.getInstance(original.getProject()).commitAllDocuments();
-		boolean formattedByIntelliJ = false;
 		CheckUtil.checkWritable(psiFile);
+		
 		if (psiFile.getVirtualFile() == null) {
 			LOG.debug("virtual file is null");
 			Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
@@ -97,11 +116,12 @@ public class EclipseCodeStyleManager {
 			notifier.showNotification(notification, psiFile.getProject());
 			return;
 		}
+		
 		int startOffset = -1;
 		int endOffset = -1;
+		boolean formattedByIntelliJ = false;
 		try {
 
-			boolean canReformatWithEclipse = canReformatWithEclipse(psiFile);
 			boolean wholeFileOrSelectedText = wholeFileOrSelectedText(psiFile, list);
 			boolean notify = false;
 
@@ -110,7 +130,7 @@ public class EclipseCodeStyleManager {
 				endOffset = textRange.getEndOffset();
 				LOG.debug("format " + psiFile.getName() + " " + startOffset + " " + endOffset);
 
-				if (canReformatWithEclipse && shouldReformat(wholeFileOrSelectedText, mode)) {
+				if (mode.shouldReformat(wholeFileOrSelectedText)) {
 					try {
 						formatWithEclipse(psiFile, startOffset, endOffset);
 						notify = notify || shouldNotify(psiFile, startOffset, endOffset);
@@ -188,18 +208,6 @@ public class EclipseCodeStyleManager {
 		return result;
 	}
 
-	private boolean shouldReformat(boolean wholeFileOrSelectedText, Mode mode) {
-		switch (mode) {
-		/* when formatting only vcs changes, this is needed. */
-		case ALWAYS_FORMAT:
-			return true;
-		/* live templates gets broken without that */
-		case WITH_CTRL_SHIFT_ENTER_CHECK:
-			return wholeFileOrSelectedText;
-		}
-		return true;
-	}
-
 	private void formatWithEclipse(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {
 		if (FileUtils.isJavaScript(psiFile)) {
 			if (eclipseCodeFormatterJs == null) {
@@ -233,7 +241,7 @@ public class EclipseCodeStyleManager {
 			if (editor != null) {
 				Document document = editor.getDocument();
 				String text = document.getText();
-				if (!FileUtils.isWholeFile(startOffset, endOffset, text) || isFocusInEditorAndSelectedText()) {
+				if (!FileUtils.isWholeFile(startOffset, endOffset, text) ) {
 					return false;
 				}
 			}
@@ -244,15 +252,10 @@ public class EclipseCodeStyleManager {
 		return true;
 	}
 
-	// todo rozlisit oznacenej celej file v editoru od normalniho formatovani
-	private boolean isFocusInEditorAndSelectedText() {
-		return false;
-	}
 
-	public boolean canReformatWithEclipse(PsiFile psiFile) {
-		Project project = psiFile.getProject();
-		return psiFile.getVirtualFile().isInLocalFileSystem() && FileUtils.isWritable(psiFile.getVirtualFile(), project)
-				&& fileTypeIsEnabled(psiFile);
+	public boolean shouldReformatByEclipse(PsiFile psiFile) {
+		return settings.isEnabled() && fileTypeIsEnabled(psiFile) && psiFile.getVirtualFile().isInLocalFileSystem()
+				&& FileUtils.isWritable(psiFile);
 	}
 
 	private void formatWithIntelliJ(PsiFile psiFile, int startOffset, int endOffset) {

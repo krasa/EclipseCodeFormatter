@@ -8,22 +8,20 @@
 
 package krasa.formatter.plugin;
 
-import static krasa.formatter.plugin.ProxyUtils.*;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.picocontainer.MutablePicoContainer;
-
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
-
 import krasa.formatter.settings.Settings;
+import org.jetbrains.annotations.NotNull;
+import org.picocontainer.MutablePicoContainer;
+
+import static krasa.formatter.plugin.ProxyUtils.createProxy;
+import static krasa.formatter.plugin.ProxyUtils.isMyProxy;
 
 /**
  * Switches a project's {@link CodeStyleManager} to a eclipse formatter and back.
- * 
+ *
  * @author Esko Luontola
  * @author Vojtech Krasa
  * @since 2.12.2007
@@ -45,30 +43,23 @@ public class ProjectCodeStyleInstaller {
 		return project;
 	}
 
-	public void changeFormatterTo(@Nullable Settings settings) {
-		uninstallCodeFormatter();
-		if (settings != null) {
-			installCodeFormatter(settings);
+	public EclipseCodeStyleManager install(@NotNull Settings settings) {
+		CodeStyleManager currentManager = CodeStyleManager.getInstance(project);
+		if (isMyProxy(currentManager)) {
+			throw new IllegalStateException("already registered");
 		}
-	}
 
-	private void installCodeFormatter(@NotNull Settings settings) {
-		CodeStyleManager manager = CodeStyleManager.getInstance(project);
-		String canonicalName = manager.getClass().getCanonicalName();
-		if (!(manager instanceof CodeStyleManagerImpl)) {
-			throw new RuntimeException("CodeStyleManager conflict, another formatter plugin is probably installed: " + canonicalName);
+		EclipseCodeStyleManager overridingObject;
+		if (compatibleWith_2016_3_API()) {
+			overridingObject = new EclipseCodeStyleManager_IJ_2016_3(currentManager, settings);
+		} else {
+			overridingObject = new EclipseCodeStyleManager(currentManager, settings);
 		}
-		if (Settings.Formatter.ECLIPSE.equals(settings.getFormatter()) && !isMyProxy(manager)) {
-			EclipseCodeStyleManager overridingObject;
-			if (compatibleWith_2016_3_API()) {
-				overridingObject = new EclipseCodeStyleManager_IJ_2016_3(manager, settings);
-			} else {
-				overridingObject = new EclipseCodeStyleManager(manager, settings);
-			}
-			CodeStyleManager proxy = createProxy((CodeStyleManagerImpl) manager, overridingObject);
+		CodeStyleManager proxy = createProxy((CodeStyleManagerImpl) currentManager, overridingObject);
 
-			registerCodeStyleManager(project, proxy);
-		}
+		LOG.info("Overriding " + currentManager.getClass().getCanonicalName() + " with " + overridingObject.getClass().getCanonicalName() + "' for project '" + project.getName() + "' using Mockito CGLIB proxy");
+		registerCodeStyleManager(project, proxy);
+		return overridingObject;
 	}
 
 	private boolean compatibleWith_2016_3_API() {
@@ -81,26 +72,17 @@ public class ProjectCodeStyleInstaller {
 	}
 
 
-	private void uninstallCodeFormatter() {
-		CodeStyleManager delegate = getDelegate(CodeStyleManager.getInstance(project));
-		if (delegate != null) {
-			registerCodeStyleManager(project, delegate);
-		}
-	}
-
-
 	/**
 	 * Dmitry Jemerov in unrelated discussion: "Trying to replace IDEA's core components with your custom
 	 * implementations is something that we consider a very bad idea, and it's pretty much guaranteed to break in future
 	 * versions of IntelliJ IDEA. I certainly hope that you won't stomp on any other plugins doing that, because no one
 	 * else is doing it. It would be better to find another approach to solving your problem."
-	 * 
-	 * LoL
+	 * <p>
+	 * lol
 	 */
-	private static void registerCodeStyleManager(@NotNull Project project, @NotNull CodeStyleManager manager) {
-		LOG.info("Registering code style manager '" + manager + "' for project '" + project.getName() + "'");
+	private static void registerCodeStyleManager(@NotNull Project project, @NotNull CodeStyleManager newManager) {
 		MutablePicoContainer container = (MutablePicoContainer) project.getPicoContainer();
 		container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
-		container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, manager);
+		container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, newManager);
 	}
 }

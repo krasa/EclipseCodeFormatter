@@ -13,6 +13,7 @@ import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import krasa.formatter.plugin.EclipseCodeStyleManager;
 import krasa.formatter.plugin.ProjectCodeStyleInstaller;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,9 +28,9 @@ public class ProjectSettingsComponent implements ProjectComponent {
 
 	private static final Logger LOG = Logger.getInstance(ProjectSettingsComponent.class.getName());
 	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error",
-			NotificationDisplayType.BALLOON, true);
+	 NotificationDisplayType.BALLOON, true);
 	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup("Eclipse code formatter info",
-			NotificationDisplayType.NONE, true);
+	 NotificationDisplayType.NONE, true);
 
 	@NotNull
 	private final ProjectCodeStyleInstaller projectCodeStyle;
@@ -37,6 +38,7 @@ public class ProjectSettingsComponent implements ProjectComponent {
 	protected Project project;
 	@NotNull
 	private ProjectPersistentStateComponent stateComponent;
+	private EclipseCodeStyleManager eclipseCodeStyleManager;
 
 	public ProjectSettingsComponent(@NotNull Project project, @NotNull ProjectPersistentStateComponent stateComponent) {
 		this.projectCodeStyle = new ProjectCodeStyleInstaller(project);
@@ -48,17 +50,10 @@ public class ProjectSettingsComponent implements ProjectComponent {
 		return getInstance(psiFile.getProject()).getSettings();
 	}
 
-	public void install(@NotNull Settings settings) {
-		projectCodeStyle.changeFormatterTo(settings);
-	}
-
-	private void uninstall() {
-		projectCodeStyle.changeFormatterTo(null);
-	}
-
 	@Override
 	public void initComponent() {
 	}
+
 
 	@Override
 	public void disposeComponent() {
@@ -72,17 +67,24 @@ public class ProjectSettingsComponent implements ProjectComponent {
 
 	public void settingsUpdatedFromOtherProject(Settings updatedSettings) {
 		stateComponent.settingsUpdatedFromOtherProject(updatedSettings);
-		install(stateComponent.getState());
+		installOrUpdate(stateComponent.getState());
 	}
 
 	@Override
 	public void projectOpened() {
-		install(stateComponent.getState());
+		installOrUpdate(stateComponent.getState());
+	}
+
+	public void installOrUpdate(@NotNull Settings settings) {
+		if (eclipseCodeStyleManager == null) {
+			eclipseCodeStyleManager = projectCodeStyle.install(settings);
+		} else {
+			eclipseCodeStyleManager.updateSettings(settings);
+		}
 	}
 
 	@Override
 	public void projectClosed() {
-		uninstall();
 	}
 
 	public static ProjectSettingsComponent getInstance(Project project) {
