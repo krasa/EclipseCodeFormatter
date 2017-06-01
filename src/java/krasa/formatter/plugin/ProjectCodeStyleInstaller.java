@@ -11,7 +11,6 @@ package krasa.formatter.plugin;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
 import krasa.formatter.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.picocontainer.MutablePicoContainer;
@@ -55,7 +54,7 @@ public class ProjectCodeStyleInstaller {
 		} else {
 			overridingObject = new EclipseCodeStyleManager(currentManager, settings);
 		}
-		CodeStyleManager proxy = createProxy((CodeStyleManagerImpl) currentManager, overridingObject);
+		CodeStyleManager proxy = createProxy(currentManager, overridingObject);
 
 		LOG.info("Overriding " + currentManager.getClass().getCanonicalName() + " with " + overridingObject.getClass().getCanonicalName() + "' for project '" + project.getName() + "' using Mockito CGLIB proxy");
 		registerCodeStyleManager(project, proxy);

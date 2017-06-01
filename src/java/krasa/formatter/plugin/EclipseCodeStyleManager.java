@@ -275,4 +275,7 @@ public class EclipseCodeStyleManager {
 				|| (FileUtils.isCpp(psiFile) && settings.isEnableCppFormatting());
 	}
 
+	public boolean isEnabled() {
+		return settings.isEnabled();
+	}
 }
