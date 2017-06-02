@@ -1,0 +1,9 @@
+<templateSet group="surround">
+  <template name="FO" value="// @formatter:off&#10;$SELECTION$&#10;// @formatter:on&#10;$END$" description="Surround with @formatter:off" toReformat="false" toShortenFQNames="false">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+      <option name="COMPLETION" value="false" />
+      <option name="JAVA_STRING" value="false" />
+    </context>
+  </template>
+</templateSet>
