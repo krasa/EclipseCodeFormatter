@@ -67,12 +67,12 @@ public class ProjectSettingsComponent implements ProjectComponent {
 
 	public void settingsUpdatedFromOtherProject(Settings updatedSettings) {
 		stateComponent.settingsUpdatedFromOtherProject(updatedSettings);
-		installOrUpdate(stateComponent.getState());
+		installOrUpdate(stateComponent.getSettings());
 	}
 
 	@Override
 	public void projectOpened() {
-		installOrUpdate(stateComponent.getState());
+		installOrUpdate(stateComponent.getSettings());
 	}
 
 	public void installOrUpdate(@NotNull Settings settings) {
@@ -98,7 +98,7 @@ public class ProjectSettingsComponent implements ProjectComponent {
 
 	@NotNull
 	public Settings getSettings() {
-		return stateComponent.getState();
+		return stateComponent.getSettings();
 	}
 
 	public void loadState(Settings defaultSettings) {

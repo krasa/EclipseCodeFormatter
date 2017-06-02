@@ -26,7 +26,7 @@ public class MyConfigurable implements Configurable {
         this.stateComponent = stateComponent;
         this.project = project;
         if (project.isDefault()) {
-            stateComponent.loadState(stateComponent.getState());
+            stateComponent.loadState(stateComponent.getSettings());
         }
     }
 
@@ -55,11 +55,11 @@ public class MyConfigurable implements Configurable {
 
     @Override
     public boolean isModified() {
-        return form != null && (form.isModified(stateComponent.getState()) || (form.getDisplayedSettings() != null && !isSameId()));
+        return form != null && (form.isModified(stateComponent.getSettings()) || (form.getDisplayedSettings() != null && !isSameId()));
     }
 
     private boolean isSameId() {
-        return ObjectUtils.equals(form.getDisplayedSettings().getId(), stateComponent.getState().getId());
+        return ObjectUtils.equals(form.getDisplayedSettings().getId(), stateComponent.getSettings().getId());
     }
 
     @Override
@@ -67,15 +67,15 @@ public class MyConfigurable implements Configurable {
         if (form != null) {
             form.validate();
             stateComponent.setState(form.exportDisplayedSettings());
-            GlobalSettings.getInstance().updateSettings(stateComponent.getState(), project);
-            ProjectUtils.applyToAllOpenedProjects(stateComponent.getState());
+            GlobalSettings.getInstance().updateSettings(stateComponent.getSettings(), project);
+            ProjectUtils.applyToAllOpenedProjects(stateComponent.getSettings());
         }
     }
 
     @Override
     public void reset() {
         if (form != null) {
-            form.importFrom(stateComponent.getState());
+            form.importFrom(stateComponent.getSettings());
         }
     }
 
