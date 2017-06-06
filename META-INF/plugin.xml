@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>16.5.132.637.0</version>
+	<version>17.0.132.637.0</version>
 
 
     <!--145	IntelliJ IDEA 2016.1, AppCode 2016.1, CLion 2016.1, DataGrip 2016.1, PhpStorm 2016.1, PyCharm 2016.1, RubyMine 2016.1, WebStorm 2016.1-->
@@ -40,8 +40,10 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>16.5 (2017-06-xx)
-        <br>- Add live template for surrounding with @formatter:off
+        <br>17.0 (2017-06-xx)
+        <br>- Introduced Project Specific profile
+        <br>- Migrated mixc.xml persistence to a separate file (.idea/eclipseCodeFormatter.xml)
+        <br>- Added live template for surrounding with @formatter:off
         <br>16.4 (2017-06-02)
         <br>- Improved compatibility with other formatter plugins
         <br>- Fixed unnecessary mixc.xml changes
@@ -148,7 +150,7 @@
 	</application-components>
 	<project-components>
 		<component>
-			<implementation-class>krasa.formatter.settings.ProjectSettingsComponent</implementation-class>
+			<implementation-class>krasa.formatter.settings.ProjectComponent</implementation-class>
 		</component>
 	</project-components>
 	<actions>
@@ -169,7 +171,9 @@
         <projectConfigurable provider="krasa.formatter.settings.MyConfigurableProvider" id="EclipseFormatter"
                              displayName="Eclipse Code Formatter"/>
         <projectService
-                serviceImplementation="krasa.formatter.settings.ProjectPersistentStateComponent"/>
+				serviceImplementation="krasa.formatter.settings.ProjectPersistentStateComponent_Old"/>
+		<projectService
+				serviceImplementation="krasa.formatter.settings.ProjectSettings"/>
 		<defaultLiveTemplatesProvider implementation="krasa.formatter.templates.LiveTemplatesProvider"/>
 	</extensions>
 

@@ -8,12 +8,14 @@
 
 package krasa.formatter.settings;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.util.xmlb.annotations.Transient;
+
 import krasa.formatter.settings.provider.CppPropertiesProvider;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
@@ -45,8 +47,8 @@ public class Settings {
 	private String importOrder = "java;javax;org;com;";
 	private String importOrderConfigFilePath = "";
 	private String selectedJavaProfile = null;
-	private boolean defaultSettings = false;
 	private boolean enableGWT = false;
+
 	@Transient
 	protected transient JavaPropertiesProvider javaPropertiesProvider;
 	@Transient
@@ -55,6 +57,7 @@ public class Settings {
 	protected transient CppPropertiesProvider cppPropertiesProvider;
 	@Transient
 	protected transient ImportOrderProvider importOrderProvider;
+
 	private boolean enableJSProcessor;
 	private String selectedJavaScriptProfile;
 	private String selectedCppProfile;
@@ -193,11 +196,6 @@ public class Settings {
 		importOrderProvider = null;
 		this.importOrderConfigFilePath = importOrderConfigFilePath;
 	}
-
-	public boolean isDefaultSettings() {
-		return defaultSettings;
-	}
-
 	public boolean isEnableGWT() {
 		return enableGWT;
 	}
@@ -278,6 +276,10 @@ public class Settings {
 		if (useOldEclipseJavaFormatter) {
 			eclipseVersion = FormatterVersion.ECLIPSE_44;
 		}
+	}
+
+	public boolean isProjectSpecific() {
+		return this instanceof ProjectSpecificProfile;
 	}
 
 	public static enum FormatterVersion {
@@ -404,8 +406,6 @@ public class Settings {
 			return false;
 		if (formatSeletedTextInAllFileTypes != settings.formatSeletedTextInAllFileTypes)
 			return false;
-		if (defaultSettings != settings.defaultSettings)
-			return false;
 		if (enableGWT != settings.enableGWT)
 			return false;
 		if (enableJSProcessor != settings.enableJSProcessor)
@@ -456,9 +456,6 @@ public class Settings {
 		return importOrderFromFile;
 	}
 
-	public void setDefaultSettings(boolean defaultSettings) {
-		this.defaultSettings = defaultSettings;
-	}
 
 	public void setImportOrderFromFile(boolean importOrderFromFile) {
 		this.importOrderFromFile = importOrderFromFile;

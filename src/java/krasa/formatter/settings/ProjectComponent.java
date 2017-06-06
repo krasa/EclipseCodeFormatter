@@ -7,15 +7,16 @@ package krasa.formatter.settings;/*
  */
 
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
-import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+
 import krasa.formatter.plugin.EclipseCodeStyleManager;
 import krasa.formatter.plugin.ProjectCodeStyleInstaller;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Takes care of initializing a project's CodeFormatter and disposing of it when the project is closed. Updates the
@@ -24,9 +25,9 @@ import org.jetbrains.annotations.NotNull;
  * @author Esko Luontola
  * @since 4.12.2007
  */
-public class ProjectSettingsComponent implements ProjectComponent {
+public class ProjectComponent implements com.intellij.openapi.components.ProjectComponent {
 
-	private static final Logger LOG = Logger.getInstance(ProjectSettingsComponent.class.getName());
+	private static final Logger LOG = Logger.getInstance(ProjectComponent.class.getName());
 	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error",
 	 NotificationDisplayType.BALLOON, true);
 	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup("Eclipse code formatter info",
@@ -37,17 +38,17 @@ public class ProjectSettingsComponent implements ProjectComponent {
 	@NotNull
 	protected Project project;
 	@NotNull
-	private ProjectPersistentStateComponent stateComponent;
+	private ProjectSettings projectSettings;
 	private EclipseCodeStyleManager eclipseCodeStyleManager;
 
-	public ProjectSettingsComponent(@NotNull Project project, @NotNull ProjectPersistentStateComponent stateComponent) {
+	public ProjectComponent(@NotNull Project project, @NotNull ProjectSettings projectSettings) {
 		this.projectCodeStyle = new ProjectCodeStyleInstaller(project);
 		this.project = project;
-		this.stateComponent = stateComponent;
+		this.projectSettings = projectSettings;
 	}
 
 	public static Settings getSettings(PsiFile psiFile) {
-		return getInstance(psiFile.getProject()).getSettings();
+		return getInstance(psiFile.getProject()).getSelectedProfile();
 	}
 
 	@Override
@@ -65,14 +66,10 @@ public class ProjectSettingsComponent implements ProjectComponent {
 		return "ProjectSettingsComponent";
 	}
 
-	public void settingsUpdatedFromOtherProject(Settings updatedSettings) {
-		stateComponent.settingsUpdatedFromOtherProject(updatedSettings);
-		installOrUpdate(stateComponent.getSettings());
-	}
-
 	@Override
 	public void projectOpened() {
-		installOrUpdate(stateComponent.getSettings());
+		projectSettings.projectOpened();
+		installOrUpdate(projectSettings.getSelectedProfile());
 	}
 
 	public void installOrUpdate(@NotNull Settings settings) {
@@ -87,21 +84,27 @@ public class ProjectSettingsComponent implements ProjectComponent {
 	public void projectClosed() {
 	}
 
-	public static ProjectSettingsComponent getInstance(Project project) {
-		return project.getComponent(ProjectSettingsComponent.class);
-	}
-
 	@NotNull
 	public Project getProject() {
 		return project;
 	}
 
 	@NotNull
-	public Settings getSettings() {
-		return stateComponent.getSettings();
+	public Settings getSelectedProfile() {
+		return projectSettings.getSelectedProfile();
 	}
 
-	public void loadState(Settings defaultSettings) {
-		stateComponent.loadState(defaultSettings);
+	public void globalProfileUpdated(@NotNull Settings updatedGlobalProfile) {
+		projectSettings.globalProfileUpdated(updatedGlobalProfile);
+		installOrUpdate(projectSettings.getSelectedProfile());
+	}
+
+	@NotNull
+	public ProjectSettings getProjectSettings() {
+		return projectSettings;
+	}
+
+	public static ProjectComponent getInstance(Project project) {
+		return project.getComponent(ProjectComponent.class);
 	}
 }

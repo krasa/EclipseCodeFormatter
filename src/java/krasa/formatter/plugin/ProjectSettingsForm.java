@@ -53,6 +53,7 @@ import com.intellij.ui.popup.mock.MockConfirmation;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.MyConfigurable;
+import krasa.formatter.settings.ProjectSettings;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 
@@ -109,9 +110,9 @@ public class ProjectSettingsForm {
 	private JButton newProfile;
 	private JButton copyProfile;
 	private JButton rename;
+	private JButton exportToProjectProfile;
 	private JButton delete;
 	private Settings displayedSettings;
-	private Settings projectSettings;
 	private JButton DONATEButton;
 	private JComboBox javaFormatterProfile;
 	private JLabel javaFormatterProfileLabel;
@@ -138,6 +139,7 @@ public class ProjectSettingsForm {
 	private JLabel javaFormatterVersionLabel;
 	private JRadioButton importOrdering451;
 	private JRadioButton importOrdering452;
+	private JButton profileHelp;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -148,17 +150,17 @@ public class ProjectSettingsForm {
 	private void updateComponents() {
 		hidePopups();
 		enabledBy(new JComponent[] { eclipseSupportedFileTypesLabel, enableJavaFormatting, enableJSFormatting,
-						enableCppFormatting, doNotFormatOtherFilesRadioButton, formatOtherFilesWithExceptionsRadioButton,
-						importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
-						importOrderConfigurationManualRadioButton, useEclipse44, useEclipseNewest, useEclipseCustom,
-						formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452 },
+				enableCppFormatting, doNotFormatOtherFilesRadioButton, formatOtherFilesWithExceptionsRadioButton,
+				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
+				importOrderConfigurationManualRadioButton, useEclipse44, useEclipseNewest, useEclipseCustom,
+				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452 },
 				useEclipseFormatter);
 
 		enabledBy(new JComponent[] { pathToEclipsePreferenceFileJava, eclipsePrefsExample,
 				eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox, eclipsePreferenceFilePathJavaBrowse,
 				javaFormatterProfileLabel, javaFormatterProfile, enableGWTNativeMethodsCheckBox,
 				customEclipseLocationBrowse, pathToCustomEclipse, useEclipse44, useEclipseNewest, useEclipseCustom,
-				javaFormatterVersionLabel, importOrdering451, importOrdering452}, enableJavaFormatting);
+				javaFormatterVersionLabel, importOrdering451, importOrdering452 }, enableJavaFormatting);
 
 		enabledBy(new JComponent[] { pathToCustomEclipse, customEclipseLocationBrowse, }, useEclipseCustom);
 
@@ -189,6 +191,10 @@ public class ProjectSettingsForm {
 		disableJavaProfilesIfNecessary();
 		disableJavaScriptProfilesIfNecessary();
 		disableCppProfilesIfNecessary();
+
+		delete.setEnabled(!displayedSettings.isProjectSpecific());
+		rename.setEnabled(!displayedSettings.isProjectSpecific());
+		exportToProjectProfile.setEnabled(!displayedSettings.isProjectSpecific());
 	}
 
 	private void enabledByAny(@NotNull JComponent[] targets, @NotNull JToggleButton[] negated,
@@ -337,7 +343,7 @@ public class ProjectSettingsForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isModified(displayedSettings)) {
-					createConfirmation("Profile was modified, save changes to current profile?", "Yes", "No",
+					createConfirmation("Profile was modified, save changes to the current profile?", "Yes", "No",
 							new Runnable() {
 								@Override
 								public void run() {
@@ -363,7 +369,7 @@ public class ProjectSettingsForm {
 
 			private void createProfile() {
 				Settings settings = GlobalSettings.getInstance().newSettings();
-				refreshProfilesModel();
+				refreshProfilesModel(ProjectSettingsForm.this.profilesModel);
 				profiles.setSelectedItem(settings);
 			}
 		});
@@ -372,7 +378,7 @@ public class ProjectSettingsForm {
 			public void actionPerformed(ActionEvent e) {
 				if (isModified(displayedSettings)) {
 					ListPopup confirmation = createConfirmation(
-							"Profile was modified, save changes to current profile?", "Yes", "No", new Runnable() {
+							"Profile was modified, save changes to the current profile?", "Yes", "No", new Runnable() {
 								@Override
 								public void run() {
 									try {
@@ -398,10 +404,43 @@ public class ProjectSettingsForm {
 			}
 
 			private void copyProfile() {
-				Settings settings = GlobalSettings.getInstance().copySettings(displayedSettings);
-				refreshProfilesModel();
+				Settings settings = GlobalSettings.getInstance().copySettings(project, displayedSettings);
+				refreshProfilesModel(ProjectSettingsForm.this.profilesModel);
 				profiles.setSelectedItem(settings);
+			}
+		});
+		exportToProjectProfile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (isModified(displayedSettings)) {
+					ListPopup confirmation = createConfirmation(
+							"Profile was modified, save changes to the current profile?", "Yes", "No", new Runnable() {
+								@Override
+								public void run() {
+									try {
+										apply();
+										exportProfile();
+									} catch (ConfigurationException e) {
+										Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent,
+												e.getMessage(), e.getTitle(), Messages.getErrorIcon());
+									}
+								}
+							}, new Runnable() {
+								@Override
+								public void run() {
+									exportProfile();
+								}
+							}, 0);
 
+					confirmation.showInFocusCenter();
+				} else {
+					exportProfile();
+				}
+			}
+
+			private void exportProfile() {
+				displayedSettings = null;// disables confirmation dialog from combobox listener
+				profiles.setSelectedItem(ProjectSettings.getInstance(project).getState().getProjectSpecificProfile());
 			}
 		});
 		setJavaFormatterProfileModel();
@@ -418,6 +457,8 @@ public class ProjectSettingsForm {
 					showConfirmationDialogOnProfileChange();
 				} else if (displayedSettings != null && getSelectedItem() != null) {
 					importFromInternal(getSelectedItem());
+				} else if (displayedSettings == null) {
+					displayedSettings = getSelectedItem();
 				}
 			}
 
@@ -467,9 +508,7 @@ public class ProjectSettingsForm {
 					importFromInternal((Settings) itemAt);
 					profiles.setSelectedIndex(selectedIndex - 1);
 				} else {
-					Settings defaultSettings = GlobalSettings.getInstance().getDefaultSettings();
-					importFromInternal(defaultSettings);
-					profiles.setSelectedItem(defaultSettings);
+					profiles.setSelectedIndex(0);
 				}
 
 			}
@@ -477,13 +516,14 @@ public class ProjectSettingsForm {
 		DONATEButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BareBonesBrowserLaunch.openURL("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest");
+				BareBonesBrowserLaunch.openURL(
+						"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest");
 			}
 		});
 		helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BareBonesBrowserLaunch.openURL("http://code.google.com/p/eclipse-code-formatter-intellij-plugin/wiki/HowTo");
+				BareBonesBrowserLaunch.openURL("https://github.com/krasa/EclipseCodeFormatter#instructions");
 			}
 		});
 		;
@@ -504,6 +544,18 @@ public class ProjectSettingsForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				importOrdering452.setSelected(true);
+			}
+		});
+		profileHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Messages.showInfoMessage(project,
+						"<Project Specific> profile is not shared between projects. Other profiles are global - shared, synchronized and stored in the IDE."
+								+ "\nChange of a global profile will result in a change in all opened or closed projects using such profile."
+								+ "\nThe selected global profile is also fully persisted within a project, but most of the data is used only as a backup for syncing between different computers."
+								+ "\n\nPaths macros are automatically managed by the IDE. That can result in '$PROJECT_DIR$' being used for a global profile within a project config file,"
+								+ "\nbut an absolute path is actually used and stored in the IDE config file.",
+						"Profiles and persistence explanation");
 			}
 		});
 	}
@@ -565,15 +617,20 @@ public class ProjectSettingsForm {
 	}
 
 	private SortedComboBoxModel createProfilesModel() {
-		//noinspection unchecked
-		SortedComboBoxModel settingsSortedComboBoxModel = new SortedComboBoxModel(
-				new Comparator<Settings>() {
-					@Override
-					public int compare(Settings o1, Settings o2) {
-						return o1.getName().compareTo(o2.getName());
-					}
-				});
-		settingsSortedComboBoxModel.setAll(GlobalSettings.getInstance().getSettingsList());
+		// noinspection unchecked
+		SortedComboBoxModel settingsSortedComboBoxModel = new SortedComboBoxModel(new Comparator<Settings>() {
+			@Override
+			public int compare(Settings o1, Settings o2) {
+				if (o1.isProjectSpecific()) {
+					return -1;
+				}
+				if (o2.isProjectSpecific()) {
+					return 1;
+				}
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		refreshProfilesModel(settingsSortedComboBoxModel);
 		return settingsSortedComboBoxModel;
 	}
 
@@ -602,13 +659,10 @@ public class ProjectSettingsForm {
 		}, 0).showInCenterOf(profiles);
 	}
 
-	private boolean isSameId() {
-		// return !displayedSettings.getId().equals(getSelectedItem().getId());
-		return displayedSettings.getId().equals(projectSettings.getId());
-	}
-
-	private void refreshProfilesModel() {
+	private void refreshProfilesModel(SortedComboBoxModel profilesModel) {
 		profilesModel.setAll(GlobalSettings.getInstance().getSettingsList());
+		Settings projectSpecificProfile = ProjectSettings.getInstance(project).getState().getProjectSpecificProfile();
+		profilesModel.add(projectSpecificProfile);
 	}
 
 	private Settings getSelectedItem() {
@@ -667,10 +721,6 @@ public class ProjectSettingsForm {
 	}
 
 	public void importFrom(@NotNull Settings in) {
-		boolean displayedSettingsIsNull = displayedSettings == null;
-		if (displayedSettingsIsNull) {
-			projectSettings = in;
-		}
 		// this needs to be before setting displayedSettings so we can disable action listener
 		// and also when we import already displayed settings == reset, no notification is needed.
 		if (displayedSettings == null || in != displayedSettings) {

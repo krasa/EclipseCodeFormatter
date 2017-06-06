@@ -2,15 +2,15 @@ package krasa.formatter.action;
 
 import javax.swing.*;
 
-import krasa.formatter.settings.ProjectSettingsComponent;
-import krasa.formatter.settings.Settings;
-
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
+
+import krasa.formatter.settings.ProjectComponent;
+import krasa.formatter.settings.Settings;
 
 /**
  * @author Vojtech Krasa
@@ -26,11 +26,11 @@ public class ChangeFormatterToolbarAction extends AnAction {
 		Settings settings;
 		Project project = getProject(e);
 		if (project != null) {
-			ProjectSettingsComponent instance = ProjectSettingsComponent.getInstance(project);
-			settings = instance.getSettings();
+			ProjectComponent projectComponent = ProjectComponent.getInstance(project);
+			settings = projectComponent.getSelectedProfile();
 			settings.setFormatter(Settings.Formatter.DEFAULT == settings.getFormatter() ? Settings.Formatter.ECLIPSE
 					: Settings.Formatter.DEFAULT);
-			instance.installOrUpdate(settings);
+			projectComponent.installOrUpdate(settings);
 			updateIcon(settings, e.getPresentation());
 		}
 	}
@@ -39,8 +39,8 @@ public class ChangeFormatterToolbarAction extends AnAction {
 		 Settings settings = null;
 		Project project = getProject(e);
 		if (project != null) {
-			ProjectSettingsComponent instance = ProjectSettingsComponent.getInstance(project);
-			settings = instance.getSettings();
+			ProjectComponent instance = ProjectComponent.getInstance(project);
+			settings = instance.getSelectedProfile();
 		}
 		return settings;
 	}

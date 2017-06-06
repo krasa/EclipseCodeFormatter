@@ -1,5 +1,7 @@
 package krasa.formatter.plugin;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
@@ -7,13 +9,13 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.psi.*;
+
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vojtech Krasa
@@ -42,7 +44,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 			public void run() {
 				intellijRunnable.run();
 				try {
-					Settings settings = ProjectSettingsComponent.getSettings(file);
+					Settings settings = ProjectComponent.getSettings(file);
 					if (isEnabled(settings)) {
 						optimizeImportsByEclipse((PsiJavaFile) file, settings);
 					}
@@ -131,7 +133,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 	}
 
 	private boolean isEnabled(PsiFile file) {
-		Settings settings = ProjectSettingsComponent.getSettings(file);
+		Settings settings = ProjectComponent.getSettings(file);
 		return isEnabled(settings);
 	}
 

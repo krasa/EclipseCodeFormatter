@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import krasa.formatter.plugin.Notifier;
-import krasa.formatter.utils.ProjectUtils;
-import krasa.formatter.utils.StringUtils;
-
+import org.apache.commons.beanutils.BeanUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.application.ApplicationManager;
@@ -17,12 +14,17 @@ import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
+import krasa.formatter.plugin.Notifier;
+import krasa.formatter.utils.ProjectUtils;
+import krasa.formatter.utils.StringUtils;
+
 /**
  * @author Vojtech Krasa
  */
-@State(name = "EclipseCodeFormatterSettings", storages = { @Storage(id = "EclipseCodeFormatterSettings", file = "$APP_CONFIG$/eclipseCodeFormatter.xml") })
-public class GlobalSettings implements ApplicationComponent, PersistentStateComponent<GlobalSettings>,
-		ExportableApplicationComponent {
+@State(name = "EclipseCodeFormatterSettings", storages = {
+		@Storage(id = "EclipseCodeFormatterSettings", file = "$APP_CONFIG$/eclipseCodeFormatter.xml") })
+public class GlobalSettings
+		implements ApplicationComponent, PersistentStateComponent<GlobalSettings>, ExportableApplicationComponent {
 	private List<Settings> settingsList = new ArrayList<Settings>();
 	private List<Long> deletedSettingsId = new ArrayList<Long>();
 
@@ -55,35 +57,29 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 		return aNew;
 	}
 
-	public Settings copySettings(Settings settings) {
-		Settings newSettings = new Settings();
-		XmlSerializerUtil.copyBean(settings, newSettings);
-		newSettings.setName(settings.getName() + " copy");
+	public Settings copySettings(Project project, Settings settings) {
+		Settings newSettings = clone(settings);
+		if (settings.isProjectSpecific()) {
+			newSettings.setName(StringUtils.generateName(settingsList, 1, project.getName(), project.getName()));
+		} else {
+			newSettings.setName(settings.getName() + " copy");
+		}
 		newSettings.setId(generateId());
-		newSettings.setDefaultSettings(false);
 		settingsList.add(newSettings);
 		return newSettings;
 	}
 
-	public Settings clone(Settings settings) {
+	public static Settings clone(Settings settings) {
 		Settings newSettings = new Settings();
-		XmlSerializerUtil.copyBean(settings, newSettings);
+		try {
+			BeanUtils.copyProperties(newSettings, settings);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 		return newSettings;
 	}
 
-	public void updateSettings(Settings settings, Project project) {
-		if (settings.getId() == null) {
-			addToGlobalSettings(settings, project);
-		} else {
-			for (Settings settings1 : settingsList) {
-				if (settings1.getId().equals(settings.getId())) {
-					XmlSerializerUtil.copyBean(settings, settings1);
-				}
-			}
-		}
-	}
-
-	private void addToGlobalSettings(Settings newSettings, Project project) {
+	private void addToGlobalSettings(@NotNull Settings newSettings, @NotNull Project project) {
 		if (newSettings.getId() == null) {
 			newSettings.setId(generateId());
 		}
@@ -105,21 +101,8 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 	}
 
 	@NotNull
-	public Settings getSettings(@NotNull Settings state, @NotNull Project project) {
-		Settings.Formatter formatter = state.getFormatter();
-		Settings clone = clone(getSettingsFromGlobal(state, project));
-		if (!state.isNotSaved()) {
-			clone.setFormatter(formatter);
-		}
-		return clone;
-	}
-
-	private Settings getSettingsFromGlobal(Settings state, Project project) {
+	public Settings getGlobalProfile(@NotNull Settings state, @NotNull Project project) throws DeletedProfileException {
 		if (state.isNotSaved()) {
-			// Settings duplicateSettings = getDuplicateSettings(state);
-			if (isSameAsDefault(state)) {
-				return getDefaultSettings();
-			}
 			addToGlobalSettings(state, project);
 			return state;
 		} else {
@@ -134,35 +117,12 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 				}
 			}
 			if (deletedSettingsId.contains(state.getId())) {
-				Settings defaultSettings = getDefaultSettings();
 				Notifier.notifyDeletedSettings(project);
-				return defaultSettings;
+				throw new DeletedProfileException();
 			}
 			addToGlobalSettings(state, project);
 			return state;
 		}
-	}
-
-	private boolean isSameAsDefault(Settings state) {
-		return new Settings().equalsContent(state) || getDefaultSettings().equalsContent(state);
-	}
-
-	public Settings getDefaultSettings() {
-		for (Settings settings : settingsList) {
-			if (settings.isDefaultSettings()) {
-				return settings;
-			}
-		}
-		Settings aDefault = createDefaultSettings();
-		settingsList.add(aDefault);
-		return aDefault;
-	}
-
-	private Settings createDefaultSettings() {
-		String name = StringUtils.generateName(settingsList, 1, "default");
-		Settings aDefault = new Settings(generateId(), name);
-		aDefault.setDefaultSettings(true);
-		return aDefault;
 	}
 
 	@Override
@@ -194,8 +154,7 @@ public class GlobalSettings implements ApplicationComponent, PersistentStateComp
 	public void delete(Settings settings, Project project) {
 		settingsList.remove(settings);
 		deletedSettingsId.add(settings.getId());
-		Settings defaultSettings = getDefaultSettings();// to create default setting when it was deleted
-		ProjectUtils.notifyProjectsWhichUsesThisSettings(settings, project, defaultSettings);
+		ProjectUtils.notifyProjectsWhichUsesThisSettings(settings, project);
 	}
 
 }

@@ -1,26 +1,25 @@
 package krasa.formatter.utils;
 
-import krasa.formatter.plugin.Notifier;
-import krasa.formatter.settings.ProjectSettingsComponent;
-import krasa.formatter.settings.Settings;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.impl.ProjectManagerImpl;
+
+import krasa.formatter.plugin.Notifier;
+import krasa.formatter.settings.ProjectComponent;
+import krasa.formatter.settings.Settings;
 
 /**
  * @author Vojtech Krasa
  */
 public class ProjectUtils {
 
-	public static void notifyProjectsWhichUsesThisSettings(Settings deletedSettings, Project project,
-			Settings defaultSettings) {
+	public static void notifyProjectsWhichUsesThisSettings(Settings deletedSettings, Project project) {
 		Project[] openProjects = ProjectManagerImpl.getInstance().getOpenProjects();
 		for (Project openProject : openProjects) {
-			ProjectSettingsComponent component = openProject.getComponent(ProjectSettingsComponent.class);
+			ProjectComponent component = openProject.getComponent(ProjectComponent.class);
 			if (component != null) {
-				Settings state = component.getSettings();
+				Settings state = component.getSelectedProfile();
 				if (deletedSettings.getId().equals(state.getId())) {
-					component.loadState(defaultSettings);
+					component.getProjectSettings().getState().setSelectedGlobalProfile(null);
 					if (project != openProject) {
 						Notifier.notifyDeletedSettings(component.getProject());
 					}
@@ -32,11 +31,11 @@ public class ProjectUtils {
 	public static void applyToAllOpenedProjects(Settings updatedSettings) {
 		Project[] openProjects = ProjectManagerImpl.getInstance().getOpenProjects();
 		for (Project openProject : openProjects) {
-			ProjectSettingsComponent component = openProject.getComponent(ProjectSettingsComponent.class);
+			ProjectComponent component = openProject.getComponent(ProjectComponent.class);
 			if (component != null) {
-				Settings state = component.getSettings();
+				Settings state = component.getSelectedProfile();
 				if (updatedSettings.getId().equals(state.getId())) {
-					component.settingsUpdatedFromOtherProject(updatedSettings);
+					component.globalProfileUpdated(updatedSettings);
 				}
 			}
 		}

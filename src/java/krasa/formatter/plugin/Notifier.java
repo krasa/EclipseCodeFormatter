@@ -1,13 +1,13 @@
 package krasa.formatter.plugin;
 
-import krasa.formatter.settings.ProjectSettingsComponent;
-
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+
+import krasa.formatter.settings.ProjectComponent;
 
 /**
  * @author Vojtech Krasa
@@ -29,13 +29,13 @@ public class Notifier {
 		} else {
 			content = psiFile.getName() + " failed to format with IntelliJ code formatter.\n" + reason;
 		}
-		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.ERROR);
 		showNotification(notification, psiFile.getProject());
 	}
 
 	void notifyFormattingWasDisabled(PsiFile psiFile) {
-		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO.createNotification(
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_INFO.createNotification(
 				psiFile.getName() + " - formatting was disabled for this file type", NotificationType.WARNING);
 		showNotification(notification, psiFile.getProject());
 	}
@@ -47,7 +47,7 @@ public class Notifier {
 		} else {
 			content = psiFile.getName() + " formatted successfully by Eclipse code formatter";
 		}
-		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_INFO.createNotification(content,
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_INFO.createNotification(content,
 				NotificationType.INFORMATION);
 		showNotification(notification, psiFile.getProject());
 	}
@@ -63,7 +63,7 @@ public class Notifier {
 
 	public void notifyBrokenImportSorter(Project project) {
 		String content = "Formatting failed due to new Import optimizer.";
-		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.ERROR);
 		showNotification(notification, project);
 
@@ -71,8 +71,8 @@ public class Notifier {
 
 	public static void notifyDeletedSettings(final Project project) {
 		String content = "Eclipse formatter settings profile was deleted for project " + project.getName()
-				+ ". Default settings is used now.";
-		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+				+ ". Check the configuration.";
+		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.ERROR);
 		ApplicationManager.getApplication().invokeLater(new Runnable() {
 			@Override
@@ -86,7 +86,7 @@ public class Notifier {
 		String content = ECLIPSE_4_6 + " formatter requires JRE 1.8+, using formatter from Eclipse 4.4. "
 				+ "You can configure to use 4.4 in the plugin settings to avoid this warning, or use a custom eclipse location for Eclipse 4.5 (JDK 1.7).";
 
-		final Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.WARNING);
 		if (ApplicationManager.getApplication() != null) {// tests hack
 			ApplicationManager.getApplication().invokeLater(new Runnable() {
@@ -99,7 +99,7 @@ public class Notifier {
 	}
 
 	public void configurationError(Exception e, Project project) {
-		Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
 				"Eclipse Formatter configuration error: " + e.getMessage(), NotificationType.ERROR);
 		showNotification(notification, project);
 	}

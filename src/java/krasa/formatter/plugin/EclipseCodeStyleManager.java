@@ -26,7 +26,7 @@ import krasa.formatter.eclipse.JavaCodeFormatterFacade;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
 import krasa.formatter.settings.DisabledFileTypeSettings;
-import krasa.formatter.settings.ProjectSettingsComponent;
+import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.CppPropertiesProvider;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
@@ -111,7 +111,7 @@ public class EclipseCodeStyleManager {
 		
 		if (psiFile.getVirtualFile() == null) {
 			LOG.debug("virtual file is null");
-			Notification notification = ProjectSettingsComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
+			Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
 					Notifier.NO_FILE_TO_FORMAT, NotificationType.ERROR);
 			notifier.showNotification(notification, psiFile.getProject());
 			return;
