@@ -20,6 +20,9 @@ public class ProjectSettings implements PersistentStateComponent<ProjectSettings
 	@Transient
 	private transient Project project;
 
+	public ProjectSettings() {
+	}
+
 	public ProjectSettings(@NotNull Project project) {
 		this.project = project;
 	}
