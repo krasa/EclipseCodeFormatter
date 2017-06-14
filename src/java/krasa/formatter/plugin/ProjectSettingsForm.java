@@ -554,7 +554,7 @@ public class ProjectSettingsForm {
 								+ "\nChange of a global profile will result in a change in all opened or closed projects using such profile."
 								+ "\nThe selected global profile is also fully persisted within a project, but most of the data is used only as a backup for syncing between different computers."
 								+ "\n\nPaths macros are automatically managed by the IDE. That can result in '$PROJECT_DIR$' being used for a global profile within a project config file,"
-								+ "\nbut an absolute path is actually used and stored in the IDE config file.",
+								+ "\nbut an absolute path is actually stored and used in the IDE config file.",
 						"Profiles and persistence explanation");
 			}
 		});

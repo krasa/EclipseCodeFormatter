@@ -25,8 +25,8 @@
         for instructions how to use it.     <br><br>
 
        Currently supports formatting of<br>
-       -Java (bundled Eclipse 4.6 (requires JRE 1.8) and 4.4 libs, also emulates Eclipse's imports optimizing, configurable external Eclipse location for Eclipse 4.5+, Workspace Mechanic support)<br>
-       -C/C++ (Eclipse 4.6 (requires JRE 1.7))<br>
+       -Java (bundled Eclipse 4.6.3 (requires JRE 1.8) and 4.4 libs, also emulates Eclipse's imports optimizing, configurable external Eclipse location for Eclipse 4.5+, Workspace Mechanic support)<br>
+       -C/C++ (Eclipse 4.6.3 (requires JRE 1.7))<br>
        -JavaScript (Eclipse 4.4)<br>
        -GWT (Eclipse 4.4)
 
@@ -41,6 +41,7 @@
 
 	<change-notes><![CDATA[
         <br>17.0 (2017-06-xx)
+        <br>- Bundled formatters from Eclipse 4.6.3
         <br>- Introduced Project Specific profile
         <br>- Migrated mixc.xml persistence to a separate file (.idea/eclipseCodeFormatter.xml)
         <br>- Added live template for surrounding with @formatter:off

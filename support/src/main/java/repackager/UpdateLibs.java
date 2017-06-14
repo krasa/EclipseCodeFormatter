@@ -11,15 +11,14 @@ import com.google.common.io.Files;
 
 public class UpdateLibs {
 
-	private static final File CLASSLOADERS = new File("./src/java/krasa/formatter/eclipse/Classloaders.java");
 
 	public static void main(String[] args) throws IOException {
 		new UpdateLibs().run();
 	}
 
 	private void run() throws IOException {
-		String from = "F:\\workspace\\eclipse-jee-neon-R-win32";
-		File currentJars = new File("support/eclipseLibs45/lib");
+		String from = "F:\\workspace\\eclipse-jee-neon-3-win32\\";
+		File currentJars = new File("support/eclipseLibs/lib");
 		File copyTo = new File(currentJars + "/temp");
 
 		Map<String, String> oldJars = getJarsToUpdate(currentJars);
@@ -28,25 +27,8 @@ public class UpdateLibs {
 
 		copyJars(jarsToCopy, copyTo);
 
-		updateClassloaders(jarsToCopy, oldJars);
 	}
 
-	private void updateClassloaders(List<File> jarsToCopy, Map<String, String> oldJars) throws IOException {
-		assert (CLASSLOADERS.exists());
-		String s = FileUtils.readFileToString(CLASSLOADERS);
-
-		for (File file : jarsToCopy) {
-			String prefix = jarPrefix(file.getName());
-			String oldJar = oldJars.get(prefix);
-			s = s.replace(oldJar, file.getName());
-		}
-		FileUtils.writeStringToFile(CLASSLOADERS, s);
-	}
-
-	private String jarPrefix(String name) {
-		int i = name.indexOf("_");
-		return name.substring(0, i);
-	}
 
 	private Map<String, String> getJarsToUpdate(File t) {
 		Map<String, String> oldJars = new HashMap<String, String>();
