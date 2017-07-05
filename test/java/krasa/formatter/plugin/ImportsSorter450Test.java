@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import krasa.formatter.eclipse.TestUtils;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.StringUtils;
@@ -88,10 +89,15 @@ public class ImportsSorter450Test {
 
 		Settings settings = new Settings();
 		settings.setImportOrderFromFile(true);
-		settings.setImportOrderConfigFilePath("resources/eclipse.importorder");
+		setPath(settings, "resources/eclipse.importorder");
 		List<String> importsOrder1 = new ImportOrderProvider(settings).get();
 		List<String> strings = ImportsSorter450.sort(imports, importsOrder1);
 		printAndAssert(expected, strings);
+	}
+
+	private void setPath(Settings settings, String importOrderConfigFilePath) {
+		importOrderConfigFilePath = TestUtils.normalizeUnitTestPath(importOrderConfigFilePath);
+		settings.setImportOrderConfigFilePath(importOrderConfigFilePath);
 	}
 
 	@Test

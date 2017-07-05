@@ -71,7 +71,11 @@ public class Classloaders {
 	private static File getPluginHome(String eclipseVersion) {
 		File pluginHome;
 		if (isUnitTest()) {
-			pluginHome = new File("../lib/" + eclipseVersion);
+			if (new File("../lib/" + eclipseVersion).exists()) {
+				pluginHome = new File("../lib/" + eclipseVersion);
+			} else {
+				pluginHome = new File("lib/" + eclipseVersion);
+			} 
 		} else {
 			pluginHome = new File(PathManager.getPluginsPath(), "EclipseFormatter/lib/");
 			File preInstalled = new File(PathManager.getPreInstalledPluginsPath(), "EclipseFormatter/lib/");
@@ -109,7 +113,7 @@ public class Classloaders {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	@NotNull
 	public static CodeFormatterFacade getCppFormatter(CppPropertiesProvider cppProperties) {
 		Object o = null;

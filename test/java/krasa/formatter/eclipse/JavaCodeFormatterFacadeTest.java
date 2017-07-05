@@ -75,9 +75,14 @@ public class JavaCodeFormatterFacadeTest {
 	@Before
 	public void setUp() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava(PATH_TO_CONFIG_FILE);
+		setPathToConfigFileJava(settings, PATH_TO_CONFIG_FILE);
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
 				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
+	}
+
+	private void setPathToConfigFileJava(Settings settings, String pathToConfigFile) {
+		pathToConfigFile = TestUtils.normalizeUnitTestPath(pathToConfigFile);
+		settings.setPathToConfigFileJava(pathToConfigFile);
 	}
 
 	@Test
@@ -95,7 +100,7 @@ public class JavaCodeFormatterFacadeTest {
 	@Test
 	public void testFormatByXML() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava("resources/format.xml");
+		setPathToConfigFileJava(settings, "resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
 				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
@@ -108,7 +113,7 @@ public class JavaCodeFormatterFacadeTest {
 	@Test
 	public void testFormatByEPF() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava("resources/mechanic-formatter.epf");
+		setPathToConfigFileJava(settings, "resources/mechanic-formatter.epf");
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
 				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 		String output = format(INPUT);
@@ -120,7 +125,7 @@ public class JavaCodeFormatterFacadeTest {
 	@Test
 	public void testFormatByXML_assertionError() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava("resources/format.xml");
+		setPathToConfigFileJava(settings, "resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
@@ -132,7 +137,7 @@ public class JavaCodeFormatterFacadeTest {
 	@Test
 	public void testFormatByXML_oldFormatter() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava("resources/format.xml");
+		setPathToConfigFileJava(settings, "resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 		settings.setUseOldEclipseJavaFormatter(true);
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
@@ -146,7 +151,7 @@ public class JavaCodeFormatterFacadeTest {
 	@Test
 	public void testFormatByXML_oldFormatter_againToTestClassloader() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJava("resources/format.xml");
+		setPathToConfigFileJava(settings, "resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 		settings.setUseOldEclipseJavaFormatter(true);
 		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),

@@ -1,5 +1,6 @@
 package krasa.formatter.settings.provider;
 
+import krasa.formatter.eclipse.TestUtils;
 import krasa.formatter.settings.Settings;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -33,10 +34,12 @@ public class ImportOrderProviderTest {
 		org.junit.Assert.assertEquals(importOrder, importOrder2);
 	}
 
-	private List<String> getOrderFromFile(String s) {
+	private List<String> getOrderFromFile(String path) {
 		Settings settings = new Settings();
-		settings.setImportOrderConfigFilePath(FileUtils.getFile(s).getAbsolutePath());
+		path = TestUtils.normalizeUnitTestPath(path);
+		settings.setImportOrderConfigFilePath(FileUtils.getFile(path).getAbsolutePath());
 		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
 		return importOrderProvider.get();
 	}
+
 }

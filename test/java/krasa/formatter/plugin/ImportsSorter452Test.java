@@ -172,11 +172,18 @@ public class ImportsSorter452Test {
 
 		Settings settings = new Settings();
 		File file = FileUtils.getFile("resources/issue104.importorder");
-		settings.setImportOrderConfigFilePath(file.getAbsolutePath());
+		setPath(settings, file);
 		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
 
 		List<String> strings = sort(importsList, importOrderProvider.get());
 		printAndAssert(expected, strings);
+	}
+
+	private void setPath(Settings settings, File file) {
+		if (!file.exists()) {
+			file = new File("test/" + file.getPath());
+		}
+		settings.setImportOrderConfigFilePath(file.getAbsolutePath());
 	}
 
 	@Test

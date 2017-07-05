@@ -5,6 +5,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import krasa.formatter.eclipse.TestUtils;
 import org.junit.Test;
 
 /**
@@ -13,7 +14,7 @@ import org.junit.Test;
 public class FileUtilsTest {
 	@Test
 	public void testGetProfileNamesFromConfigXML() throws Exception {
-		File file = new File("resources/format.xml");
+		File file = new File(TestUtils.normalizeUnitTestPath("resources/format.xml"));
 		System.err.println(file.getAbsolutePath());
 		List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(file);
 		Assert.assertFalse(profileNamesFromConfigXML.isEmpty());

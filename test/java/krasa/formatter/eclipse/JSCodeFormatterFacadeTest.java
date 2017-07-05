@@ -29,8 +29,13 @@ public class JSCodeFormatterFacadeTest {
 	@Before
 	public void setUp() throws Exception {
 		Settings settings = new Settings();
-		settings.setPathToConfigFileJS(PATH_TO_CONFIG_FILE);
+		setPath(settings, PATH_TO_CONFIG_FILE);
 		eclipseCodeFormatterFacade = Classloaders.getJsFormatter(new JSPropertiesProvider(settings));
+	}
+
+	private void setPath(Settings settings, String pathToConfigFile) {
+		pathToConfigFile = TestUtils.normalizeUnitTestPath(pathToConfigFile);
+		settings.setPathToConfigFileJS(pathToConfigFile);
 	}
 
 	protected CodeFormatterFacade eclipseCodeFormatterFacade;
