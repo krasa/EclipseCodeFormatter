@@ -14,7 +14,7 @@
     <!--135	IntelliJ IDEA 13.1, WebStorm 8-->
     <!--133	IntelliJ IDEA 13, PhpStorm 7, PyCharm 3.1, WebStorm 7-->
     <!--131	PhpStorm 7, PyCharm 3.0, WebStorm 7-->
-	<idea-version since-build="132.637" until-build=""/>
+	<idea-version since-build="132.637" />
 
 	<description><![CDATA[
         Allows using Eclipse's code formatter directly from IntelliJ.<br>
