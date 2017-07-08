@@ -3,6 +3,8 @@ package krasa.formatter.plugin;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.codeStyle.CodeStyleManager;
@@ -14,6 +16,7 @@ public class CodeStyleManagerDelegator implements InvocationHandler {
 
 	private final CodeStyleManager delegatedObject;
 	private final EclipseCodeStyleManager overridingObject;
+	private Set<Method> notOverriddenMethods = new HashSet<Method>();
 
 	public <T> CodeStyleManagerDelegator(CodeStyleManager delegatedObject, EclipseCodeStyleManager overridingObject) {
 		this.delegatedObject = delegatedObject;
@@ -22,7 +25,7 @@ public class CodeStyleManagerDelegator implements InvocationHandler {
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] rawArguments) throws Throwable {
-		if (!overridingObject.isEnabled()) {
+		if (!overridingObject.isEnabled() || notOverriddenMethods.contains(method)) {
 			return PLEASE_REPORT_BUGS_TO_JETBRAINS_IF_IT_FAILS_HERE____ORIGINAL_INTELLIJ_FORMATTER_WAS_USED(method, rawArguments);
 		} else {
 			try {
@@ -37,6 +40,7 @@ public class CodeStyleManagerDelegator implements InvocationHandler {
 				}
 				return overridingMethod.invoke(overridingObject, rawArguments);
 			} catch (NoSuchMethodException e) {
+				notOverriddenMethods.add(method);
 				if (log.isDebugEnabled()) {
 					log.debug("invoking original {}({})", method.getName(), Arrays.toString(rawArguments));
 				}
