@@ -12,11 +12,11 @@ import com.intellij.util.IncorrectOperationException;
 
 import krasa.formatter.settings.Settings;
 
-public class EclipseCodeStyleManager_IJ_2016_3 extends EclipseCodeStyleManager {
+public class EclipseCodeStyleManager_IJ_2016_3plus extends EclipseCodeStyleManager {
 
-	private static final Logger LOG = Logger.getInstance(EclipseCodeStyleManager_IJ_2016_3.class.getName());
+	private static final Logger LOG = Logger.getInstance(EclipseCodeStyleManager_IJ_2016_3plus.class.getName());
 
-	public EclipseCodeStyleManager_IJ_2016_3(@NotNull CodeStyleManager original, @NotNull Settings settings) {
+	public EclipseCodeStyleManager_IJ_2016_3plus(@NotNull CodeStyleManager original, @NotNull Settings settings) {
 		super(original, settings);
 	}
 

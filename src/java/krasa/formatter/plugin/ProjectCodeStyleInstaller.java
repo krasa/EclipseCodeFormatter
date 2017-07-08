@@ -8,15 +8,16 @@
 
 package krasa.formatter.plugin;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import krasa.formatter.settings.Settings;
+import static krasa.formatter.plugin.ProxyUtils.createProxy;
+
 import org.jetbrains.annotations.NotNull;
 import org.picocontainer.MutablePicoContainer;
 
-import static krasa.formatter.plugin.ProxyUtils.createProxy;
-import static krasa.formatter.plugin.ProxyUtils.isMyProxy;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.codeStyle.CodeStyleManager;
+
+import krasa.formatter.settings.Settings;
 
 /**
  * Switches a project's {@link CodeStyleManager} to a eclipse formatter and back.
@@ -44,13 +45,10 @@ public class ProjectCodeStyleInstaller {
 
 	public EclipseCodeStyleManager install(@NotNull Settings settings) {
 		CodeStyleManager currentManager = CodeStyleManager.getInstance(project);
-		if (isMyProxy(currentManager)) {
-			throw new IllegalStateException("already registered");
-		}
 
 		EclipseCodeStyleManager overridingObject;
 		if (compatibleWith_2016_3_API()) {
-			overridingObject = new EclipseCodeStyleManager_IJ_2016_3(currentManager, settings);
+			overridingObject = new EclipseCodeStyleManager_IJ_2016_3plus(currentManager, settings);
 		} else {
 			overridingObject = new EclipseCodeStyleManager(currentManager, settings);
 		}
