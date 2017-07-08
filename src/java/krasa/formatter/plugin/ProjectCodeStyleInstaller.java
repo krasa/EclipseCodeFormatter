@@ -54,7 +54,8 @@ public class ProjectCodeStyleInstaller {
 		}
 		CodeStyleManager proxy = createProxy(currentManager, overridingObject);
 
-		LOG.info("Overriding " + currentManager.getClass().getCanonicalName() + " with " + overridingObject.getClass().getCanonicalName() + "' for project '" + project.getName() + "' using Mockito CGLIB proxy");
+		LOG.info("Overriding " + currentManager.getClass().getCanonicalName() + " with " + overridingObject.getClass().getCanonicalName() + "' for project '"
+				+ project.getName() + "' using CGLIB proxy");
 		registerCodeStyleManager(project, proxy);
 		return overridingObject;
 	}

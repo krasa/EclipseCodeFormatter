@@ -11,14 +11,14 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 
 import net.sf.cglib.proxy.InvocationHandler;
 
-public class CodeStyleManagerDelegator implements InvocationHandler {
-	private static final Logger log = Logger.getInstance(CodeStyleManagerDelegator.class.getName());
+public class ProxyCodeStyleManagerDelegator implements InvocationHandler {
+	private static final Logger log = Logger.getInstance(ProxyCodeStyleManagerDelegator.class.getName());
 
 	private final CodeStyleManager delegatedObject;
 	private final EclipseCodeStyleManager overridingObject;
-	private Set<Method> notOverriddenMethods = new HashSet<Method>();
+	private final Set<Method> notOverriddenMethods = new HashSet<Method>();
 
-	public <T> CodeStyleManagerDelegator(CodeStyleManager delegatedObject, EclipseCodeStyleManager overridingObject) {
+	public ProxyCodeStyleManagerDelegator(CodeStyleManager delegatedObject, EclipseCodeStyleManager overridingObject) {
 		this.delegatedObject = delegatedObject;
 		this.overridingObject = overridingObject;
 	}
