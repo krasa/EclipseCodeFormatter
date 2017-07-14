@@ -192,4 +192,16 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
     public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
         original.reformatTextWithContext(psiFile, collection);
     }
+
+	//  2017.2
+	@Override
+	public int getSpacing(@NotNull PsiFile file, int offset) {
+		return original.getSpacing(file, offset);
+	}
+
+	//  2017.2
+	@Override
+	public int getMinLineFeeds(@NotNull PsiFile file, int offset) {
+		return original.getMinLineFeeds(file, offset);
+	}
 }

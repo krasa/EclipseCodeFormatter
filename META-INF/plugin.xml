@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	<version>17.0.132.637.1</version>
+    <version>17.1.132.637.0</version>
 
 
     <!--145	IntelliJ IDEA 2016.1, AppCode 2016.1, CLion 2016.1, DataGrip 2016.1, PhpStorm 2016.1, PyCharm 2016.1, RubyMine 2016.1, WebStorm 2016.1-->
@@ -40,6 +40,9 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+        <br>17.1 (2017-07-14)
+        <br>- Javadoc indent fix
+        <br>- Improved performance
         <br>17.0 (2017-07-07)
         <br>- Bundled formatters from Eclipse 4.7
         <br>- Introduced Project Specific profile

@@ -8,16 +8,14 @@
 
 package krasa.formatter.plugin;
 
-import static krasa.formatter.plugin.ProxyUtils.createProxy;
-
-import org.jetbrains.annotations.NotNull;
-import org.picocontainer.MutablePicoContainer;
-
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-
 import krasa.formatter.settings.Settings;
+import org.jetbrains.annotations.NotNull;
+import org.picocontainer.MutablePicoContainer;
+
+import static krasa.formatter.plugin.ProxyUtils.createProxy;
 
 /**
  * Switches a project's {@link CodeStyleManager} to a eclipse formatter and back.
@@ -53,6 +51,7 @@ public class ProjectCodeStyleInstaller {
 			overridingObject = new EclipseCodeStyleManager(currentManager, settings);
 		}
 		CodeStyleManager proxy = createProxy(currentManager, overridingObject);
+//		CodeStyleManager proxy = new ManualCodeStyleManagerDelegator(currentManager, overridingObject);
 
 		LOG.info("Overriding " + currentManager.getClass().getCanonicalName() + " with " + overridingObject.getClass().getCanonicalName() + "' for project '"
 				+ project.getName() + "' using CGLIB proxy");
