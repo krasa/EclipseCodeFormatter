@@ -35,24 +35,6 @@ public class ChangeFormatterToolbarAction extends AnAction {
 		}
 	}
 
-	private Settings getSettings(AnActionEvent e) {
-		 Settings settings = null;
-		Project project = e.getProject();
-		if (project != null) {
-			ProjectComponent instance = ProjectComponent.getInstance(project);
-			settings = instance.getSelectedProfile();
-		}
-		return settings;
-	}
-
-	private void updateIcon(Settings state, Presentation presentation) {
-		if (state.getFormatter() == Settings.Formatter.DEFAULT) {
-			presentation.setIcon(ICON1);
-		} else {
-			presentation.setIcon(ICON);
-		}
-	}
-
 	@Override
 	public void update(AnActionEvent e) {
 		super.update(e);
@@ -65,6 +47,24 @@ public class ChangeFormatterToolbarAction extends AnAction {
 			e.getPresentation().setEnabled(false);
 		}
 
+	}
+
+	private void updateIcon(Settings state, Presentation presentation) {
+		if (state.getFormatter() == Settings.Formatter.DEFAULT) {
+			presentation.setIcon(ICON1);
+		} else {
+			presentation.setIcon(ICON);
+		}
+	}
+
+	private Settings getSettings(AnActionEvent e) {
+		Settings settings = null;
+		Project project = e.getProject();
+		if (project != null) {
+			ProjectComponent instance = ProjectComponent.getInstance(project);
+			settings = instance.getSelectedProfile();
+		}
+		return settings;
 	}
 
 }
