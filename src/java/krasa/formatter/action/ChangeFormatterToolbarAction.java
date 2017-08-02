@@ -24,7 +24,7 @@ public class ChangeFormatterToolbarAction extends AnAction {
 	@Override
 	public void actionPerformed(AnActionEvent e) {
 		Settings settings;
-		Project project = getProject(e);
+		Project project = e.getProject();
 		if (project != null) {
 			ProjectComponent projectComponent = ProjectComponent.getInstance(project);
 			settings = projectComponent.getSelectedProfile();
@@ -37,21 +37,12 @@ public class ChangeFormatterToolbarAction extends AnAction {
 
 	private Settings getSettings(AnActionEvent e) {
 		 Settings settings = null;
-		Project project = getProject(e);
+		Project project = e.getProject();
 		if (project != null) {
 			ProjectComponent instance = ProjectComponent.getInstance(project);
 			settings = instance.getSelectedProfile();
 		}
 		return settings;
-	}
-
-	private Project getProject(AnActionEvent e) {
-		try {
-			return e.getProject();
-		} catch (Throwable e1) {
-			// old version
-		}
-		return e.getProject();
 	}
 
 	private void updateIcon(Settings state, Presentation presentation) {
@@ -66,10 +57,9 @@ public class ChangeFormatterToolbarAction extends AnAction {
 	public void update(AnActionEvent e) {
 		super.update(e);
 		try {
-			Presentation presentation = e.getPresentation();
-			final Settings state = getSettings(e);
-			if (state != null) {
-				updateIcon(state, presentation);
+			final Settings settings = getSettings(e);
+			if (settings != null) {
+				updateIcon(settings, e.getPresentation());
 			}
 		} catch (Throwable e1) {
 			e.getPresentation().setEnabled(false);
