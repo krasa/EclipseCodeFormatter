@@ -79,6 +79,17 @@ public class GlobalSettings
 		return newSettings;
 	}
 
+	public void updateSettings(Settings settings, Project project) {
+		if (settings.getId() == null) {
+			addToGlobalSettings(settings, project);
+		} else {
+			for (Settings settings1 : settingsList) {
+				if (settings1.getId().equals(settings.getId())) {
+					XmlSerializerUtil.copyBean(settings, settings1);
+				}
+			}
+		}
+	}
 	private void addToGlobalSettings(@NotNull Settings newSettings, @NotNull Project project) {
 		if (newSettings.getId() == null) {
 			newSettings.setId(generateId());

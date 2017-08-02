@@ -70,6 +70,10 @@ public class MyConfigurable implements Configurable {
 
 			projectSettings.setProfile(profile);
 
+			if (!profile.isProjectSpecific()) {
+				GlobalSettings.getInstance().updateSettings(profile, project);
+			}
+
 			if (!project.isDefault()) {
 				if (profile.isProjectSpecific()) {
 					ProjectComponent.getInstance(project).installOrUpdate(profile);
