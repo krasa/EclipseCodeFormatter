@@ -8,14 +8,12 @@
 
 package krasa.formatter.settings;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.util.xmlb.annotations.Transient;
-
 import krasa.formatter.settings.provider.CppPropertiesProvider;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JSPropertiesProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
@@ -38,11 +36,13 @@ public class Settings {
 	private Formatter formatter = Formatter.DEFAULT;
 	@NotNull
 	private String pathToConfigFileJava = "";
-	private String disabledFileTypes = "";
 	private boolean optimizeImports = true;
 	private boolean importOrderFromFile = false;
+
+	private String disabledFileTypes = "";
 	private boolean formatOtherFileTypesWithIntelliJ = true;
 	private boolean formatSeletedTextInAllFileTypes = true;
+
 	private Integer notifyFromTextLenght = 300;
 	private String importOrder = "java;javax;org;com;";
 	private String importOrderConfigFilePath = "";
@@ -57,6 +57,8 @@ public class Settings {
 	protected transient CppPropertiesProvider cppPropertiesProvider;
 	@Transient
 	protected transient ImportOrderProvider importOrderProvider;
+	@Transient
+	private transient DisabledFileTypeSettings disabledFileTypeSettings;
 
 	private boolean enableJSProcessor;
 	private String selectedJavaScriptProfile;
@@ -118,8 +120,11 @@ public class Settings {
 		this.name = name;
 	}
 
-	public DisabledFileTypeSettings geDisabledFileTypeSettings() {
-		return new DisabledFileTypeSettings(disabledFileTypes);
+	public DisabledFileTypeSettings getDisabledFileTypeSettings() {
+		if (disabledFileTypeSettings == null) {
+			disabledFileTypeSettings = new DisabledFileTypeSettings(disabledFileTypes);
+		}
+		return disabledFileTypeSettings;
 	}
 
 	public String getSelectedJavaProfile() {
@@ -196,6 +201,7 @@ public class Settings {
 		importOrderProvider = null;
 		this.importOrderConfigFilePath = importOrderConfigFilePath;
 	}
+
 	public boolean isEnableGWT() {
 		return enableGWT;
 	}
@@ -289,11 +295,15 @@ public class Settings {
 	}
 
 	public static enum ImportOrdering {
-		/** not matching imports -> between groups */
+		/**
+		 * not matching imports -> between groups
+		 */
 		ECLIPSE_44,
 		@Deprecated
 		ECLIPSE_451,
-		/** not matching imports -> on the end, actually since Eclipse 4.5.1 :( oops */
+		/**
+		 * not matching imports -> on the end, actually since Eclipse 4.5.1 :( oops
+		 */
 		ECLIPSE_452,
 	}
 
@@ -340,6 +350,7 @@ public class Settings {
 	}
 
 	public void setDisabledFileTypes(String disabledFileTypes) {
+		disabledFileTypeSettings = null;
 		this.disabledFileTypes = disabledFileTypes;
 	}
 
