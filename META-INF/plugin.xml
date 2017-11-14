@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>16.6.132.637.0.Eclipse_4.6.3</version>
+    <version>17.3.132.637.0.Eclipse_4.6.3</version>
 
 
     <!--145	IntelliJ IDEA 2016.1, AppCode 2016.1, CLion 2016.1, DataGrip 2016.1, PhpStorm 2016.1, PyCharm 2016.1, RubyMine 2016.1, WebStorm 2016.1-->
@@ -40,7 +40,9 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-        <br>16.6 (2017-08-02)
+        <br>16.7, 17.3 (2017-11-14)
+        <br>- Fixed: 'Do not format other file types by Intellij formatter'
+        <br>16.6, 17.2 (2017-08-02)
         <br>- Global profiles sync fix
         <br>16.5 (2017-07-20)
         <br>- Release of 17.1 with Eclipse 4.6.3
