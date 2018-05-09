@@ -17,7 +17,7 @@ public class UpdateLibs {
 	}
 
 	private void run() throws IOException {
-		String from = "F:\\workspace\\eclipse-jee-neon-3-win32\\";
+		String from = "F:\\workspace\\eclipse-jee-oxygen-3a-win32-x86_64\\eclipse";
 		File currentJars = new File("support/eclipseLibs/lib");
 		File copyTo = new File(currentJars + "/temp");
 

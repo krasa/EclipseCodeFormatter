@@ -16,6 +16,7 @@ import com.google.common.io.Files;
 @SuppressWarnings("Duplicates")
 public class RepackJars {
 	static StringBuilder log = new StringBuilder();
+	static StringBuilder sizeLog = new StringBuilder();
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// new RepackJars().execute(rootFile("lib/eclipse44"));
@@ -25,6 +26,8 @@ public class RepackJars {
 		System.out.println("-----------------");
 		System.out.println("-----------------");
 		System.out.println(log);
+		System.out.println("-----------------");
+		System.out.println(sizeLog);
 	}
 
 	private static File rootFile(String s) throws IOException {
@@ -121,6 +124,7 @@ public class RepackJars {
 			dest.delete();
 			tmpJarFile.renameTo(dest);
 			print("\tcrap removed: " + dest.getName() + " (" + size(dest) + ", original " + size(srcJarFile) + ")");
+			sizeLog.append(dest.getName() + ": " + size(srcJarFile) + " => " + size(dest)).append("\n"); 
 		} else {
 			throw new RuntimeException(srcJarFile.getCanonicalPath() + " not updated.");
 		}
