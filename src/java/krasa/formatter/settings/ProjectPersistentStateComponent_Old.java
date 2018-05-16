@@ -7,7 +7,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 
 @Deprecated
-@State(name = "EclipseCodeFormatter", storages = { @Storage(id = "other", file = "$PROJECT_FILE$") })
+@State(name = "EclipseCodeFormatter", storages = { @Storage(file = "$PROJECT_FILE$") })
 public class ProjectPersistentStateComponent_Old implements PersistentStateComponent<Settings> {
 
 	protected Settings settings;
