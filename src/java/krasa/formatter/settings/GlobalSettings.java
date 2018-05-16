@@ -22,7 +22,7 @@ import krasa.formatter.utils.StringUtils;
  * @author Vojtech Krasa
  */
 @State(name = "EclipseCodeFormatterSettings", storages = {
-		@Storage(id = "EclipseCodeFormatterSettings", file = "$APP_CONFIG$/eclipseCodeFormatter.xml") })
+		@Storage(file = "$APP_CONFIG$/eclipseCodeFormatter.xml") })
 public class GlobalSettings
 		implements ApplicationComponent, PersistentStateComponent<GlobalSettings>, ExportableApplicationComponent {
 	private List<Settings> settingsList = new ArrayList<Settings>();
