@@ -1,4 +1,4 @@
-# EclipseCodeFormatter #
+# Eclipse Code Formatter [![Donate][badge-paypal-img]][badge-paypal]
 
 Allows using Eclipse's code formatter directly from IntelliJ. Solves the problem of maintaining a common code style in team environments where both IDEA and Eclipse are used.
 
@@ -46,7 +46,7 @@ Currently supports formatting of
 4. Use `Ctrl + Alt + O` as usual, it will use this plugin
 5. Use `Ctrl + ~` for quick switch between formatters or icon at the main toolbar
 6. [Give it 5 stars](http://plugins.jetbrains.com/plugin/?idea&id=6546)
-7. [Donate some money](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest)
+7. [Make a donation](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest)
 
 ## Possible problems with Java formatting ##
 - `@formatter:off` is not working
@@ -83,3 +83,6 @@ and [YourKit .NET Profiler](https://www.yourkit.com/.net/profiler/),
 innovative and intelligent tools for profiling Java and .NET applications.
 
 
+
+[badge-paypal-img]:       https://img.shields.io/badge/donate-paypal-yellow.svg
+[badge-paypal]:           https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20code%20formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
