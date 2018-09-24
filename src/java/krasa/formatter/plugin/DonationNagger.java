@@ -22,7 +22,7 @@ public class DonationNagger {
 
 	public static final String DONATE = "Click <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=75YN7U7H7D7XU&lc=CZ&item_name=Eclipse%20Code%20Formatter%20%2d%20IntelliJ%20plugin%20%2d%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest\">"
 			+ "here</a> if you would like to make a donation via PayPal.";
-	public static final String TITLE = "Thank you for using Eclipse Code Formatter plugin.";
+	public static final String TITLE = "Thank you for using Eclipse Code Formatter";
 
 	private long actionsExecuted;
 	private Date firstUsage;
