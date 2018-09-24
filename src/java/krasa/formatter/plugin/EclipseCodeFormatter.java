@@ -13,6 +13,7 @@ import krasa.formatter.eclipse.Classloaders;
 import krasa.formatter.eclipse.CodeFormatterFacade;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.processor.Processor;
+import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +43,8 @@ public class EclipseCodeFormatter {
 	}
 
 	public void format(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {
+		GlobalSettings.getInstance().getDonationNagger().actionExecuted();
+		
 		LOG.debug("#format " + startOffset + "-" + endOffset);
 		boolean wholeFile = FileUtils.isWholeFile(startOffset, endOffset, psiFile.getText());
 		Range range = new Range(startOffset, endOffset, wholeFile);

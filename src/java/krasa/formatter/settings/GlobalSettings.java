@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import krasa.formatter.plugin.DonationNagger;
 import org.apache.commons.beanutils.BeanUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +28,15 @@ public class GlobalSettings
 		implements ApplicationComponent, PersistentStateComponent<GlobalSettings>, ExportableApplicationComponent {
 	private List<Settings> settingsList = new ArrayList<Settings>();
 	private List<Long> deletedSettingsId = new ArrayList<Long>();
+	private DonationNagger donationNagger = new DonationNagger();
+
+	public DonationNagger getDonationNagger() {
+		return donationNagger;
+	}
+
+	public void setDonationNagger(DonationNagger donationNagger) {
+		this.donationNagger = donationNagger;
+	}
 
 	public static GlobalSettings getInstance() {
 		return ApplicationManager.getApplication().getComponent(GlobalSettings.class);
