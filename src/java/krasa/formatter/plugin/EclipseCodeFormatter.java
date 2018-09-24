@@ -43,8 +43,6 @@ public class EclipseCodeFormatter {
 	}
 
 	public void format(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {
-		GlobalSettings.getInstance().getDonationNagger().actionExecuted();
-		
 		LOG.debug("#format " + startOffset + "-" + endOffset);
 		boolean wholeFile = FileUtils.isWholeFile(startOffset, endOffset, psiFile.getText());
 		Range range = new Range(startOffset, endOffset, wholeFile);
@@ -59,7 +57,8 @@ public class EclipseCodeFormatter {
 		} else {
 			formatWhenEditorIsClosed(range, psiFile);
 		}
-
+		               
+		GlobalSettings.getInstance().getDonationNagger().actionExecuted();
 	}
 
 	private void formatWhenEditorIsClosed(Range range, PsiFile psiFile) throws FileDoesNotExistsException {
