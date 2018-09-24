@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>18.1.181.000.0-Eclipse_4.7.3a</version>
+    <version>18.2.181.000.0-Eclipse_4.8.0</version>
 
 
     <!--145	IntelliJ IDEA 2016.1, AppCode 2016.1, CLion 2016.1, DataGrip 2016.1, PhpStorm 2016.1, PyCharm 2016.1, RubyMine 2016.1, WebStorm 2016.1-->
@@ -25,7 +25,7 @@
         for instructions how to use it.     <br><br>
 
        Currently supports formatting of<br>
-       -Java (bundled Eclipse 4.6.3 Neon or 4.7.3a Oxygen.3a (requires JRE 1.8) and 4.4 libs, also emulates Eclipse's imports optimizing, configurable external Eclipse location for Eclipse 4.5+, Workspace Mechanic support)<br>
+       -Java (bundled Eclipse 4.6.3 Neon or 4.8.0 Photon (requires JRE 1.8) and 4.4 libs, also emulates Eclipse's imports optimizing, configurable external Eclipse location for Eclipse 4.5+, Workspace Mechanic support)<br>
        -C/C++ (Eclipse 4.6.3 (requires JRE 1.7))<br>
        -JavaScript (Eclipse 4.4)<br>
        -GWT (Eclipse 4.4)
@@ -40,6 +40,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>18.2 (2018-09-10)
+	    <br>- Java formatter updated to Photon Release (4.8.0)
         <br>18.1 (2018-05-16)
         <br>- IJ 2018.2 compatibility
         <br>18.0 (2018-05-09)
