@@ -49,7 +49,6 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
-
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.MyConfigurable;
@@ -149,44 +148,38 @@ public class ProjectSettingsForm {
 
 	private void updateComponents() {
 		hidePopups();
-		enabledBy(new JComponent[] { eclipseSupportedFileTypesLabel, enableJavaFormatting, enableJSFormatting,
+		enabledBy(new JComponent[]{eclipseSupportedFileTypesLabel, enableJavaFormatting, enableJSFormatting,
 				enableCppFormatting, doNotFormatOtherFilesRadioButton, formatOtherFilesWithExceptionsRadioButton,
 				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
 				importOrderConfigurationManualRadioButton, useEclipse44, useEclipseNewest, useEclipseCustom,
-				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452 },
-				useEclipseFormatter);
+				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452}, useEclipseFormatter);
 
-		enabledBy(new JComponent[] { pathToEclipsePreferenceFileJava, eclipsePrefsExample,
-				eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox, eclipsePreferenceFilePathJavaBrowse,
-				javaFormatterProfileLabel, javaFormatterProfile, enableGWTNativeMethodsCheckBox,
-				customEclipseLocationBrowse, pathToCustomEclipse, useEclipse44, useEclipseNewest, useEclipseCustom,
-				javaFormatterVersionLabel, importOrdering451, importOrdering452 }, enableJavaFormatting);
+		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
+				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, enableGWTNativeMethodsCheckBox,
+				customEclipseLocationBrowse, pathToCustomEclipse, useEclipse44, useEclipseNewest, useEclipseCustom, javaFormatterVersionLabel,
+				importOrdering451, importOrdering452}, enableJavaFormatting);
 
-		enabledBy(new JComponent[] { pathToCustomEclipse, customEclipseLocationBrowse, }, useEclipseCustom);
+		enabledBy(new JComponent[]{pathToCustomEclipse, customEclipseLocationBrowse,}, useEclipseCustom);
 
-		enabledBy(
-				new JComponent[] { importOrder, pathToImportOrderPreferenceFile, pathToImportOrderPreferenceFileBrowse,
-						importOrderManualExample, importOrderLabel, importOrderPreferenceFileExample,
-						importOrderConfigurationFromFileRadioButton, importOrderConfigurationManualRadioButton },
+		enabledBy(new JComponent[]{importOrder, pathToImportOrderPreferenceFile, pathToImportOrderPreferenceFileBrowse, importOrderManualExample,
+						importOrderLabel, importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton, importOrderConfigurationManualRadioButton},
 				optimizeImportsCheckBox);
 
-		enabledBy(new JComponent[] { pathToImportOrderPreferenceFile, importOrderPreferenceFileExample,
-				pathToImportOrderPreferenceFileBrowse }, importOrderConfigurationFromFileRadioButton);
+		enabledBy(new JComponent[]{pathToImportOrderPreferenceFile, importOrderPreferenceFileExample, pathToImportOrderPreferenceFileBrowse},
+				importOrderConfigurationFromFileRadioButton);
 
-		enabledBy(new JComponent[] { importOrder, importOrderManualExample, },
-				importOrderConfigurationManualRadioButton);
+		enabledBy(new JComponent[]{importOrder, importOrderManualExample,}, importOrderConfigurationManualRadioButton);
 
-		enabledByAny(new JComponent[] { pathToEclipsePreferenceFileJS, formatterProfileLabelJS, formatterProfileJS,
+		enabledByAny(new JComponent[]{pathToEclipsePreferenceFileJS, formatterProfileLabelJS, formatterProfileJS,
 				eclipsePrefsExampleJS, eclipsePreferenceFileJSLabel, eclipsePreferenceFilePathJSBrowse,
-				enableJavaScriptCommentsPostProcessor }, enableJSFormatting, enableGWTNativeMethodsCheckBox);
+				enableJavaScriptCommentsPostProcessor}, enableJSFormatting, enableGWTNativeMethodsCheckBox);
 
 		enabledByAny(
-				new JComponent[] { pathToEclipsePreferenceFileCpp, formatterProfileLabelCpp, formatterProfileCpp,
-						eclipsePrefsExampleCpp, eclipsePreferenceFileCppLabel, eclipsePreferenceFilePathCppBrowse },
+				new JComponent[]{pathToEclipsePreferenceFileCpp, formatterProfileLabelCpp, formatterProfileCpp,
+						eclipsePrefsExampleCpp, eclipsePreferenceFileCppLabel, eclipsePreferenceFilePathCppBrowse},
 				enableCppFormatting);
 
-		enabledBy(new JComponent[] { disabledFileTypes, disabledFileTypesHelpLabel, },
-				formatOtherFilesWithExceptionsRadioButton);
+		enabledBy(new JComponent[]{disabledFileTypes, disabledFileTypesHelpLabel,}, formatOtherFilesWithExceptionsRadioButton);
 
 		disableJavaProfilesIfNecessary();
 		disableJavaScriptProfilesIfNecessary();
@@ -197,8 +190,7 @@ public class ProjectSettingsForm {
 		exportToProjectProfile.setEnabled(!displayedSettings.isProjectSpecific());
 	}
 
-	private void enabledByAny(@NotNull JComponent[] targets, @NotNull JToggleButton[] negated,
-			@NotNull JToggleButton... control) {
+	private void enabledByAny(@NotNull JComponent[] targets, @NotNull JToggleButton[] negated, @NotNull JToggleButton... control) {
 		boolean b = false;
 
 		for (JToggleButton jToggleButton : control) {
@@ -268,15 +260,13 @@ public class ProjectSettingsForm {
 		eclipsePreferenceFilePathJavaBrowse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				browseForFile(pathToEclipsePreferenceFileJava, createSingleFileNoJarsDescriptor(),
-						"Select config file");
+				browseForFile(pathToEclipsePreferenceFileJava, createSingleFileNoJarsDescriptor(), "Select config file");
 			}
 		});
 		pathToImportOrderPreferenceFileBrowse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				browseForFile(pathToImportOrderPreferenceFile, createSingleFileNoJarsDescriptor(),
-						"Select config file");
+				browseForFile(pathToImportOrderPreferenceFile, createSingleFileNoJarsDescriptor(), "Select config file");
 			}
 		});
 		eclipsePreferenceFilePathJSBrowse.addActionListener(new ActionListener() {
@@ -343,25 +333,24 @@ public class ProjectSettingsForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isModified(displayedSettings)) {
-					createConfirmation("Profile was modified, save changes to the current profile?", "Yes", "No",
-							new Runnable() {
-								@Override
-								public void run() {
-									try {
-										apply();
-										createProfile();
-									} catch (ConfigurationException e) {
-										Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent,
-												e.getMessage(), e.getTitle(), Messages.getErrorIcon());
-									}
-								}
-							}, new Runnable() {
-								@Override
-								public void run() {
-									importFrom(displayedSettings);
-									createProfile();
-								}
-							}, 0).showInFocusCenter();
+					createConfirmation("Profile was modified, save changes to the current profile?", "Yes", "No", new Runnable() {
+						@Override
+						public void run() {
+							try {
+								apply();
+								createProfile();
+							} catch (ConfigurationException e) {
+								SwingUtilities.invokeLater(() -> Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent, e.getMessage(),
+										e.getTitle(), Messages.getErrorIcon()));
+							}
+						}
+					}, new Runnable() {
+						@Override
+						public void run() {
+							importFrom(displayedSettings);
+							createProfile();
+						}
+					}, 0).showInFocusCenter();
 				} else {
 					createProfile();
 				}
@@ -377,25 +366,23 @@ public class ProjectSettingsForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isModified(displayedSettings)) {
-					ListPopup confirmation = createConfirmation(
-							"Profile was modified, save changes to the current profile?", "Yes", "No", new Runnable() {
-								@Override
-								public void run() {
-									try {
-										apply();
-										copyProfile();
-									} catch (ConfigurationException e) {
-										Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent,
-												e.getMessage(), e.getTitle(), Messages.getErrorIcon());
-									}
-								}
-							}, new Runnable() {
-								@Override
-								public void run() {
-									importFrom(displayedSettings);
-									copyProfile();
-								}
-							}, 0);
+					ListPopup confirmation = createConfirmation("Profile was modified, save changes to the current profile?", "Yes", "No", new Runnable() {
+						@Override
+						public void run() {
+							try {
+								apply();
+								copyProfile();
+							} catch (ConfigurationException e) {
+								SwingUtilities.invokeLater(() -> Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent, e.getMessage(), e.getTitle(), Messages.getErrorIcon()));
+							}
+						}
+					}, new Runnable() {
+						@Override
+						public void run() {
+							importFrom(displayedSettings);
+							copyProfile();
+						}
+					}, 0);
 
 					confirmation.showInFocusCenter();
 				} else {
@@ -413,24 +400,22 @@ public class ProjectSettingsForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isModified(displayedSettings)) {
-					ListPopup confirmation = createConfirmation(
-							"Profile was modified, save changes to the current profile?", "Yes", "No", new Runnable() {
-								@Override
-								public void run() {
-									try {
-										apply();
-										exportProfile();
-									} catch (ConfigurationException e) {
-										Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent,
-												e.getMessage(), e.getTitle(), Messages.getErrorIcon());
-									}
-								}
-							}, new Runnable() {
-								@Override
-								public void run() {
-									exportProfile();
-								}
-							}, 0);
+					ListPopup confirmation = createConfirmation("Profile was modified, save changes to the current profile?", "Yes", "No", new Runnable() {
+						@Override
+						public void run() {
+							try {
+								apply();
+								exportProfile();
+							} catch (ConfigurationException e) {
+								SwingUtilities.invokeLater(() -> Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent, e.getMessage(), e.getTitle(), Messages.getErrorIcon()));
+							}
+						}
+					}, new Runnable() {
+						@Override
+						public void run() {
+							exportProfile();
+						}
+					}, 0);
 
 					confirmation.showInFocusCenter();
 				} else {
@@ -479,15 +464,14 @@ public class ProjectSettingsForm {
 				// Damn you're ugly
 				try {
 					apply();
-					String s = Messages.showInputDialog(rename, "New profile name:", "Rename profile",
-							Messages.getQuestionIcon(), displayedSettings.getName(), new NonEmptyInputValidator());
+					String s = Messages.showInputDialog(rename, "New profile name:", "Rename profile", Messages.getQuestionIcon(), displayedSettings.getName(),
+							new NonEmptyInputValidator());
 					if (s != null) {
 						displayedSettings.setName(s);
 						apply();
 					}
 				} catch (ConfigurationException e1) {
-					Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent, e1.getMessage(), e1.getTitle(),
-							Messages.getErrorIcon());
+					Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent, e1.getMessage(), e1.getTitle(), Messages.getErrorIcon());
 				}
 			}
 		});
@@ -647,8 +631,8 @@ public class ProjectSettingsForm {
 					apply();
 					importFrom(getSelectedItem());
 				} catch (ConfigurationException e) {
-					Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent, e.getMessage(), e.getTitle(),
-							Messages.getErrorIcon());
+					profiles.setSelectedItem(displayedSettings);
+					SwingUtilities.invokeLater(() -> Messages.showMessageDialog(ProjectSettingsForm.this.rootComponent, e.getMessage(), e.getTitle(), Messages.getErrorIcon()));
 				}
 			}
 		}, new Runnable() {
@@ -675,8 +659,7 @@ public class ProjectSettingsForm {
 
 		descriptor.setTitle(title);
 		String text = target.getText();
-		final VirtualFile toSelect = text == null || text.isEmpty() ? getProject().getBaseDir()
-				: LocalFileSystem.getInstance().findFileByPath(text);
+		final VirtualFile toSelect = text == null || text.isEmpty() ? getProject().getBaseDir() : LocalFileSystem.getInstance().findFileByPath(text);
 
 		// 10.5 does not have #chooseFile
 		VirtualFile[] virtualFile = FileChooser.chooseFiles(descriptor, getProject(), toSelect);
@@ -871,10 +854,9 @@ public class ProjectSettingsForm {
 		return displayedSettings;
 	}
 
-	public ListPopup createConfirmation(String title, final String yesText, String noText, final Runnable onYes,
-			final Runnable onNo, int defaultOptionIndex) {
+	public ListPopup createConfirmation(String title, final String yesText, String noText, final Runnable onYes, final Runnable onNo, int defaultOptionIndex) {
 
-		final BaseListPopupStep<String> step = new BaseListPopupStep<String>(title, new String[] { yesText, noText }) {
+		final BaseListPopupStep<String> step = new BaseListPopupStep<String>(title, new String[]{yesText, noText}) {
 			@Override
 			public PopupStep onChosen(String selectedValue, final boolean finalChoice) {
 				if (selectedValue.equals(yesText)) {
@@ -949,26 +931,21 @@ public class ProjectSettingsForm {
 			return true;
 		if (formatSelectedTextInAllFileTypes.isSelected() != data.isFormatSeletedTextInAllFileTypes())
 			return true;
-		if (pathToEclipsePreferenceFileJava.getText() != null
-				? !pathToEclipsePreferenceFileJava.getText().equals(data.getPathToConfigFileJava())
+		if (pathToEclipsePreferenceFileJava.getText() != null ? !pathToEclipsePreferenceFileJava.getText().equals(data.getPathToConfigFileJava())
 				: data.getPathToConfigFileJava() != null)
 			return true;
-		if (pathToEclipsePreferenceFileJS.getText() != null
-				? !pathToEclipsePreferenceFileJS.getText().equals(data.getPathToConfigFileJS())
+		if (pathToEclipsePreferenceFileJS.getText() != null ? !pathToEclipsePreferenceFileJS.getText().equals(data.getPathToConfigFileJS())
 				: data.getPathToConfigFileJS() != null)
 			return true;
-		if (disabledFileTypes.getText() != null ? !disabledFileTypes.getText().equals(data.getDisabledFileTypes())
-				: data.getDisabledFileTypes() != null)
+		if (disabledFileTypes.getText() != null ? !disabledFileTypes.getText().equals(data.getDisabledFileTypes()) : data.getDisabledFileTypes() != null)
 			return true;
 		if (enableJSFormatting.isSelected() != data.isEnableJSFormatting())
 			return true;
 		if (enableJavaFormatting.isSelected() != data.isEnableJavaFormatting())
 			return true;
-		if (importOrder.getText() != null ? !importOrder.getText().equals(data.getImportOrder())
-				: data.getImportOrder() != null)
+		if (importOrder.getText() != null ? !importOrder.getText().equals(data.getImportOrder()) : data.getImportOrder() != null)
 			return true;
-		if (pathToImportOrderPreferenceFile.getText() != null
-				? !pathToImportOrderPreferenceFile.getText().equals(data.getImportOrderConfigFilePath())
+		if (pathToImportOrderPreferenceFile.getText() != null ? !pathToImportOrderPreferenceFile.getText().equals(data.getImportOrderConfigFilePath())
 				: data.getImportOrderConfigFilePath() != null)
 			return true;
 		if (enableJavaScriptCommentsPostProcessor.isSelected() != data.isEnableJSProcessor())
@@ -977,14 +954,12 @@ public class ProjectSettingsForm {
 			return true;
 		if (enableCppFormatting.isSelected() != data.isEnableCppFormatting())
 			return true;
-		if (pathToEclipsePreferenceFileCpp.getText() != null
-				? !pathToEclipsePreferenceFileCpp.getText().equals(data.getPathToConfigFileCpp())
+		if (pathToEclipsePreferenceFileCpp.getText() != null ? !pathToEclipsePreferenceFileCpp.getText().equals(data.getPathToConfigFileCpp())
 				: data.getPathToConfigFileCpp() != null)
 			return true;
 		if (enableGWTNativeMethodsCheckBox.isSelected() != data.isEnableGWT())
 			return true;
-		if (pathToCustomEclipse.getText() != null ? !pathToCustomEclipse.getText().equals(data.getPathToEclipse())
-				: data.getPathToEclipse() != null)
+		if (pathToCustomEclipse.getText() != null ? !pathToCustomEclipse.getText().equals(data.getPathToEclipse()) : data.getPathToEclipse() != null)
 			return true;
 		return false;
 	}
