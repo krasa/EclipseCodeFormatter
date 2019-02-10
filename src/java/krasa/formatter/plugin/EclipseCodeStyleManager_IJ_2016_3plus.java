@@ -1,5 +1,6 @@
 package krasa.formatter.plugin;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,14 +23,16 @@ public class EclipseCodeStyleManager_IJ_2016_3plus extends EclipseCodeStyleManag
 
 	// 16.3
 	// @Override
-	public void reformatTextWithContext(@NotNull PsiFile psiFile,
-			@NotNull com.intellij.psi.codeStyle.ChangedRangesInfo changedRangesInfo)
+	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull com.intellij.psi.codeStyle.ChangedRangesInfo changedRangesInfo)
 			throws IncorrectOperationException {
-		if (!shouldReformatByEclipse(psiFile)) {
-			original.reformatTextWithContext(psiFile, changedRangesInfo);
-		} else {
+		if (shouldReformatByEclipse(psiFile)) {
 			List<TextRange> allChangedRanges = changedRangesInfo.allChangedRanges;
 			reformatText(psiFile, allChangedRanges);
+			// TODO check if file is being commited. rather than faking TextRange
+		} else if (shouldSkipFormatting(psiFile, Collections.singletonList(new TextRange(0, psiFile.getTextLength())))) {
+			notifier.notifyFormattingWasDisabled(psiFile);
+		} else {
+			original.reformatTextWithContext(psiFile, changedRangesInfo);
 		}
 	}
 

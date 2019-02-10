@@ -39,7 +39,7 @@ public class EclipseCodeStyleManager {
 	@NotNull
 	protected volatile Settings settings;
 	@NotNull
-	private Notifier notifier;
+	protected Notifier notifier;
 	@Nullable
 	private volatile EclipseCodeFormatter eclipseCodeFormatterJava;
 	@Nullable
@@ -231,9 +231,10 @@ public class EclipseCodeStyleManager {
 		}
 	}
 
-	private boolean shouldSkipFormatting(PsiFile psiFile, Collection<TextRange> textRanges) {
+	protected boolean shouldSkipFormatting(PsiFile psiFile, Collection<TextRange> textRanges) {
 		VirtualFile virtualFile = psiFile.getVirtualFile();
-		if (settings.isFormatSeletedTextInAllFileTypes()) {
+
+		if (settings.isFormatSeletedTextInAllFileTypes()) {             
 			// when file is being edited, it is important to load text from editor, i think
 			final Editor editor = PsiUtilBase.findEditor(psiFile);
 			if (editor != null) {
