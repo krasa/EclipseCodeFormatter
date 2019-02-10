@@ -1,7 +1,5 @@
 package krasa.formatter.plugin;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
@@ -9,13 +7,13 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.psi.*;
-
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vojtech Krasa
@@ -29,7 +27,9 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 	@NotNull
 	@Override
 	public Runnable processFile(final PsiFile file) {
-		final Runnable intellijRunnable = new JavaImportOptimizer().processFile(file);
+		final PsiJavaFile dummyFile = (PsiJavaFile) file.copy();
+
+		final Runnable intellijRunnable = new JavaImportOptimizer().processFile(dummyFile);
 		if (!(file instanceof PsiJavaFile)) {
 			return intellijRunnable;
 		}
@@ -37,7 +37,6 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		if (!isEnabled(file)) {
 			return intellijRunnable;
 		}
-
 		return new Runnable() {
 
 			@Override
@@ -46,7 +45,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 				try {
 					Settings settings = ProjectComponent.getSettings(file);
 					if (isEnabled(settings)) {
-						optimizeImportsByEclipse((PsiJavaFile) file, settings);
+						optimizeImportsByEclipse((PsiJavaFile) file, settings, dummyFile);
 					}
 				} catch (ParsingFailedException e) {
 					notifier.configurationError(e, file.getProject());
@@ -63,7 +62,7 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		};
 	}
 
-	private void optimizeImportsByEclipse(PsiJavaFile psiFile, Settings settings) {
+	private void optimizeImportsByEclipse(PsiJavaFile psiFile, Settings settings, PsiJavaFile dummy) {
 		ImportSorterAdapter importSorter = null;
 		try {
 			importSorter = getImportSorter(settings);
@@ -71,8 +70,8 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 			PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(psiFile.getProject());
 			commitDocument(psiFile, psiDocumentManager);
 
-			importSorter.sortImports(psiFile);
-			commitDocumentAndSave(psiFile, psiDocumentManager);
+			importSorter.sortImports(psiFile, dummy);
+//			commitDocumentAndSave(psiFile, psiDocumentManager);
 		} catch (ParsingFailedException e) {
 			throw e;
 		} catch (IndexNotReadyException e) {
@@ -105,6 +104,9 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 		}
 	}
 
+	/**
+	 * was needed for #87+#94 - saveDocument un-blues changed files - where content is equal, but now not changing PSI when imports are not changed (#179) makes it obsolete
+	 */
 	private void commitDocumentAndSave(PsiJavaFile psiFile, PsiDocumentManager psiDocumentManager) {
 		Document document = psiDocumentManager.getDocument(psiFile);
 		if (document != null) {

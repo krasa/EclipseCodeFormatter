@@ -30,16 +30,20 @@ public class ImportSorterAdapter {
 		return Arrays.toString(importsOrder.toArray());
 	}
 
-	public void sortImports(PsiJavaFile file) {
+	public void sortImports(PsiJavaFile file, PsiJavaFile dummy) {
 		List<String> imports = new ArrayList<String>();
 		List<PsiElement> nonImports = new ArrayList<PsiElement>();
 
-		PsiImportList importList = file.getImportList();
-		if (importList == null) {
+		PsiImportList actualImportList = file.getImportList();
+		if (actualImportList == null) {
+			return;
+		}
+		PsiImportList dummyImportList = dummy.getImportList();
+		if (dummyImportList == null) {
 			return;
 		}
 
-		PsiElement[] children = importList.getChildren();
+		PsiElement[] children = dummyImportList.getChildren();
 		for (int i = 0; i < children.length; i++) {
 			PsiElement child = children[i];
 			if (child instanceof PsiImportStatementBase) {
@@ -67,8 +71,7 @@ public class ImportSorterAdapter {
 
 		PsiImportList newImportList = dummyFile.getImportList();
 		PsiImportList result = (PsiImportList) newImportList.copy();
-		PsiImportList oldList = file.getImportList();
-		if (oldList.isReplaceEquivalent(result))
+		if (actualImportList.isReplaceEquivalent(result))
 			return;
 		if (!nonImports.isEmpty()) {
 			PsiElement firstPrevious = newImportList.getPrevSibling();
@@ -84,7 +87,8 @@ public class ImportSorterAdapter {
 				result.add(element.copy());
 			}
 		}
-		importList.replace(result);
+		
+		actualImportList.replace(result);
 	}
 
 	@NotNull
