@@ -48,7 +48,7 @@
 
 	<modules>
 		<module>eclipseLibs44</module>
-		<module>eclipseLibs45</module>
+		<module>eclipseLibs</module>
 	</modules>
 
 	<dependencies>
