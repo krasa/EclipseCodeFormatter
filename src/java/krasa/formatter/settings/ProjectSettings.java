@@ -7,8 +7,7 @@ import com.intellij.util.xmlb.annotations.Transient;
 import krasa.formatter.plugin.Notifier;
 import org.jetbrains.annotations.NotNull;
 
-@State(name = "EclipseCodeFormatterProjectSettings", storages = {
-		@Storage(file = "eclipseCodeFormatter.xml", scheme = StorageScheme.DIRECTORY_BASED)})
+@State(name = "EclipseCodeFormatterProjectSettings", storages = {@Storage("eclipseCodeFormatter.xml")})
 public class ProjectSettings implements PersistentStateComponent<ProjectSettings> {
 
 	private ProjectSpecificProfile projectSpecificProfile = new ProjectSpecificProfile();
