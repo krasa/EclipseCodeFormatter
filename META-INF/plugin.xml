@@ -25,7 +25,7 @@
         for instructions how to use it.     <br><br>
 
        Currently supports formatting of<br>
-       -Java (Eclipse <see plugin version> and 4.4 libs, also emulates Eclipse's imports optimizing, configurable external Eclipse location for Eclipse 4.5+, Workspace Mechanic support)<br>
+       -Java (Eclipse [see plugin version] and 4.4 libs, also emulates Eclipse's imports optimizing, configurable external Eclipse location for Eclipse 4.5+, Workspace Mechanic support)<br>
        -C/C++ (Eclipse 4.6.3 (requires JRE 1.7)) - to be removed<br>
        -JavaScript (Eclipse 4.4) - to be removed<br>
        -GWT (Eclipse 4.4) - to be removed
