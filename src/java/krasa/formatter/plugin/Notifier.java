@@ -15,7 +15,7 @@ import krasa.formatter.settings.ProjectComponent;
 public class Notifier {
 
 	public static final String NO_FILE_TO_FORMAT = "No file to format";
-	public static final String ECLIPSE_CURRENT = "Eclipse 4.9.0 2018-09";
+	public static final String ECLIPSE_CURRENT = "Eclipse 2019-03";
 
 	public void notifyFailedFormatting(PsiFile psiFile, boolean formattedByIntelliJ, Exception e) {
 		String error = e.getMessage() == null ? "" : e.getMessage();
