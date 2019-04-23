@@ -42,6 +42,9 @@
 	<change-notes><![CDATA[
 	    <br>18.3 (2019-04-23)
 	    <br>- Java formatter updated to 2019-03 R
+	    <br>- Fixes #150 config gui exception
+	    <br>- Fixed #179 reformat in commit diff dialog
+	    <br>- Fixed #178 disabling of formatting by IJ on commit
 	    <br>18.2 (2018-09-24)
 	    <br>- Java formatter updated to 2018-09 Release (4.9.0)
         <br>18.1 (2018-05-16)
