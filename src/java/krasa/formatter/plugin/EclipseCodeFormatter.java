@@ -58,7 +58,6 @@ public class EclipseCodeFormatter {
 			formatWhenEditorIsClosed(range, psiFile);
 		}
 		               
-		GlobalSettings.getInstance().getDonationNagger().actionExecuted();
 	}
 
 	private void formatWhenEditorIsClosed(Range range, PsiFile psiFile) throws FileDoesNotExistsException {
