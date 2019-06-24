@@ -1,28 +1,30 @@
 package krasa.formatter.utils;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.ReadonlyStatusHandler;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.plugin.InvalidPropertyFile;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.ReadonlyStatusHandler;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.ParsingFailedException;
+import krasa.formatter.plugin.InvalidPropertyFile;
 
 /**
  * @author Vojtech Krasa
@@ -49,16 +51,6 @@ public class FileUtils {
 	
 	public static boolean isWholeFile(int startOffset, int endOffset, String text) {
 		return startOffset == 0 && endOffset == text.length();
-	}
-
-	public static boolean isJavaScript(PsiFile psiFile) {
-		FileType fileType = psiFile.getFileType();
-		return StdFileTypes.JS.equals(fileType) || "JavaScript".equals(fileType.getName());
-	}
-
-	public static boolean isCpp(PsiFile psiFile) {
-		String name = psiFile.getFileType().getName();
-		return name.equals("C++") || name.equals("C/C++") || name.equals("ObjectiveC") ; // CLion calls it ObjectiveC... wtf
 	}
 
 	public static boolean isJava(PsiFile psiFile) {

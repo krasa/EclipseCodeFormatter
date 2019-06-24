@@ -8,12 +8,12 @@
 
 package krasa.formatter.settings;
 
-import com.intellij.util.xmlb.annotations.Transient;
-import krasa.formatter.settings.provider.CppPropertiesProvider;
-import krasa.formatter.settings.provider.ImportOrderProvider;
-import krasa.formatter.settings.provider.JSPropertiesProvider;
-import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import org.jetbrains.annotations.NotNull;
+
+import com.intellij.util.xmlb.annotations.Transient;
+
+import krasa.formatter.settings.provider.ImportOrderProvider;
+import krasa.formatter.settings.provider.JavaPropertiesProvider;
 
 /**
  * @author Esko Luontola
@@ -51,10 +51,6 @@ public class Settings {
 
 	@Transient
 	protected transient JavaPropertiesProvider javaPropertiesProvider;
-	@Transient
-	protected transient JSPropertiesProvider jsPropertiesProvider;
-	@Transient
-	protected transient CppPropertiesProvider cppPropertiesProvider;
 	@Transient
 	protected transient ImportOrderProvider importOrderProvider;
 	@Transient
@@ -141,7 +137,6 @@ public class Settings {
 	}
 
 	public void setPathToConfigFileJS(final String pathToConfigFileJS) {
-		jsPropertiesProvider = null;
 		this.pathToConfigFileJS = pathToConfigFileJS;
 	}
 
@@ -210,19 +205,7 @@ public class Settings {
 		this.enableGWT = enableGWT;
 	}
 
-	public JSPropertiesProvider getJSProperties() {
-		if (jsPropertiesProvider == null) {
-			jsPropertiesProvider = new JSPropertiesProvider(this);
-		}
-		return jsPropertiesProvider;
-	}
 
-	public CppPropertiesProvider getCppProperties() {
-		if (cppPropertiesProvider == null) {
-			cppPropertiesProvider = new CppPropertiesProvider(this);
-		}
-		return cppPropertiesProvider;
-	}
 
 	public JavaPropertiesProvider getJavaProperties() {
 		if (javaPropertiesProvider == null) {
@@ -251,7 +234,6 @@ public class Settings {
 	}
 
 	public void setSelectedJavaScriptProfile(String selectedJavaScriptProfile) {
-		jsPropertiesProvider = null;
 		this.selectedJavaScriptProfile = selectedJavaScriptProfile;
 	}
 

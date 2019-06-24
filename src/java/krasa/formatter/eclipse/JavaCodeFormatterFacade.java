@@ -7,23 +7,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.plugin.Notifier;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.JavaPropertiesProvider;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
+
+import krasa.formatter.common.ModifiableFile;
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.JavaPropertiesProvider;
 
 /**
  * @author Vojtech Krasa
@@ -76,17 +74,10 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 		try {
 			Class<?> aClass;
-			if (version == Settings.FormatterVersion.ECLIPSE_44) {
-				aClass = getAdapter44();
-			} else {
-				if (version == Settings.FormatterVersion.CUSTOM && SystemInfo.isJavaVersionAtLeast("1.7")) {
+			if (version == Settings.FormatterVersion.CUSTOM) {
 					aClass = getCustomAdapter(pathToEclipse);
-				} else if (SystemInfo.isJavaVersionAtLeast("1.8")) {
-					aClass = getAdapter();
-				} else {
-					aClass = getAdapter44();
-					Notifier.notifyOldJRE(project);
-				}
+			} else {
+				aClass = getAdapter();
 			}
 			Constructor<?> constructor = aClass.getConstructor(Map.class);
 			codeFormatter = (EclipseFormatterAdapter) constructor.newInstance(toMap(options));
@@ -113,11 +104,6 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		return aClass;
 	}
 
-	private Class<?> getAdapter44() throws ClassNotFoundException {
-		ClassLoader classLoader = Classloaders.getEclipse44();
-		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter44", true, classLoader);
-		return aClass;
-	}
 
 	private Class<?> getAdapter() throws ClassNotFoundException {
 		ClassLoader classLoader = Classloaders.getEclipse();

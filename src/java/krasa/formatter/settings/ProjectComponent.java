@@ -7,12 +7,16 @@ package krasa.formatter.settings;/*
  */
 
 
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+
+import com.intellij.bootRuntime.command.Install;
+import com.intellij.notification.*;
 import org.jetbrains.annotations.NotNull;
 
-import com.intellij.notification.NotificationDisplayType;
-import com.intellij.notification.NotificationGroup;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.MessageType;
 import com.intellij.psi.PsiFile;
 
 import krasa.formatter.plugin.EclipseCodeStyleManager;
@@ -73,6 +77,20 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 	}
 
 	public void installOrUpdate(@NotNull Settings settings) {
+		if (settings.isEnabled() && (settings.isEnableCppFormatting() || settings.isEnableJSFormatting() || settings.isEnableGWT())) {
+			SwingUtilities.invokeLater(() -> Notifications.Bus.notify(
+					GROUP_DISPLAY_ID_ERROR.createNotification(
+							"Eclipse Formatter plugin", "Support for Cpp, JS, GWT formatting was dropped. Install an older version or <a href=\"#\">click here</a> to disable this warning.", NotificationType.WARNING, new NotificationListener() {
+								@Override
+								public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent hyperlinkEvent) {
+									settings.setEnableJSFormatting(false);
+									settings.setEnableGWT(false);
+									settings.setEnableCppFormatting(false);
+								}
+							}),
+					project));
+
+		}
 		if (eclipseCodeStyleManager == null) {
 			eclipseCodeStyleManager = projectCodeStyle.install(settings);
 		} else {

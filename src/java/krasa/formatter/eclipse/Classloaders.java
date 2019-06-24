@@ -1,16 +1,10 @@
 package krasa.formatter.eclipse;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-
-import krasa.formatter.processor.Processor;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.CppPropertiesProvider;
-import krasa.formatter.settings.provider.JSPropertiesProvider;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,18 +15,8 @@ import com.intellij.openapi.diagnostic.Logger;
 public class Classloaders {
 	private static final Logger LOG = Logger.getInstance(Classloaders.class.getName());
 
-	private static ClassLoader eclipse44;
 	private static ClassLoader newEclipse;
 
-	public static ClassLoader getEclipse44() {
-		if (eclipse44 == null) {
-			eclipse44 = classLoader(getPluginLibHomeEclipse44(),
-					"adapter44.jar",
-					"eclipse44.jar"
-			);
-		}
-		return eclipse44;
-	}
 
 	public static ClassLoader getEclipse() {
 		if (newEclipse == null) {
@@ -57,10 +41,6 @@ public class Classloaders {
 		}
 	}
 
-	@NotNull
-	private static File getPluginLibHomeEclipse44() {
-		return getPluginHome("eclipse44");
-	}
 
 	@NotNull
 	private static File getPluginLibHomeEclipse() {
@@ -114,59 +94,8 @@ public class Classloaders {
 		}
 	}
 	
-	@NotNull
-	public static CodeFormatterFacade getCppFormatter(CppPropertiesProvider cppProperties) {
-		Object o = null;
-		try {
-			ClassLoader classLoader = getEclipse();
-			Class<?> aClass = Class.forName("krasa.formatter.adapter.CppCodeFormatterFacade", true, classLoader);
-			Constructor<?> constructor = aClass.getConstructor(CppPropertiesProvider.class);
-			o = constructor.newInstance(cppProperties);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return (CodeFormatterFacade) o;
-	}
 
-	@NotNull
-	public static CodeFormatterFacade getJsFormatter(JSPropertiesProvider propertiesProvider) {
-		Object o = null;
-		try {
-			ClassLoader classLoader = getEclipse44();
-			Class<?> aClass = Class.forName("krasa.formatter.adapter.JSCodeFormatterFacade", true, classLoader);
-			Constructor<?> constructor = aClass.getConstructor(JSPropertiesProvider.class);
-			o = constructor.newInstance(propertiesProvider);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return (CodeFormatterFacade) o;
-	}
 
-	public static Processor getGWTProcessor(Settings settings) {
-		Object o = null;
-		try {
-			ClassLoader classLoader = getEclipse44();
-			Class<?> aClass = Class.forName("krasa.formatter.adapter.processor.GWTProcessor", true, classLoader);
-			Constructor<?> constructor = aClass.getConstructor(Settings.class);
-			o = constructor.newInstance(settings);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return (Processor) o;
-	}
 
-	public static Processor getJSCommentsFormatterProcessor(Settings settings) {
-		Object o = null;
-		try {
-			ClassLoader classLoader = getEclipse44();
-			Class<?> aClass = Class.forName("krasa.formatter.adapter.processor.JSCommentsFormatterProcessor", true,
-					classLoader);
-			Constructor<?> constructor = aClass.getConstructor(Settings.class);
-			o = constructor.newInstance(settings);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return (Processor) o;
-	}
 
 }

@@ -18,7 +18,7 @@ public class RepackJars {
 	static StringBuilder log = new StringBuilder();
 	static StringBuilder sizeLog = new StringBuilder();
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	protected static void main(String[] args) throws IOException, InterruptedException {
 		// new RepackJars().execute(rootFile("lib/eclipse44"));
 		// new RepackJars().execute(rootFile("lib/eclipse"));
 		new RepackJars().execute(rootFile("support/eclipseLibs/lib"));
@@ -44,8 +44,6 @@ public class RepackJars {
 
 	private void execute(File sourceDir) throws IOException, InterruptedException {
 		List<File> files = getJars(sourceDir);
-		// List<File> files = Arrays.asList(new
-		// File("F:\\workspace\\_projekty\\Github\\EclipseCodeFormatter4\\lib\\eclipse\\org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"));
 		File tempDir = new File(sourceDir, "temp");
 		tempDir.mkdir();
 
@@ -138,7 +136,7 @@ public class RepackJars {
 	private List<File> getJars(File dir) throws IOException {
 		print("searching for jars in " + dir.getCanonicalPath());
 		List<File> files = new ArrayList<File>();
-		for (File next : Files.fileTreeTraverser().children(dir)) {
+		for (File next : Files.fileTraverser().breadthFirst(dir)) {
 			String name = next.getName();
 			if (name.startsWith("adapter")) {
 				continue;
@@ -147,6 +145,7 @@ public class RepackJars {
 				files.add(next);
 			}
 		}
+		print("#getJars= " + files);
 		return files;
 	}
 

@@ -49,6 +49,7 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
+
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.MyConfigurable;
@@ -81,19 +82,14 @@ public class ProjectSettingsForm {
 	private JCheckBox formatSelectedTextInAllFileTypes;
 
 	private JLabel eclipsePreferenceFileJavaLabel;
-	private JLabel eclipsePreferenceFileJSLabel;
 
 	private JTextField pathToEclipsePreferenceFileJava;
-	private JTextField pathToEclipsePreferenceFileJS;
 
 	private JLabel eclipsePrefsExample;
-	private JLabel eclipsePrefsExampleJS;
 
 	private JCheckBox enableJavaFormatting;
-	private JCheckBox enableJSFormatting;
 
 	private JButton eclipsePreferenceFilePathJavaBrowse;
-	private JButton eclipsePreferenceFilePathJSBrowse;
 
 	private JCheckBox optimizeImportsCheckBox;
 	private JLabel importOrderLabel;
@@ -117,28 +113,17 @@ public class ProjectSettingsForm {
 	private JLabel javaFormatterProfileLabel;
 	private JButton helpButton;
 	private JButton homepage;
-	private JCheckBox enableGWTNativeMethodsCheckBox;
-	private JCheckBox enableJavaScriptCommentsPostProcessor;
-	private JLabel formatterProfileLabelJS;
-	private JComboBox formatterProfileJS;
 	private JCheckBox useForLiveTemplates;
 
-	private JCheckBox enableCppFormatting;
-	private JComboBox formatterProfileCpp;
-	private JTextField pathToEclipsePreferenceFileCpp;
-	private JLabel eclipsePreferenceFileCppLabel;
-	private JButton eclipsePreferenceFilePathCppBrowse;
-	private JLabel formatterProfileLabelCpp;
-	private JLabel eclipsePrefsExampleCpp;
 	private JTextField pathToCustomEclipse;
 	private JButton customEclipseLocationBrowse;
-	private JRadioButton useEclipse44;
 	private JRadioButton useEclipseNewest;
 	private JRadioButton useEclipseCustom;
 	private JLabel javaFormatterVersionLabel;
 	private JRadioButton importOrdering451;
 	private JRadioButton importOrdering452;
 	private JButton profileHelp;
+	private JLabel importStyleLabel;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -148,15 +133,15 @@ public class ProjectSettingsForm {
 
 	private void updateComponents() {
 		hidePopups();
-		enabledBy(new JComponent[]{eclipseSupportedFileTypesLabel, enableJavaFormatting, enableJSFormatting,
-				enableCppFormatting, doNotFormatOtherFilesRadioButton, formatOtherFilesWithExceptionsRadioButton,
+		enabledBy(new JComponent[] { eclipseSupportedFileTypesLabel, enableJavaFormatting, doNotFormatOtherFilesRadioButton,
+				formatOtherFilesWithExceptionsRadioButton,
 				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
-				importOrderConfigurationManualRadioButton, useEclipse44, useEclipseNewest, useEclipseCustom,
+				importOrderConfigurationManualRadioButton, useEclipseNewest, useEclipseCustom,
 				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452}, useEclipseFormatter);
 
 		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
-				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, enableGWTNativeMethodsCheckBox,
-				customEclipseLocationBrowse, pathToCustomEclipse, useEclipse44, useEclipseNewest, useEclipseCustom, javaFormatterVersionLabel,
+				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, customEclipseLocationBrowse, pathToCustomEclipse,
+				useEclipseNewest, useEclipseCustom, javaFormatterVersionLabel,  importStyleLabel,
 				importOrdering451, importOrdering452}, enableJavaFormatting);
 
 		enabledBy(new JComponent[]{pathToCustomEclipse, customEclipseLocationBrowse,}, useEclipseCustom);
@@ -170,20 +155,11 @@ public class ProjectSettingsForm {
 
 		enabledBy(new JComponent[]{importOrder, importOrderManualExample,}, importOrderConfigurationManualRadioButton);
 
-		enabledByAny(new JComponent[]{pathToEclipsePreferenceFileJS, formatterProfileLabelJS, formatterProfileJS,
-				eclipsePrefsExampleJS, eclipsePreferenceFileJSLabel, eclipsePreferenceFilePathJSBrowse,
-				enableJavaScriptCommentsPostProcessor}, enableJSFormatting, enableGWTNativeMethodsCheckBox);
 
-		enabledByAny(
-				new JComponent[]{pathToEclipsePreferenceFileCpp, formatterProfileLabelCpp, formatterProfileCpp,
-						eclipsePrefsExampleCpp, eclipsePreferenceFileCppLabel, eclipsePreferenceFilePathCppBrowse},
-				enableCppFormatting);
 
 		enabledBy(new JComponent[]{disabledFileTypes, disabledFileTypesHelpLabel,}, formatOtherFilesWithExceptionsRadioButton);
 
 		disableJavaProfilesIfNecessary();
-		disableJavaScriptProfilesIfNecessary();
-		disableCppProfilesIfNecessary();
 
 		delete.setEnabled(!displayedSettings.isProjectSpecific());
 		rename.setEnabled(!displayedSettings.isProjectSpecific());
@@ -212,19 +188,6 @@ public class ProjectSettingsForm {
 		}
 	}
 
-	private void disableJavaScriptProfilesIfNecessary() {
-		String text = pathToEclipsePreferenceFileJS.getText();
-		if (!text.endsWith("xml")) {
-			formatterProfileJS.setEnabled(false);
-		}
-	}
-
-	private void disableCppProfilesIfNecessary() {
-		String text = pathToEclipsePreferenceFileCpp.getText();
-		if (!text.endsWith("xml")) {
-			formatterProfileCpp.setEnabled(false);
-		}
-	}
 
 	public ProjectSettingsForm(final Project project, MyConfigurable myConfigurable) {
 		this.myConfigurable = myConfigurable;
@@ -269,18 +232,6 @@ public class ProjectSettingsForm {
 				browseForFile(pathToImportOrderPreferenceFile, createSingleFileNoJarsDescriptor(), "Select config file");
 			}
 		});
-		eclipsePreferenceFilePathJSBrowse.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				browseForFile(pathToEclipsePreferenceFileJS, createSingleFileNoJarsDescriptor(), "Select config file");
-			}
-		});
-		eclipsePreferenceFilePathCppBrowse.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				browseForFile(pathToEclipsePreferenceFileCpp, createSingleFileNoJarsDescriptor(), "Select config file");
-			}
-		});
 		customEclipseLocationBrowse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -311,20 +262,6 @@ public class ProjectSettingsForm {
 			@Override
 			protected void textChanged(DocumentEvent e) {
 				setJavaFormatterProfileModel();
-			}
-		});
-
-		pathToEclipsePreferenceFileJS.getDocument().addDocumentListener(new DocumentAdapter() {
-			@Override
-			protected void textChanged(DocumentEvent e) {
-				setJavaScriptFormatterProfileModel();
-			}
-		});
-
-		pathToEclipsePreferenceFileCpp.getDocument().addDocumentListener(new DocumentAdapter() {
-			@Override
-			protected void textChanged(DocumentEvent e) {
-				setCppFormatterProfileModel();
 			}
 		});
 
@@ -429,8 +366,6 @@ public class ProjectSettingsForm {
 			}
 		});
 		setJavaFormatterProfileModel();
-		setJavaScriptFormatterProfileModel();
-		setCppFormatterProfileModel();
 
 		profilesModel = createProfilesModel();
 		profiles.setModel(profilesModel);
@@ -517,13 +452,6 @@ public class ProjectSettingsForm {
 				BareBonesBrowserLaunch.openURL("http://plugins.intellij.net/plugin/?idea&id=6546");
 			}
 		});
-		useEclipse44.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				importOrdering451.setSelected(true);
-
-			}
-		});
 		useEclipseNewest.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -551,16 +479,6 @@ public class ProjectSettingsForm {
 	private void setJavaFormatterProfileModel() {
 		String selectedProfile = displayedSettings != null ? displayedSettings.getSelectedJavaProfile() : null;
 		javaFormatterProfile.setModel(createProfilesModel(pathToEclipsePreferenceFileJava, selectedProfile));
-	}
-
-	private void setJavaScriptFormatterProfileModel() {
-		String selectedProfile = displayedSettings != null ? displayedSettings.getSelectedJavaScriptProfile() : null;
-		formatterProfileJS.setModel(createProfilesModel(pathToEclipsePreferenceFileJS, selectedProfile));
-	}
-
-	private void setCppFormatterProfileModel() {
-		String selectedProfile = displayedSettings != null ? displayedSettings.getSelectedCppProfile() : null;
-		formatterProfileCpp.setModel(createProfilesModel(pathToEclipsePreferenceFileCpp, selectedProfile));
 	}
 
 	private ComboBoxModel createProfilesModel(JTextField pathToEclipsePreferenceFile, String selectedProfile) {
@@ -722,7 +640,6 @@ public class ProjectSettingsForm {
 		doNotFormatOtherFilesRadioButton.setSelected(!in.isFormatOtherFileTypesWithIntelliJ());
 		useDefaultFormatter.setSelected(in.getFormatter().equals(Settings.Formatter.DEFAULT));
 		useEclipseFormatter.setSelected(in.getFormatter().equals(Settings.Formatter.ECLIPSE));
-		useEclipse44.setSelected(in.getEclipseVersion().equals(Settings.FormatterVersion.ECLIPSE_44));
 		useEclipseNewest.setSelected(in.getEclipseVersion().equals(Settings.FormatterVersion.NEWEST));
 		useEclipseCustom.setSelected(in.getEclipseVersion().equals(Settings.FormatterVersion.CUSTOM));
 		importOrdering451.setSelected(in.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_44));
@@ -730,8 +647,6 @@ public class ProjectSettingsForm {
 		importOrderConfigurationFromFileRadioButton.setSelected(in.isImportOrderFromFile());
 		importOrderConfigurationManualRadioButton.setSelected(!in.isImportOrderFromFile());
 		javaFormatterProfile.setSelectedItem(in.getSelectedJavaProfile());
-		formatterProfileJS.setSelectedItem(in.getSelectedJavaScriptProfile());
-		formatterProfileCpp.setSelectedItem(in.getSelectedCppProfile());
 		setData(in);
 		updateComponents();
 	}
@@ -747,9 +662,7 @@ public class ProjectSettingsForm {
 		} else if (importOrdering452.isSelected()) {
 			displayedSettings.setImportOrdering(Settings.ImportOrdering.ECLIPSE_452);
 		}
-		if (useEclipse44.isSelected()) {
-			displayedSettings.setEclipseVersion(Settings.FormatterVersion.ECLIPSE_44);
-		} else if (useEclipseNewest.isSelected()) {
+		if (useEclipseNewest.isSelected()) {
 			displayedSettings.setEclipseVersion(Settings.FormatterVersion.NEWEST);
 		} else if (useEclipseCustom.isSelected()) {
 			displayedSettings.setEclipseVersion(Settings.FormatterVersion.CUSTOM);
@@ -758,8 +671,6 @@ public class ProjectSettingsForm {
 		displayedSettings.setFormatOtherFileTypesWithIntelliJ(formatOtherFilesWithExceptionsRadioButton.isSelected());
 		displayedSettings.setImportOrderFromFile(importOrderConfigurationFromFileRadioButton.isSelected());
 		displayedSettings.setSelectedJavaProfile(profileCheck(javaFormatterProfile.getSelectedItem()));
-		displayedSettings.setSelectedJavaScriptProfile(profileCheck(formatterProfileJS.getSelectedItem()));
-		displayedSettings.setSelectedCppProfile(profileCheck(formatterProfileCpp.getSelectedItem()));
 		getData(displayedSettings);
 		return displayedSettings;
 	}
@@ -779,14 +690,6 @@ public class ProjectSettingsForm {
 			}
 			if (!new File(pathToEclipsePreferenceFileJava.getText()).exists()) {
 				throw new ConfigurationException("Path to Java config file is not valid - file does not exist");
-			}
-		}
-		if (pathToEclipsePreferenceFileJS.isEnabled()) {
-			if (StringUtils.isBlank(pathToEclipsePreferenceFileJS.getText())) {
-				throw new ConfigurationException("Path to JS config file is not valid");
-			}
-			if (!new File(pathToEclipsePreferenceFileJS.getText()).exists()) {
-				throw new ConfigurationException("Path to JS config file is not valid - file does not exist");
 			}
 		}
 		if (pathToImportOrderPreferenceFile.isEnabled()) {
@@ -811,19 +714,10 @@ public class ProjectSettingsForm {
 		if (!ObjectUtils.equals(javaFormatterProfile.getSelectedItem(), data.getSelectedJavaProfile())) {
 			return true;
 		}
-		if (!ObjectUtils.equals(formatterProfileJS.getSelectedItem(), data.getSelectedJavaScriptProfile())) {
-			return true;
-		}
-		if (!ObjectUtils.equals(formatterProfileCpp.getSelectedItem(), data.getSelectedCppProfile())) {
-			return true;
-		}
 		if (useDefaultFormatter.isSelected() != data.getFormatter().equals(Settings.Formatter.DEFAULT)) {
 			return true;
 		}
 		if (useEclipseFormatter.isSelected() != data.getFormatter().equals(Settings.Formatter.ECLIPSE)) {
-			return true;
-		}
-		if (useEclipse44.isSelected() != data.getEclipseVersion().equals(Settings.FormatterVersion.ECLIPSE_44)) {
 			return true;
 		}
 		if (useEclipseNewest.isSelected() != data.getEclipseVersion().equals(Settings.FormatterVersion.NEWEST)) {
@@ -890,17 +784,11 @@ public class ProjectSettingsForm {
 		optimizeImportsCheckBox.setSelected(data.isOptimizeImports());
 		formatSelectedTextInAllFileTypes.setSelected(data.isFormatSeletedTextInAllFileTypes());
 		pathToEclipsePreferenceFileJava.setText(data.getPathToConfigFileJava());
-		pathToEclipsePreferenceFileJS.setText(data.getPathToConfigFileJS());
 		disabledFileTypes.setText(data.getDisabledFileTypes());
-		enableJSFormatting.setSelected(data.isEnableJSFormatting());
 		enableJavaFormatting.setSelected(data.isEnableJavaFormatting());
 		importOrder.setText(data.getImportOrder());
 		pathToImportOrderPreferenceFile.setText(data.getImportOrderConfigFilePath());
-		enableJavaScriptCommentsPostProcessor.setSelected(data.isEnableJSProcessor());
 		useForLiveTemplates.setSelected(data.isUseForLiveTemplates());
-		enableCppFormatting.setSelected(data.isEnableCppFormatting());
-		pathToEclipsePreferenceFileCpp.setText(data.getPathToConfigFileCpp());
-		enableGWTNativeMethodsCheckBox.setSelected(data.isEnableGWT());
 		pathToCustomEclipse.setText(data.getPathToEclipse());
 	}
 
@@ -908,17 +796,11 @@ public class ProjectSettingsForm {
 		data.setOptimizeImports(optimizeImportsCheckBox.isSelected());
 		data.setFormatSeletedTextInAllFileTypes(formatSelectedTextInAllFileTypes.isSelected());
 		data.setPathToConfigFileJava(pathToEclipsePreferenceFileJava.getText());
-		data.setPathToConfigFileJS(pathToEclipsePreferenceFileJS.getText());
 		data.setDisabledFileTypes(disabledFileTypes.getText());
-		data.setEnableJSFormatting(enableJSFormatting.isSelected());
 		data.setEnableJavaFormatting(enableJavaFormatting.isSelected());
 		data.setImportOrder(importOrder.getText());
 		data.setImportOrderConfigFilePath(pathToImportOrderPreferenceFile.getText());
-		data.setEnableJSProcessor(enableJavaScriptCommentsPostProcessor.isSelected());
 		data.setUseForLiveTemplates(useForLiveTemplates.isSelected());
-		data.setEnableCppFormatting(enableCppFormatting.isSelected());
-		data.setPathToConfigFileCpp(pathToEclipsePreferenceFileCpp.getText());
-		data.setEnableGWT(enableGWTNativeMethodsCheckBox.isSelected());
 		data.setPathToEclipse(pathToCustomEclipse.getText());
 	}
 
@@ -934,12 +816,7 @@ public class ProjectSettingsForm {
 		if (pathToEclipsePreferenceFileJava.getText() != null ? !pathToEclipsePreferenceFileJava.getText().equals(data.getPathToConfigFileJava())
 				: data.getPathToConfigFileJava() != null)
 			return true;
-		if (pathToEclipsePreferenceFileJS.getText() != null ? !pathToEclipsePreferenceFileJS.getText().equals(data.getPathToConfigFileJS())
-				: data.getPathToConfigFileJS() != null)
-			return true;
 		if (disabledFileTypes.getText() != null ? !disabledFileTypes.getText().equals(data.getDisabledFileTypes()) : data.getDisabledFileTypes() != null)
-			return true;
-		if (enableJSFormatting.isSelected() != data.isEnableJSFormatting())
 			return true;
 		if (enableJavaFormatting.isSelected() != data.isEnableJavaFormatting())
 			return true;
@@ -948,16 +825,7 @@ public class ProjectSettingsForm {
 		if (pathToImportOrderPreferenceFile.getText() != null ? !pathToImportOrderPreferenceFile.getText().equals(data.getImportOrderConfigFilePath())
 				: data.getImportOrderConfigFilePath() != null)
 			return true;
-		if (enableJavaScriptCommentsPostProcessor.isSelected() != data.isEnableJSProcessor())
-			return true;
 		if (useForLiveTemplates.isSelected() != data.isUseForLiveTemplates())
-			return true;
-		if (enableCppFormatting.isSelected() != data.isEnableCppFormatting())
-			return true;
-		if (pathToEclipsePreferenceFileCpp.getText() != null ? !pathToEclipsePreferenceFileCpp.getText().equals(data.getPathToConfigFileCpp())
-				: data.getPathToConfigFileCpp() != null)
-			return true;
-		if (enableGWTNativeMethodsCheckBox.isSelected() != data.isEnableGWT())
 			return true;
 		if (pathToCustomEclipse.getText() != null ? !pathToCustomEclipse.getText().equals(data.getPathToEclipse()) : data.getPathToEclipse() != null)
 			return true;

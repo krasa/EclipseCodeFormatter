@@ -1,8 +1,6 @@
 package adapter.e45;
 
 public class Dependencies {
-	org.eclipse.cdt.core.ToolFactory a1;
-	org.eclipse.cdt.core.formatter.CodeFormatter a2;
 	org.eclipse.jface.text.BadLocationException a3;
 	org.eclipse.jface.text.Document a4;
 	org.eclipse.jface.text.IDocument a5;

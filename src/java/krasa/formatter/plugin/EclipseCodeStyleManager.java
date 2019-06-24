@@ -1,5 +1,10 @@
 package krasa.formatter.plugin;
 
+import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -14,21 +19,14 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
-import krasa.formatter.eclipse.Classloaders;
-import krasa.formatter.eclipse.CodeFormatterFacade;
+
 import krasa.formatter.eclipse.JavaCodeFormatterFacade;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
 import krasa.formatter.settings.DisabledFileTypeSettings;
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.CppPropertiesProvider;
-import krasa.formatter.settings.provider.JSPropertiesProvider;
 import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class EclipseCodeStyleManager {
 
@@ -42,10 +40,6 @@ public class EclipseCodeStyleManager {
 	protected Notifier notifier;
 	@Nullable
 	private volatile EclipseCodeFormatter eclipseCodeFormatterJava;
-	@Nullable
-	private volatile EclipseCodeFormatter eclipseCodeFormatterJs;
-	@Nullable
-	private volatile EclipseCodeFormatter eclipseCodeFormatterCpp;
 
 	public EclipseCodeStyleManager(@NotNull CodeStyleManager original, @NotNull Settings settings) {
 		this.original = original;
@@ -56,8 +50,6 @@ public class EclipseCodeStyleManager {
 	public void updateSettings(@NotNull Settings settings) {
 		this.settings = settings;
 		eclipseCodeFormatterJava = null;
-		eclipseCodeFormatterJs = null;
-		eclipseCodeFormatterCpp = null;
 	}
 
 	private final static Comparator<TextRange> RANGE_COMPARATOR = new Comparator<TextRange>() {
@@ -207,28 +199,12 @@ public class EclipseCodeStyleManager {
 	}
 
 	private void formatWithEclipse(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {
-		if (FileUtils.isJavaScript(psiFile)) {
-			if (eclipseCodeFormatterJs == null) {
-				JSPropertiesProvider jsProperties = settings.getJSProperties();
-				CodeFormatterFacade jsFormatter = Classloaders.getJsFormatter(jsProperties);
-				eclipseCodeFormatterJs = new EclipseCodeFormatter(settings, jsFormatter);
-			}
-			eclipseCodeFormatterJs.format(psiFile, startOffset, endOffset);
-		} else if (FileUtils.isCpp(psiFile)) {
-			if (eclipseCodeFormatterCpp == null) {
-				CppPropertiesProvider cppProperties = settings.getCppProperties();
-				CodeFormatterFacade cpp = Classloaders.getCppFormatter(cppProperties);
-				eclipseCodeFormatterCpp = new EclipseCodeFormatter(settings, cpp);
-			}
-			eclipseCodeFormatterCpp.format(psiFile, startOffset, endOffset);
-		} else {
 			if (eclipseCodeFormatterJava == null) {
 				JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
 						settings.getEclipseVersion(), original.getProject(), settings.getPathToEclipse());
 				eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, facade);
 			}
 			eclipseCodeFormatterJava.format(psiFile, startOffset, endOffset);
-		}
 	}
 
 	protected boolean shouldSkipFormatting(PsiFile psiFile, Collection<TextRange> textRanges) {
@@ -271,9 +247,7 @@ public class EclipseCodeStyleManager {
 	}
 
 	private boolean fileTypeIsEnabled(@NotNull PsiFile psiFile) {
-		return (FileUtils.isJava(psiFile) && settings.isEnableJavaFormatting())
-				|| (FileUtils.isJavaScript(psiFile) && settings.isEnableJSFormatting())
-				|| (FileUtils.isCpp(psiFile) && settings.isEnableCppFormatting());
+		return (FileUtils.isJava(psiFile) && settings.isEnableJavaFormatting());
 	}
 
 	public boolean isEnabled() {

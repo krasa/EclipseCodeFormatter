@@ -1,5 +1,10 @@
 package krasa.formatter.plugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.openapi.diagnostic.Logger;
@@ -9,17 +14,12 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtilBase;
-import krasa.formatter.eclipse.Classloaders;
+
 import krasa.formatter.eclipse.CodeFormatterFacade;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.processor.Processor;
-import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Vojtech Krasa
@@ -38,8 +38,6 @@ public class EclipseCodeFormatter {
 		this.settings = settings;
 		codeFormatterFacade = codeFormatterFacade1;
 		postProcessors = new ArrayList<Processor>();
-		postProcessors.add(Classloaders.getGWTProcessor(settings));
-		postProcessors.add(Classloaders.getJSCommentsFormatterProcessor(settings));
 	}
 
 	public void format(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {

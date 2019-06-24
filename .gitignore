@@ -1,1 +1,6 @@
 /EclipseFormatter.zip
+**/out/**
+**/target/**
+support/eclipseLibs/target/**
+.shelf/
+*.iws

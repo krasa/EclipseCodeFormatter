@@ -1,7 +1,5 @@
 -download new eclipse
 -run UpdateLibs
- - move them from /temp and delete old ones add new ones - if you do it right, it will be a file update in git, not delete+add 
--run RepackJars
 -run mvn package on support/eclipseLibs/pom.xml
 -run tests on test module with $MODULE_DIR$ working directory
 -commit to git

@@ -22,24 +22,8 @@
 				    </execution>
 				</executions>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<executions>
-					<execution>
-						<phase>install</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<mainClass>repackager.RepackJars</mainClass>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -47,7 +31,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>eclipseLibs44</module>
 		<module>eclipseLibs</module>
 	</modules>
 
@@ -55,7 +38,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>18.0</version>
+			<version>25.1-jre</version>
 		</dependency>
 		<dependency>
 			<groupId> org.apache.commons </groupId>
