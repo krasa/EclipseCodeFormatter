@@ -1,19 +1,22 @@
 package krasa.formatter.plugin;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.IndexNotReadyException;
+import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.psi.*;
+
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vojtech Krasa
@@ -27,6 +30,9 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 	@NotNull
 	@Override
 	public Runnable processFile(final PsiFile file) {
+		if (!(file instanceof PsiJavaFile)) {
+			return EmptyRunnable.getInstance();
+		}
 		final PsiJavaFile dummyFile = (PsiJavaFile) file.copy();
 
 		final Runnable intellijRunnable = new JavaImportOptimizer().processFile(dummyFile);

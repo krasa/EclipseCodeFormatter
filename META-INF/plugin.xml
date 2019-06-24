@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>18.3.181.000.1-Eclipse_2019-03</version>
+    <version>18.4.181.000.0-Eclipse_2019-03</version>
 
 
     <!--145	IntelliJ IDEA 2016.1, AppCode 2016.1, CLion 2016.1, DataGrip 2016.1, PhpStorm 2016.1, PyCharm 2016.1, RubyMine 2016.1, WebStorm 2016.1-->
@@ -40,6 +40,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>18.4 (2019-06-24)
+	    <br>- Import Optimize ClassCastException fix
 	    <br>18.3 (2019-04-23)
 	    <br>- Java formatter updated to 2019-03 R
 	    <br>- Fixes #150 config gui exception
