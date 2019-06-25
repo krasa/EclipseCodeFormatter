@@ -85,7 +85,11 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 								public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent hyperlinkEvent) {
 									settings.setEnableJSFormatting(false);
 									settings.setEnableGWT(false);
-									settings.setEnableCppFormatting(false);
+									settings.setEnableCppFormatting(false);   
+									if (!settings.isProjectSpecific()) {
+										GlobalSettings.getInstance().updateSettings(settings, project);
+									}
+									
 									notification.hideBalloon();
 								}
 							}),
