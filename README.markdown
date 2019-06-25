@@ -4,10 +4,7 @@ Allows using Eclipse's code formatter directly from IntelliJ. Solves the problem
 
 Currently supports formatting of 
  - Java (also emulates Eclipse's imports optimizing)
- - JavaScript 
- - GWT
- - C/C++
-
+ 
 ## Instructions ##
 1. Install the plugin
    - [Tutorial: Installing, Updating and Uninstalling Repository Plugins](http://www.jetbrains.com/idea/webhelp/installing-updating-and-uninstalling-repository-plugins.html)
