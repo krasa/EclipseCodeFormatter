@@ -80,12 +80,13 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 		if (settings.isEnabled() && (settings.isEnableCppFormatting() || settings.isEnableJSFormatting() || settings.isEnableGWT())) {
 			SwingUtilities.invokeLater(() -> Notifications.Bus.notify(
 					GROUP_DISPLAY_ID_ERROR.createNotification(
-							"Eclipse Formatter plugin", "Support for Cpp, JS, GWT formatting was dropped. Install an older version or <a href=\"#\">click here</a> to disable this warning.", NotificationType.WARNING, new NotificationListener() {
+							"Eclipse Code Formatter plugin", "Support for Cpp, JS, GWT formatting was dropped. Install an older version or <a href=\"#\">click here</a> to disable this warning.", NotificationType.WARNING, new NotificationListener() {
 								@Override
 								public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent hyperlinkEvent) {
 									settings.setEnableJSFormatting(false);
 									settings.setEnableGWT(false);
 									settings.setEnableCppFormatting(false);
+									notification.hideBalloon();
 								}
 							}),
 					project));
