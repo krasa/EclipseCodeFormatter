@@ -108,7 +108,7 @@ public class ProjectSettingsForm {
 	private JButton exportToProjectProfile;
 	private JButton delete;
 	private Settings displayedSettings;
-	private JButton DONATEButton;
+	private JButton donateButton;
 	private JComboBox javaFormatterProfile;
 	private JLabel javaFormatterProfileLabel;
 	private JButton helpButton;
@@ -191,8 +191,8 @@ public class ProjectSettingsForm {
 
 	public ProjectSettingsForm(final Project project, MyConfigurable myConfigurable) {
 		this.myConfigurable = myConfigurable;
-		DONATEButton.setBorder(BorderFactory.createEmptyBorder());
-		DONATEButton.setContentAreaFilled(false);
+		donateButton.setBorder(BorderFactory.createEmptyBorder());
+		donateButton.setContentAreaFilled(false);
 		this.project = project;
 		for (Field field : ProjectSettingsForm.class.getDeclaredFields()) {
 			try {
@@ -432,7 +432,7 @@ public class ProjectSettingsForm {
 
 			}
 		});
-		DONATEButton.addActionListener(new ActionListener() {
+		donateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				BareBonesBrowserLaunch.openURL(

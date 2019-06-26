@@ -261,7 +261,7 @@
           <text resource-bundle="krasa/formatter/messages" key="settings.useEclipse"/>
         </properties>
       </component>
-      <component id="781ad" class="javax.swing.JButton" binding="DONATEButton" default-binding="true">
+      <component id="781ad" class="javax.swing.JButton" binding="donateButton" default-binding="true">
         <constraints>
           <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
