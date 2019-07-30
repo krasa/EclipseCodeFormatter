@@ -58,8 +58,8 @@ Currently supports formatting of
 - Eclipse indendation is configured for 2 spaces, but a new line gets indented by 4 spaces when Enter is pressed.
   - Change code style in IntelliJ. Not all things get formatted by this plugin when you type them.
 - If nothing helps
-  - [check old issues](https://github.com/krasa/eclipse-code-formatter-intellij-plugin/issues?q=is%3Aissue+is%3Aclosed)
-  - Create a new issue [here](https://github.com/krasa/eclipse-code-formatter-intellij-plugin/issues/new)
+  - [check old issues](/issues)
+  - Create a new issue [here](/issues/new)
 
 
 # Troubleshooting #
