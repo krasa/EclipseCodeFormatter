@@ -164,6 +164,7 @@
     ]]></change-notes>
 
 	<depends>com.intellij.modules.lang</depends>
+	<depends>com.intellij.modules.java</depends>
 
 	<application-components>
 		<component>
