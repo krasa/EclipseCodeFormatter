@@ -4,7 +4,7 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>19.1.193.000.0-Eclipse_2019-09-JavaOnly</version>
+    <version>19.1.193.000.1-Eclipse_2019-09-JavaOnly</version>
 
 	<idea-version since-build="193.000" />
 

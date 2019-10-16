@@ -85,7 +85,6 @@ public class ProjectCodeStyleInstaller {
 	 */
 	private static void registerCodeStyleManager(@NotNull Project project, @NotNull CodeStyleManager newManager) {
 		MutablePicoContainer container = (MutablePicoContainer) project.getPicoContainer();
-		CodeStyleManager.getInstance(project);
 		container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
 
 		ServiceDescriptor descriptor = new ServiceDescriptor();
