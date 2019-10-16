@@ -4,16 +4,8 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>19.0.181.000.0-Eclipse_2019-06-JavaOnly</version>
+    <version>19.1.181.000.0-Eclipse_2019-09-JavaOnly</version>
 
-
-    <!--145	IntelliJ IDEA 2016.1, AppCode 2016.1, CLion 2016.1, DataGrip 2016.1, PhpStorm 2016.1, PyCharm 2016.1, RubyMine 2016.1, WebStorm 2016.1-->
-    <!--143	IntelliJ IDEA 15, AppCode 3.3, CLion 1.2, DataGrip 1.0, PhpStorm 10, PyCharm 5, RubyMine 8, WebStorm 11-->
-    <!--141	IntelliJ IDEA 14.1, Android Studio 1.3, PyCharm 4.1, WebStorm 10-->
-    <!--139	IntelliJ IDEA 14, PhpStorm 8, PyCharm 4, RubyMine 7, WebStorm 9-->
-    <!--135	IntelliJ IDEA 13.1, WebStorm 8-->
-    <!--133	IntelliJ IDEA 13, PhpStorm 7, PyCharm 3.1, WebStorm 7-->
-    <!--131	PhpStorm 7, PyCharm 3.0, WebStorm 7-->
 	<idea-version since-build="181.000" />
 
 	<description><![CDATA[
@@ -37,127 +29,12 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>19.1 (2019-06-25)
+		<br>- Java formatter updated to Eclipse 2019-09
 	    <br>19.0 (2019-06-25)
 		<br>- Java formatter updated to Eclipse 2019-06
 	    <br>- Removed support for Cpp, JS, GWT formatting
 	    <br>- Import Optimize ClassCastException fix
-	    <br>18.3 (2019-04-23)
-	    <br>- Java formatter updated to 2019-03 R
-	    <br>- Fixes #150 config gui exception
-	    <br>- Fixed #179 reformat in commit diff dialog
-	    <br>- Fixed #178 disabling of formatting by IJ on commit
-	    <br>18.2 (2018-09-24)
-	    <br>- Java formatter updated to 2018-09 Release (4.9.0)
-        <br>18.1 (2018-05-16)
-        <br>- IJ 2018.2 compatibility
-        <br>18.0 (2018-05-09)
-        <br>- Java formatter updated to Oxygen.3a Release (4.7.3a)
-        <br>- Fixed: 'Do not format other file types by Intellij formatter'
-        <br>16.6, 17.2 (2017-08-02)
-        <br>- Global profiles sync fix
-        <br>16.5 (2017-07-20)
-        <br>- Release of 17.1 with Eclipse 4.6.3
-        <br>17.1 (2017-07-14)
-        <br>- Javadoc indent fix
-        <br>- Improved performance
-        <br>17.0 (2017-07-07)
-        <br>- Bundled formatters from Eclipse 4.7
-        <br>- Introduced Project Specific profile
-        <br>- Migrated mixc.xml persistence to a separate file (.idea/eclipseCodeFormatter.xml)
-        <br>- Added live template for surrounding with @formatter:off
-        <br>- Added HD icons
-        <br>16.4 (2017-06-02)
-        <br>- Improved compatibility with other formatter plugins
-        <br>- Fixed unnecessary mixc.xml changes
-        <br>16.3 (2017-04-03)
-        <br>- Fixes incorrect parsing of import order from *.prefs
-        <br>16.2 (2017-01-30)
-        <br>- Update labels in settings dialog
-        <br>16.1 (2017-01-10)
-        <br>- Support for Workspace Mechanic configuration files (*.epf) (Java formatter only)
-        <br>- hooking on IntelliJ API with dynamic proxies
-        <br>16.0 (2016-09-07)
-        <br>- disabled asserts
-        <br>15.9 (2016-08-29)
-		<br>- bundled formatters from Eclipse 4.6 - requires JDK 1.8
-		<br>- Import order fix for inner classes
-		<br>- bundled formatters from Eclipse 4.6
-		<br>- support for installation location in a default plugins folder 
-        <br>15.8 (2016-07-16)
-		<br>- Another import order fix 
-        <br>15.7 (2016-07-01)
-		<br>- Import order fix 
-        <br>15.6 (2016-06-10)
-		<br>- configuration enabled for default project 
-        <br>- external Eclipse location fix for IJ 13 
-        <br>- import order edge case fixed
-        <br>15.5 (2016-05-06)
-		<br>- upgraded C, Java formatter from Eclipse 4.5.2 
-		<br>- installed Eclipse (4.5+) can be chosen to format Java code
-		<br>- added new import ordering implementation to match Eclipse 4.5.2 
-		<br>- fixed: editor tab changes to blue when there's no changes after format
-		<br>- repacked and compressed jars to reduce size
-		<br>- settings scrollbar fixed
-        <br>15.4 (2016-01-25)
-		<br>- upgraded C, Java formatter from Eclipse Mars (4.5.1) - requires JRE 1.7
-		<br>- fixed settings form for new IJ 15, 16
-        <br>15.3 (2015-11-19)
-		<br>- upgraded Java formatter from Eclipse Mars SR1 (4.5.1) - requires JRE 1.7
-        <br>15.2.x.2 (2015-08-13)
-        <br>- IndexOutOfBoundsException fix
-        <br>15.2 (2015-08-07)
-        <br>- fixed cursor jumping after formatting
-        <br>- probably fixed 'Attempt to modify PSI for non-committed Document!' after import optimizing
-        <br>- disabled info notification popups
-        <br>15.1 (2015-07-21)
-        <br>- C/C++ support - requires to run IDE with JRE 1.7, matched for file types defined in: 'Settings | Editor | File Types' with 'C++' name
-        <br>- better matching of JS file types
-        <br>- upgraded Java formatter from Eclipse Mars 4.5 - requires JRE 1.7
-        <br>- configurable use of the old Java formatter from Eclipse 4.4 - requires JRE 1.6
-        <br>15.0 (2015-06-22)
-        <br>- new IJ 15 API
-        <br>14.9 (2015-06-15)
-        <br>- fixed reformat for 'only VCS changed text'
-        <br>14.8 (2015-01-29)
-        <br>- fixed jsp import optimizing
-        <br>14.7 (2014-12-02)
-        <br>- exception fix for Android Studio
-        <br>14.6 (2014-11-05)
-        <br>- libs from Eclipse 4.4.1
-        <br>- configurable formatting for Live Templates (default off)
-        <br>14.5 (2014-10-22)
-        <br>- fixed notifications settings for IJ 14
-        <br>- import optimizing fix
-        <br>- settings scroll pane added
-        <br>14.4 (2014-09-12)
-        <br>- Live templates formatting fix
-        <br>14.3 (2014-09-11)
-        <br>- StringIndexOutOfBoundsException when formatting during commit
-        <br>14.2 (2014-07-16)
-        <br>- java formatter from Eclipse 4.4 - supports Java 1.8
-        <br>- language level used for formatting is loaded from project settings
-        <br>14.1 (2014-04-08)
-        <br>- persisting of project specific enabling/disabling of the formatter
-        <br>14.0 (2014-03-31)
-        <br>- project specific enabling/disabling of the formatter
-        <br>13.0.1.1 (2014-01-15)
-        <br>- error handling
-        <br>4.1.0 (2013-11-24)
-        <br>- Updated libs for Java formatting to Eclipse 4.3.1
-        <br>4.0.0 (2013-11-22)
-        <br>- Proper Import Optimizer integration, it is no longer true that IntelliJ's Import Optimizing must be turned off, quite the opposite.
-        <br>- Hard-coded using of language level to 1.7 if configured lower in eclipse settings file, to be more user friendly.
-        <br>3.9.0 (2013-11-21)
-        <br>- IJ 13 API changes
-        <br>3.8.1 (2013-10-17)
-        <br>- better error messages.
-        <br>3.8.0 (2013-10-15)
-        <br>- format "Only VCS changed text" fixed
-        <br>3.7.0 (2013-08-07)
-        <br>- fix for custom static imports order
-        <br>- settings validations
-        <br>3.6.0 (2013-04-22)
-        <br>- import order fix - issue #44
       	<br>...
         <br>0.1 (2011-11-01)
         <br>- Initial release

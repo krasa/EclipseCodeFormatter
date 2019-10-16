@@ -10,13 +10,11 @@ package krasa.formatter.settings;/*
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 
-import com.intellij.bootRuntime.command.Install;
 import com.intellij.notification.*;
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.MessageType;
 import com.intellij.psi.PsiFile;
 
 import krasa.formatter.plugin.EclipseCodeStyleManager;
