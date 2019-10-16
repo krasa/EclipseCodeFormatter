@@ -4,9 +4,9 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>19.1.181.000.0-Eclipse_2019-09-JavaOnly</version>
+    <version>19.1.193.000.0-Eclipse_2019-09-JavaOnly</version>
 
-	<idea-version since-build="181.000" />
+	<idea-version since-build="193.000" />
 
 	<description><![CDATA[
         Allows using Eclipse's code formatter directly from IntelliJ.<br>
@@ -29,8 +29,9 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-	    <br>19.1 (2019-06-25)
+	    <br>19.1 (2019-10-16)
 		<br>- Java formatter updated to Eclipse 2019-09
+		<br>- IntelliJ 2019.3 compatibility
 	    <br>19.0 (2019-06-25)
 		<br>- Java formatter updated to Eclipse 2019-06
 	    <br>- Removed support for Cpp, JS, GWT formatting

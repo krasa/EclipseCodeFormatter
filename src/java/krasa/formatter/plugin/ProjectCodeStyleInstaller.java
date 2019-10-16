@@ -8,9 +8,15 @@
 
 package krasa.formatter.plugin;
 
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.components.ServiceDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.serviceContainer.PlatformComponentManagerImpl;
+import com.intellij.serviceContainer.ServiceComponentAdapter;
 import krasa.formatter.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.picocontainer.MutablePicoContainer;
@@ -51,10 +57,11 @@ public class ProjectCodeStyleInstaller {
 			overridingObject = new EclipseCodeStyleManager(currentManager, settings);
 		}
 		CodeStyleManager proxy = createProxy(currentManager, overridingObject);
-//		CodeStyleManager proxy = new ManualCodeStyleManagerDelegator(currentManager, overridingObject);
+		// CodeStyleManager proxy = new ManualCodeStyleManagerDelegator(currentManager, overridingObject);
 
-		LOG.info("Overriding " + currentManager.getClass().getCanonicalName() + " with " + overridingObject.getClass().getCanonicalName() + "' for project '"
-				+ project.getName() + "' using CGLIB proxy");
+		LOG.info("Overriding " + currentManager.getClass().getCanonicalName() + " with "
+				+ overridingObject.getClass().getCanonicalName() + "' for project '" + project.getName()
+				+ "' using CGLIB proxy");
 		registerCodeStyleManager(project, proxy);
 		return overridingObject;
 	}
@@ -68,7 +75,6 @@ public class ProjectCodeStyleInstaller {
 		return aClass != null;
 	}
 
-
 	/**
 	 * Dmitry Jemerov in unrelated discussion: "Trying to replace IDEA's core components with your custom
 	 * implementations is something that we consider a very bad idea, and it's pretty much guaranteed to break in future
@@ -79,7 +85,14 @@ public class ProjectCodeStyleInstaller {
 	 */
 	private static void registerCodeStyleManager(@NotNull Project project, @NotNull CodeStyleManager newManager) {
 		MutablePicoContainer container = (MutablePicoContainer) project.getPicoContainer();
+		CodeStyleManager.getInstance(project);
 		container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
-		container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, newManager);
+
+		ServiceDescriptor descriptor = new ServiceDescriptor();
+		descriptor.serviceInterface = CODE_STYLE_MANAGER_KEY;
+		descriptor.serviceImplementation = newManager.getClass().getName();
+		IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("EclipseCodeFormatter"));
+		ServiceComponentAdapter componentAdapter = new ServiceComponentAdapter(descriptor, plugin, (PlatformComponentManagerImpl) project, newManager.getClass(), newManager);
+		container.registerComponent(componentAdapter);
 	}
 }
