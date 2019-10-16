@@ -29,11 +29,14 @@ import java.util.Collection;
 /**
  * for tracking api changes only
  */
-@SuppressWarnings({ "deprecation" })
+@SuppressWarnings({"deprecation"})
 public class DelegatingCodeStyleManager extends CodeStyleManager {
 
 	@NotNull
-	protected final CodeStyleManager original;
+	protected CodeStyleManager original;
+
+	public DelegatingCodeStyleManager() {
+	}
 
 	public DelegatingCodeStyleManager(@NotNull CodeStyleManager original) {
 		this.original = original;
@@ -71,7 +74,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 
 	@Override
 	public PsiElement reformatRange(@NotNull PsiElement element, int startOffset, int endOffset,
-			boolean canChangeWhiteSpacesOnly) throws IncorrectOperationException {
+									boolean canChangeWhiteSpacesOnly) throws IncorrectOperationException {
 		return original.reformatRange(element, startOffset, endOffset, canChangeWhiteSpacesOnly);
 	}
 
@@ -92,10 +95,10 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 	}
 
 	@Override
-    public int adjustLineIndent(@NotNull Document document, int i) {
-        return original.adjustLineIndent(document, i);
-    }
-    //	2017.1 EAP
+	public int adjustLineIndent(@NotNull Document document, int i) {
+		return original.adjustLineIndent(document, i);
+	}
+	//	2017.1 EAP
 //	@Override
 //    public int adjustLineIndent(@NotNull Document document, int i, FormattingMode formattingMode) {
 //        return original.adjustLineIndent(document, i, formattingMode);
@@ -188,10 +191,10 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 	}
 
 	// 15
-    @Override
-    public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
-        original.reformatTextWithContext(psiFile, collection);
-    }
+	@Override
+	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
+		original.reformatTextWithContext(psiFile, collection);
+	}
 
 	//  2017.2
 	@Override

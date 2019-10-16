@@ -10,16 +10,13 @@ package krasa.formatter.plugin;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.components.ServiceDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.serviceContainer.PlatformComponentManagerImpl;
-import com.intellij.serviceContainer.ServiceComponentAdapter;
 import krasa.formatter.settings.Settings;
 import org.jetbrains.annotations.NotNull;
-import org.picocontainer.MutablePicoContainer;
 
 import static krasa.formatter.plugin.ProxyUtils.createProxy;
 
@@ -84,14 +81,8 @@ public class ProjectCodeStyleInstaller {
 	 * lol
 	 */
 	private static void registerCodeStyleManager(@NotNull Project project, @NotNull CodeStyleManager newManager) {
-		MutablePicoContainer container = (MutablePicoContainer) project.getPicoContainer();
-		container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
-
-		ServiceDescriptor descriptor = new ServiceDescriptor();
-		descriptor.serviceInterface = CODE_STYLE_MANAGER_KEY;
-		descriptor.serviceImplementation = newManager.getClass().getName();
+		PlatformComponentManagerImpl platformComponentManager = (PlatformComponentManagerImpl) project;
 		IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("EclipseCodeFormatter"));
-		ServiceComponentAdapter componentAdapter = new ServiceComponentAdapter(descriptor, plugin, (PlatformComponentManagerImpl) project, newManager.getClass(), newManager);
-		container.registerComponent(componentAdapter);
+		platformComponentManager.registerServiceInstance(CodeStyleManager.class, newManager, plugin);
 	}
 }

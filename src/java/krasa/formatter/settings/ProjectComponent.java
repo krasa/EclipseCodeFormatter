@@ -7,18 +7,16 @@ package krasa.formatter.settings;/*
  */
 
 
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-
 import com.intellij.notification.*;
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-
 import krasa.formatter.plugin.EclipseCodeStyleManager;
 import krasa.formatter.plugin.ProjectCodeStyleInstaller;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
 
 /**
  * Takes care of initializing a project's CodeFormatter and disposing of it when the project is closed. Updates the
@@ -31,9 +29,9 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 
 	private static final Logger LOG = Logger.getInstance(ProjectComponent.class.getName());
 	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error",
-	 NotificationDisplayType.BALLOON, true);
+			NotificationDisplayType.BALLOON, true);
 	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup("Eclipse code formatter info",
-	 NotificationDisplayType.NONE, true);
+			NotificationDisplayType.NONE, true);
 
 	@NotNull
 	private final ProjectCodeStyleInstaller projectCodeStyle;
@@ -51,6 +49,10 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 
 	public static Settings getSettings(PsiFile psiFile) {
 		return getInstance(psiFile.getProject()).getSelectedProfile();
+	}
+
+	public static Settings getSettings(Project project) {
+		return getInstance(project).getSelectedProfile();
 	}
 
 	@Override
@@ -83,11 +85,11 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 								public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent hyperlinkEvent) {
 									settings.setEnableJSFormatting(false);
 									settings.setEnableGWT(false);
-									settings.setEnableCppFormatting(false);   
+									settings.setEnableCppFormatting(false);
 									if (!settings.isProjectSpecific()) {
 										GlobalSettings.getInstance().updateSettings(settings, project);
 									}
-									
+
 									notification.hideBalloon();
 								}
 							}),

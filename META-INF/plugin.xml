@@ -4,9 +4,9 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-    <version>19.1.193.000.1-Eclipse_2019-09-JavaOnly</version>
+	<version>19.1.193.000.2-Eclipse_2019-09-JavaOnly</version>
 
-	<idea-version since-build="193.000" />
+	<idea-version since-build="193.000"/>
 
 	<description><![CDATA[
         Allows using Eclipse's code formatter directly from IntelliJ.<br>
