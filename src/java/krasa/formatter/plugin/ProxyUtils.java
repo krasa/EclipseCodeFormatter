@@ -3,7 +3,6 @@ package krasa.formatter.plugin;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.FormattingModeAwareIndentAdjuster;
 import org.apache.commons.lang3.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 
