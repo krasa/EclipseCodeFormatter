@@ -20,14 +20,9 @@ public class ProxyUtils {
 
 	@NotNull
 	private static Class[] getInterfaces(CodeStyleManager manager) {
-		try {
-			List<Class<?>> allInterfaces = ClassUtils.getAllInterfaces(manager.getClass());
-			LOG.debug("Proxy interfaces " + allInterfaces);
-			return allInterfaces.toArray(new Class[0]);
-		} catch (Throwable e) {
-			//old API < IJ ~2017
-			return new Class[]{};
-		}
+		List<Class<?>> allInterfaces = ClassUtils.getAllInterfaces(manager.getClass());
+		LOG.debug("Proxy interfaces " + allInterfaces);
+		return allInterfaces.toArray(new Class[0]);
 	}
 
 
