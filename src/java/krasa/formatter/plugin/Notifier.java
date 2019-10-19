@@ -24,7 +24,7 @@ public class Notifier {
 	public void notifyFailedFormatting(PsiFile psiFile, boolean formattedByIntelliJ, final String reason) {
 		String content;
 		if (!formattedByIntelliJ) {
-			content = psiFile.getName() + " failed to format with Eclipse code formatter. " + reason + "\n";
+			content = psiFile.getName() + " failed to format with Eclipse Code Formatter. " + reason + "\n";
 		} else {
 			content = psiFile.getName() + " failed to format with IntelliJ code formatter.\n" + reason;
 		}
@@ -44,7 +44,7 @@ public class Notifier {
 		if (formattedByIntelliJ) {
 			content = psiFile.getName() + " formatted successfully by IntelliJ code formatter";
 		} else {
-			content = psiFile.getName() + " formatted successfully by Eclipse code formatter";
+			content = psiFile.getName() + " formatted successfully by Eclipse Code Formatter";
 		}
 		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_INFO.createNotification(content,
 				NotificationType.INFORMATION);
