@@ -1,10 +1,5 @@
 package krasa.formatter.plugin;
 
-import java.util.*;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -19,7 +14,6 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
-
 import krasa.formatter.eclipse.JavaCodeFormatterFacade;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
@@ -27,6 +21,10 @@ import krasa.formatter.settings.DisabledFileTypeSettings;
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 public class EclipseCodeStyleManager {
 
@@ -190,7 +188,7 @@ public class EclipseCodeStyleManager {
 		if (e.isUserError() && e.getMessage() != null) {
 			return "<br>" + e.getMessage();
 		}
-		String result = "Probably due to syntax error or wrong configuration file.";
+		String result = "Probably due to a syntax error or a wrong configuration file.";
 		String message = e.getMessage();
 		if (message != null) {
 			result = result + "<br>" + message;

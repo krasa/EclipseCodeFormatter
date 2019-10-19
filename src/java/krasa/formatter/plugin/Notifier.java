@@ -6,7 +6,6 @@ import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-
 import krasa.formatter.settings.ProjectComponent;
 
 /**
@@ -61,18 +60,15 @@ public class Notifier {
 	}
 
 	public void notifyBrokenImportSorter(Project project) {
-		String content = "Formatting failed due to new Import optimizer.";
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
-				NotificationType.ERROR);
+		String content = "Formatting failed due to a new Import optimizer.";
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content, NotificationType.ERROR);
 		showNotification(notification, project);
 
 	}
 
 	public static void notifyDeletedSettings(final Project project) {
-		String content = "Eclipse formatter settings profile was deleted for project " + project.getName()
-				+ ". Check the configuration.";
-		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
-				NotificationType.ERROR);
+		String content = "Eclipse formatter settings profile was deleted for project " + project.getName() + ". Check the configuration.";
+		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content, NotificationType.ERROR);
 		ApplicationManager.getApplication().invokeLater(new Runnable() {
 			@Override
 			public void run() {
