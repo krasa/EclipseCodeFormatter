@@ -8,6 +8,11 @@
 
 package krasa.formatter.plugin;
 
+import static krasa.formatter.plugin.ProxyUtils.createProxy;
+
+import org.jetbrains.annotations.NotNull;
+import org.picocontainer.MutablePicoContainer;
+
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.ApplicationInfo;
@@ -17,11 +22,8 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.serviceContainer.PlatformComponentManagerImpl;
-import krasa.formatter.settings.Settings;
-import org.jetbrains.annotations.NotNull;
-import org.picocontainer.MutablePicoContainer;
 
-import static krasa.formatter.plugin.ProxyUtils.createProxy;
+import krasa.formatter.settings.Settings;
 
 /**
  * Switches a project's {@link CodeStyleManager} to a eclipse formatter and back.
@@ -97,6 +99,6 @@ public class ProjectCodeStyleInstaller {
 
 	private static boolean isNewApi() {
 		ApplicationInfo appInfo = ApplicationInfoImpl.getInstance();
-		return appInfo.getBuild().getBaselineVersion() > 193;
+		return appInfo.getBuild().getBaselineVersion() >= 193;
 	}
 }                                                                                   
