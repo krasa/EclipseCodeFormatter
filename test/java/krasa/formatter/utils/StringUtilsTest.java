@@ -3,6 +3,7 @@ package krasa.formatter.utils;
 import com.intellij.openapi.components.BaseComponent;
 import com.intellij.openapi.components.ComponentConfig;
 import com.intellij.openapi.extensions.ExtensionPointName;
+import com.intellij.openapi.extensions.ExtensionsArea;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.UserDataHolderBase;
@@ -75,6 +76,11 @@ public class StringUtilsTest {
 	}
 
 	class MyDummyProject extends UserDataHolderBase implements Project {
+		@NotNull
+		@Override
+		public ExtensionsArea getExtensionArea() {
+			return null;
+		}
 
 		public MyDummyProject() {
 		}
