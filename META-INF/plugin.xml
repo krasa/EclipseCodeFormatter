@@ -4,10 +4,10 @@
 
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
-	
-	<version>19.2.181.000.0-Eclipse_2019-09-JavaOnly</version>
+
+	<version>19.3.181.000.0-Eclipse_2019-09-JavaOnly</version>
 	<idea-version since-build="181.000"/>
-	
+
 
 	<description><![CDATA[
         Allows using Eclipse's code formatter directly from IntelliJ.<br>
@@ -30,6 +30,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>19.3 (2019-10-24)
+		<br>- Fixed LanguageLevel parsing
 	    <br>19.2 (2019-10-19)
 		<br>- IndexOutOfBoundsException fix
 	    <br>19.1 (2019-10-16)
