@@ -1,16 +1,17 @@
 package krasa.formatter.eclipse;
 
-import java.io.UnsupportedEncodingException;
-
+import com.intellij.openapi.command.impl.DummyProject;
+import com.intellij.openapi.project.Project;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.util.PsiUtilCore;
+import junit.framework.Assert;
+import krasa.formatter.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.intellij.openapi.command.impl.DummyProject;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.util.PsiUtilCore;
+import java.io.UnsupportedEncodingException;
 
-import junit.framework.Assert;
-import krasa.formatter.settings.Settings;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Vojtech Krasa
@@ -156,4 +157,11 @@ public class JavaCodeFormatterFacadeTest {
 		return new String(s.getBytes("UTF8"), utf8);
 	}
 
+	@Test
+	public void toEclipseLanguageLevel() {
+		assertEquals("1.8", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_1_8));
+		assertEquals("10", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_10));
+		assertEquals("13", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_13));
+		assertEquals("13", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_13_PREVIEW));
+	}
 }

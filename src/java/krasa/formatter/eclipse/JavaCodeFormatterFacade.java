@@ -1,27 +1,23 @@
 package krasa.formatter.eclipse;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
-
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -64,18 +60,16 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	private EclipseFormatterAdapter newCodeFormatter(LanguageLevel level) {
 		lastState = javaPropertiesProvider.getModifiedMonitor();
 		Properties options = javaPropertiesProvider.get();
-		String substring = level.name().replace("_", ".").substring(4);
-		// test
-		new Double(substring);
-		options.setProperty("org.eclipse.jdt.core.compiler.source", substring);
-		options.setProperty("org.eclipse.jdt.core.compiler.codegen.targetPlatform", substring);
-		options.setProperty("org.eclipse.jdt.core.compiler.compliance", substring);
+		String languageLevel = toEclipseLanguageLevel(level);
+		options.setProperty("org.eclipse.jdt.core.compiler.source", languageLevel);
+		options.setProperty("org.eclipse.jdt.core.compiler.codegen.targetPlatform", languageLevel);
+		options.setProperty("org.eclipse.jdt.core.compiler.compliance", languageLevel);
 		this.effectiveLanguageLevel = level;
 
 		try {
 			Class<?> aClass;
 			if (version == Settings.FormatterVersion.CUSTOM) {
-					aClass = getCustomAdapter(pathToEclipse);
+				aClass = getCustomAdapter(pathToEclipse);
 			} else {
 				aClass = getAdapter();
 			}
@@ -88,6 +82,15 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			throw new RuntimeException(e);
 		}
 		return codeFormatter;
+	}
+
+	@NotNull
+	protected static String toEclipseLanguageLevel(LanguageLevel level) {
+		int feature = level.toJavaVersion().feature;
+		if (feature < 10) {
+			return "1." + feature;
+		}
+		return String.valueOf(feature);
 	}
 
 	/**
@@ -117,24 +120,8 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			return LanguageLevel.JDK_1_7; // tests hack
 		}
 		JavaPsiImplementationHelper instance = JavaPsiImplementationHelper.getInstance(project);
-		LanguageLevel languageLevel = null;
-		try {
-			Method getClassesLanguageLevel = instance.getClass().getMethod("getClassesLanguageLevel",
-					VirtualFile.class);
-			languageLevel = (LanguageLevel) getClassesLanguageLevel.invoke(instance, psiFile.getVirtualFile());
-		} catch (Exception e) {
-			try {
-				Method getClassesLanguageLevel = instance.getClass().getMethod("getEffectiveLanguageLevel",
-						VirtualFile.class);
-				languageLevel = (LanguageLevel) getClassesLanguageLevel.invoke(instance, psiFile.getVirtualFile());
-			} catch (Exception e1) {
-				LOG.error("Please report this", e);
-				LOG.error("Please report this", e1);
-			}
-		}
-		if (languageLevel == null) {
-			languageLevel = LanguageLevel.JDK_1_7;
-		}
+		LanguageLevel languageLevel = instance.getEffectiveLanguageLevel(psiFile.getVirtualFile());
+
 		return languageLevel;
 	}
 
