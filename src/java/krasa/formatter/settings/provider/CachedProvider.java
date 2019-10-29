@@ -18,6 +18,10 @@ public abstract class CachedProvider<T> {
 		this.modifiableFile = modifiableFile;
 	}
 
+	public ModifiableFile getModifiableFile() {
+		return modifiableFile;
+	}
+
 	protected abstract T readFile(File file);
 
 	public T get() {

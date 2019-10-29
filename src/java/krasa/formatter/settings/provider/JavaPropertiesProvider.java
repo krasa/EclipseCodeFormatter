@@ -14,8 +14,12 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 	protected String profile;
 
 	public JavaPropertiesProvider(Settings settings) {
-		super(new ModifiableFile(settings.getPathToConfigFileJava()));
-		this.profile = settings.getSelectedJavaProfile();
+		this(settings.getPathToConfigFileJava(), settings.getSelectedJavaProfile());
+	}
+
+	public JavaPropertiesProvider(String pathToConfigFileJava, String selectedJavaProfile) {
+		super(new ModifiableFile(pathToConfigFileJava));
+		this.profile = selectedJavaProfile;
 	}
 
 	@Override
