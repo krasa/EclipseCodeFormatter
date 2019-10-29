@@ -3,6 +3,8 @@ package krasa.formatter.eclipse;
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
@@ -14,11 +16,14 @@ import krasa.formatter.plugin.InvalidPropertyFile;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -56,18 +61,64 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	public String format(String text, int startOffset, int endOffset, PsiFile psiFile)
 			throws FileDoesNotExistsException {
 		LanguageLevel languageLevel = getLanguageLevel(psiFile);
-		return getCodeFormatter(languageLevel).format(text, startOffset, endOffset, languageLevel);
+		VirtualFile formatterFile = traverseToFindConfigurationFilesByConvention(psiFile);
+		System.out.println("found Formatter at = " + formatterFile);
+
+		return getCodeFormatter(languageLevel, formatterFile).format(text, startOffset, endOffset, languageLevel);
 	}
 
-	private EclipseFormatterAdapter getCodeFormatter(LanguageLevel level) throws FileDoesNotExistsException {
+	@Nullable
+	private VirtualFile traverseToFindConfigurationFilesByConvention(PsiFile psiFile) {
+
+		VirtualFile currentDirectory = psiFile.getVirtualFile().getParent();
+		VirtualFile dir = currentDirectory;
+		VirtualFile moduleFile = ProjectRootManager.getInstance(psiFile.getProject()).getFileIndex().getModuleForFile(psiFile.getVirtualFile()).getModuleFile().getParent();
+
+		for (; ; ) {
+			if (dir == null || !dir.exists()) {
+				//no more parent directory to traverse
+				break;
+			}
+			List<String> conventionFileNames = Arrays.asList(".settings/org.eclipse.jdt.core.prefs", "mechanic-formatter.epf", ".settings/mechanic-formatter.epf");
+			for (String conventionFileName : conventionFileNames) {
+				VirtualFile fileByRelativePath = dir.findFileByRelativePath(conventionFileName);
+				if (fileByRelativePath != null && fileByRelativePath.exists()) {
+					return fileByRelativePath;
+				}
+			}
+			if (dir.equals(moduleFile)) {
+				//Abort traversing at module root directory
+				break;
+			}
+			dir = dir.getParent();
+		}
+		return null;
+	}
+
+	private EclipseFormatterAdapter getCodeFormatter(LanguageLevel level, VirtualFile formatterFileByConventionOverConfiguration) throws FileDoesNotExistsException {
+
+		if (null != formatterFileByConventionOverConfiguration && !isSameFile(javaPropertiesProvider.getModifiableFile(), formatterFileByConventionOverConfiguration)) {
+			javaPropertiesProvider = new JavaPropertiesProvider(formatterFileByConventionOverConfiguration.getCanonicalPath(), "");
+			return newCodeFormatter(level);
+		}
+
 		if (codeFormatter == null || configFileRefresh() || this.effectiveLanguageLevel != level) {
 			return newCodeFormatter(level);
 		}
+
 		return codeFormatter;
 	}
 
 	private boolean configFileRefresh() {
 		return profileScheme == Settings.ProfileScheme.FILE && javaPropertiesProvider.wasChanged(lastState);
+	}
+
+	private boolean isSameFile(ModifiableFile fileA, VirtualFile fileB) {
+		try {
+			return fileA.getCanonicalPath().equals(fileB.getCanonicalPath());
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	private EclipseFormatterAdapter newCodeFormatter(LanguageLevel level) {
