@@ -15,6 +15,5 @@ support/DependencyDownloader/DependencyDownloader.iml
 .idea/deployment.xml
 .idea/compiler.xml
 .idea/encodings.xml
-.idea/vcs.xml
 
 testProject/testProject.iml
