@@ -1,6 +1,18 @@
 /EclipseFormatter.zip
 **/out/**
 **/target/**
-support/eclipseLibs/target/**
+
+support/eclipseLibs/target/**     
+support/support.iml
+support/DependencyDownloader/DependencyDownloader.iml
+
 .shelf/
 *.iws
+
+# Default ignored files
+.idea/workspace.xml
+.idea/uiDesigner.xml
+.idea/deployment.xml
+.idea/compiler.xml
+
+testProject/testProject.iml
