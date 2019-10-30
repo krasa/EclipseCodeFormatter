@@ -228,7 +228,8 @@ public class EclipseCodeStyleManager {
 
 
 	public boolean shouldReformatByEclipse(PsiFile psiFile) {
-		return settings.isEnabled() && fileTypeIsEnabled(psiFile) && psiFile.getVirtualFile().isInLocalFileSystem()
+		return settings.isEnabled() && fileTypeIsEnabled(psiFile)
+				&& psiFile.getVirtualFile().isInLocalFileSystem()     // not sure why that is here
 				&& FileUtils.isWritable(psiFile);
 	}
 

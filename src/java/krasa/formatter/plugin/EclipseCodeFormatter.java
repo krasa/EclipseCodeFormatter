@@ -1,10 +1,5 @@
 package krasa.formatter.plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.openapi.diagnostic.Logger;
@@ -14,12 +9,15 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtilBase;
-
 import krasa.formatter.eclipse.CodeFormatterFacade;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.processor.Processor;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Vojtech Krasa
@@ -97,13 +95,14 @@ public class EclipseCodeFormatter {
 	}
 
 	private void postProcess(Document document, PsiFile file, Range range, FileDocumentManager fileDocumentManager) {
-		for (Processor postProcessor : postProcessors) {
-			postProcessor.process(document, file, range);
-		}
-		// updates psi, so comments from import statements does not get duplicated
-		final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
-		manager.commitDocument(document);
-		fileDocumentManager.saveDocument(document);
+//		for (Processor postProcessor : postProcessors) {
+//			postProcessor.process(document, file, range);
+//		}
+		//TODO probably not needed anymore?
+//		// updates psi, so comments from import statements does not get duplicated
+//		final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
+//		manager.commitDocument(document);
+//		fileDocumentManager.saveDocument(document);
 	}
 
 	private String reformat(int startOffset, int endOffset, String text, PsiFile psiFile)
