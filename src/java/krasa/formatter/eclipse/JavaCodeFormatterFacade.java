@@ -1,13 +1,16 @@
 package krasa.formatter.eclipse;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
+import com.intellij.testFramework.UsefulTestCase;
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
@@ -16,6 +19,7 @@ import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URL;
@@ -62,7 +66,14 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 		VirtualFile currentDirectory = psiFile.getVirtualFile().getParent();
 		VirtualFile dir = currentDirectory;
-		VirtualFile moduleFile = ProjectRootManager.getInstance(psiFile.getProject()).getFileIndex().getModuleForFile(psiFile.getVirtualFile()).getModuleFile().getParent();
+		Module moduleForFile = ProjectRootManager.getInstance(psiFile.getProject()).getFileIndex().getModuleForFile(psiFile.getVirtualFile());
+		VirtualFile moduleFile;
+		if (ApplicationManager.getApplication().isUnitTestMode()) {   //unable to setup it properly
+			moduleFile = UsefulTestCase.refreshAndFindFile(new File("testProject/testProject.iml"));
+		} else {
+			moduleFile = moduleForFile.getModuleFile();
+		}
+		VirtualFile moduleFileDir = moduleFile.getParent();
 
 		for (; ; ) {
 			if (dir == null || !dir.exists()) {
@@ -76,7 +87,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 					return fileByRelativePath;
 				}
 			}
-			if (dir.equals(moduleFile)) {
+			if (dir.equals(moduleFileDir)) {
 				//Abort traversing at module root directory
 				break;
 			}
