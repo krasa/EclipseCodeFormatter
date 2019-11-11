@@ -5,6 +5,7 @@ import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -14,6 +15,7 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterTestCase;
 import com.intellij.testFramework.IdeaTestUtil;
+import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.util.IncorrectOperationException;
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
@@ -24,38 +26,114 @@ import java.util.Arrays;
 
 public class PlatformFormatterTest extends FormatterTestCase {
 
+	private static final String BASE_PATH = "../testProject";
+	JavaCodeFormatterFacade.IModuleResolverStrategy previousResolver;
+
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 		Settings settings = new Settings();
 		settings.setFormatter(Settings.Formatter.ECLIPSE);
 		ProjectComponent.getInstance(getProject()).installOrUpdate(settings);
+		previousResolver = JavaCodeFormatterFacade.TESTING_getModuleResolver();
 	}
 
-
 	public void testFormatting() {
-		VirtualFile virtualFile;
-		File file = new File("testProject\\src\\main\\java\\aaa\\XAAA.java");
-		virtualFile = refreshAndFindFile(file);
-		PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(virtualFile);
 
-		CommandProcessor.getInstance().executeCommand(getProject(), () -> ApplicationManager.getApplication().runWriteAction(() -> performFormatting(psiFile)), "",
-				"");
 
-		Document document = getDocument(psiFile);
-		String fileText = document.getText();
-		assertEquals("package aaa;\n" +
-				"\n" +
-				"public class XAAA {\n" +
-				"\tpublic static void aaa() {\n" +
-				"\n" +
-				"\t}\n" +
-				"}\n", fileText);
+		JavaCodeFormatterFacade.TESTING_setModuleResolver(new JavaCodeFormatterFacade.IModuleResolverStrategy() {
+			@Override
+			public VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
 
+				if (virtualFile.getPath().contains("/testProject/submodule-a")) {
+					return UsefulTestCase.refreshAndFindFile(new File("../testProject/submodule-a"));
+				}
+				if (virtualFile.getPath().contains("/testProject/submodule-b")) {
+					return UsefulTestCase.refreshAndFindFile(new File("../testProject/submodule-b"));
+				}
+				if (virtualFile.getPath().contains("/testProject")) {
+					return UsefulTestCase.refreshAndFindFile(new File("../testProject"));
+				}
+				throw new UnsupportedOperationException("Not expected " + virtualFile);
+			}
+		});
+
+		{
+			VirtualFile virtualFile = refreshAndFindFile(new File("../testProject/submodule-a/src/main/java/aaa/XAAA.java"));
+
+			PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(virtualFile);
+
+			CommandProcessor.getInstance().executeCommand(getProject(), () -> ApplicationManager.getApplication().runWriteAction(() -> performFormatting(psiFile)), "",
+					"");
+
+			Document document = getDocument(psiFile);
+			String fileText = document.getText();
+			assertEquals("package aaa;\n" +
+					"\n" +
+					"public class XAAA {\n" +
+					"\tpublic static void aaa() {\n" +
+					"\n" +
+					"\t}\n" +
+					"}\n", fileText);
+			//submodule-a has no own formatter configuration, so it uses the one of its parent
+			assertFormatterFile("testProject/.settings/org.eclipse.jdt.core.prefs");
+
+		}
+
+		{
+			VirtualFile virtualFile = refreshAndFindFile(new File("../testProject/submodule-b/src/main/java/bbb/XBBB.java"));
+
+			PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(virtualFile);
+
+			CommandProcessor.getInstance().executeCommand(getProject(), () -> ApplicationManager.getApplication().runWriteAction(() -> performFormatting(psiFile)), "",
+					"");
+
+			assertFormatterFile("testProject/submodule-b/mechanic-formatter.epf");
+			Document document = getDocument(psiFile);
+			String fileText = document.getText();
+			assertEquals("package bbb;\n" +
+					"\n" +
+					"public class XBBB {\n" +
+					"    public static void bbb() {\n" +
+					"\n" +
+					"    }\n" +
+					"}\n", fileText);
+			//submodule-b has its own formatter configuration
+		}
+
+		{
+			VirtualFile virtualFile = refreshAndFindFile(new File("../testProject/src/main/java/aaa/XAAA.java"));
+
+			PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(virtualFile);
+
+			CommandProcessor.getInstance().executeCommand(getProject(), () -> ApplicationManager.getApplication().runWriteAction(() -> performFormatting(psiFile)), "",
+					"");
+
+			Document document = getDocument(psiFile);
+			String fileText = document.getText();
+			assertEquals("package aaa;\n" +
+					"\n" +
+					"public class XAAA {\n" +
+					"\tpublic static void aaa() {\n" +
+					"\n" +
+					"\t}\n" +
+					"}\n", fileText);
+			//the parent project has its own formatter configuration
+			assertFormatterFile("testProject/.settings/org.eclipse.jdt.core.prefs");
+		}
+
+	}
+
+	private void assertFormatterFile(String s) {
+		String filePath = JavaCodeFormatterFacade.TESTING_getMostRecentFormatterFile().getPath();
+		assertTrue("Used " + filePath, filePath.endsWith(s));
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+
+		JavaCodeFormatterFacade.TESTING_setModuleResolver(previousResolver);
+
 		try {
 			super.tearDown();
 		} catch (RuntimeException exception) {
@@ -96,6 +174,6 @@ public class PlatformFormatterTest extends FormatterTestCase {
 
 	@Override
 	protected String getBasePath() {
-		return "/psi/formatter/wrapping";
+		return BASE_PATH;
 	}
 }
