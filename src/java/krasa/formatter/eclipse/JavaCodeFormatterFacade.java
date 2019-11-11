@@ -1,17 +1,15 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
-import com.intellij.testFramework.UsefulTestCase;
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
@@ -21,7 +19,6 @@ import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -38,15 +35,22 @@ import java.util.Properties;
 public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 	private static final Logger LOG = Logger.getInstance(JavaCodeFormatterFacade.class.getName());
+	private static IModuleResolverStrategy moduleResolver = new DefaultModuleResolverStrategy();
+	private static VirtualFile mostRecentFormatterFile = null;
 
+	private final List<String> CONVENTIONFILENAMES = Arrays.asList(//
+			".settings/org.eclipse.jdt.core.prefs",//
+			".settings/mechanic-formatter.epf",//
+			"mechanic-formatter.epf" //
+	);
+	protected EclipseFormatterAdapter codeFormatter;
+	protected ModifiableFile.Monitor lastState;
 	private Settings.FormatterVersion version;
 	private Project project;
 	private String pathToEclipse;
-	protected EclipseFormatterAdapter codeFormatter;
 	private LanguageLevel effectiveLanguageLevel;
 	private Settings.ProfileScheme profileScheme;
 	private JavaPropertiesProvider javaPropertiesProvider;
-	protected ModifiableFile.Monitor lastState;
 
 	public JavaCodeFormatterFacade(Settings.ProfileScheme profileScheme, JavaPropertiesProvider javaPropertiesProvider, Settings.FormatterVersion version,
 								   Project project, String pathToEclipse) {
@@ -61,47 +65,73 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		this(settings.getProfileScheme(), settings.getJavaProperties(), settings.getEclipseVersion(), original.getProject(), settings.getPathToEclipse());
 	}
 
+	/**
+	 * VisibleForTesting
+	 */
+	@Deprecated
+	public static void TESTING_setModuleResolver(IModuleResolverStrategy otherModuleResolver) {
+		moduleResolver = otherModuleResolver;
+	}
+
+	/**
+	 * VisibleForTesting
+	 */
+	@Deprecated
+	public static IModuleResolverStrategy TESTING_getModuleResolver() {
+		return moduleResolver;
+	}
+
+	/**
+	 * VisibleForTesting
+	 */
+	@Deprecated
+	public static VirtualFile TESTING_getMostRecentFormatterFile() {
+		return mostRecentFormatterFile;
+	}
+
 	@Override
 	public String format(String text, int startOffset, int endOffset, PsiFile psiFile)
 			throws FileDoesNotExistsException {
 		LanguageLevel languageLevel = getLanguageLevel(psiFile);
-		VirtualFile formatterFile = traverseToFindConfigurationFilesByConvention(psiFile);
-		System.out.println("found Formatter at = " + formatterFile);
+		VirtualFile formatterFile = traverseToFindConfigurationFileByConvention(psiFile);
+		mostRecentFormatterFile = formatterFile;
 
 		return getCodeFormatter(languageLevel, formatterFile).format(text, startOffset, endOffset, languageLevel);
 	}
 
 	@Nullable
-	private VirtualFile traverseToFindConfigurationFilesByConvention(PsiFile psiFile) {
+	private VirtualFile traverseToFindConfigurationFileByConvention(PsiFile psiFile) {
 
-		VirtualFile currentDirectory = psiFile.getVirtualFile().getParent();
-		VirtualFile dir = currentDirectory;
-		Module moduleForFile = ProjectRootManager.getInstance(psiFile.getProject()).getFileIndex().getModuleForFile(psiFile.getVirtualFile());
-		VirtualFile moduleFile;
-		if (ApplicationManager.getApplication().isUnitTestMode()) {   //unable to setup it properly
-			moduleFile = UsefulTestCase.refreshAndFindFile(new File("testProject/testProject.iml"));
-		} else {
-			moduleFile = moduleForFile.getModuleFile();
-		}
-		VirtualFile moduleFileDir = moduleFile.getParent();
+		VirtualFile moduleFileDir = getModuleDirForFile(psiFile.getVirtualFile(), project);
 
-		for (; ; ) {
-			if (dir == null || !dir.exists()) {
-				//no more parent directory to traverse
-				break;
-			}
-			List<String> conventionFileNames = Arrays.asList(".settings/org.eclipse.jdt.core.prefs", "mechanic-formatter.epf", ".settings/mechanic-formatter.epf");
-			for (String conventionFileName : conventionFileNames) {
-				VirtualFile fileByRelativePath = dir.findFileByRelativePath(conventionFileName);
+		while (moduleFileDir != null) {
+
+			for (String conventionFileName : CONVENTIONFILENAMES) {
+				VirtualFile fileByRelativePath = moduleFileDir.findFileByRelativePath(conventionFileName);
 				if (fileByRelativePath != null && fileByRelativePath.exists()) {
 					return fileByRelativePath;
 				}
 			}
-			if (dir.equals(moduleFileDir)) {
-				//Abort traversing at module root directory
-				break;
+			moduleFileDir = getNextParentModuleDirectory(moduleFileDir);
+		}
+		return null;
+	}
+
+	private VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
+		// delegate to a strategy which can be overriden in unit tests
+		return moduleResolver.getModuleDirForFile(virtualFile, project);
+	}
+
+	private VirtualFile getNextParentModuleDirectory(VirtualFile currentModuleDir) {
+		//Jump outside the current project
+		VirtualFile parent = currentModuleDir.getParent();
+		if (parent != null && parent.exists()) {
+			//the file/dir outside the project may be within another loaded module
+			// NOTE all modules must be loaded for detecting the parent module of the current one
+			VirtualFile dirOfParentModule = getModuleDirForFile(parent, project);
+			if (dirOfParentModule != null) {
+				return dirOfParentModule;
 			}
-			dir = dir.getParent();
 		}
 		return null;
 	}
@@ -210,6 +240,11 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		return classLoader;
 	}
 
+	private Class<?> getAdapter() throws ClassNotFoundException {
+		ClassLoader classLoader = Classloaders.getEclipse();
+		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter", true, classLoader);
+		return aClass;
+	}
 
 	@NotNull
 	protected LanguageLevel getLanguageLevel(@NotNull PsiFile psiFile) {
@@ -220,6 +255,23 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		LanguageLevel languageLevel = instance.getEffectiveLanguageLevel(psiFile.getVirtualFile());
 
 		return languageLevel;
+	}
+
+
+	public interface IModuleResolverStrategy {
+		VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project);
+	}
+
+	static class DefaultModuleResolverStrategy implements IModuleResolverStrategy {
+		@Override
+		public VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
+			Module moduleForFile = ModuleUtil.findModuleForFile(virtualFile, project);
+			if (moduleForFile != null) {
+				return moduleForFile.getModuleFile().getParent();
+			} else {
+				return null;
+			}
+		}
 	}
 
 }

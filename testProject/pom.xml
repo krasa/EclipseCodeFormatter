@@ -7,6 +7,7 @@
 	<groupId>krasa.formattertest</groupId>
 	<artifactId>krasa.formattertest</artifactId>
 	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<build>
 		<plugins>
 			<plugin>
@@ -40,6 +41,10 @@
 			<version>3.3.1</version>
 		</dependency>
 	</dependencies>
+	<modules>
+		<module>submodule-a</module>
+		<module>submodule-b</module>
+	</modules>
 
 
 </project>
