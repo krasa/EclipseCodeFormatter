@@ -8,22 +8,17 @@
 
 package krasa.formatter.plugin;
 
-import static krasa.formatter.plugin.ProxyUtils.createProxy;
-
-import org.jetbrains.annotations.NotNull;
-import org.picocontainer.MutablePicoContainer;
-
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.application.ApplicationInfo;
-import com.intellij.openapi.application.impl.ApplicationInfoImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.serviceContainer.PlatformComponentManagerImpl;
-
+import com.intellij.serviceContainer.ComponentManagerImpl;
 import krasa.formatter.settings.Settings;
+import org.jetbrains.annotations.NotNull;
+
+import static krasa.formatter.plugin.ProxyUtils.createProxy;
 
 /**
  * Switches a project's {@link CodeStyleManager} to a eclipse formatter and back.
@@ -86,19 +81,9 @@ public class ProjectCodeStyleInstaller {
 	 * lol
 	 */
 	private static void registerCodeStyleManager(@NotNull Project project, @NotNull CodeStyleManager newManager) {
-		if (isNewApi()) {
-			PlatformComponentManagerImpl platformComponentManager = (PlatformComponentManagerImpl) project;
-			IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("EclipseCodeFormatter"));
-			platformComponentManager.registerServiceInstance(CodeStyleManager.class, newManager, plugin);
-		} else {
-			MutablePicoContainer container = (MutablePicoContainer) project.getPicoContainer();
-			container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
-			container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, newManager);
-		}
+		ComponentManagerImpl platformComponentManager = (ComponentManagerImpl) project;
+		IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("EclipseCodeFormatter"));
+		platformComponentManager.registerServiceInstance(CodeStyleManager.class, newManager, plugin);
 	}
 
-	private static boolean isNewApi() {
-		ApplicationInfo appInfo = ApplicationInfoImpl.getInstance();
-		return appInfo.getBuild().getBaselineVersion() >= 193;
-	}
 }                                                                                   
