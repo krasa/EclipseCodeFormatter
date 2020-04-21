@@ -1,13 +1,13 @@
 package krasa.formatter.settings.provider;
 
+import java.io.File;
+import java.util.*;
+
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 import krasa.formatter.utils.StringUtils;
-
-import java.io.File;
-import java.util.*;
 
 /**
  * @author Vojtech Krasa
@@ -29,10 +29,10 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 		List<String> order;
 		if (property != null) {
 			order = toList(property);
-		} else if (property == null && file.getName().endsWith(".prefs")) {
+		} else if (property == null && file.getName().toLowerCase().endsWith(".prefs")) {
 			throw new ParsingFailedException(
 					"File is missing a property 'org.eclipse.jdt.ui.importorder', see instructions.");
-		} else if (file.getName().endsWith(".importorder")) {
+		} else if (file.getName().toLowerCase().endsWith(".importorder")) {
 			order = loadImportOrderFile(properties);
 		} else {
 			throw new ParsingFailedException(
