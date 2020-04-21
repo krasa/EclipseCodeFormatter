@@ -183,7 +183,7 @@ public class ProjectSettingsForm {
 
 	private void disableJavaProfilesIfNecessary() {
 		String text = pathToEclipsePreferenceFileJava.getText();
-		if (!text.endsWith("xml")) {
+		if (!text.toLowerCase().endsWith("xml")) {
 			javaFormatterProfile.setEnabled(false);
 		}
 	}
@@ -491,7 +491,7 @@ public class ProjectSettingsForm {
 		});
 		String text = pathToEclipsePreferenceFile.getText();
 		if (!text.isEmpty()) {
-			if (text.endsWith("xml")) {
+			if (text.toLowerCase().endsWith("xml")) {
 				try {
 					profilesModel.addAll(FileUtils.getProfileNamesFromConfigXML(new File(text)));
 				} catch (ParsingFailedException e) {

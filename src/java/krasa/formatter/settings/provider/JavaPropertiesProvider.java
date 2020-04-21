@@ -1,11 +1,11 @@
 package krasa.formatter.settings.provider;
 
+import java.io.File;
+import java.util.Properties;
+
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.plugin.InvalidPropertyFile;
 import krasa.formatter.settings.Settings;
-
-import java.io.File;
-import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -20,9 +20,9 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 
 	@Override
 	protected Properties readFile(File file) throws InvalidPropertyFile {
-		if (file.getName().endsWith("xml")) {
+		if (file.getName().toLowerCase().endsWith("xml")) {
 			return readXmlFile(file, profile);
-		} else if (file.getName().endsWith("epf")) {
+		} else if (file.getName().toLowerCase().endsWith("epf")) {
 			return readConfigFromWorkspaceMechanicFile(file);
 		} else {
 			// properties file
