@@ -7,16 +7,18 @@ package krasa.formatter.settings;/*
  */
 
 
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.notification.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+
 import krasa.formatter.plugin.EclipseCodeStyleManager;
 import krasa.formatter.plugin.ProjectCodeStyleInstaller;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
 
 /**
  * Takes care of initializing a project's CodeFormatter and disposing of it when the project is closed. Updates the
@@ -41,10 +43,10 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 	private ProjectSettings projectSettings;
 	private EclipseCodeStyleManager eclipseCodeStyleManager;
 
-	public ProjectComponent(@NotNull Project project, @NotNull ProjectSettings projectSettings) {
+	public ProjectComponent(@NotNull Project project) {
 		this.projectCodeStyle = new ProjectCodeStyleInstaller(project);
 		this.project = project;
-		this.projectSettings = projectSettings;
+		this.projectSettings = ProjectSettings.getInstance(project);
 	}
 
 	public static Settings getSettings(PsiFile psiFile) {
