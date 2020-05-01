@@ -382,7 +382,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Custom Eclipse location (4.5+ / Mars+)"/>
+          <text value="Custom Eclipse location"/>
         </properties>
       </component>
       <component id="f8e02" class="javax.swing.JFormattedTextField" binding="importOrder">
