@@ -1,19 +1,5 @@
 package krasa.formatter.utils;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
@@ -21,10 +7,21 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.plugin.InvalidPropertyFile;
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -92,18 +89,18 @@ public class FileUtils {
 		if (!file.exists()) {
 			throw new FileDoesNotExistsException(file);
 		}
-		if (profile == null) {
-			throw new IllegalStateException("no profile selected, go to settings and select proper settings file");
-		}
 		boolean profileFound = false;
-		try { // load file profiles
+		try {
+			if (profile == null) {
+				throw new IllegalStateException("No Eclipse formatter profile selected, go to settings and properly configure it.");
+			}
+			// load file profiles
 			org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 			doc.getDocumentElement().normalize();
 
 			NodeList profiles = doc.getElementsByTagName("profile");
 			if (profiles.getLength() == 0) {
-				throw new IllegalStateException(
-						"loading of profile settings failed, file does not contain any profiles");
+				throw new IllegalStateException("Loading of profile settings failed, the file does not contain any profiles.");
 			}
 			for (int temp = 0; temp < profiles.getLength(); temp++) {
 				Node profileNode = profiles.item(temp);
@@ -114,8 +111,7 @@ public class FileUtils {
 						profileFound = true;
 						NodeList childNodes = profileElement.getElementsByTagName("setting");
 						if (childNodes.getLength() == 0) {
-							throw new IllegalStateException(
-									"loading of profile settings failed, profile has no settings elements");
+							throw new IllegalStateException("Loading of profile settings failed, the profile has no settings elements.");
 						}
 						for (int i = 0; i < childNodes.getLength(); i++) {
 							Node item = childNodes.item(i);
@@ -129,15 +125,15 @@ public class FileUtils {
 					}
 				}
 			}
+			if (!profileFound) {
+				throw new IllegalStateException("profile not found in the file " + file.getAbsolutePath());
+			}
+			if (properties.size() == defaultSize) {
+				throw new IllegalStateException("no properties loaded, something is broken, file:" + file.getAbsolutePath());
+			}
 		} catch (Exception e) {
-			LOG.error("file: " + file.getAbsolutePath() + ", profile: " + profile, e);
+			LOG.warn("file: " + file.getAbsolutePath() + ", profile: " + profile, e);
 			throw new InvalidPropertyFile(e.getMessage(), e);
-		}
-		if (!profileFound) {
-			throw new IllegalStateException("profile not found in the file " + file.getAbsolutePath());
-		}
-		if (properties.size() == defaultSize) {
-			throw new IllegalStateException("no properties loaded, something is broken, file:" + file.getAbsolutePath());
 		}
 		return properties;
 	}

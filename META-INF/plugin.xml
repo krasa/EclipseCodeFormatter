@@ -5,7 +5,7 @@
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
 
-	<version>19.4.201.6668.0-Eclipse_2019-09-JavaOnly</version>
+	<version>19.5.201.6668.0-Eclipse_2019-09-JavaOnly</version>
 	<idea-version since-build="201.6668"/>
 
 
@@ -30,6 +30,9 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>19.5 (2019-05-03)
+		<br>- fixed 'Custom Eclipse location' label
+		<br>- fixed error handling
 	    <br>19.4 (2019-04-24)
 		<br>- allowing ".XML" in settings
 	    <br>19.3 (2019-10-24)
