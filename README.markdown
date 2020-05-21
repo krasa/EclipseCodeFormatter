@@ -22,7 +22,7 @@ Currently supports formatting of
          3. Click `OK` to save the settings
          4. Go to the `.settings` directory inside your project's directory. There you will find the `org.eclipse.jdt.core.prefs` file which contains the Eclipse formatter settings
             - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/org.eclipse.jdt.core.prefs) 
-      - Or, export a [Workspace Mechanic] (http://marketplace.eclipse.org/content/workspace-mechanic/) configuration to get a `*.epf` file
+      - Or, export a [Workspace Mechanic](http://marketplace.eclipse.org/content/workspace-mechanic/) configuration to get a `*.epf` file
          - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/mechanic-formatter.epf) 
    2. Open a project in IntelliJ
    3. Set path to the config file via `IntelliJ | Settings | Other Settings | Eclipse Code Formatter | Eclipse preference file`
