@@ -5,6 +5,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.FileDoesNotExistsException;
@@ -14,6 +15,8 @@ import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -31,15 +34,21 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	private String pathToEclipse;
 	protected EclipseFormatterAdapter codeFormatter;
 	private LanguageLevel effectiveLanguageLevel;
+	private Settings.ProfileScheme profileScheme;
 	private JavaPropertiesProvider javaPropertiesProvider;
 	protected ModifiableFile.Monitor lastState;
 
-	public JavaCodeFormatterFacade(JavaPropertiesProvider javaPropertiesProvider, Settings.FormatterVersion version,
+	public JavaCodeFormatterFacade(Settings.ProfileScheme profileScheme, JavaPropertiesProvider javaPropertiesProvider, Settings.FormatterVersion version,
 								   Project project, String pathToEclipse) {
+		this.profileScheme = profileScheme;
 		this.javaPropertiesProvider = javaPropertiesProvider;
 		this.version = version;
 		this.project = project;
 		this.pathToEclipse = pathToEclipse;
+	}
+
+	public JavaCodeFormatterFacade(Settings settings, CodeStyleManager original) {
+		this(settings.getProfileScheme(), settings.getJavaProperties(), settings.getEclipseVersion(), original.getProject(), settings.getPathToEclipse());
 	}
 
 	@Override
@@ -58,30 +67,52 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	}
 
 	private EclipseFormatterAdapter newCodeFormatter(LanguageLevel level) {
-		lastState = javaPropertiesProvider.getModifiedMonitor();
-		Properties options = javaPropertiesProvider.get();
-		String languageLevel = toEclipseLanguageLevel(level);
-		options.setProperty("org.eclipse.jdt.core.compiler.source", languageLevel);
-		options.setProperty("org.eclipse.jdt.core.compiler.codegen.targetPlatform", languageLevel);
-		options.setProperty("org.eclipse.jdt.core.compiler.compliance", languageLevel);
-		this.effectiveLanguageLevel = level;
-
 		try {
-			Class<?> aClass;
+			ClassLoader classLoader;
 			if (version == Settings.FormatterVersion.CUSTOM) {
-				aClass = getCustomAdapter(pathToEclipse);
+				classLoader = getCustomClassloader(pathToEclipse);
 			} else {
-				aClass = getAdapter();
+				classLoader = Classloaders.getEclipse();
 			}
-			Constructor<?> constructor = aClass.getConstructor(Map.class);
-			codeFormatter = (EclipseFormatterAdapter) constructor.newInstance(toMap(options));
+
+			Map<String, String> options = getEclipseProfileOptions(classLoader);
+			String languageLevel = toEclipseLanguageLevel(level);
+			options.put("org.eclipse.jdt.core.compiler.source", languageLevel);
+			options.put("org.eclipse.jdt.core.compiler.codegen.targetPlatform", languageLevel);
+			options.put("org.eclipse.jdt.core.compiler.compliance", languageLevel);
+			this.effectiveLanguageLevel = level;
+
+			Class<?> aClass1 = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter", true, classLoader);
+			Constructor<?> constructor = aClass1.getConstructor(Map.class);
+			codeFormatter = (EclipseFormatterAdapter) constructor.newInstance(options);
 		} catch (FormattingFailedException e) {
+			throw e;
+		} catch (FileDoesNotExistsException e) {
 			throw e;
 		} catch (Throwable e) {
 			// rethrow to have this plugin as a cause of the error report
 			throw new RuntimeException(e);
 		}
 		return codeFormatter;
+	}
+
+	private Map<String, String> getEclipseProfileOptions(ClassLoader classLoader) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		Class<?> aClass1 = Class.forName("org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions", true, classLoader);
+		Method getMap = aClass1.getMethod("getMap");
+		switch (profileScheme) {
+
+			case ECLIPSE:
+				return (Map<String, String>) getMap.invoke(aClass1.getDeclaredMethod("getEclipseDefaultSettings").invoke(null));
+			case ECLIPSE_2_1:
+				return (Map<String, String>) getMap.invoke(aClass1.getDeclaredMethod("getDefaultSettings").invoke(null));
+			case JAVA_CONVENTIONS:
+				return (Map<String, String>) getMap.invoke(aClass1.getDeclaredMethod("getJavaConventionsSettings").invoke(null));
+			case FILE:
+				lastState = javaPropertiesProvider.getModifiedMonitor();
+				Properties options = javaPropertiesProvider.get();
+				return toMap(options);
+		}
+		throw new IllegalStateException();
 	}
 
 	@NotNull
@@ -95,24 +126,19 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 	/**
 	 * TODO CACHE BETWEEN PROJECTS
+	 *
+	 * @return
 	 */
-	private Class<?> getCustomAdapter(String pathToEclipse) throws ClassNotFoundException {
+	private ClassLoader getCustomClassloader(String pathToEclipse) throws ClassNotFoundException {
 		ConfigurableEclipseLocation configurableEclipseLocation = new ConfigurableEclipseLocation();
 		List<URL> urlList = configurableEclipseLocation.run(pathToEclipse.trim());
 		if (urlList.isEmpty()) {
 			throw new FormattingFailedException("Invalid path to Eclipse, no jars found in '" + pathToEclipse + "'", true);
 		}
 		ClassLoader classLoader = Classloaders.getCustomClassloader(urlList);
-		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter", true, classLoader);
-		return aClass;
+		return classLoader;
 	}
 
-
-	private Class<?> getAdapter() throws ClassNotFoundException {
-		ClassLoader classLoader = Classloaders.getEclipse();
-		Class<?> aClass = Class.forName("krasa.formatter.adapter.EclipseJavaFormatterAdapter", true, classLoader);
-		return aClass;
-	}
 
 	@NotNull
 	protected LanguageLevel getLanguageLevel(@NotNull PsiFile psiFile) {

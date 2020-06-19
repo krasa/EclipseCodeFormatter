@@ -8,12 +8,10 @@
 
 package krasa.formatter.settings;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.util.xmlb.annotations.Transient;
-
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
@@ -64,12 +62,18 @@ public class Settings {
 	private boolean useOldEclipseJavaFormatter = false;
 	private FormatterVersion eclipseVersion = FormatterVersion.NEWEST;
 	private ImportOrdering importOrdering = ImportOrdering.ECLIPSE_452;
+	private ProfileScheme profileScheme = ProfileScheme.FILE;
 	private String pathToEclipse = "";
 
-	/**
-	 * NEVER FORGET: add fields to #equalsContent !!
-	 */
 	public Settings() {
+	}
+
+	public ProfileScheme getProfileScheme() {
+		return profileScheme;
+	}
+
+	public void setProfileScheme(ProfileScheme profileScheme) {
+		this.profileScheme = profileScheme;
 	}
 
 	public String getPathToEclipse() {
@@ -289,6 +293,13 @@ public class Settings {
 		ECLIPSE_452,
 	}
 
+	public static enum ProfileScheme {
+		ECLIPSE,
+		ECLIPSE_2_1,
+		JAVA_CONVENTIONS,
+		FILE,
+	}
+
 	public static enum Formatter {
 		DEFAULT,
 		ECLIPSE
@@ -375,80 +386,9 @@ public class Settings {
 		this.id = id;
 	}
 
-	public boolean equalsContent(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-
-		Settings settings = (Settings) o;
-
-		if (enableJavaFormatting != settings.enableJavaFormatting)
-			return false;
-		if (enableJSFormatting != settings.enableJSFormatting)
-			return false;
-		if (enableCppFormatting != settings.enableCppFormatting)
-			return false;
-		if (optimizeImports != settings.optimizeImports)
-			return false;
-		if (useOldEclipseJavaFormatter != settings.useOldEclipseJavaFormatter)
-			return false;
-		if (importOrderFromFile != settings.importOrderFromFile)
-			return false;
-		if (formatOtherFileTypesWithIntelliJ != settings.formatOtherFileTypesWithIntelliJ)
-			return false;
-		if (formatSeletedTextInAllFileTypes != settings.formatSeletedTextInAllFileTypes)
-			return false;
-		if (enableGWT != settings.enableGWT)
-			return false;
-		if (enableJSProcessor != settings.enableJSProcessor)
-			return false;
-		if (useForLiveTemplates != settings.useForLiveTemplates)
-			return false;
-		if (useOldEclipseJavaFormatter != settings.useOldEclipseJavaFormatter)
-			return false;
-		if (pathToConfigFileJS != null ? !pathToConfigFileJS.equals(settings.pathToConfigFileJS)
-				: settings.pathToConfigFileJS != null)
-			return false;
-		if (pathToConfigFileCpp != null ? !pathToConfigFileCpp.equals(settings.pathToConfigFileCpp)
-				: settings.pathToConfigFileCpp != null)
-			return false;
-		if (formatter != settings.formatter)
-			return false;
-		if (!pathToConfigFileJava.equals(settings.pathToConfigFileJava))
-			return false;
-		if (disabledFileTypes != null ? !disabledFileTypes.equals(settings.disabledFileTypes)
-				: settings.disabledFileTypes != null)
-			return false;
-		if (notifyFromTextLenght != null ? !notifyFromTextLenght.equals(settings.notifyFromTextLenght)
-				: settings.notifyFromTextLenght != null)
-			return false;
-		if (importOrder != null ? !importOrder.equals(settings.importOrder) : settings.importOrder != null)
-			return false;
-		if (importOrderConfigFilePath != null ? !importOrderConfigFilePath.equals(settings.importOrderConfigFilePath)
-				: settings.importOrderConfigFilePath != null)
-			return false;
-		if (selectedJavaProfile != null ? !selectedJavaProfile.equals(settings.selectedJavaProfile)
-				: settings.selectedJavaProfile != null)
-			return false;
-		if (selectedJavaScriptProfile != null ? !selectedJavaScriptProfile.equals(settings.selectedJavaScriptProfile)
-				: settings.selectedJavaScriptProfile != null)
-			return false;
-		if (selectedCppProfile != null ? !selectedCppProfile.equals(settings.selectedCppProfile)
-				: settings.selectedCppProfile != null)
-			return false;
-		if (eclipseVersion != settings.eclipseVersion)
-			return false;
-		if (importOrdering != settings.importOrdering)
-			return false;
-		return pathToEclipse != null ? pathToEclipse.equals(settings.pathToEclipse) : settings.pathToEclipse == null;
-
-	}
-
 	public boolean isImportOrderFromFile() {
 		return importOrderFromFile;
 	}
-
 
 	public void setImportOrderFromFile(boolean importOrderFromFile) {
 		this.importOrderFromFile = importOrderFromFile;

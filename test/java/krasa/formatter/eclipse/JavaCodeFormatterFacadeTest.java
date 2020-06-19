@@ -77,7 +77,7 @@ public class JavaCodeFormatterFacadeTest {
 	public void setUp() throws Exception {
 		Settings settings = new Settings();
 		setPathToConfigFileJava(settings, PATH_TO_CONFIG_FILE);
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(Settings.ProfileScheme.FILE, settings.getJavaProperties(),
 				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 	}
 
@@ -103,7 +103,7 @@ public class JavaCodeFormatterFacadeTest {
 		Settings settings = new Settings();
 		setPathToConfigFileJava(settings, "resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(Settings.ProfileScheme.FILE, settings.getJavaProperties(),
 				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 		String output = format(INPUT);
 		Assert.assertEquals(FORMATTED, output);
@@ -115,7 +115,7 @@ public class JavaCodeFormatterFacadeTest {
 	public void testFormatByEPF() throws Exception {
 		Settings settings = new Settings();
 		setPathToConfigFileJava(settings, "resources/mechanic-formatter.epf");
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(Settings.ProfileScheme.FILE, settings.getJavaProperties(),
 				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 		String output = format(INPUT);
 		Assert.assertEquals(FORMATTED, output);
@@ -129,7 +129,7 @@ public class JavaCodeFormatterFacadeTest {
 		setPathToConfigFileJava(settings, "resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(settings.getJavaProperties(),
+		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(Settings.ProfileScheme.FILE, settings.getJavaProperties(),
 				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
 		String output = format(INPUT_3);
 		Assert.assertEquals(EXPECTED_3, output);

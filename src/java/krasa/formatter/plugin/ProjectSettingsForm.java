@@ -128,6 +128,10 @@ public class ProjectSettingsForm {
 	private JRadioButton importOrdering452;
 	private JButton profileHelp;
 	private JLabel importStyleLabel;
+	private JRadioButton schemeEclipseJC;
+	private JRadioButton schemeEclipse;
+	private JRadioButton schemeEclipse21;
+	private JRadioButton schemeEclipseFile;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -137,13 +141,14 @@ public class ProjectSettingsForm {
 
 	private void updateComponents() {
 		hidePopups();
+
 		enabledBy(new JComponent[]{eclipseSupportedFileTypesLabel, enableJavaFormatting, doNotFormatOtherFilesRadioButton,
 				formatOtherFilesWithExceptionsRadioButton,
 				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
 				importOrderConfigurationManualRadioButton, useEclipseNewest, useEclipseCustom,
 				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452}, useEclipseFormatter);
 
-		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
+		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, schemeEclipseFile, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
 				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, customEclipseLocationBrowse, pathToCustomEclipse,
 				useEclipseNewest, useEclipseCustom, javaFormatterVersionLabel, importStyleLabel,
 				importOrdering451, importOrdering452}, enableJavaFormatting);
@@ -161,6 +166,8 @@ public class ProjectSettingsForm {
 
 
 		enabledBy(new JComponent[]{disabledFileTypes, disabledFileTypesHelpLabel,}, formatOtherFilesWithExceptionsRadioButton);
+
+		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, eclipsePreferenceFilePathJavaBrowse, javaFormatterProfile, eclipsePrefsExample, javaFormatterProfileLabel}, schemeEclipseFile);
 
 		disableJavaProfilesIfNecessary();
 
@@ -668,6 +675,12 @@ public class ProjectSettingsForm {
 		importOrderConfigurationFromFileRadioButton.setSelected(in.isImportOrderFromFile());
 		importOrderConfigurationManualRadioButton.setSelected(!in.isImportOrderFromFile());
 		javaFormatterProfile.setSelectedItem(in.getSelectedJavaProfile());
+
+		schemeEclipse.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE));
+		schemeEclipse21.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE_2_1));
+		schemeEclipseJC.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.JAVA_CONVENTIONS));
+		schemeEclipseFile.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.FILE));
+
 		setData(in);
 		updateComponents();
 	}
@@ -688,6 +701,17 @@ public class ProjectSettingsForm {
 		} else if (useEclipseCustom.isSelected()) {
 			displayedSettings.setEclipseVersion(Settings.FormatterVersion.CUSTOM);
 		}
+
+		if (schemeEclipse.isSelected()) {
+			displayedSettings.setProfileScheme(Settings.ProfileScheme.ECLIPSE);
+		} else if (schemeEclipse21.isSelected()) {
+			displayedSettings.setProfileScheme(Settings.ProfileScheme.ECLIPSE_2_1);
+		} else if (schemeEclipseJC.isSelected()) {
+			displayedSettings.setProfileScheme(Settings.ProfileScheme.JAVA_CONVENTIONS);
+		} else if (schemeEclipseFile.isSelected()) {
+			displayedSettings.setProfileScheme(Settings.ProfileScheme.FILE);
+		}
+
 
 		displayedSettings.setFormatOtherFileTypesWithIntelliJ(formatOtherFilesWithExceptionsRadioButton.isSelected());
 		displayedSettings.setImportOrderFromFile(importOrderConfigurationFromFileRadioButton.isSelected());
@@ -757,6 +781,21 @@ public class ProjectSettingsForm {
 		if (importOrdering452.isSelected() != data.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_452)) {
 			return true;
 		}
+
+		if (schemeEclipse.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE)) {
+			return true;
+		}
+		if (schemeEclipseFile.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.FILE)) {
+			return true;
+		}
+		if (schemeEclipseJC.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.JAVA_CONVENTIONS)) {
+			return true;
+		}
+		if (schemeEclipse21.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE_2_1)) {
+			return true;
+		}
+
+
 		if (formatOtherFilesWithExceptionsRadioButton.isSelected() != data.isFormatOtherFileTypesWithIntelliJ()) {
 			return true;
 		}
