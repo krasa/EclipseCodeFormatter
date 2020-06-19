@@ -12,6 +12,7 @@ import java.util.*;
 
 public class ConfigurableEclipseLocation {
 	private static final Logger LOG = Logger.getInstance(ConfigurableEclipseLocation.class.getName());
+//	private static final Logger LOG = new PrintingLogger(System.out);
 
 	private static final int TIMEOUT = 500;
 
@@ -39,7 +40,12 @@ public class ConfigurableEclipseLocation {
 	}
 
 	public static void main(String[] args) throws IOException {
-		List<URL> urlList = new ConfigurableEclipseLocation().run("F:\\workspace\\eclipse-jee 4.5.2");
+		List<URL> urlList;
+		urlList = new ConfigurableEclipseLocation().run("C:\\Users\\vojtisek\\eclipse");
+//		urlList= new ConfigurableEclipseLocation().run("C:\\workspace\\eclipse-standard-kepler-R-macosx-cocoa");
+//		urlList= new ConfigurableEclipseLocation().run("C:\\workspace\\eclipse-standard-kepler-R-linux-gtk");
+//		urlList= new ConfigurableEclipseLocation().run("C:\\workspace\\eclipse-standard-kepler-R-win32");
+//		List<URL> urlList = new ConfigurableEclipseLocation().run("C:\\workspace\\eclipse-jee-2020-06-R-win32-x86_64");
 		for (URL jar : urlList) {
 			System.out.println(jar);
 		}
@@ -56,12 +62,12 @@ public class ConfigurableEclipseLocation {
 				throw new IllegalStateException("Invalid Eclipse location");
 			}
 
-			LOG.info("found root=" + root.getAbsolutePath() + " in" + (System.currentTimeMillis() - start) + "ms");
+			LOG.info("found root=" + root.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + "ms");
 
 			jars = findJars(root);
 
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("from=" + from, e);
 		}
 		if (!jarNames.isEmpty()) {
 			throw new FormattingFailedException("Required jars not found in '" + from + "': " + jarNames.toString(), true);
@@ -96,20 +102,10 @@ public class ConfigurableEclipseLocation {
 	}
 
 	@NotNull
-	private List<URL> findJars(File from) throws IOException {
-		File plugins = FileUtils.getFile(from, "plugins");
-
-		List<URL> files = findJarsFromPackagedInstall(plugins);
-
-		if (files.isEmpty()) {
-			File bundlesInfo = FileUtils.getFile(from, "configuration", "org.eclipse.equinox.simpleconfigurator", "bundles.info");
-			files = findJarsFromRepository(bundlesInfo);
-		}
-		return files;
-	}
-
-	private List<URL> findJarsFromRepository(File bundlesInfo) throws IOException {
+	private List<URL> findJars(File root) throws IOException {
 		long start = System.currentTimeMillis();
+		String rootURI = root.toURI().toString();
+		File bundlesInfo = FileUtils.getFile(root, "configuration", "org.eclipse.equinox.simpleconfigurator", "bundles.info");
 		List<URL> files = new ArrayList<>();
 		List<String> strings = FileUtils.readLines(bundlesInfo, "UTF-8");
 		for (String string : strings) {
@@ -119,7 +115,11 @@ public class ConfigurableEclipseLocation {
 				String path = split[2];
 				if (jarNames.contains(name)) {
 					jarNames.remove(name);
-					files.add(new URL(path));
+					if (!path.startsWith("file:")) {
+						files.add(new URL(rootURI + path));
+					} else {
+						files.add(new URL(path));
+					}
 				}
 			}
 		}
@@ -127,27 +127,4 @@ public class ConfigurableEclipseLocation {
 		return files;
 	}
 
-	@NotNull
-	private List<URL> findJarsFromPackagedInstall(File from) throws IOException {
-		long start = System.currentTimeMillis();
-		List<URL> files = new ArrayList<URL>();
-		File[] listFiles = from.listFiles();
-		if (listFiles != null) {
-			for (File next : listFiles) {
-				String name = next.getName();
-				if (name.endsWith(".jar")) {
-					int i = name.indexOf("_");
-					if (i <= 0)
-						continue;
-					String jarName = name.substring(0, i);
-					if (jarNames.contains(jarName)) {
-						jarNames.remove(jarName);
-						files.add(next.toURI().toURL());
-					}
-				}
-			}
-		}
-		LOG.info("#findJarsFromPackagedInstall took " + (System.currentTimeMillis() - start) + "ms");
-		return files;
-	}
 }
