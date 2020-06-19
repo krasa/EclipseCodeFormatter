@@ -363,7 +363,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Custom Eclipse location"/>
+          <text value="Eclipse installation directory"/>
           <toolTipText value="Must be installed from a package - (eclipse.org/downloads/packages), not via installer."/>
         </properties>
       </component>

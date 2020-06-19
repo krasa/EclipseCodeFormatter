@@ -162,6 +162,6 @@ public class JavaCodeFormatterFacadeTest {
 		assertEquals("1.8", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_1_8));
 		assertEquals("10", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_10));
 		assertEquals("13", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_13));
-		assertEquals("13", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_13_PREVIEW));
+		assertEquals("15", JavaCodeFormatterFacade.toEclipseLanguageLevel(LanguageLevel.JDK_15_PREVIEW));
 	}
 }

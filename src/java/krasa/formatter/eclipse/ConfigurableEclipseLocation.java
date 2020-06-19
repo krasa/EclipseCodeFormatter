@@ -59,7 +59,7 @@ public class ConfigurableEclipseLocation {
 			root = findEclipseRoot(root, start);
 
 			if (root == null || !root.exists()) {
-				throw new IllegalStateException("Invalid Eclipse location");
+				throw new IllegalStateException("Invalid Eclipse location, it must contain '.eclipseproduct' file");
 			}
 
 			LOG.info("found root=" + root.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + "ms");

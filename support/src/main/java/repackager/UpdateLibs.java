@@ -1,10 +1,10 @@
 package repackager;
 
+import com.google.common.io.Files;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
-import com.google.common.io.Files;
 
 public class UpdateLibs {
 
@@ -16,7 +16,7 @@ public class UpdateLibs {
 	}
 
 	private void run() throws IOException {
-		String from = "C:\\Users\\i7\\Downloads\\eclipse-jee-2019-06-R-win32-x86_64";
+		String from = "C:\\workspace\\eclipse-jee-2020-06-R-win32-x86_64\\eclipse";
 		File currentJars = new File("support/eclipseLibs/lib");
 		File copyTo = new File(currentJars + "/temp");
 
