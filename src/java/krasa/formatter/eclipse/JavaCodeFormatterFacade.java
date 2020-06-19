@@ -59,11 +59,14 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	}
 
 	private EclipseFormatterAdapter getCodeFormatter(LanguageLevel level) throws FileDoesNotExistsException {
-		if (codeFormatter == null || javaPropertiesProvider.wasChanged(lastState)
-				|| this.effectiveLanguageLevel != level) {
+		if (codeFormatter == null || configFileRefresh() || this.effectiveLanguageLevel != level) {
 			return newCodeFormatter(level);
 		}
 		return codeFormatter;
+	}
+
+	private boolean configFileRefresh() {
+		return profileScheme == Settings.ProfileScheme.FILE && javaPropertiesProvider.wasChanged(lastState);
 	}
 
 	private EclipseFormatterAdapter newCodeFormatter(LanguageLevel level) {
