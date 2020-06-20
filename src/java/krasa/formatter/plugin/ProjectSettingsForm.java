@@ -29,12 +29,7 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
-import krasa.formatter.exception.ParsingFailedException;
-import krasa.formatter.settings.GlobalSettings;
-import krasa.formatter.settings.MyConfigurable;
-import krasa.formatter.settings.ProjectSettings;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.utils.FileUtils;
+import krasa.formatter.settings.*;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -54,8 +49,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor;
-import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createSingleFolderDescriptor;
+import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.*;
 
 /**
  * Configuration dialog for changing the {@link krasa.formatter.settings.Settings} of the plugin.
@@ -66,10 +60,10 @@ import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.crea
  */
 public class ProjectSettingsForm {
 	private static final Logger LOG = Logger.getInstance(ProjectSettingsForm.class.getName());
+	public static final String NOT_EXISTS = "NOT EXISTS";
 	public static final String PARSING_FAILED = "PARSING FAILED";
-	public static final String NOT_XML = "NOT XML";
 	public static final String CONTAINS_NO_PROFILES = "CONTAINS NO PROFILES";
-	private Border normalBorder;
+	public Border normalBorder;
 	public static final ColoredSideBorder ERROR_BORDER = new ColoredSideBorder(Color.RED, Color.RED, Color.RED, Color.RED, 1);
 
 	private JPanel rootComponent;
@@ -113,7 +107,7 @@ public class ProjectSettingsForm {
 	private JButton delete;
 	private Settings displayedSettings;
 	private JButton donateButton;
-	private JComboBox javaFormatterProfile;
+	public JComboBox javaFormatterProfile;
 	private JLabel javaFormatterProfileLabel;
 	private JButton helpButton;
 	private JButton homepage;
@@ -148,7 +142,10 @@ public class ProjectSettingsForm {
 				importOrderConfigurationManualRadioButton, useEclipseNewest, useEclipseCustom,
 				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452}, useEclipseFormatter);
 
-		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, schemeEclipseFile, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
+		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, schemeEclipseJC,
+				schemeEclipse,
+				schemeEclipse21,
+				schemeEclipseFile, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
 				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, customEclipseLocationBrowse, pathToCustomEclipse,
 				useEclipseNewest, useEclipseCustom, javaFormatterVersionLabel, importStyleLabel,
 				importOrdering451, importOrdering452}, enableJavaFormatting);
@@ -235,7 +232,7 @@ public class ProjectSettingsForm {
 		eclipsePreferenceFilePathJavaBrowse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				browseForFile(pathToEclipsePreferenceFileJava, createSingleFileNoJarsDescriptor(), "Select config file");
+				browseForFile(pathToEclipsePreferenceFileJava, createSingleFileOrFolderDescriptor(), "Select Eclipse workspace/project/config file");
 			}
 		});
 		pathToImportOrderPreferenceFileBrowse.addActionListener(new ActionListener() {
@@ -505,30 +502,14 @@ public class ProjectSettingsForm {
 		if (normalBorder == null) {
 			this.normalBorder = javaFormatterProfile.getBorder();
 		}
-		if (!text.isEmpty()) {
-			if (text.toLowerCase().endsWith("xml")) {
-				try {
-					profilesModel.addAll(FileUtils.getProfileNamesFromConfigXML(new File(text)));
-					javaFormatterProfile.setEnabled(true);
-					javaFormatterProfile.setBorder(this.normalBorder);
-				} catch (ParsingFailedException e) {
-					profilesModel.add(PARSING_FAILED);
-					javaFormatterProfile.setEnabled(false);
-					javaFormatterProfile.setBorder(ERROR_BORDER);
-				}
-			} else {
-				profilesModel.add(NOT_XML);
-				javaFormatterProfile.setEnabled(false);
-				javaFormatterProfile.setBorder(ERROR_BORDER);
-			}
+		if (!text.isEmpty() && schemeEclipseFile.isSelected()) {
+			ConfigFileLocator configFileLocator = new ConfigFileLocator(text);
+
+			configFileLocator.validate(this, profilesModel);
+
 		} else {
 			javaFormatterProfile.setEnabled(false);
 			javaFormatterProfile.setBorder(this.normalBorder);
-		}
-		if (pathToEclipsePreferenceFileJava.isEnabled() && profilesModel.getSize() == 0) {
-			profilesModel.add(CONTAINS_NO_PROFILES);
-			javaFormatterProfile.setEnabled(false);
-			javaFormatterProfile.setBorder(ERROR_BORDER);
 		}
 
 		List<String> items = profilesModel.getItems();
@@ -729,7 +710,7 @@ public class ProjectSettingsForm {
 	}
 
 	private boolean isErrorProfile(String selectedItem1) {
-		return PARSING_FAILED.equals(selectedItem1) || NOT_XML.equals(selectedItem1) || CONTAINS_NO_PROFILES.equals(selectedItem1);
+		return ProjectSettingsForm.ERROR_BORDER.equals(javaFormatterProfile.getBorder()) || NOT_EXISTS.equals(selectedItem1) || PARSING_FAILED.equals(selectedItem1) || CONTAINS_NO_PROFILES.equals(selectedItem1);
 	}
 
 	public void validate() throws ConfigurationException {

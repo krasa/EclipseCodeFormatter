@@ -1,11 +1,13 @@
 package krasa.formatter.settings.provider;
 
-import java.io.File;
-import java.util.Properties;
-
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.plugin.InvalidPropertyFile;
+import krasa.formatter.settings.ConfigFileLocator;
 import krasa.formatter.settings.Settings;
+import krasa.formatter.utils.FileUtils;
+
+import java.io.File;
+import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -13,9 +15,14 @@ import krasa.formatter.settings.Settings;
 public class JavaPropertiesProvider extends CachedPropertiesProvider {
 	protected String profile;
 
+
 	public JavaPropertiesProvider(Settings settings) {
-		super(new ModifiableFile(settings.getPathToConfigFileJava()));
-		this.profile = settings.getSelectedJavaProfile();
+		this(settings.getPathToConfigFileJava(), settings.getSelectedJavaProfile());
+	}
+
+	public JavaPropertiesProvider(String pathToConfigFileJava, String selectedJavaProfile) {
+		super(new ModifiableFile(new ConfigFileLocator(pathToConfigFileJava).resolveConfigFilePath()));
+		this.profile = selectedJavaProfile;
 	}
 
 	@Override
@@ -24,23 +31,27 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 			return readXmlFile(file, profile);
 		} else if (file.getName().toLowerCase().endsWith("epf")) {
 			return readConfigFromWorkspaceMechanicFile(file);
+		} else if (file.getName().toLowerCase().equals("org.eclipse.jdt.ui.prefs")) {
+			return readWorkspaceFile(file);
 		} else {
-			// properties file
+			// org.eclipse.jdt.core.prefs
 			return super.readFile(file);
 		}
 	}
 
+	private Properties readWorkspaceFile(File file) {
+		Properties properties = FileUtils.readPropertiesFile(file);
+		String xml = properties.getProperty("org.eclipse.jdt.ui.formatterprofiles");
+		Properties result = FileUtils.readXmlJavaSettingsFile(xml, properties, profile);
+		trimTrailingWhitespaceFromConfigValues(result);
+		validateConfig(result, file);
+		return result;
+	}
+
 	private Properties readConfigFromWorkspaceMechanicFile(final File file) {
-		Properties result = new Properties();
-		Properties properties = super.readFile(file);
-		final String prefix = "/instance/org.eclipse.jdt.core/";
-		for (Object object : properties.keySet()) {
-			String key = (String) object;
-			if (key.startsWith(prefix)) {
-				String value = properties.getProperty(key);
-				result.put(key.substring(prefix.length()), value);
-			}
-		}
+		Properties properties = FileUtils.readPropertiesFile(file);
+		Properties result = FileUtils.convertEPF(properties, createDefaultConfig());
+		validateConfig(result, file);
 		return result;
 	}
 

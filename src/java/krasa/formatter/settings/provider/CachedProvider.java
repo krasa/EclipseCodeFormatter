@@ -1,10 +1,9 @@
 package krasa.formatter.settings.provider;
 
-import java.io.File;
-
 import krasa.formatter.common.ModifiableFile;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
 
 /**
  * @author Vojtech Krasa
@@ -22,8 +21,8 @@ public abstract class CachedProvider<T> {
 
 	public T get() {
 		if (cachedValue == null || modifiableFile.wasChanged(lastState)) {
-			saveLastModified();
 			cachedValue = readFile(modifiableFile);
+			saveLastModified();
 		}
 		return cachedValue;
 	}

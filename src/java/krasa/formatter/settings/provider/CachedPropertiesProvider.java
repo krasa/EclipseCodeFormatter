@@ -1,13 +1,13 @@
 package krasa.formatter.settings.provider;
 
+import krasa.formatter.common.ModifiableFile;
+import krasa.formatter.plugin.InvalidPropertyFile;
+import krasa.formatter.utils.FileUtils;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import krasa.formatter.common.ModifiableFile;
-import krasa.formatter.plugin.InvalidPropertyFile;
-import krasa.formatter.utils.FileUtils;
 
 /**
  * @author Vojtech Krasa
@@ -53,8 +53,8 @@ public class CachedPropertiesProvider extends CachedProvider<Properties> {
 	}
 
 	protected void validateConfig(Properties config, File file) {
-		if (config.isEmpty()) {
-			throw new InvalidPropertyFile(file);
+		if (config.size() < 100) {
+			throw new InvalidPropertyFile("Loaded only " + config.size() + " properties, should be 100+. Use a custom formatter profile in Eclipse.", file);
 		}
 	}
 

@@ -57,7 +57,6 @@ public class FileUtils {
 	public static Properties readPropertiesFile(File file, Properties defaultConfig) {
 		if (!file.exists()) {
 			throw new FileDoesNotExistsException(file);
-
 		}
 		BufferedInputStream stream = null;
 		final Properties formatterOptions;
@@ -85,17 +84,25 @@ public class FileUtils {
 	}
 
 	public static Properties readXmlJavaSettingsFile(File file, Properties properties, String profile) {
-		int defaultSize = properties.size();
 		if (!file.exists()) {
 			throw new FileDoesNotExistsException(file);
 		}
+		try {
+			return readXmlJavaSettingsFile(org.apache.commons.io.FileUtils.readFileToString(file, "UTF-8"), properties, profile);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Properties readXmlJavaSettingsFile(String xml, Properties properties, String profile) {
+		int defaultSize = properties.size();
 		boolean profileFound = false;
 		try {
 			if (profile == null) {
 				throw new IllegalStateException("No Eclipse formatter profile selected, go to settings and properly configure it.");
 			}
 			// load file profiles
-			org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+			org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(IOUtils.toInputStream(xml));
 			doc.getDocumentElement().normalize();
 
 			NodeList profiles = doc.getElementsByTagName("profile");
@@ -126,13 +133,13 @@ public class FileUtils {
 				}
 			}
 			if (!profileFound) {
-				throw new IllegalStateException("profile not found in the file " + file.getAbsolutePath());
+				throw new IllegalStateException("profile not found in the xml: " + xml);
 			}
 			if (properties.size() == defaultSize) {
-				throw new IllegalStateException("no properties loaded, something is broken, file:" + file.getAbsolutePath());
+				throw new IllegalStateException("no properties loaded, something is broken, xml:" + xml);
 			}
 		} catch (Exception e) {
-			LOG.warn("file: " + file.getAbsolutePath() + ", profile: " + profile, e);
+			LOG.warn("xml: " + xml + ", profile: " + profile, e);
 			throw new InvalidPropertyFile(e.getMessage(), e);
 		}
 		return properties;
@@ -169,4 +176,44 @@ public class FileUtils {
 		return profileNames;
 	}
 
+	public static List<String> getProfileNamesFromConfigXML(InputStream s) throws ParsingFailedException {
+		List<String> profileNames = new ArrayList<String>();
+		try { // load file profiles
+			// delete eclipse dependency to fix java.lang.ClassCastException:
+			// org.apache.xerces.jaxp.DocumentBuilderFactoryImpl cannot be cast to
+			// javax.xml.parsers.DocumentBuilderFactory
+
+			org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(s);
+			doc.getDocumentElement().normalize();
+
+			NodeList nList = doc.getElementsByTagName("profile");
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					String name = eElement.getAttribute("name");
+					profileNames.add(name);
+				}
+			}
+		} catch (Exception e) {
+			LOG.info(e);
+			throw new ParsingFailedException(e);
+		}
+
+		return profileNames;
+	}
+
+	@NotNull
+	public static Properties convertEPF(Properties properties, Properties defaultConfig) {
+		Properties result = new Properties(defaultConfig);
+		final String prefix = "/instance/org.eclipse.jdt.core/";
+		for (Object object : properties.keySet()) {
+			String key = (String) object;
+			if (key.startsWith(prefix)) {
+				String value = properties.getProperty(key);
+				result.put(key.substring(prefix.length()), value);
+			}
+		}
+		return result;
+	}
 }

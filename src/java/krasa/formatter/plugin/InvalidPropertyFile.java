@@ -8,7 +8,7 @@ import java.io.File;
 public class InvalidPropertyFile extends RuntimeException {
 
 	public InvalidPropertyFile(String s, File file) {
-		super("Property " + s + " does not exists in " + file.getAbsolutePath());
+		super(s);
 	}
 
 	public InvalidPropertyFile(File file) {

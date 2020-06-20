@@ -274,6 +274,10 @@ public class Settings {
 		return this instanceof ProjectSpecificProfile;
 	}
 
+	public String resolvePathToConfigFileJava() {
+		return new ConfigFileLocator(pathToConfigFileJava).resolveConfigFilePath();
+	}
+
 	public static enum FormatterVersion {
 		ECLIPSE_44,
 		NEWEST,

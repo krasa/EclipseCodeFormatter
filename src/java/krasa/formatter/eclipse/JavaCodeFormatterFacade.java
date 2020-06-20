@@ -10,6 +10,7 @@ import com.intellij.psi.impl.JavaPsiImplementationHelper;
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.plugin.InvalidPropertyFile;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import org.jetbrains.annotations.NotNull;
@@ -89,6 +90,8 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			Constructor<?> constructor = aClass1.getConstructor(Map.class);
 			codeFormatter = (EclipseFormatterAdapter) constructor.newInstance(options);
 		} catch (FormattingFailedException e) {
+			throw e;
+		} catch (InvalidPropertyFile e) {
 			throw e;
 		} catch (FileDoesNotExistsException e) {
 			throw e;
