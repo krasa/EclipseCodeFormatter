@@ -107,6 +107,9 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		Method getMap = aClass1.getMethod("getMap");
 		switch (profileScheme) {
 
+			case PROJECT_SPECIFIC:
+				//TODO
+				break;
 			case ECLIPSE:
 				return (Map<String, String>) getMap.invoke(aClass1.getDeclaredMethod("getEclipseDefaultSettings").invoke(null));
 			case ECLIPSE_2_1:

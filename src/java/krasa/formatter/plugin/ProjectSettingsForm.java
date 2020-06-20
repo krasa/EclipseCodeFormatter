@@ -126,6 +126,7 @@ public class ProjectSettingsForm {
 	private JRadioButton schemeEclipse;
 	private JRadioButton schemeEclipse21;
 	private JRadioButton schemeEclipseFile;
+//	private JRadioButton schemeCurrentProject;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -144,6 +145,7 @@ public class ProjectSettingsForm {
 
 		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, schemeEclipseJC,
 				schemeEclipse,
+//				schemeCurrentProject,
 				schemeEclipse21,
 				schemeEclipseFile, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
 				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, customEclipseLocationBrowse, pathToCustomEclipse,
@@ -471,7 +473,8 @@ public class ProjectSettingsForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Messages.showInfoMessage(project,
-						"<Project Specific> profile is not shared between projects. Other profiles are global - shared, synchronized and stored in the IDE."
+						"Close all projects to configure default settings.\n\n"
+								+ "<Project Specific> profile is not shared between projects. Other profiles are global - shared, synchronized and stored in the IDE."
 								+ "\nChange of a global profile will result in a change in all opened or closed projects using such profile."
 								+ "\nThe selected global profile is also fully persisted within a project, but most of the data is used only as a backup for syncing between different computers."
 								+ "\n\nPaths macros are automatically managed by the IDE. That can result in '$PROJECT_DIR$' being used for a global profile within a project config file,"
@@ -658,6 +661,7 @@ public class ProjectSettingsForm {
 		javaFormatterProfile.setSelectedItem(in.getSelectedJavaProfile());
 
 		schemeEclipse.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE));
+//		schemeCurrentProject.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.PROJECT_SPECIFIC));
 		schemeEclipse21.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE_2_1));
 		schemeEclipseJC.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.JAVA_CONVENTIONS));
 		schemeEclipseFile.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.FILE));
@@ -691,6 +695,8 @@ public class ProjectSettingsForm {
 			displayedSettings.setProfileScheme(Settings.ProfileScheme.JAVA_CONVENTIONS);
 		} else if (schemeEclipseFile.isSelected()) {
 			displayedSettings.setProfileScheme(Settings.ProfileScheme.FILE);
+//		}else if (schemeCurrentProject.isSelected()) {
+//			displayedSettings.setProfileScheme(Settings.ProfileScheme.PROJECT_SPECIFIC);
 		}
 
 
@@ -763,6 +769,9 @@ public class ProjectSettingsForm {
 			return true;
 		}
 
+//		if (schemeCurrentProject.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.PROJECT_SPECIFIC)) {
+//			return true;
+//		}
 		if (schemeEclipse.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE)) {
 			return true;
 		}

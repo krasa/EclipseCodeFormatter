@@ -298,6 +298,7 @@ public class Settings {
 	}
 
 	public static enum ProfileScheme {
+		PROJECT_SPECIFIC,
 		ECLIPSE,
 		ECLIPSE_2_1,
 		JAVA_CONVENTIONS,
