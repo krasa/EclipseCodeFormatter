@@ -118,6 +118,7 @@ public class Settings {
 	public Settings(Long id, String name) {
 		this.id = id;
 		this.name = name;
+		setProfileScheme(ProfileScheme.PROJECT_SPECIFIC);
 	}
 
 	public DisabledFileTypeSettings getDisabledFileTypeSettings() {
@@ -274,9 +275,6 @@ public class Settings {
 		return this instanceof ProjectSpecificProfile;
 	}
 
-	public String resolvePathToConfigFileJava() {
-		return new ConfigFileLocator(pathToConfigFileJava).resolveConfigFilePath();
-	}
 
 	public static enum FormatterVersion {
 		ECLIPSE_44,

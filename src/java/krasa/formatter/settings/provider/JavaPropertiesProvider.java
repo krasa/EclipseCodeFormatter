@@ -30,7 +30,7 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 		if (file.getName().toLowerCase().endsWith("xml")) {
 			return readXmlFile(file, profile);
 		} else if (file.getName().toLowerCase().endsWith("epf")) {
-			return readConfigFromWorkspaceMechanicFile(file);
+			return readWorkspaceMechanicFile(file);
 		} else if (file.getName().toLowerCase().equals("org.eclipse.jdt.ui.prefs")) {
 			return readWorkspaceFile(file);
 		} else {
@@ -48,7 +48,7 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 		return result;
 	}
 
-	private Properties readConfigFromWorkspaceMechanicFile(final File file) {
+	private Properties readWorkspaceMechanicFile(final File file) {
 		Properties properties = FileUtils.readPropertiesFile(file);
 		Properties result = FileUtils.convertEPF(properties, createDefaultConfig());
 		validateConfig(result, file);

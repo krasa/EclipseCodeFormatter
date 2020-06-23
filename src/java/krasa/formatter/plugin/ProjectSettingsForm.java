@@ -126,7 +126,7 @@ public class ProjectSettingsForm {
 	private JRadioButton schemeEclipse;
 	private JRadioButton schemeEclipse21;
 	private JRadioButton schemeEclipseFile;
-//	private JRadioButton schemeCurrentProject;
+	private JRadioButton schemeCurrentProject;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -144,8 +144,7 @@ public class ProjectSettingsForm {
 				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452}, useEclipseFormatter);
 
 		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, schemeEclipseJC,
-				schemeEclipse,
-//				schemeCurrentProject,
+				schemeEclipse, schemeCurrentProject,
 				schemeEclipse21,
 				schemeEclipseFile, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
 				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, customEclipseLocationBrowse, pathToCustomEclipse,
@@ -661,7 +660,7 @@ public class ProjectSettingsForm {
 		javaFormatterProfile.setSelectedItem(in.getSelectedJavaProfile());
 
 		schemeEclipse.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE));
-//		schemeCurrentProject.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.PROJECT_SPECIFIC));
+		schemeCurrentProject.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.PROJECT_SPECIFIC));
 		schemeEclipse21.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE_2_1));
 		schemeEclipseJC.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.JAVA_CONVENTIONS));
 		schemeEclipseFile.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.FILE));
@@ -695,8 +694,8 @@ public class ProjectSettingsForm {
 			displayedSettings.setProfileScheme(Settings.ProfileScheme.JAVA_CONVENTIONS);
 		} else if (schemeEclipseFile.isSelected()) {
 			displayedSettings.setProfileScheme(Settings.ProfileScheme.FILE);
-//		}else if (schemeCurrentProject.isSelected()) {
-//			displayedSettings.setProfileScheme(Settings.ProfileScheme.PROJECT_SPECIFIC);
+		} else if (schemeCurrentProject.isSelected()) {
+			displayedSettings.setProfileScheme(Settings.ProfileScheme.PROJECT_SPECIFIC);
 		}
 
 
@@ -769,9 +768,9 @@ public class ProjectSettingsForm {
 			return true;
 		}
 
-//		if (schemeCurrentProject.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.PROJECT_SPECIFIC)) {
-//			return true;
-//		}
+		if (schemeCurrentProject.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.PROJECT_SPECIFIC)) {
+			return true;
+		}
 		if (schemeEclipse.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE)) {
 			return true;
 		}
