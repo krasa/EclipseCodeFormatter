@@ -27,7 +27,7 @@ public class ConfigFileLocator {
 	private static final Logger LOG = Logger.getInstance(ConfigFileLocator.class.getName());
 
 	private static IModuleResolverStrategy moduleResolver = new DefaultModuleResolverStrategy();
-	private VirtualFile mostRecentFormatterFile = null;
+	private static VirtualFile mostRecentFormatterFile = null;
 
 	private final List<String> CONVENTIONFILENAMES = Arrays.asList(//
 			".settings/org.eclipse.jdt.core.prefs",//
@@ -193,6 +193,7 @@ public class ConfigFileLocator {
 			for (String conventionFileName : CONVENTIONFILENAMES) {
 				VirtualFile fileByRelativePath = moduleFileDir.findFileByRelativePath(conventionFileName);
 				if (fileByRelativePath != null && fileByRelativePath.exists()) {
+					mostRecentFormatterFile = fileByRelativePath;
 					return fileByRelativePath;
 				}
 			}
@@ -258,7 +259,7 @@ public class ConfigFileLocator {
 	 * VisibleForTesting
 	 */
 	@Deprecated
-	public VirtualFile TESTING_getMostRecentFormatterFile() {
+	public static VirtualFile TESTING_getMostRecentFormatterFile() {
 		return mostRecentFormatterFile;
 	}
 }

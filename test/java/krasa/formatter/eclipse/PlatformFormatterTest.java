@@ -26,7 +26,7 @@ import java.util.Arrays;
 
 public class PlatformFormatterTest extends FormatterTestCase {
 
-	private static final String BASE_PATH = "../testProject";
+	private static final String BASE_PATH = "testProject";
 	ConfigFileLocator.IModuleResolverStrategy previousResolver;
 
 	@Override
@@ -46,14 +46,15 @@ public class PlatformFormatterTest extends FormatterTestCase {
 			@Override
 			public VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
 
-				if (virtualFile.getPath().contains("/testProject/submodule-a")) {
-					return UsefulTestCase.refreshAndFindFile(new File("../testProject/submodule-a"));
+				String path = virtualFile.getPath();
+				if (path.contains("/testProject/submodule-a")) {
+					return UsefulTestCase.refreshAndFindFile(new File("testProject/submodule-a"));
 				}
-				if (virtualFile.getPath().contains("/testProject/submodule-b")) {
-					return UsefulTestCase.refreshAndFindFile(new File("../testProject/submodule-b"));
+				if (path.contains("/testProject/submodule-b")) {
+					return UsefulTestCase.refreshAndFindFile(new File("testProject/submodule-b"));
 				}
-				if (virtualFile.getPath().contains("/testProject")) {
-					return UsefulTestCase.refreshAndFindFile(new File("../testProject"));
+				if (path.contains("/testProject")) {
+					return UsefulTestCase.refreshAndFindFile(new File("testProject"));
 				}
 				throw new UnsupportedOperationException("Not expected " + virtualFile);
 			}
@@ -82,7 +83,7 @@ public class PlatformFormatterTest extends FormatterTestCase {
 		}
 
 		{
-			VirtualFile virtualFile = refreshAndFindFile(new File("../testProject/submodule-b/src/main/java/bbb/XBBB.java"));
+			VirtualFile virtualFile = refreshAndFindFile(new File("testProject/submodule-b/src/main/java/bbb/XBBB.java"));
 
 			PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(virtualFile);
 
@@ -95,15 +96,15 @@ public class PlatformFormatterTest extends FormatterTestCase {
 			assertEquals("package bbb;\n" +
 					"\n" +
 					"public class XBBB {\n" +
-					"    public static void bbb() {\n" +
+					"  public static void bbb() {\n" +
 					"\n" +
-					"    }\n" +
+					"  }\n" +
 					"}\n", fileText);
 			//submodule-b has its own formatter configuration
 		}
 
 		{
-			VirtualFile virtualFile = refreshAndFindFile(new File("../testProject/src/main/java/aaa/XAAA.java"));
+			VirtualFile virtualFile = refreshAndFindFile(new File("testProject/src/main/java/aaa/XAAA.java"));
 
 			PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(virtualFile);
 
@@ -126,7 +127,7 @@ public class PlatformFormatterTest extends FormatterTestCase {
 	}
 
 	private void assertFormatterFile(String s) {
-		String filePath = ConfigFileLocator.getInstance(getProject()).TESTING_getMostRecentFormatterFile().getPath();
+		String filePath = ConfigFileLocator.TESTING_getMostRecentFormatterFile().getPath();
 		assertTrue("Used " + filePath, filePath.endsWith(s));
 	}
 
