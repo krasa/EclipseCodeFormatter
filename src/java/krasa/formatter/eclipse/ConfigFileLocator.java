@@ -1,6 +1,12 @@
-package krasa.formatter.settings;
+package krasa.formatter.eclipse;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import com.intellij.ui.SortedComboBoxModel;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
@@ -12,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -19,13 +26,20 @@ import java.util.Properties;
 public class ConfigFileLocator {
 	private static final Logger LOG = Logger.getInstance(ConfigFileLocator.class.getName());
 
-	private String path;
+	private static IModuleResolverStrategy moduleResolver = new DefaultModuleResolverStrategy();
+	private VirtualFile mostRecentFormatterFile = null;
 
-	public ConfigFileLocator(String text) {
-		path = text;
+	private final List<String> CONVENTIONFILENAMES = Arrays.asList(//
+			".settings/org.eclipse.jdt.core.prefs",//
+			".settings/mechanic-formatter.epf",//
+			"mechanic-formatter.epf" //
+	);
+
+	public static ConfigFileLocator getInstance(Project project) {
+		return ServiceManager.getService(project, ConfigFileLocator.class);
 	}
 
-	public String resolveConfigFilePath() {
+	public String resolveConfigFilePath(String path) {
 		File file = new File(path);
 
 		if (!file.exists()) {
@@ -43,7 +57,7 @@ public class ConfigFileLocator {
 	}
 
 	public void validate(ProjectSettingsForm projectSettingsForm,
-						 SortedComboBoxModel profilesModel) {
+						 SortedComboBoxModel profilesModel, String path) {
 		String text = path;
 		File file = new File(text);
 		String lowerCaseName = file.getName().toLowerCase();
@@ -171,4 +185,80 @@ public class ConfigFileLocator {
 	}
 
 
+	@Nullable
+	VirtualFile traverseToFindConfigurationFileByConvention(PsiFile psiFile, Project project) {
+		VirtualFile moduleFileDir = getModuleDirForFile(psiFile.getVirtualFile(), project);
+
+		while (moduleFileDir != null) {
+			for (String conventionFileName : CONVENTIONFILENAMES) {
+				VirtualFile fileByRelativePath = moduleFileDir.findFileByRelativePath(conventionFileName);
+				if (fileByRelativePath != null && fileByRelativePath.exists()) {
+					return fileByRelativePath;
+				}
+			}
+			moduleFileDir = getNextParentModuleDirectory(moduleFileDir, project);
+		}
+		return null;
+	}
+
+	private VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
+		// delegate to a strategy which can be overriden in unit tests
+		return moduleResolver.getModuleDirForFile(virtualFile, project);
+	}
+
+	private VirtualFile getNextParentModuleDirectory(VirtualFile currentModuleDir, Project project) {
+		//Jump outside the current project
+		VirtualFile parent = currentModuleDir.getParent();
+		if (parent != null && parent.exists()) {
+			//the file/dir outside the project may be within another loaded module
+			// NOTE all modules must be loaded for detecting the parent module of the current one
+			VirtualFile dirOfParentModule = getModuleDirForFile(parent, project);
+			if (dirOfParentModule != null) {
+				return dirOfParentModule;
+			}
+		}
+		return null;
+	}
+
+	public interface IModuleResolverStrategy {
+		VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project);
+	}
+
+	static class DefaultModuleResolverStrategy implements IModuleResolverStrategy {
+		@Override
+		public VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
+			Module moduleForFile = ModuleUtil.findModuleForFile(virtualFile, project);
+			if (moduleForFile != null) {
+				VirtualFile moduleFile = moduleForFile.getModuleFile();
+				if (moduleFile != null) {
+					return moduleFile.getParent();
+				}
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * VisibleForTesting
+	 */
+	@Deprecated
+	public static void TESTING_setModuleResolver(IModuleResolverStrategy otherModuleResolver) {
+		moduleResolver = otherModuleResolver;
+	}
+
+	/**
+	 * VisibleForTesting
+	 */
+	@Deprecated
+	public static IModuleResolverStrategy TESTING_getModuleResolver() {
+		return moduleResolver;
+	}
+
+	/**
+	 * VisibleForTesting
+	 */
+	@Deprecated
+	public VirtualFile TESTING_getMostRecentFormatterFile() {
+		return mostRecentFormatterFile;
+	}
 }

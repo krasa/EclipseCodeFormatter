@@ -9,6 +9,7 @@
 package krasa.formatter.settings;
 
 import com.intellij.util.xmlb.annotations.Transient;
+import krasa.formatter.eclipse.ConfigFileLocator;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import org.jetbrains.annotations.NotNull;
@@ -214,7 +215,8 @@ public class Settings {
 
 	public JavaPropertiesProvider getJavaProperties() {
 		if (javaPropertiesProvider == null) {
-			javaPropertiesProvider = new JavaPropertiesProvider(this);
+			String pathToConfigFileJava = new ConfigFileLocator().resolveConfigFilePath(this.getPathToConfigFileJava());
+			javaPropertiesProvider = new JavaPropertiesProvider(pathToConfigFileJava, getSelectedJavaProfile());
 		}
 		return javaPropertiesProvider;
 	}

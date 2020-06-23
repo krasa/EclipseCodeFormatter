@@ -1,16 +1,14 @@
 package krasa.formatter.settings.provider;
 
-import java.io.File;
-import java.io.IOException;
-
-import junit.framework.Assert;
+import com.intellij.openapi.util.io.FileUtil;
 import krasa.formatter.common.ModifiableFile;
-
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.intellij.openapi.util.io.FileUtil;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Vojtech Krasa
@@ -38,10 +36,10 @@ public class CachedProviderTest {
 
 	@Test
 	public void testWasChanged() throws Exception {
-		ModifiableFile.Monitor modifiedMonitor = cachedProvider.getModifiedMonitor();
-		Assert.assertFalse(cachedProvider.wasChanged(modifiedMonitor));
+		cachedProvider.get();
+		Assert.assertFalse(cachedProvider.wasChanged());
 		tempFile.setLastModified(tempFile.lastModified() + 1000);
-		Assert.assertTrue(cachedProvider.wasChanged(modifiedMonitor));
+		Assert.assertTrue(cachedProvider.wasChanged());
 	}
 
 	@Test

@@ -1,7 +1,6 @@
 package krasa.formatter.settings.provider;
 
 import krasa.formatter.common.ModifiableFile;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -35,7 +34,7 @@ public abstract class CachedProvider<T> {
 		return modifiableFile.getModifiedMonitor();
 	}
 
-	public boolean wasChanged(@Nullable ModifiableFile.Monitor lastState) {
+	public boolean wasChanged() {
 		return lastState == null || modifiableFile.wasChanged(lastState);
 	}
 

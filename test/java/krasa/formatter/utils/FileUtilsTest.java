@@ -1,12 +1,11 @@
 package krasa.formatter.utils;
 
+import krasa.formatter.eclipse.TestUtils;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.File;
 import java.util.List;
-
-import junit.framework.Assert;
-
-import krasa.formatter.eclipse.TestUtils;
-import org.junit.Test;
 
 /**
  * @author Vojtech Krasa

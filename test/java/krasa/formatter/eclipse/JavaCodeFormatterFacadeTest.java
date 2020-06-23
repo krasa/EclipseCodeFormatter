@@ -4,8 +4,9 @@ import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.util.PsiUtilCore;
-import junit.framework.Assert;
 import krasa.formatter.settings.Settings;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,12 +53,45 @@ public class JavaCodeFormatterFacadeTest {
 			+ "\t\tEclipseCodeFormatterFacade eclipseCodeFormatterFacade = new EclipseCodeFormatterFacade(pathToConfigFile);\n"
 			+ "\t\tString output = eclipseCodeFormatterFacade.format(INPUT, Settings.LINE_SEPARATOR);\n"
 			+ "\t\tAssert.assertEquals(INPUT, output);\n" + "\n" + "\t}\n" + "}";
+	public static final String FORMATTED_EPF = "public class EclipseCodeFormatterFacadeTest {\n" +
+			"\n" +
+			"  public static final String INPUT =\n" +
+			"      \"ღმ⠀⠑⠁⠞色は匂へど 散りぬるを⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑ერთსი შემვედრე, ნუთუ კვლა დამხსნას სოფლისა შრომასა, ცეცხლს, წყალსა და მიწასა, ჰაერთა თანა მრომასა; მომცნეს ფრთენი და აღვფრინდე, მივჰხვდე მას ჩემსა ნდომასა, დღისით და ღამით ვჰხედვიდე யாமறிந்த மொழிகளி+ěščřრუსთაველიžýáíé=ê¹ś¿źæñ³ó\";\n" +
+			"\n" +
+			"  @Test\n" +
+			"  public void testFormat() throws Exception {\n" +
+			"    String pathToCo色は匂へどnfigFile = \"org.eclipse.jdt.core.prefs\";\n" +
+			"    EclipseCodeFormatterFacade eclipseCodeFormatterFacade = new EclipseCodeFormatterFacade(pathToConfigFile);\n" +
+			"    String output = eclipseCodeFormatterFacade.format(INPUT, Settings.LINE_SEPARATOR);\n" +
+			"    Assert.assertEquals(INPUT, output);\n" +
+			"\n" +
+			"  }\n" +
+			"}\n";
 	public static final String FORMATTED2 = "package krasa;\n" + "\n" + "import org.xml.sax.InputSource;\n" + "\n"
 			+ "/**\n" + " * @author Vojtech Krasa\n" + " */\n" + "public class Test2 {\n" + "\n"
 			+ "\tpublic static final InputSource INPUT_SOURCE = new InputSource();\n" + "\n"
 			+ "\tpublic static void main(String[] args) {\n" + "\n"
 			+ "\t\tSystem.err.println(\"\" + \"\" + \"\" + \"\" + \"\");\n"
 			+ "\t\tSystem.err.println(\"\" + \"\" + \"\" + \"\" + \"\");\n" + "\n" + "\t}\n" + "\n" + "}";
+	public static final String FORMATTED_2_EPF = "package krasa;\n" +
+			"\n" +
+			"import org.xml.sax.InputSource;\n" +
+			"\n" +
+			"/**\n" +
+			"                   *                         @author Vojtech Krasa\n" +
+			"                  */\n" +
+			"public class Test2 {\n" +
+			"\n" +
+			"  public static final InputSource INPUT_SOURCE = new InputSource();\n" +
+			"\n" +
+			"  public static void main(String[] args) {\n" +
+			"\n" +
+			"    System.err.println(\"\" + \"\" + \"\" + \"\" + \"\");\n" +
+			"    System.err.println(\"\" + \"\" + \"\" + \"\" + \"\");\n" +
+			"\n" +
+			"  }\n" +
+			"\n" +
+			"}\n";
 
 	public static final String PATH_TO_CONFIG_FILE = "resources/org.eclipse.jdt.core.prefs";
 
@@ -77,9 +111,14 @@ public class JavaCodeFormatterFacadeTest {
 	public void setUp() throws Exception {
 		Settings settings = new Settings();
 		setPathToConfigFileJava(settings, PATH_TO_CONFIG_FILE);
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(Settings.ProfileScheme.FILE, settings.getJavaProperties(),
-				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
+		eclipseCodeFormatterFacade = getEclipseCodeFormatterFacade(settings);
 	}
+
+	@NotNull
+	private JavaCodeFormatterFacade getEclipseCodeFormatterFacade(Settings settings) {
+		return new JavaCodeFormatterFacade(settings, getProject());
+	}
+
 
 	private void setPathToConfigFileJava(Settings settings, String pathToConfigFile) {
 		pathToConfigFile = TestUtils.normalizeUnitTestPath(pathToConfigFile);
@@ -103,8 +142,7 @@ public class JavaCodeFormatterFacadeTest {
 		Settings settings = new Settings();
 		setPathToConfigFileJava(settings, "resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(Settings.ProfileScheme.FILE, settings.getJavaProperties(),
-				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
+		eclipseCodeFormatterFacade = getEclipseCodeFormatterFacade(settings);
 		String output = format(INPUT);
 		Assert.assertEquals(FORMATTED, output);
 		output = format(INPUT2);
@@ -115,12 +153,11 @@ public class JavaCodeFormatterFacadeTest {
 	public void testFormatByEPF() throws Exception {
 		Settings settings = new Settings();
 		setPathToConfigFileJava(settings, "resources/mechanic-formatter.epf");
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(Settings.ProfileScheme.FILE, settings.getJavaProperties(),
-				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
+		eclipseCodeFormatterFacade = getEclipseCodeFormatterFacade(settings);
 		String output = format(INPUT);
-		Assert.assertEquals(FORMATTED, output);
+		Assert.assertEquals(FORMATTED_EPF, output);
 		output = format(INPUT2);
-		Assert.assertEquals(FORMATTED2, output);
+		Assert.assertEquals(FORMATTED_2_EPF, output);
 	}
 
 	@Test
@@ -129,8 +166,7 @@ public class JavaCodeFormatterFacadeTest {
 		setPathToConfigFileJava(settings, "resources/format.xml");
 		settings.setSelectedJavaProfile("kuk");
 
-		eclipseCodeFormatterFacade = new JavaCodeFormatterFacade(Settings.ProfileScheme.FILE, settings.getJavaProperties(),
-				settings.getEclipseVersion(), getProject(), settings.getPathToEclipse());
+		eclipseCodeFormatterFacade = getEclipseCodeFormatterFacade(settings);
 		String output = format(INPUT_3);
 		Assert.assertEquals(EXPECTED_3, output);
 	}

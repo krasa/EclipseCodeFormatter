@@ -1,8 +1,9 @@
 package krasa.formatter.settings.provider;
 
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.PathUtil;
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.plugin.InvalidPropertyFile;
-import krasa.formatter.settings.ConfigFileLocator;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 
@@ -21,7 +22,7 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 	}
 
 	public JavaPropertiesProvider(String pathToConfigFileJava, String selectedJavaProfile) {
-		super(new ModifiableFile(new ConfigFileLocator(pathToConfigFileJava).resolveConfigFilePath()));
+		super(new ModifiableFile(pathToConfigFileJava));
 		this.profile = selectedJavaProfile;
 	}
 
@@ -53,6 +54,12 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 		Properties result = FileUtils.convertEPF(properties, createDefaultConfig());
 		validateConfig(result, file);
 		return result;
+	}
+
+	public boolean isSameFile(VirtualFile fileB) {
+		String path = PathUtil.toSystemIndependentName(fileB.getPath());
+		String current = getModifiableFile().getSystemIndependentPath();
+		return current.equals(path);
 	}
 
 }

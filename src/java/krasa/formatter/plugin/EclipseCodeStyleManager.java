@@ -198,7 +198,7 @@ public class EclipseCodeStyleManager {
 
 	private void formatWithEclipse(PsiFile psiFile, int startOffset, int endOffset) throws FileDoesNotExistsException {
 			if (eclipseCodeFormatterJava == null) {
-				JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings, original);
+				JavaCodeFormatterFacade facade = new JavaCodeFormatterFacade(settings, original.getProject());
 				eclipseCodeFormatterJava = new EclipseCodeFormatter(settings, facade);
 			}
 			eclipseCodeFormatterJava.format(psiFile, startOffset, endOffset);

@@ -54,7 +54,7 @@ public class CachedPropertiesProvider extends CachedProvider<Properties> {
 
 	protected void validateConfig(Properties config, File file) {
 		if (config.size() < 100) {
-			throw new InvalidPropertyFile("Loaded only " + config.size() + " properties, should be 100+. Use a custom formatter profile in Eclipse.", file);
+			throw new InvalidPropertyFile("Loaded only " + config.size() + " properties from: " + file.getAbsolutePath() + ", should be 100+. Use a custom formatter profile in Eclipse.", file);
 		}
 	}
 

@@ -29,7 +29,11 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
-import krasa.formatter.settings.*;
+import krasa.formatter.eclipse.ConfigFileLocator;
+import krasa.formatter.settings.GlobalSettings;
+import krasa.formatter.settings.MyConfigurable;
+import krasa.formatter.settings.ProjectSettings;
+import krasa.formatter.settings.Settings;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -505,9 +509,9 @@ public class ProjectSettingsForm {
 			this.normalBorder = javaFormatterProfile.getBorder();
 		}
 		if (!text.isEmpty() && schemeEclipseFile.isSelected()) {
-			ConfigFileLocator configFileLocator = new ConfigFileLocator(text);
+			ConfigFileLocator configFileLocator = new ConfigFileLocator();
 
-			configFileLocator.validate(this, profilesModel);
+			configFileLocator.validate(this, profilesModel, text);
 
 		} else {
 			javaFormatterProfile.setEnabled(false);

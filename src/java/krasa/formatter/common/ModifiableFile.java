@@ -1,8 +1,10 @@
 package krasa.formatter.common;
 
-import java.io.File;
-
+import com.intellij.util.PathUtil;
 import krasa.formatter.exception.FileDoesNotExistsException;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 /**
  * @author Vojtech Krasa
@@ -15,7 +17,7 @@ public class ModifiableFile extends File {
 
 	public boolean wasChanged(Monitor lastState) {
 		checkIfExists();
-		return this.lastModified() > lastState.getLastStateTime();
+		return this.lastModified() != lastState.getLastStateTime();
 	}
 
 	public void checkIfExists() throws FileDoesNotExistsException {
@@ -26,6 +28,11 @@ public class ModifiableFile extends File {
 
 	public Monitor getModifiedMonitor() {
 		return new Monitor(this);
+	}
+
+	@NotNull
+	public String getSystemIndependentPath() {
+		return PathUtil.toSystemIndependentName(getAbsolutePath());
 	}
 
 	/**

@@ -1,13 +1,13 @@
 package krasa.formatter.settings.provider;
 
-import java.io.File;
-import java.util.*;
-
 import krasa.formatter.common.ModifiableFile;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
 import krasa.formatter.utils.StringUtils;
+
+import java.io.File;
+import java.util.*;
 
 /**
  * @author Vojtech Krasa
@@ -51,7 +51,6 @@ public class ImportOrderProvider extends CachedProvider<List<String>> {
 		treeMap.putAll(file);
 		return new ArrayList<String>(treeMap.values());
 	}
-
 
 
 }

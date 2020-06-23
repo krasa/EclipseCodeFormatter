@@ -27,21 +27,22 @@ import java.util.Arrays;
 public class PlatformFormatterTest extends FormatterTestCase {
 
 	private static final String BASE_PATH = "../testProject";
-	JavaCodeFormatterFacade.IModuleResolverStrategy previousResolver;
+	ConfigFileLocator.IModuleResolverStrategy previousResolver;
 
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 		Settings settings = new Settings();
 		settings.setFormatter(Settings.Formatter.ECLIPSE);
+		settings.setProfileScheme(Settings.ProfileScheme.PROJECT_SPECIFIC);
 		ProjectComponent.getInstance(getProject()).installOrUpdate(settings);
-		previousResolver = JavaCodeFormatterFacade.TESTING_getModuleResolver();
+		previousResolver = ConfigFileLocator.TESTING_getModuleResolver();
 	}
 
 	public void testFormatting() {
 
 
-		JavaCodeFormatterFacade.TESTING_setModuleResolver(new JavaCodeFormatterFacade.IModuleResolverStrategy() {
+		ConfigFileLocator.TESTING_setModuleResolver(new ConfigFileLocator.IModuleResolverStrategy() {
 			@Override
 			public VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
 
@@ -59,7 +60,7 @@ public class PlatformFormatterTest extends FormatterTestCase {
 		});
 
 		{
-			VirtualFile virtualFile = refreshAndFindFile(new File("../testProject/submodule-a/src/main/java/aaa/XAAA.java"));
+			VirtualFile virtualFile = refreshAndFindFile(new File("testProject/submodule-a/src/main/java/aaa/XAAA.java"));
 
 			PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(virtualFile);
 
@@ -125,14 +126,14 @@ public class PlatformFormatterTest extends FormatterTestCase {
 	}
 
 	private void assertFormatterFile(String s) {
-		String filePath = JavaCodeFormatterFacade.TESTING_getMostRecentFormatterFile().getPath();
+		String filePath = ConfigFileLocator.getInstance(getProject()).TESTING_getMostRecentFormatterFile().getPath();
 		assertTrue("Used " + filePath, filePath.endsWith(s));
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 
-		JavaCodeFormatterFacade.TESTING_setModuleResolver(previousResolver);
+		ConfigFileLocator.TESTING_setModuleResolver(previousResolver);
 
 		try {
 			super.tearDown();

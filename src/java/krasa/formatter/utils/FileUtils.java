@@ -98,9 +98,7 @@ public class FileUtils {
 		int defaultSize = properties.size();
 		boolean profileFound = false;
 		try {
-			if (profile == null) {
-				throw new IllegalStateException("No Eclipse formatter profile selected, go to settings and properly configure it.");
-			}
+
 			// load file profiles
 			org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(IOUtils.toInputStream(xml));
 			doc.getDocumentElement().normalize();
@@ -109,12 +107,15 @@ public class FileUtils {
 			if (profiles.getLength() == 0) {
 				throw new IllegalStateException("Loading of profile settings failed, the file does not contain any profiles.");
 			}
+			if (profiles.getLength() > 1 && profile == null) {
+				throw new IllegalStateException("No Eclipse formatter profile selected, go to settings and properly configure it.");
+			}
 			for (int temp = 0; temp < profiles.getLength(); temp++) {
 				Node profileNode = profiles.item(temp);
 				if (profileNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element profileElement = (Element) profileNode;
 					String name = profileElement.getAttribute("name");
-					if (profile.equals(name)) {
+					if (profile.equals(name) || profiles.getLength() == 1) {
 						profileFound = true;
 						NodeList childNodes = profileElement.getElementsByTagName("setting");
 						if (childNodes.getLength() == 0) {

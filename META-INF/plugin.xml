@@ -83,12 +83,14 @@
 	<extensions defaultExtensionNs="com.intellij">
 		<lang.importOptimizer order="FIRST" language="JAVA"
 							  implementationClass="krasa.formatter.plugin.EclipseImportOptimizer"/>
-        <projectConfigurable provider="krasa.formatter.settings.MyConfigurableProvider" id="EclipseFormatter"
-                             displayName="Eclipse Code Formatter"/>
-        <projectService
+		<projectConfigurable provider="krasa.formatter.settings.MyConfigurableProvider" id="EclipseFormatter"
+							 displayName="Eclipse Code Formatter"/>
+		<projectService
 				serviceImplementation="krasa.formatter.settings.ProjectPersistentStateComponent_Old"/>
 		<projectService
 				serviceImplementation="krasa.formatter.settings.ProjectSettings"/>
+		<projectService
+				serviceImplementation="krasa.formatter.eclipse.ConfigFileLocator"/>
 		<defaultLiveTemplatesProvider implementation="krasa.formatter.templates.LiveTemplatesProvider"/>
 	</extensions>
 
