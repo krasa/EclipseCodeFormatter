@@ -1,6 +1,5 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -35,9 +34,6 @@ public class ConfigFileLocator {
 			"mechanic-formatter.epf" //
 	);
 
-	public static ConfigFileLocator getInstance(Project project) {
-		return ServiceManager.getService(project, ConfigFileLocator.class);
-	}
 
 	public String resolveConfigFilePath(String path) {
 		File file = new File(path);
@@ -193,6 +189,10 @@ public class ConfigFileLocator {
 			for (String conventionFileName : CONVENTIONFILENAMES) {
 				VirtualFile fileByRelativePath = moduleFileDir.findFileByRelativePath(conventionFileName);
 				if (fileByRelativePath != null && fileByRelativePath.exists()) {
+					if (!isValid(fileByRelativePath)) {
+						LOG.info("Found a config file, but is invalid, skipping. " + fileByRelativePath);
+						continue;
+					}
 					mostRecentFormatterFile = fileByRelativePath;
 					return fileByRelativePath;
 				}
@@ -200,6 +200,16 @@ public class ConfigFileLocator {
 			moduleFileDir = getNextParentModuleDirectory(moduleFileDir, project);
 		}
 		return null;
+	}
+
+	private boolean isValid(VirtualFile virtualFile) {
+		if ("org.eclipse.jdt.core.prefs".equals(virtualFile.getName())) {
+			return isValidCorePrefs(virtualFile.toNioPath().toFile());
+		}
+		if (virtualFile.getName().endsWith(".epf")) {
+			return isValidEPF(virtualFile.toNioPath().toFile());
+		}
+		return true;
 	}
 
 	private VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {

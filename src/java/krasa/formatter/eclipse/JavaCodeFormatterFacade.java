@@ -59,7 +59,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 			long start = System.currentTimeMillis();
 			VirtualFile configFile = configFileLocator.traverseToFindConfigurationFileByConvention(psiFile, project);
-			LOG.info("config located in " + (System.currentTimeMillis() - start) + "ms, (" + configFile + ")");
+			LOG.debug("config located in " + (System.currentTimeMillis() - start) + "ms (" + configFile + ")");
 
 			if (configFile == null) {
 				throw new FormattingFailedException("Formatter config file not resolved.", true);

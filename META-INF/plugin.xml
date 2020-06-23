@@ -89,8 +89,6 @@
 				serviceImplementation="krasa.formatter.settings.ProjectPersistentStateComponent_Old"/>
 		<projectService
 				serviceImplementation="krasa.formatter.settings.ProjectSettings"/>
-		<projectService
-				serviceImplementation="krasa.formatter.eclipse.ConfigFileLocator"/>
 		<defaultLiveTemplatesProvider implementation="krasa.formatter.templates.LiveTemplatesProvider"/>
 	</extensions>
 
