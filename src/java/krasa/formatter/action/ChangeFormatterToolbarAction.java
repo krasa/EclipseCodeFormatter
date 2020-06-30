@@ -1,21 +1,20 @@
 package krasa.formatter.action;
 
-import javax.swing.*;
-
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
-
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
+
+import javax.swing.*;
 
 /**
  * @author Vojtech Krasa
  */
-public class ChangeFormatterToolbarAction extends AnAction {
+public class ChangeFormatterToolbarAction extends DumbAwareAction {
 	private static final Logger LOG = Logger.getInstance(ChangeFormatterToolbarAction.class.getName());
 
 	public static final Icon ICON = IconLoader.getIcon("/krasa/formatter/eclipse.gif");

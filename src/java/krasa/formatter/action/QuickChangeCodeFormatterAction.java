@@ -4,16 +4,16 @@ import com.intellij.ide.actions.QuickSwitchSchemeAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
-
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
 
 /**
  * @author Vojtech Krasa
  */
-public class QuickChangeCodeFormatterAction extends QuickSwitchSchemeAction {
+public class QuickChangeCodeFormatterAction extends QuickSwitchSchemeAction implements DumbAware {
 
 	@Override
 	protected void fillActions(final Project project, DefaultActionGroup group, DataContext dataContext) {
