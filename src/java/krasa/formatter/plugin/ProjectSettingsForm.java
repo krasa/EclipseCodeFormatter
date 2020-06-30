@@ -207,6 +207,7 @@ public class ProjectSettingsForm {
 		this.myConfigurable = myConfigurable;
 		donateButton.setBorder(BorderFactory.createEmptyBorder());
 		donateButton.setContentAreaFilled(false);
+		donateButton.putClientProperty("JButton.backgroundColor", rootComponent.getBackground());
 		this.project = project;
 		for (Field field : ProjectSettingsForm.class.getDeclaredFields()) {
 			try {
