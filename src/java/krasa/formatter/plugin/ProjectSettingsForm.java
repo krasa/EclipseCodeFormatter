@@ -664,10 +664,10 @@ public class ProjectSettingsForm {
 		javaFormatterProfile.setSelectedItem(in.getSelectedJavaProfile());
 
 		schemeEclipse.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE));
-		schemeCurrentProject.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.PROJECT_SPECIFIC));
+		schemeCurrentProject.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.RESOLVE));
 		schemeEclipse21.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE_2_1));
 		schemeEclipseJC.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.JAVA_CONVENTIONS));
-		schemeEclipseFile.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.FILE));
+		schemeEclipseFile.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.CUSTOM));
 
 		setData(in);
 		updateComponents();
@@ -697,9 +697,9 @@ public class ProjectSettingsForm {
 		} else if (schemeEclipseJC.isSelected()) {
 			displayedSettings.setProfileScheme(Settings.ProfileScheme.JAVA_CONVENTIONS);
 		} else if (schemeEclipseFile.isSelected()) {
-			displayedSettings.setProfileScheme(Settings.ProfileScheme.FILE);
+			displayedSettings.setProfileScheme(Settings.ProfileScheme.CUSTOM);
 		} else if (schemeCurrentProject.isSelected()) {
-			displayedSettings.setProfileScheme(Settings.ProfileScheme.PROJECT_SPECIFIC);
+			displayedSettings.setProfileScheme(Settings.ProfileScheme.RESOLVE);
 		}
 
 
@@ -772,13 +772,13 @@ public class ProjectSettingsForm {
 			return true;
 		}
 
-		if (schemeCurrentProject.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.PROJECT_SPECIFIC)) {
+		if (schemeCurrentProject.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.RESOLVE)) {
 			return true;
 		}
 		if (schemeEclipse.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE)) {
 			return true;
 		}
-		if (schemeEclipseFile.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.FILE)) {
+		if (schemeEclipseFile.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.CUSTOM)) {
 			return true;
 		}
 		if (schemeEclipseJC.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.JAVA_CONVENTIONS)) {

@@ -43,7 +43,7 @@ public class ConfigFileLocator {
 		}
 
 		if (file.isDirectory()) {
-			File resolve = resolve(file);
+			File resolve = resolveFolder(file);
 			if (resolve != null) return resolve.getAbsolutePath();
 
 			throw new FileDoesNotExistsException("Invalid config location: " + path);
@@ -66,7 +66,7 @@ public class ConfigFileLocator {
 				invalid(ProjectSettingsForm.NOT_EXISTS, profilesModel, comboBox);
 			}
 			if (file.isDirectory()) {
-				file = resolve(file);
+				file = resolveFolder(file);
 				if (file == null) {
 					invalid("invalid location", profilesModel, comboBox);
 				}
@@ -92,18 +92,18 @@ public class ConfigFileLocator {
 	}
 
 	@Nullable
-	private File resolve(File file) {
-		File mechanicFormatterEpf = org.apache.commons.io.FileUtils.getFile(file, ".settings", "mechanic-formatter.epf");
+	private File resolveFolder(File folder) {
+		File mechanicFormatterEpf = org.apache.commons.io.FileUtils.getFile(folder, ".settings", "mechanic-formatter.epf");
 		if (mechanicFormatterEpf.exists()) {
 			return mechanicFormatterEpf;
 		}
 
-		File corePrefs = org.apache.commons.io.FileUtils.getFile(file, ".settings", "org.eclipse.jdt.core.prefs");
+		File corePrefs = org.apache.commons.io.FileUtils.getFile(folder, ".settings", "org.eclipse.jdt.core.prefs");
 		if (corePrefs.exists()) {
 			return corePrefs;
 		}
 
-		File uiPrefs = org.apache.commons.io.FileUtils.getFile(file, ".metadata", ".plugins", "org.eclipse.core.runtime", ".settings", "org.eclipse.jdt.ui.prefs");
+		File uiPrefs = org.apache.commons.io.FileUtils.getFile(folder, ".metadata", ".plugins", "org.eclipse.core.runtime", ".settings", "org.eclipse.jdt.ui.prefs");
 		if (uiPrefs.exists()) {
 			return uiPrefs;
 		}

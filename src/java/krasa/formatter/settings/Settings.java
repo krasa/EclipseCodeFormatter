@@ -63,7 +63,7 @@ public class Settings {
 	private boolean useOldEclipseJavaFormatter = false;
 	private FormatterVersion eclipseVersion = FormatterVersion.NEWEST;
 	private ImportOrdering importOrdering = ImportOrdering.ECLIPSE_452;
-	private ProfileScheme profileScheme = ProfileScheme.FILE;
+	private ProfileScheme profileScheme = ProfileScheme.CUSTOM;
 	private String pathToEclipse = "";
 
 	public Settings() {
@@ -119,7 +119,7 @@ public class Settings {
 	public Settings(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		setProfileScheme(ProfileScheme.PROJECT_SPECIFIC);
+		setProfileScheme(ProfileScheme.RESOLVE);
 	}
 
 	public DisabledFileTypeSettings getDisabledFileTypeSettings() {
@@ -298,11 +298,11 @@ public class Settings {
 	}
 
 	public static enum ProfileScheme {
-		PROJECT_SPECIFIC,
+		RESOLVE,
 		ECLIPSE,
 		ECLIPSE_2_1,
 		JAVA_CONVENTIONS,
-		FILE,
+		CUSTOM,
 	}
 
 	public static enum Formatter {
