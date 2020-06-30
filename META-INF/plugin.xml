@@ -5,7 +5,7 @@
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
 
-	<version>19.6.201.6668.0-Eclipse_2020-06-JavaOnly</version>
+	<version>20.0.201.6668.0-Eclipse_2020-06-JavaOnly</version>
 	<idea-version since-build="201.6668"/>
 
 
@@ -30,10 +30,11 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-	    <br>19.6 (2019-06-19)
+	    <br>20.0 (2019-07-01)
 		<br>- Java formatter updated to Eclipse 2020-06
 		<br>- Support for custom Eclipse installed via installer
 		<br>- Added build-in Eclipse profiles
+		<br>- Added resolving project/workspace/mechanic-formatter.epf settings
 	    <br>19.5 (2019-05-03)
 		<br>- fixed 'Custom Eclipse location' label
 		<br>- fixed error handling

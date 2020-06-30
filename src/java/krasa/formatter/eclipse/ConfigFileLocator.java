@@ -12,6 +12,8 @@ import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.plugin.ProjectSettingsForm;
 import krasa.formatter.utils.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -22,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
+@SuppressWarnings("rawtypes")
 public class ConfigFileLocator {
 	private static final Logger LOG = Logger.getInstance(ConfigFileLocator.class.getName());
 
@@ -54,25 +57,29 @@ public class ConfigFileLocator {
 
 	public void validate(ProjectSettingsForm projectSettingsForm,
 						 SortedComboBoxModel profilesModel, String path) {
-		String text = path;
-		File file = new File(text);
-		String lowerCaseName = file.getName().toLowerCase();
+		if (StringUtils.isBlank(path)) {
+			return;
+		}
+		File file = new File(path);
 		JComboBox comboBox = projectSettingsForm.javaFormatterProfile;
 		comboBox.setEnabled(true);
 		comboBox.setBorder(projectSettingsForm.normalBorder);
 
 		try {
 			if (!file.exists()) {
-				invalid(ProjectSettingsForm.NOT_EXISTS, profilesModel, comboBox);
+				invalid("invalid location", profilesModel, comboBox);
+				return;
 			}
 			if (file.isDirectory()) {
 				file = resolveFolder(file);
 				if (file == null) {
 					invalid("invalid location", profilesModel, comboBox);
+					return;
 				}
 			}
+			String lowerCaseName = file.getName().toLowerCase().trim();
 
-			if (lowerCaseName.equals(".org.eclipse.jdt.ui.prefs")) {
+			if (lowerCaseName.equals("org.eclipse.jdt.ui.prefs")) {
 				processWorkspaceConfig(profilesModel, comboBox, file);
 			} else if (lowerCaseName.endsWith(".prefs")) {
 				processPrefs(projectSettingsForm, profilesModel, comboBox, file);
@@ -87,6 +94,8 @@ public class ConfigFileLocator {
 		} catch (IOException e) {
 			invalid("Plugin error:" + e.toString(), profilesModel, comboBox);
 			throw new RuntimeException(e);
+		} catch (FileDoesNotExistsException e) {
+			invalid("invalid location", profilesModel, comboBox);
 		}
 
 	}
@@ -132,9 +141,9 @@ public class ConfigFileLocator {
 
 	private void processEPF(ProjectSettingsForm projectSettingsForm, SortedComboBoxModel profilesModel, File file, JComboBox comboBox) {
 		if (isValidEPF(file)) {
-			valid("valid config", projectSettingsForm, profilesModel, comboBox);
+			valid("valid EPF config", projectSettingsForm, profilesModel, comboBox);
 		} else {
-			invalid("Invalid config, should contain 100+ org.eclipse.jdt.core properties", profilesModel, comboBox);
+			invalid("Invalid EPF config, should contain 100+ org.eclipse.jdt.core properties", profilesModel, comboBox);
 		}
 	}
 
@@ -155,15 +164,15 @@ public class ConfigFileLocator {
 		}
 	}
 
-	private void processPrefs(ProjectSettingsForm projectSettingsForm, SortedComboBoxModel profilesModel, JComboBox comboBox, File file) {
+	private void processPrefs(@NotNull ProjectSettingsForm projectSettingsForm, @NotNull SortedComboBoxModel profilesModel, @NotNull JComboBox comboBox, @NotNull File file) {
 		if (isValidCorePrefs(file)) {
-			valid("valid config", projectSettingsForm, profilesModel, comboBox);
+			valid("valid '" + file.getName() + "' config", projectSettingsForm, profilesModel, comboBox);
 		} else {
 			invalid("Enable 'Project Specific Settings' in Eclipse!", profilesModel, comboBox);
 		}
 	}
 
-	private boolean isValidCorePrefs(File file) {
+	private boolean isValidCorePrefs(@NotNull File file) {
 		Properties properties = FileUtils.readPropertiesFile(file);
 		return properties.size() > 100;
 	}

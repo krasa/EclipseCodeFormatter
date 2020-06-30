@@ -257,6 +257,7 @@
         </constraints>
         <properties>
           <text value="Eclipse workspace/project/config file"/>
+          <toolTipText value=""/>
         </properties>
       </component>
       <component id="c4f8" class="javax.swing.JRadioButton" binding="schemeEclipse21">
@@ -293,6 +294,7 @@
         </constraints>
         <properties>
           <text value="Resolve project specific config"/>
+          <toolTipText value="The configuration is resolved for each formatted file by its module/project. Following files are searched for: &quot;.settings/org.eclipse.jdt.core.prefs&quot;, &quot;.settings/mechanic-formatter.epf&quot;, &quot;mechanic-formatter.epf&quot;."/>
         </properties>
       </component>
       <component id="cd640" class="javax.swing.JLabel" binding="eclipsePreferenceFileJavaLabel">
@@ -502,7 +504,7 @@
       </component>
       <component id="1a4f3" class="javax.swing.JLabel" binding="javaFormatterProfileLabel">
         <constraints>
-          <grid row="17" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="17" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="27"/>
           </grid>
         </constraints>

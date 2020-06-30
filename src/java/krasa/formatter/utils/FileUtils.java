@@ -12,6 +12,7 @@ import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.plugin.InvalidPropertyFile;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -45,7 +46,7 @@ public class FileUtils {
 		}
 		return false;
 	}
-	
+
 	public static boolean isWholeFile(int startOffset, int endOffset, String text) {
 		return startOffset == 0 && endOffset == text.length();
 	}
@@ -54,7 +55,7 @@ public class FileUtils {
 		return StdFileTypes.JAVA.equals(psiFile.getFileType());
 	}
 
-	public static Properties readPropertiesFile(File file, Properties defaultConfig) {
+	public static Properties readPropertiesFile(@NotNull File file, @Nullable Properties defaultConfig) {
 		if (!file.exists()) {
 			throw new FileDoesNotExistsException(file);
 		}
@@ -79,7 +80,7 @@ public class FileUtils {
 		return formatterOptions;
 	}
 
-	public static Properties readPropertiesFile(File file) {
+	public static Properties readPropertiesFile(@NotNull File file) {
 		return readPropertiesFile(file, null);
 	}
 

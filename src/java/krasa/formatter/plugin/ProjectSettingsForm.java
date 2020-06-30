@@ -512,7 +512,6 @@ public class ProjectSettingsForm {
 			ConfigFileLocator configFileLocator = new ConfigFileLocator();
 
 			configFileLocator.validate(this, profilesModel, text);
-
 		} else {
 			javaFormatterProfile.setEnabled(false);
 			javaFormatterProfile.setBorder(this.normalBorder);
