@@ -1,26 +1,25 @@
 package krasa.formatter.plugin;
 
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.psi.codeStyle.CodeStyleManager;
+import net.sf.cglib.proxy.InvocationHandler;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-
-import net.sf.cglib.proxy.InvocationHandler;
-
 public class ProxyCodeStyleManagerDelegator implements InvocationHandler {
 	private static final Logger log = Logger.getInstance(ProxyCodeStyleManagerDelegator.class.getName());
 
-	private final CodeStyleManager delegatedObject;
+	private final CodeStyleManager original;
 	private final EclipseCodeStyleManager overridingObject;
 	private final Set<Method> notOverriddenMethods = new HashSet<Method>();
 
-	public ProxyCodeStyleManagerDelegator(CodeStyleManager delegatedObject, EclipseCodeStyleManager overridingObject) {
-		this.delegatedObject = delegatedObject;
-		this.overridingObject = overridingObject;
+	public ProxyCodeStyleManagerDelegator(CodeStyleManager original, EclipseCodeStyleManager overriding) {
+		this.original = original;
+		this.overridingObject = overriding;
 	}
 
 	@Override
@@ -32,7 +31,9 @@ public class ProxyCodeStyleManagerDelegator implements InvocationHandler {
 				Method overridingMethod = getOverridingMethod(method);
 
 				if (!compatibleReturnTypes(method.getReturnType(), overridingMethod.getReturnType())) {
-					overridingMethodHasWrongReturnType(method, overridingMethod, proxy, overridingObject);
+					log.error("IntelliJ API changed, install proper/updated version of Eclipse Formatter plugin. " + "Incompatible return types when calling: " + method
+							+ " on: " + proxy.getClass().getSimpleName() + " return type should be: " + method.getReturnType().getSimpleName() + ", but was: "
+							+ overridingMethod.getReturnType().getSimpleName() + " (delegate instance had type: " + ((Object) overridingObject).getClass().getSimpleName() + ")");
 					return PLEASE_REPORT_BUGS_TO_JETBRAINS_IF_IT_FAILS_HERE____ORIGINAL_INTELLIJ_FORMATTER_WAS_USED(method, rawArguments);
 				}
 				if (log.isDebugEnabled()) {
@@ -56,24 +57,18 @@ public class ProxyCodeStyleManagerDelegator implements InvocationHandler {
 	private Object PLEASE_REPORT_BUGS_TO_JETBRAINS_IF_IT_FAILS_HERE____ORIGINAL_INTELLIJ_FORMATTER_WAS_USED(Method invokedMethod, Object[] rawArguments)
 			throws Throwable {
 		try {
-			return invokedMethod.invoke(delegatedObject, rawArguments);
+			return invokedMethod.invoke(original, rawArguments);
 		} catch (InvocationTargetException e) {
 			throw e.getCause();
 		}
-	}
-
-	public void overridingMethodHasWrongReturnType(Method mockMethod, Method overridingMethod, Object mock, Object overridingObject) {
-		log.error("IntelliJ API changed, install proper/updated version of Eclipse Formatter plugin. " + "Incompatible return types when calling: " + mockMethod
-				+ " on: " + mock.getClass().getSimpleName() + " return type should be: " + mockMethod.getReturnType().getSimpleName() + ", but was: "
-				+ overridingMethod.getReturnType().getSimpleName() + " (delegate instance had type: " + overridingObject.getClass().getSimpleName() + ")");
 	}
 
 	private Method getOverridingMethod(Method mockMethod) throws NoSuchMethodException {
 		return overridingObject.getClass().getMethod(mockMethod.getName(), mockMethod.getParameterTypes());
 	}
 
-	private static boolean compatibleReturnTypes(Class<?> superType, Class<?> subType) {
-		return superType.equals(subType) || superType.isAssignableFrom(subType);
+	private static boolean compatibleReturnTypes(Class<?> required, Class<?> overriding) {
+		return required.equals(overriding) || required.isAssignableFrom(overriding);
 	}
 
 }
