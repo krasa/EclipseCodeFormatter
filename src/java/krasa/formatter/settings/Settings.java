@@ -121,7 +121,6 @@ public class Settings {
 	public Settings(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		setConfigType(ConfigType.RESOLVE);
 	}
 
 	public DisabledFileTypeSettings getDisabledFileTypeSettings() {
