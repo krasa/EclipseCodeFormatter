@@ -30,27 +30,16 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-	    <br>20.0 (2019-07-01)
+	    <br>20.0 (2020-07-01)
 		<br>- Java formatter updated to Eclipse 2020-06
 		<br>- Support for custom Eclipse installed via an installer
 		<br>- Added build-in Eclipse profiles
 		<br>- Added resolving project/workspace/mechanic-formatter.epf config
-	    <br>19.5 (2019-05-03)
+	    <br>19.5 (2020-05-03)
 		<br>- fixed 'Custom Eclipse location' label
 		<br>- fixed error handling
-	    <br>19.4 (2019-04-24)
+	    <br>19.4 (2020-04-24)
 		<br>- allowing ".XML" in settings
-	    <br>19.3 (2019-10-24)
-		<br>- Fixed LanguageLevel parsing
-	    <br>19.2 (2019-10-19)
-		<br>- IndexOutOfBoundsException fix
-	    <br>19.1 (2019-10-16)
-		<br>- Java formatter updated to Eclipse 2019-09
-		<br>- IntelliJ 2019.3 compatibility
-	    <br>19.0 (2019-06-25)
-		<br>- Java formatter updated to Eclipse 2019-06
-	    <br>- Removed support for Cpp, JS, GWT formatting
-	    <br>- Import Optimize ClassCastException fix
       	<br>...
         <br>0.1 (2011-11-01)
         <br>- Initial release
