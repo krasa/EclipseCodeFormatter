@@ -8,11 +8,13 @@
 
 package krasa.formatter.settings;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.util.xmlb.annotations.Transient;
+
 import krasa.formatter.eclipse.ConfigFileLocator;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
@@ -89,15 +91,15 @@ public class Settings {
 		this.eclipseVersion = eclipseVersion;
 		switch (eclipseVersion) {
 
-			case ECLIPSE_44:
-				useOldEclipseJavaFormatter = true;
-				break;
-			case NEWEST:
-				useOldEclipseJavaFormatter = false;
-				break;
-			case CUSTOM:
-				useOldEclipseJavaFormatter = false;
-				break;
+		case ECLIPSE_44:
+			useOldEclipseJavaFormatter = true;
+			break;
+		case NEWEST:
+			useOldEclipseJavaFormatter = false;
+			break;
+		case CUSTOM:
+			useOldEclipseJavaFormatter = false;
+			break;
 		}
 	}
 
@@ -211,8 +213,6 @@ public class Settings {
 		this.enableGWT = enableGWT;
 	}
 
-
-
 	public JavaPropertiesProvider getJavaProperties() {
 		if (javaPropertiesProvider == null) {
 			String pathToConfigFileJava = new ConfigFileLocator().resolveConfigFilePath(this.getPathToConfigFileJava());
@@ -277,19 +277,15 @@ public class Settings {
 		return this instanceof ProjectSpecificProfile;
 	}
 
-
 	public static enum FormatterVersion {
-		ECLIPSE_44,
-		NEWEST,
-		CUSTOM
+		ECLIPSE_44, NEWEST, CUSTOM
 	}
 
 	public static enum ImportOrdering {
 		/**
 		 * not matching imports -> between groups
 		 */
-		ECLIPSE_44,
-		@Deprecated
+		ECLIPSE_44, @Deprecated
 		ECLIPSE_451,
 		/**
 		 * not matching imports -> on the end, actually since Eclipse 4.5.1 :( oops
@@ -298,21 +294,15 @@ public class Settings {
 	}
 
 	public static enum ConfigType {
-		RESOLVE,
-		ECLIPSE,
-		ECLIPSE_2_1,
-		JAVA_CONVENTIONS,
-		CUSTOM,
+		RESOLVE, ECLIPSE, ECLIPSE_2_1, JAVA_CONVENTIONS, CUSTOM,
 	}
 
 	public static enum Formatter {
-		DEFAULT,
-		ECLIPSE
+		DEFAULT, ECLIPSE
 	}
 
 	public static enum Location {
-		PROJECT,
-		APPLICATION
+		PROJECT, APPLICATION
 	}
 
 	public boolean isFormatSeletedTextInAllFileTypes() {
