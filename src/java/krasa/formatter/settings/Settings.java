@@ -63,18 +63,18 @@ public class Settings {
 	private boolean useOldEclipseJavaFormatter = false;
 	private FormatterVersion eclipseVersion = FormatterVersion.NEWEST;
 	private ImportOrdering importOrdering = ImportOrdering.ECLIPSE_452;
-	private ProfileScheme profileScheme = ProfileScheme.CUSTOM;
+	private ConfigType configType = ConfigType.CUSTOM;
 	private String pathToEclipse = "";
 
 	public Settings() {
 	}
 
-	public ProfileScheme getProfileScheme() {
-		return profileScheme;
+	public ConfigType getConfigType() {
+		return configType;
 	}
 
-	public void setProfileScheme(ProfileScheme profileScheme) {
-		this.profileScheme = profileScheme;
+	public void setConfigType(ConfigType configType) {
+		this.configType = configType;
 	}
 
 	public String getPathToEclipse() {
@@ -119,7 +119,7 @@ public class Settings {
 	public Settings(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		setProfileScheme(ProfileScheme.RESOLVE);
+		setConfigType(ConfigType.RESOLVE);
 	}
 
 	public DisabledFileTypeSettings getDisabledFileTypeSettings() {
@@ -297,7 +297,7 @@ public class Settings {
 		ECLIPSE_452,
 	}
 
-	public static enum ProfileScheme {
+	public static enum ConfigType {
 		RESOLVE,
 		ECLIPSE,
 		ECLIPSE_2_1,

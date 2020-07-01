@@ -62,7 +62,7 @@ public class ConfigurableEclipseLocation {
 				throw new IllegalStateException("Invalid Eclipse location, it must contain '.eclipseproduct' file");
 			}
 
-			LOG.info("found root=" + root.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + "ms");
+			LOG.debug("found root=" + root.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + "ms");
 
 			jars = findJars(root);
 
@@ -74,7 +74,7 @@ public class ConfigurableEclipseLocation {
 		}
 
 		long total = System.currentTimeMillis() - start;
-		LOG.info("found " + jars.size() + " jars in " + total + "ms, (" + from + ")");
+		LOG.debug("found " + jars.size() + " jars in " + total + "ms, (" + from + ")");
 		return jars;
 	}
 
@@ -123,7 +123,7 @@ public class ConfigurableEclipseLocation {
 				}
 			}
 		}
-		LOG.info("#findJarsFromRepository took " + (System.currentTimeMillis() - start) + "ms");
+		LOG.debug("#findJarsFromRepository took " + (System.currentTimeMillis() - start) + "ms");
 		return files;
 	}
 

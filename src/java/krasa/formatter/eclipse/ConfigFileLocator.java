@@ -143,7 +143,7 @@ public class ConfigFileLocator {
 		if (isValidEPF(file)) {
 			valid("valid EPF config", projectSettingsForm, profilesModel, comboBox);
 		} else {
-			invalid("Invalid EPF config, should contain 100+ org.eclipse.jdt.core properties", profilesModel, comboBox);
+			invalid("Invalid EPF config, should contain 100+ 'org.eclipse.jdt.core' properties", profilesModel, comboBox);
 		}
 	}
 

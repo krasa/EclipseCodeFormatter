@@ -663,11 +663,11 @@ public class ProjectSettingsForm {
 		importOrderConfigurationManualRadioButton.setSelected(!in.isImportOrderFromFile());
 		javaFormatterProfile.setSelectedItem(in.getSelectedJavaProfile());
 
-		schemeEclipse.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE));
-		schemeCurrentProject.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.RESOLVE));
-		schemeEclipse21.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE_2_1));
-		schemeEclipseJC.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.JAVA_CONVENTIONS));
-		schemeEclipseFile.setSelected(in.getProfileScheme().equals(Settings.ProfileScheme.CUSTOM));
+		schemeEclipse.setSelected(in.getConfigType().equals(Settings.ConfigType.ECLIPSE));
+		schemeCurrentProject.setSelected(in.getConfigType().equals(Settings.ConfigType.RESOLVE));
+		schemeEclipse21.setSelected(in.getConfigType().equals(Settings.ConfigType.ECLIPSE_2_1));
+		schemeEclipseJC.setSelected(in.getConfigType().equals(Settings.ConfigType.JAVA_CONVENTIONS));
+		schemeEclipseFile.setSelected(in.getConfigType().equals(Settings.ConfigType.CUSTOM));
 
 		setData(in);
 		updateComponents();
@@ -691,15 +691,15 @@ public class ProjectSettingsForm {
 		}
 
 		if (schemeEclipse.isSelected()) {
-			displayedSettings.setProfileScheme(Settings.ProfileScheme.ECLIPSE);
+			displayedSettings.setConfigType(Settings.ConfigType.ECLIPSE);
 		} else if (schemeEclipse21.isSelected()) {
-			displayedSettings.setProfileScheme(Settings.ProfileScheme.ECLIPSE_2_1);
+			displayedSettings.setConfigType(Settings.ConfigType.ECLIPSE_2_1);
 		} else if (schemeEclipseJC.isSelected()) {
-			displayedSettings.setProfileScheme(Settings.ProfileScheme.JAVA_CONVENTIONS);
+			displayedSettings.setConfigType(Settings.ConfigType.JAVA_CONVENTIONS);
 		} else if (schemeEclipseFile.isSelected()) {
-			displayedSettings.setProfileScheme(Settings.ProfileScheme.CUSTOM);
+			displayedSettings.setConfigType(Settings.ConfigType.CUSTOM);
 		} else if (schemeCurrentProject.isSelected()) {
-			displayedSettings.setProfileScheme(Settings.ProfileScheme.RESOLVE);
+			displayedSettings.setConfigType(Settings.ConfigType.RESOLVE);
 		}
 
 
@@ -772,19 +772,19 @@ public class ProjectSettingsForm {
 			return true;
 		}
 
-		if (schemeCurrentProject.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.RESOLVE)) {
+		if (schemeCurrentProject.isSelected() != data.getConfigType().equals(Settings.ConfigType.RESOLVE)) {
 			return true;
 		}
-		if (schemeEclipse.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE)) {
+		if (schemeEclipse.isSelected() != data.getConfigType().equals(Settings.ConfigType.ECLIPSE)) {
 			return true;
 		}
-		if (schemeEclipseFile.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.CUSTOM)) {
+		if (schemeEclipseFile.isSelected() != data.getConfigType().equals(Settings.ConfigType.CUSTOM)) {
 			return true;
 		}
-		if (schemeEclipseJC.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.JAVA_CONVENTIONS)) {
+		if (schemeEclipseJC.isSelected() != data.getConfigType().equals(Settings.ConfigType.JAVA_CONVENTIONS)) {
 			return true;
 		}
-		if (schemeEclipse21.isSelected() != data.getProfileScheme().equals(Settings.ProfileScheme.ECLIPSE_2_1)) {
+		if (schemeEclipse21.isSelected() != data.getConfigType().equals(Settings.ConfigType.ECLIPSE_2_1)) {
 			return true;
 		}
 

@@ -55,7 +55,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 
 	private EclipseFormatterAdapter getCodeFormatter(LanguageLevel level, PsiFile psiFile) throws FileDoesNotExistsException {
-		if (settings.getProfileScheme() == Settings.ProfileScheme.RESOLVE) {
+		if (settings.getConfigType() == Settings.ConfigType.RESOLVE) {
 
 			long start = System.currentTimeMillis();
 			VirtualFile configFile = configFileLocator.traverseToFindConfigurationFileByConvention(psiFile, project);
@@ -79,7 +79,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	}
 
 	private boolean configFileRefresh() {
-		return settings.getProfileScheme() == Settings.ProfileScheme.CUSTOM && (javaPropertiesProvider == null || javaPropertiesProvider.wasChanged());
+		return settings.getConfigType() == Settings.ConfigType.CUSTOM && (javaPropertiesProvider == null || javaPropertiesProvider.wasChanged());
 	}
 
 	private EclipseFormatterAdapter newCodeFormatter(LanguageLevel level, VirtualFile configFile) {
@@ -132,7 +132,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		Method getMap = aClass1.getMethod("getMap");
 		Properties options;
 
-		switch (settings.getProfileScheme()) {
+		switch (settings.getConfigType()) {
 
 			case RESOLVE:
 				javaPropertiesProvider = new JavaPropertiesProvider(configFile.getPath(), null);

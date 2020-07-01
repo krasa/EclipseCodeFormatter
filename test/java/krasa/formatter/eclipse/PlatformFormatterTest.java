@@ -34,7 +34,7 @@ public class PlatformFormatterTest extends FormatterTestCase {
 		super.setUp();
 		Settings settings = new Settings();
 		settings.setFormatter(Settings.Formatter.ECLIPSE);
-		settings.setProfileScheme(Settings.ProfileScheme.RESOLVE);
+		settings.setConfigType(Settings.ConfigType.RESOLVE);
 		ProjectComponent.getInstance(getProject()).installOrUpdate(settings);
 		previousResolver = ConfigFileLocator.TESTING_getModuleResolver();
 	}
