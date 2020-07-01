@@ -1,5 +1,19 @@
 package krasa.formatter.eclipse;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+
+import javax.swing.*;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -7,22 +21,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.SortedComboBoxModel;
+
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.plugin.ProjectSettingsForm;
 import krasa.formatter.utils.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
 
 @SuppressWarnings("rawtypes")
 public class ConfigFileLocator {
@@ -213,10 +216,10 @@ public class ConfigFileLocator {
 
 	private boolean isValid(VirtualFile virtualFile) {
 		if ("org.eclipse.jdt.core.prefs".equals(virtualFile.getName())) {
-			return isValidCorePrefs(virtualFile.toNioPath().toFile());
+			return isValidCorePrefs(new File(virtualFile.getPath()));
 		}
 		if (virtualFile.getName().endsWith(".epf")) {
-			return isValidEPF(virtualFile.toNioPath().toFile());
+			return isValidEPF(new File(virtualFile.getPath()));
 		}
 		return true;
 	}
