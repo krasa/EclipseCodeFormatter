@@ -210,7 +210,7 @@
         </constraints>
         <properties>
           <text value="Eclipse installation directory"/>
-          <toolTipText value="Must be installed from a package - (eclipse.org/downloads/packages), not via installer."/>
+          <toolTipText value=""/>
         </properties>
       </component>
       <component id="f8e02" class="javax.swing.JFormattedTextField" binding="importOrder">
