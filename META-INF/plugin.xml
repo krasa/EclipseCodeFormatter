@@ -32,9 +32,9 @@
 	<change-notes><![CDATA[
 	    <br>20.0 (2019-07-01)
 		<br>- Java formatter updated to Eclipse 2020-06
-		<br>- Support for custom Eclipse installed via installer
+		<br>- Support for custom Eclipse installed via an installer
 		<br>- Added build-in Eclipse profiles
-		<br>- Added resolving project/workspace/mechanic-formatter.epf settings
+		<br>- Added resolving project/workspace/mechanic-formatter.epf config
 	    <br>19.5 (2019-05-03)
 		<br>- fixed 'Custom Eclipse location' label
 		<br>- fixed error handling
