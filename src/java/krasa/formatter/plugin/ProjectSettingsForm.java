@@ -8,28 +8,6 @@
 
 package krasa.formatter.plugin;
 
-import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.*;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.DocumentEvent;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
 import com.centerkey.utils.BareBonesBrowserLaunch;
 import com.intellij.openapi.application.ex.ApplicationEx;
 import com.intellij.openapi.application.ex.ApplicationManagerEx;
@@ -51,12 +29,29 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
-
 import krasa.formatter.eclipse.ConfigFileLocator;
 import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.MyConfigurable;
 import krasa.formatter.settings.ProjectSettings;
 import krasa.formatter.settings.Settings;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.DocumentEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.*;
+
+import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.*;
 
 /**
  * Configuration dialog for changing the {@link krasa.formatter.settings.Settings} of the plugin.
@@ -656,21 +651,21 @@ public class ProjectSettingsForm {
 		displayedSettings = in;
 		formatOtherFilesWithExceptionsRadioButton.setSelected(in.isFormatOtherFileTypesWithIntelliJ());
 		doNotFormatOtherFilesRadioButton.setSelected(!in.isFormatOtherFileTypesWithIntelliJ());
-		useDefaultFormatter.setSelected(in.getFormatter().equals(Settings.Formatter.DEFAULT));
-		useEclipseFormatter.setSelected(in.getFormatter().equals(Settings.Formatter.ECLIPSE));
-		useEclipseNewest.setSelected(in.getEclipseVersion().equals(Settings.FormatterVersion.NEWEST));
-		useEclipseCustom.setSelected(in.getEclipseVersion().equals(Settings.FormatterVersion.CUSTOM));
-		importOrdering451.setSelected(in.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_44));
-		importOrdering452.setSelected(in.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_452));
+		useDefaultFormatter.setSelected(Objects.equals(in.getFormatter(), Settings.Formatter.DEFAULT));
+		useEclipseFormatter.setSelected(Objects.equals(in.getFormatter(), Settings.Formatter.ECLIPSE));
+		useEclipseNewest.setSelected(Objects.equals(in.getEclipseVersion(), Settings.FormatterVersion.NEWEST));
+		useEclipseCustom.setSelected(Objects.equals(in.getEclipseVersion(), Settings.FormatterVersion.CUSTOM));
+		importOrdering451.setSelected(Objects.equals(in.getImportOrdering(), Settings.ImportOrdering.ECLIPSE_44));
+		importOrdering452.setSelected(Objects.equals(in.getImportOrdering(), Settings.ImportOrdering.ECLIPSE_452));
 		importOrderConfigurationFromFileRadioButton.setSelected(in.isImportOrderFromFile());
 		importOrderConfigurationManualRadioButton.setSelected(!in.isImportOrderFromFile());
 		javaFormatterProfile.setSelectedItem(in.getSelectedJavaProfile());
 
-		schemeEclipse.setSelected(in.getConfigType().equals(Settings.ConfigType.ECLIPSE));
-		schemeCurrentProject.setSelected(in.getConfigType().equals(Settings.ConfigType.RESOLVE));
-		schemeEclipse21.setSelected(in.getConfigType().equals(Settings.ConfigType.ECLIPSE_2_1));
-		schemeEclipseJC.setSelected(in.getConfigType().equals(Settings.ConfigType.JAVA_CONVENTIONS));
-		schemeEclipseFile.setSelected(in.getConfigType().equals(Settings.ConfigType.CUSTOM));
+		schemeEclipse.setSelected(Objects.equals(Settings.ConfigType.ECLIPSE, in.getConfigType()));
+		schemeCurrentProject.setSelected(Objects.equals(Settings.ConfigType.RESOLVE, in.getConfigType()));
+		schemeEclipse21.setSelected(Objects.equals(Settings.ConfigType.ECLIPSE_2_1, in.getConfigType()));
+		schemeEclipseJC.setSelected(Objects.equals(in.getConfigType(), Settings.ConfigType.JAVA_CONVENTIONS));
+		schemeEclipseFile.setSelected(Objects.equals(in.getConfigType(), Settings.ConfigType.CUSTOM));
 
 		setData(in);
 		updateComponents();
@@ -758,38 +753,38 @@ public class ProjectSettingsForm {
 				&& !isErrorProfile(data.getSelectedJavaProfile())) {
 			return true;
 		}
-		if (useDefaultFormatter.isSelected() != data.getFormatter().equals(Settings.Formatter.DEFAULT)) {
+		if (useDefaultFormatter.isSelected() != Settings.Formatter.DEFAULT.equals(data.getFormatter())) {
 			return true;
 		}
-		if (useEclipseFormatter.isSelected() != data.getFormatter().equals(Settings.Formatter.ECLIPSE)) {
+		if (useEclipseFormatter.isSelected() != Settings.Formatter.ECLIPSE.equals(data.getFormatter())) {
 			return true;
 		}
-		if (useEclipseNewest.isSelected() != data.getEclipseVersion().equals(Settings.FormatterVersion.NEWEST)) {
+		if (useEclipseNewest.isSelected() != Settings.FormatterVersion.NEWEST.equals(data.getEclipseVersion())) {
 			return true;
 		}
-		if (useEclipseCustom.isSelected() != data.getEclipseVersion().equals(Settings.FormatterVersion.CUSTOM)) {
+		if (useEclipseCustom.isSelected() != Settings.FormatterVersion.CUSTOM.equals(data.getEclipseVersion())) {
 			return true;
 		}
-		if (importOrdering451.isSelected() != data.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_44)) {
+		if (importOrdering451.isSelected() != Settings.ImportOrdering.ECLIPSE_44.equals(data.getImportOrdering())) {
 			return true;
 		}
-		if (importOrdering452.isSelected() != data.getImportOrdering().equals(Settings.ImportOrdering.ECLIPSE_452)) {
+		if (importOrdering452.isSelected() != Settings.ImportOrdering.ECLIPSE_452.equals(data.getImportOrdering())) {
 			return true;
 		}
 
-		if (schemeCurrentProject.isSelected() != data.getConfigType().equals(Settings.ConfigType.RESOLVE)) {
+		if (schemeCurrentProject.isSelected() != Settings.ConfigType.RESOLVE.equals(data.getConfigType())) {
 			return true;
 		}
-		if (schemeEclipse.isSelected() != data.getConfigType().equals(Settings.ConfigType.ECLIPSE)) {
+		if (schemeEclipse.isSelected() != Settings.ConfigType.ECLIPSE.equals(data.getConfigType())) {
 			return true;
 		}
-		if (schemeEclipseFile.isSelected() != data.getConfigType().equals(Settings.ConfigType.CUSTOM)) {
+		if (schemeEclipseFile.isSelected() != Settings.ConfigType.CUSTOM.equals(data.getConfigType())) {
 			return true;
 		}
-		if (schemeEclipseJC.isSelected() != data.getConfigType().equals(Settings.ConfigType.JAVA_CONVENTIONS)) {
+		if (schemeEclipseJC.isSelected() != Settings.ConfigType.JAVA_CONVENTIONS.equals(data.getConfigType())) {
 			return true;
 		}
-		if (schemeEclipse21.isSelected() != data.getConfigType().equals(Settings.ConfigType.ECLIPSE_2_1)) {
+		if (schemeEclipse21.isSelected() != Settings.ConfigType.ECLIPSE_2_1.equals(data.getConfigType())) {
 			return true;
 		}
 
