@@ -1,19 +1,5 @@
 package krasa.formatter.eclipse;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-
-import javax.swing.*;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -21,11 +7,22 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.SortedComboBoxModel;
-
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.ParsingFailedException;
 import krasa.formatter.plugin.ProjectSettingsForm;
 import krasa.formatter.utils.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
 
 @SuppressWarnings("rawtypes")
 public class ConfigFileLocator {
@@ -195,9 +192,17 @@ public class ConfigFileLocator {
 
 	@Nullable
 	VirtualFile traverseToFindConfigurationFileByConvention(PsiFile psiFile, Project project) {
+		int i = 0;
 		VirtualFile moduleFileDir = getModuleDirForFile(psiFile.getVirtualFile(), project);
 
 		while (moduleFileDir != null) {
+			if (++i > 1000) {
+				throw new IllegalStateException("loop guard");
+			}
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("moduleFileDir=" + moduleFileDir.getPath());
+			}
+
 			for (String conventionFileName : CONVENTIONFILENAMES) {
 				VirtualFile fileByRelativePath = moduleFileDir.findFileByRelativePath(conventionFileName);
 				if (fileByRelativePath != null && fileByRelativePath.exists()) {
@@ -230,12 +235,21 @@ public class ConfigFileLocator {
 	}
 
 	private VirtualFile getNextParentModuleDirectory(VirtualFile currentModuleDir, Project project) {
+		int i = 0;
 		//Jump outside the current project
 		VirtualFile parent = currentModuleDir.getParent();
-		if (parent != null && parent.exists()) {
+		while (parent != null && parent.exists()) {
+			if (++i > 1000) {
+				throw new IllegalStateException("loop guard");
+			}
 			//the file/dir outside the project may be within another loaded module
 			// NOTE all modules must be loaded for detecting the parent module of the current one
 			VirtualFile dirOfParentModule = getModuleDirForFile(parent, project);
+			//module file can be is some subfolder, so find a parent which is actually from a different module
+			if (dirOfParentModule.equals(currentModuleDir)) {
+				parent = parent.getParent();
+				continue;
+			}
 			if (dirOfParentModule != null) {
 				return dirOfParentModule;
 			}
