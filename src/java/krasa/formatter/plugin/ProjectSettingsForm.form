@@ -293,8 +293,8 @@
           <grid row="10" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Resolve project specific config  (experimental)"/>
-          <toolTipText value="The configuration is resolved for each formatted file by its module/project. Following files are searched for: &quot;.settings/org.eclipse.jdt.core.prefs&quot;, &quot;.settings/mechanic-formatter.epf&quot;, &quot;mechanic-formatter.epf&quot;."/>
+          <text value="Resolve project specific config"/>
+          <toolTipText value="The configuration is resolved for each formatted file by its module and parent modules. Following files are searched for: &quot;.settings/org.eclipse.jdt.core.prefs&quot;, &quot;.settings/mechanic-formatter.epf&quot;, &quot;mechanic-formatter.epf&quot;."/>
         </properties>
       </component>
       <component id="cd640" class="javax.swing.JLabel" binding="eclipsePreferenceFileJavaLabel">
