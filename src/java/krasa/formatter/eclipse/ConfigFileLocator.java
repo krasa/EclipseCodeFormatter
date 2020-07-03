@@ -197,7 +197,7 @@ public class ConfigFileLocator {
 
 		while (moduleFileDir != null) {
 			if (++i > 1000) {
-				throw new IllegalStateException("loop guard");
+				throw new IllegalStateException("loop bug: " + moduleFileDir.getPath());
 			}
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("moduleFileDir=" + moduleFileDir.getPath());
@@ -240,7 +240,7 @@ public class ConfigFileLocator {
 		VirtualFile parent = currentModuleDir.getParent();
 		while (parent != null && parent.exists()) {
 			if (++i > 1000) {
-				throw new IllegalStateException("loop guard");
+				throw new IllegalStateException("loop bug: " + parent.getPath());
 			}
 			//the file/dir outside the project may be within another loaded module
 			// NOTE all modules must be loaded for detecting the parent module of the current one
