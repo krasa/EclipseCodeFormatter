@@ -294,7 +294,7 @@
         </constraints>
         <properties>
           <text value="Resolve project specific config"/>
-          <toolTipText value="The configuration is resolved for each formatted file by its module and parent modules. Following files are searched for: &quot;.settings/org.eclipse.jdt.core.prefs&quot;, &quot;.settings/mechanic-formatter.epf&quot;, &quot;mechanic-formatter.epf&quot;."/>
+          <toolTipText value="The configuration is resolved for each formatted file by its module or parent modules. Following files are searched for: &quot;.settings/org.eclipse.jdt.core.prefs&quot;, &quot;.settings/mechanic-formatter.epf&quot;, &quot;mechanic-formatter.epf&quot;, &quot;eclipse-code-formatter.xml&quot;."/>
         </properties>
       </component>
       <component id="cd640" class="javax.swing.JLabel" binding="eclipsePreferenceFileJavaLabel">

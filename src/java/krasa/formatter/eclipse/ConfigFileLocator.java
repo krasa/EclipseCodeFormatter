@@ -34,7 +34,8 @@ public class ConfigFileLocator {
 	private final List<String> CONVENTIONFILENAMES = Arrays.asList(//
 			".settings/org.eclipse.jdt.core.prefs",//
 			".settings/mechanic-formatter.epf",//
-			"mechanic-formatter.epf" //
+			"mechanic-formatter.epf", //
+			"eclipse-code-formatter.xml" //
 	);
 
 
@@ -220,13 +221,22 @@ public class ConfigFileLocator {
 	}
 
 	private boolean isValid(VirtualFile virtualFile) {
-		if ("org.eclipse.jdt.core.prefs".equals(virtualFile.getName())) {
-			return isValidCorePrefs(new File(virtualFile.getPath()));
+		try {
+			if ("org.eclipse.jdt.core.prefs".equals(virtualFile.getName())) {
+				return isValidCorePrefs(new File(virtualFile.getPath()));
+			}
+			if (virtualFile.getName().endsWith(".epf")) {
+				return isValidEPF(new File(virtualFile.getPath()));
+			}
+			if ("eclipse-code-formatter.xml".equals(virtualFile.getName())) {
+				List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(new File(virtualFile.getPath()));
+				return profileNamesFromConfigXML.size() == 1;
+			}
+			return true;
+		} catch (Throwable e) {
+			LOG.error(e);
+			return false;
 		}
-		if (virtualFile.getName().endsWith(".epf")) {
-			return isValidEPF(new File(virtualFile.getPath()));
-		}
-		return true;
 	}
 
 	private VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
@@ -245,14 +255,15 @@ public class ConfigFileLocator {
 			//the file/dir outside the project may be within another loaded module
 			// NOTE all modules must be loaded for detecting the parent module of the current one
 			VirtualFile dirOfParentModule = getModuleDirForFile(parent, project);
+			if (dirOfParentModule == null) {
+				return null;
+			}
 			//module file can be is some subfolder, so find a parent which is actually from a different module
 			if (dirOfParentModule.equals(currentModuleDir)) {
 				parent = parent.getParent();
 				continue;
 			}
-			if (dirOfParentModule != null) {
-				return dirOfParentModule;
-			}
+			return dirOfParentModule;
 		}
 		return null;
 	}

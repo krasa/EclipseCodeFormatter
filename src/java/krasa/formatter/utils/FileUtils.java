@@ -116,7 +116,7 @@ public class FileUtils {
 				if (profileNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element profileElement = (Element) profileNode;
 					String name = profileElement.getAttribute("name");
-					if (profile.equals(name) || profiles.getLength() == 1) {
+					if ((profile != null && profile.equals(name)) || profiles.getLength() == 1) {
 						profileFound = true;
 						NodeList childNodes = profileElement.getElementsByTagName("setting");
 						if (childNodes.getLength() == 0) {

@@ -5,7 +5,7 @@
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
 
-	<version>20.1.201.6668.0-Eclipse_2020-06-JavaOnly</version>
+	<version>20.2.201.6668.0-Eclipse_2020-06-JavaOnly</version>
 	<idea-version since-build="201.6668"/>
 
 
@@ -30,17 +30,19 @@
 	</vendor>
 
 	<change-notes><![CDATA[
-	    <br>20.1 (2020-07-03)
+	    <br>20.2
+		<br>- added resolving for "eclipse-code-formatter.xml" with 1 profile.
+	    <br>20.1
 		<br>- freeze fix
-	    <br>20.0 (2020-07-01)
+	    <br>20.0
 		<br>- Java formatter updated to Eclipse 2020-06
 		<br>- Support for custom Eclipse installed via an installer
 		<br>- Added build-in Eclipse profiles
 		<br>- Added resolving project/workspace/mechanic-formatter.epf config
-	    <br>19.5 (2020-05-03)
+	    <br>19.5
 		<br>- fixed 'Custom Eclipse location' label
 		<br>- fixed error handling
-	    <br>19.4 (2020-04-24)
+	    <br>19.4
 		<br>- allowing ".XML" in settings
       	<br>...
         <br>0.1 (2011-11-01)
