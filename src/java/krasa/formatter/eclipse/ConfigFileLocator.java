@@ -32,12 +32,11 @@ public class ConfigFileLocator {
 	private static VirtualFile mostRecentFormatterFile = null;
 
 	private final List<String> CONVENTIONFILENAMES = Arrays.asList(//
-			".settings/org.eclipse.jdt.core.prefs",//
-			".settings/mechanic-formatter.epf",//
+			".settings/org.eclipse.jdt.core.prefs", //
+			".settings/mechanic-formatter.epf", //
 			"mechanic-formatter.epf", //
 			"eclipse-code-formatter.xml" //
 	);
-
 
 	public String resolveConfigFilePath(String path) {
 		File file = new File(path);
@@ -48,7 +47,8 @@ public class ConfigFileLocator {
 
 		if (file.isDirectory()) {
 			File resolve = resolveFolder(file);
-			if (resolve != null) return resolve.getAbsolutePath();
+			if (resolve != null)
+				return resolve.getAbsolutePath();
 
 			throw new FileDoesNotExistsException("Invalid config location: " + path);
 		}
@@ -56,8 +56,7 @@ public class ConfigFileLocator {
 		return path;
 	}
 
-	public void validate(ProjectSettingsForm projectSettingsForm,
-						 SortedComboBoxModel profilesModel, String path) {
+	public void validate(ProjectSettingsForm projectSettingsForm, SortedComboBoxModel profilesModel, String path) {
 		if (StringUtils.isBlank(path)) {
 			return;
 		}
@@ -89,7 +88,7 @@ public class ConfigFileLocator {
 			} else if (lowerCaseName.endsWith(".xml")) {
 				processXml(profilesModel, file, comboBox);
 			} else {
-				//lets assume it is properties
+				// lets assume it is properties
 				processPrefs(projectSettingsForm, profilesModel, comboBox, file);
 			}
 		} catch (IOException e) {
@@ -103,7 +102,8 @@ public class ConfigFileLocator {
 
 	@Nullable
 	private File resolveFolder(File folder) {
-		File mechanicFormatterEpf = org.apache.commons.io.FileUtils.getFile(folder, ".settings", "mechanic-formatter.epf");
+		File mechanicFormatterEpf = org.apache.commons.io.FileUtils.getFile(folder, ".settings",
+				"mechanic-formatter.epf");
 		if (mechanicFormatterEpf.exists()) {
 			return mechanicFormatterEpf;
 		}
@@ -113,19 +113,19 @@ public class ConfigFileLocator {
 			return corePrefs;
 		}
 
-		File uiPrefs = org.apache.commons.io.FileUtils.getFile(folder, ".metadata", ".plugins", "org.eclipse.core.runtime", ".settings", "org.eclipse.jdt.ui.prefs");
+		File uiPrefs = org.apache.commons.io.FileUtils.getFile(folder, ".metadata", ".plugins",
+				"org.eclipse.core.runtime", ".settings", "org.eclipse.jdt.ui.prefs");
 		if (uiPrefs.exists()) {
 			return uiPrefs;
 		}
 		return null;
 	}
 
-
-	private void processWorkspaceConfig(SortedComboBoxModel profilesModel, JComboBox comboBox, File uiPrefs) throws IOException {
+	private void processWorkspaceConfig(SortedComboBoxModel profilesModel, JComboBox comboBox, File uiPrefs)
+			throws IOException {
 		Properties properties = FileUtils.readPropertiesFile(uiPrefs);
 		String xml = properties.getProperty("org.eclipse.jdt.ui.formatterprofiles");
 		List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(IOUtils.toInputStream(xml));
-
 
 		if (profileNamesFromConfigXML.isEmpty()) {
 			invalid("Workspace does not contain custom formatter profiles!", profilesModel, comboBox);
@@ -140,11 +140,13 @@ public class ConfigFileLocator {
 		}
 	}
 
-	private void processEPF(ProjectSettingsForm projectSettingsForm, SortedComboBoxModel profilesModel, File file, JComboBox comboBox) {
+	private void processEPF(ProjectSettingsForm projectSettingsForm, SortedComboBoxModel profilesModel, File file,
+							JComboBox comboBox) {
 		if (isValidEPF(file)) {
 			valid("valid EPF config", projectSettingsForm, profilesModel, comboBox);
 		} else {
-			invalid("Invalid EPF config, should contain 100+ 'org.eclipse.jdt.core' properties", profilesModel, comboBox);
+			invalid("Invalid EPF config, should contain 100+ 'org.eclipse.jdt.core.formatter' properties", profilesModel,
+					comboBox);
 		}
 	}
 
@@ -165,7 +167,8 @@ public class ConfigFileLocator {
 		}
 	}
 
-	private void processPrefs(@NotNull ProjectSettingsForm projectSettingsForm, @NotNull SortedComboBoxModel profilesModel, @NotNull JComboBox comboBox, @NotNull File file) {
+	private void processPrefs(@NotNull ProjectSettingsForm projectSettingsForm,
+							  @NotNull SortedComboBoxModel profilesModel, @NotNull JComboBox comboBox, @NotNull File file) {
 		if (isValidCorePrefs(file)) {
 			valid("valid '" + file.getName() + "' config", projectSettingsForm, profilesModel, comboBox);
 		} else {
@@ -178,7 +181,8 @@ public class ConfigFileLocator {
 		return properties.size() > 100;
 	}
 
-	private void valid(String valid_config, ProjectSettingsForm projectSettingsForm, SortedComboBoxModel profilesModel, JComboBox comboBox) {
+	private void valid(String valid_config, ProjectSettingsForm projectSettingsForm, SortedComboBoxModel profilesModel,
+					   JComboBox comboBox) {
 		profilesModel.add(valid_config);
 		comboBox.setEnabled(false);
 		comboBox.setBorder(projectSettingsForm.normalBorder);
@@ -189,7 +193,6 @@ public class ConfigFileLocator {
 		comboBox.setEnabled(false);
 		comboBox.setBorder(ProjectSettingsForm.ERROR_BORDER);
 	}
-
 
 	@Nullable
 	VirtualFile traverseToFindConfigurationFileByConvention(PsiFile psiFile, Project project) {
@@ -229,7 +232,8 @@ public class ConfigFileLocator {
 				return isValidEPF(new File(virtualFile.getPath()));
 			}
 			if ("eclipse-code-formatter.xml".equals(virtualFile.getName())) {
-				List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(new File(virtualFile.getPath()));
+				List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(
+						new File(virtualFile.getPath()));
 				return profileNamesFromConfigXML.size() == 1;
 			}
 			return true;
@@ -246,19 +250,19 @@ public class ConfigFileLocator {
 
 	private VirtualFile getNextParentModuleDirectory(VirtualFile currentModuleDir, Project project) {
 		int i = 0;
-		//Jump outside the current project
+		// Jump outside the current project
 		VirtualFile parent = currentModuleDir.getParent();
 		while (parent != null && parent.exists()) {
 			if (++i > 1000) {
 				throw new IllegalStateException("loop bug: " + parent.getPath());
 			}
-			//the file/dir outside the project may be within another loaded module
+			// the file/dir outside the project may be within another loaded module
 			// NOTE all modules must be loaded for detecting the parent module of the current one
 			VirtualFile dirOfParentModule = getModuleDirForFile(parent, project);
 			if (dirOfParentModule == null) {
 				return null;
 			}
-			//module file can be is some subfolder, so find a parent which is actually from a different module
+			// module file can be is some subfolder, so find a parent which is actually from a different module
 			if (dirOfParentModule.equals(currentModuleDir)) {
 				parent = parent.getParent();
 				continue;

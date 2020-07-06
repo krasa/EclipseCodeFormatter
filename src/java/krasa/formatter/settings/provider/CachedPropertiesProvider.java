@@ -58,6 +58,12 @@ public class CachedPropertiesProvider extends CachedProvider<Properties> {
 		}
 	}
 
+	protected void validateEPFConfig(Properties config, File file) {
+		if (config.size() < 100) {
+			throw new InvalidPropertyFile("Invalid EPF config!" + " Loaded only " + config.size() + " `org.eclipse.jdt.core.formatter` properties from: " + file.getAbsolutePath() + ", should be 100+.", file);
+		}
+	}
+
 	protected Properties createDefaultConfig() {
 		return new Properties();
 	}

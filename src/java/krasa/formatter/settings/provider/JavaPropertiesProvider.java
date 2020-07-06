@@ -52,7 +52,7 @@ public class JavaPropertiesProvider extends CachedPropertiesProvider {
 	private Properties readWorkspaceMechanicFile(final File file) {
 		Properties properties = FileUtils.readPropertiesFile(file);
 		Properties result = FileUtils.convertEPF(properties, createDefaultConfig());
-		validateConfig(result, file);
+		validateEPFConfig(result, file);
 		return result;
 	}
 

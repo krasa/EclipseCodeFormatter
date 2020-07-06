@@ -33,7 +33,7 @@ public class FileUtils {
 	public static boolean isWritable(PsiFile psiFile) {
 		return isWritable(psiFile.getVirtualFile(), psiFile.getProject());
 	}
-	      
+
 	public static boolean isWritable(@NotNull VirtualFile file, @NotNull Project project) {
 		return !ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(file).hasReadonlyFiles();
 	}
@@ -207,13 +207,13 @@ public class FileUtils {
 
 	@NotNull
 	public static Properties convertEPF(Properties properties, Properties defaultConfig) {
+		int beginIndex = "/instance/org.eclipse.jdt.core/".length();
 		Properties result = new Properties(defaultConfig);
-		final String prefix = "/instance/org.eclipse.jdt.core/";
 		for (Object object : properties.keySet()) {
 			String key = (String) object;
-			if (key.startsWith(prefix)) {
+			if (key.startsWith("/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter")) {
 				String value = properties.getProperty(key);
-				result.put(key.substring(prefix.length()), value);
+				result.put(key.substring(beginIndex), value);
 			}
 		}
 		return result;
