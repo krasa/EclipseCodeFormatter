@@ -5,7 +5,7 @@
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
 
-	<version>20.2.201.6668.0-Eclipse_2020-06-JavaOnly</version>
+	<version>20.3.201.6668.0-Eclipse_2020-06-JavaOnly</version>
 	<idea-version since-build="201.6668"/>
 
 
@@ -30,6 +30,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>20.3
+		<br>- Fix for Save Actions plugin
 	    <br>20.2
 		<br>- added resolving for "eclipse-code-formatter.xml" with 1 profile.
 	    <br>20.1

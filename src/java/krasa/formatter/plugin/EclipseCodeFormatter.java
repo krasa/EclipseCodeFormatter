@@ -98,10 +98,11 @@ public class EclipseCodeFormatter {
 //		for (Processor postProcessor : postProcessors) {
 //			postProcessor.process(document, file, range);
 //		}
-		//TODO probably not needed anymore?
-//		// updates psi, so comments from import statements does not get duplicated
-//		final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
-//		manager.commitDocument(document);
+//		// updates psi, so comments from import statements does not get duplicated - probably obsolete
+		final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
+		//commitDocument needed for intellij-plugin-save-actions
+		manager.commitDocument(document);
+		// TODO needed?
 //		fileDocumentManager.saveDocument(document);
 	}
 
