@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -101,7 +102,8 @@ public class FileUtils {
 		try {
 
 			// load file profiles
-			org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(IOUtils.toInputStream(xml));
+			InputStream is = IOUtils.toInputStream(xml, "UTF-8");
+			org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
 			doc.getDocumentElement().normalize();
 
 			NodeList profiles = doc.getElementsByTagName("profile");
@@ -155,7 +157,9 @@ public class FileUtils {
 				// org.apache.xerces.jaxp.DocumentBuilderFactoryImpl cannot be cast to
 				// javax.xml.parsers.DocumentBuilderFactory
 
-				org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+				InputSource in = new InputSource(file.toURI().toASCIIString());
+				in.setEncoding("UTF-8");
+				org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 				doc.getDocumentElement().normalize();
 
 				NodeList nList = doc.getElementsByTagName("profile");

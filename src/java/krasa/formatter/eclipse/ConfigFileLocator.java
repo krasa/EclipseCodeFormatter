@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -125,7 +126,8 @@ public class ConfigFileLocator {
 			throws IOException {
 		Properties properties = FileUtils.readPropertiesFile(uiPrefs);
 		String xml = properties.getProperty("org.eclipse.jdt.ui.formatterprofiles");
-		List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(IOUtils.toInputStream(xml));
+		InputStream s = IOUtils.toInputStream(xml, "UTF-8");
+		List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(s);
 
 		if (profileNamesFromConfigXML.isEmpty()) {
 			invalid("Workspace does not contain custom formatter profiles!", profilesModel, comboBox);
