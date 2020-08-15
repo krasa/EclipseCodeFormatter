@@ -20,6 +20,7 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -65,7 +66,7 @@ public class FileUtils {
 		try {
 			stream = new BufferedInputStream(new FileInputStream(file));
 			formatterOptions = new Properties(defaultConfig);
-			String s = IOUtils.toString(stream);
+			String s = IOUtils.toString(stream, StandardCharsets.UTF_8);
 			StringReader reader = new StringReader(s.replace("=\\#", "=#"));
 			formatterOptions.load(reader);
 		} catch (IOException e) {
