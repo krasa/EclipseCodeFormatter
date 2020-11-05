@@ -1,28 +1,25 @@
 package krasa.formatter.settings;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-
 import krasa.formatter.plugin.Notifier;
 import krasa.formatter.utils.ProjectUtils;
 import krasa.formatter.utils.StringUtils;
+import org.apache.commons.beanutils.BeanUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Vojtech Krasa
  */
-@State(name = "EclipseCodeFormatterSettings", storages = {
-		@Storage(file = "$APP_CONFIG$/eclipseCodeFormatter.xml") })
+@State(name = "EclipseCodeFormatterSettings", storages = {@Storage("eclipseCodeFormatter.xml")})
 public class GlobalSettings
 		implements ApplicationComponent, PersistentStateComponent<GlobalSettings>, ExportableApplicationComponent {
 	private List<Settings> settingsList = new ArrayList<Settings>();
