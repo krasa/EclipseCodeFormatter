@@ -17,8 +17,8 @@ import javax.swing.*;
 public class ChangeFormatterToolbarAction extends DumbAwareAction {
 	private static final Logger LOG = Logger.getInstance(ChangeFormatterToolbarAction.class.getName());
 
-	public static final Icon ICON = IconLoader.getIcon("/krasa/formatter/eclipse.gif");
-	public static final Icon ICON1 = IconLoader.getIcon("/krasa/formatter/IDEA.gif");
+	public static final Icon ECLIPSE = IconLoader.getIcon("/krasa/formatter/eclipse.png");
+	public static final Icon IDEA = IconLoader.getIcon("/krasa/formatter/IDEA.png");
 
 	@Override
 	public void actionPerformed(AnActionEvent e) {
@@ -50,9 +50,11 @@ public class ChangeFormatterToolbarAction extends DumbAwareAction {
 
 	private void updateIcon(Settings state, Presentation presentation) {
 		if (state.getFormatter() == Settings.Formatter.DEFAULT) {
-			presentation.setIcon(ICON1);
+			presentation.setIcon(IDEA);
+			presentation.setDescription("Click to use Eclipse formatter");
 		} else {
-			presentation.setIcon(ICON);
+			presentation.setIcon(ECLIPSE);
+			presentation.setDescription("Click to use IntelliJ formatter");
 		}
 	}
 

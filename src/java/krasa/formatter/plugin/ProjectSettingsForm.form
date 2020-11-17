@@ -325,7 +325,7 @@
               <font/>
               <hideActionText value="false"/>
               <horizontalTextPosition value="0"/>
-              <icon value="krasa/formatter/btn_donate_LG.gif"/>
+              <icon value="krasa/formatter/donate.png"/>
               <text value=""/>
               <toolTipText value="via PayPal"/>
             </properties>
