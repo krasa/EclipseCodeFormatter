@@ -40,7 +40,7 @@ public class FileUtils {
 		return !ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(file).hasReadonlyFiles();
 	}
 
-	public static boolean isWholeFile(Collection<TextRange> textRanges, String text) {
+	public static boolean isWholeFile(Collection<? extends TextRange> textRanges, String text) {
 		for (TextRange textRange : textRanges) {
 			if (isWholeFile(textRange.getStartOffset(), textRange.getEndOffset(), text)) {
 				return true;
@@ -143,7 +143,7 @@ public class FileUtils {
 			if (properties.size() == defaultSize) {
 				throw new IllegalStateException("no properties loaded, something is broken, xml:" + xml);
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			LOG.warn("xml: " + xml + ", profile: " + profile, e);
 			throw new InvalidPropertyFile(e.getMessage(), e);
 		}

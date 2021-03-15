@@ -104,7 +104,7 @@ public class RepackJars {
 				}
 
 				jarUpdated = true;
-			} catch (Exception ex) {
+			} catch (Throwable ex) {
 				throw new RuntimeException(ex);
 			} finally {
 				tempJarOutputStream.close();

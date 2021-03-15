@@ -66,7 +66,7 @@ public class ConfigurableEclipseLocation {
 
 			jars = findJars(root);
 
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new RuntimeException("from=" + from, e);
 		}
 		if (!jarNames.isEmpty()) {

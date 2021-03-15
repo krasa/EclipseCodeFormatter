@@ -1,16 +1,15 @@
 package krasa.formatter.eclipse;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
-
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.diagnostic.Logger;
 
 public class Classloaders {
 	private static final Logger LOG = Logger.getInstance(Classloaders.class.getName());
@@ -36,7 +35,7 @@ public class Classloaders {
 			URL[] a = jars.toArray(new URL[jars.size()]);
 			LOG.info("Creating classloader for " + Arrays.toString(a));
 			return new ParentLastURLClassLoader(Classloaders.class.getClassLoader(), a);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -89,7 +88,7 @@ public class Classloaders {
 			// return UrlClassLoader.classLoader().urls(jarFile).useCache().get();
 			LOG.info("Creating classloader for " + Arrays.toString(urls));
 			return new ParentLastURLClassLoader(Classloaders.class.getClassLoader(), urls);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
 	}

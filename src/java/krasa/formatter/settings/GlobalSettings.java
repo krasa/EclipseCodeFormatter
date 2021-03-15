@@ -70,7 +70,7 @@ public class GlobalSettings
 		Settings newSettings = new Settings();
 		try {
 			BeanUtils.copyProperties(newSettings, settings);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
 		return newSettings;
