@@ -1,14 +1,16 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.openapi.diagnostic.Logger;
-import krasa.formatter.exception.FormattingFailedException;
-import org.apache.commons.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
+import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
+
+import com.intellij.openapi.diagnostic.Logger;
+
+import krasa.formatter.exception.FormattingFailedException;
 
 public class ConfigurableEclipseLocation {
 	private static final Logger LOG = Logger.getInstance(ConfigurableEclipseLocation.class.getName());

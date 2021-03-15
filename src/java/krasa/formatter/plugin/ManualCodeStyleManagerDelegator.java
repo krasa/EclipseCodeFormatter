@@ -1,5 +1,9 @@
 package krasa.formatter.plugin;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.formatting.FormattingMode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -11,10 +15,8 @@ import com.intellij.psi.codeStyle.FormattingModeAwareIndentAdjuster;
 import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl;
 import com.intellij.serviceContainer.NonInjectable;
 import com.intellij.util.IncorrectOperationException;
-import krasa.formatter.settings.ProjectComponent;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import krasa.formatter.settings.ProjectComponent;
 
 public class ManualCodeStyleManagerDelegator extends DelegatingCodeStyleManager implements FormattingModeAwareIndentAdjuster {
 	private static final Logger log = Logger.getInstance(ManualCodeStyleManagerDelegator.class.getName());
@@ -35,12 +37,12 @@ public class ManualCodeStyleManagerDelegator extends DelegatingCodeStyleManager 
 	}
 
 	@Override
-	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
+	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<? extends TextRange> collection) throws IncorrectOperationException {
 		eclipseCodeStyleManager.reformatTextWithContext(psiFile, collection);
 	}
 
 	@Override
-	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges) throws IncorrectOperationException {
+	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<? extends TextRange> textRanges) throws IncorrectOperationException {
 		eclipseCodeStyleManager.reformatText(psiFile, textRanges);
 	}
 

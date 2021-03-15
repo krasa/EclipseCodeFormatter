@@ -8,6 +8,11 @@
 
 package krasa.formatter.plugin;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileType;
@@ -21,10 +26,6 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.Indent;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ThrowableRunnable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 /**
  * for tracking api changes only
@@ -179,7 +180,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 	// 11.1
 	// @Override
 	@Override
-	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges)
+	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<? extends TextRange> textRanges)
 			throws IncorrectOperationException {
 		original.reformatText(psiFile, textRanges);
 	}
@@ -192,7 +193,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 
 	// 15
 	@Override
-	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
+	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<? extends TextRange> collection) throws IncorrectOperationException {
 		original.reformatTextWithContext(psiFile, collection);
 	}
 

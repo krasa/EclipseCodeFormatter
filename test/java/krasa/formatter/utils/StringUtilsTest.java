@@ -1,16 +1,12 @@
 package krasa.formatter.utils;
 
-import com.intellij.openapi.components.BaseComponent;
-import com.intellij.openapi.components.ComponentConfig;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.ExtensionsArea;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.UserDataHolderBase;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.messages.MessageBus;
-import krasa.formatter.settings.Settings;
+import static krasa.formatter.utils.StringUtils.getPackage;
+import static krasa.formatter.utils.StringUtils.getSimpleName;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,11 +14,20 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.picocontainer.PicoContainer;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.openapi.components.BaseComponent;
+import com.intellij.openapi.components.ComponentConfig;
+import com.intellij.openapi.extensions.ExtensionPointName;
+import com.intellij.openapi.extensions.ExtensionsArea;
+import com.intellij.openapi.extensions.PluginDescriptor;
+import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.UserDataHolderBase;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.messages.MessageBus;
 
-import static krasa.formatter.utils.StringUtils.getPackage;
-import static krasa.formatter.utils.StringUtils.getSimpleName;
+import krasa.formatter.settings.Settings;
 
 /**
  * @author Vojtech Krasa
@@ -79,6 +84,26 @@ public class StringUtilsTest {
 		@NotNull
 		@Override
 		public ExtensionsArea getExtensionArea() {
+			return null;
+		}
+
+		@Override
+		public @NotNull RuntimeException createError(@NotNull Throwable throwable, @NotNull PluginId pluginId) {
+			return null;
+		}
+
+		@Override
+		public @NotNull RuntimeException createError(@NotNull @NonNls String s, @NotNull PluginId pluginId) {
+			return null;
+		}
+
+		@Override
+		public @NotNull RuntimeException createError(@NotNull @NonNls String s, @NotNull PluginId pluginId, @Nullable Map<String, String> map) {
+			return null;
+		}
+
+		@Override
+		public @NotNull <T> Class<T> loadClass(@NotNull String s, @NotNull PluginDescriptor pluginDescriptor) throws ClassNotFoundException {
 			return null;
 		}
 

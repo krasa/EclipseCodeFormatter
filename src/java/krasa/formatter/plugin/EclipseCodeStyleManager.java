@@ -1,5 +1,10 @@
 package krasa.formatter.plugin;
 
+import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -14,6 +19,7 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
+
 import krasa.formatter.eclipse.JavaCodeFormatterFacade;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
@@ -21,10 +27,6 @@ import krasa.formatter.settings.DisabledFileTypeSettings;
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class EclipseCodeStyleManager {
 
@@ -60,7 +62,7 @@ public class EclipseCodeStyleManager {
 
 	// 15
 	// @Override
-	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges) throws IncorrectOperationException {
+	public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull Collection<? extends TextRange> textRanges) throws IncorrectOperationException {
 		if (shouldReformatByEclipse(psiFile)) {
 			reformatText(psiFile, textRanges);
 		} else if (shouldSkipFormatting(psiFile, textRanges)) {
@@ -71,7 +73,7 @@ public class EclipseCodeStyleManager {
 	}
 
 	// @Override
-	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> textRanges) throws IncorrectOperationException {
+	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<? extends TextRange> textRanges) throws IncorrectOperationException {
 		if (shouldReformatByEclipse(psiFile)) {
 			List<TextRange> list = new ArrayList<TextRange>(textRanges);
 			Collections.sort(list, Collections.reverseOrder(RANGE_COMPARATOR));
@@ -97,7 +99,7 @@ public class EclipseCodeStyleManager {
 		}
 	}
 
-	private void formatInternal(PsiFile psiFile, List<TextRange> list, Mode mode) {
+	private void formatInternal(PsiFile psiFile, List<? extends TextRange> list, Mode mode) {
 		ApplicationManager.getApplication().assertWriteAccessAllowed();
 		PsiDocumentManager.getInstance(original.getProject()).commitAllDocuments();
 		CheckUtil.checkWritable(psiFile);
@@ -165,7 +167,7 @@ public class EclipseCodeStyleManager {
 		return !skipSuccessFormattingNotification;
 	}
 
-	private boolean wholeFileOrSelectedText(PsiFile psiFile, List<TextRange> list) {
+	private boolean wholeFileOrSelectedText(PsiFile psiFile, List<? extends TextRange> list) {
 		boolean wholeFileOrSelectedText = false;
 		final Editor editor = PsiUtilBase.findEditor(psiFile);
 		boolean result;
@@ -205,7 +207,7 @@ public class EclipseCodeStyleManager {
 	}
 
 
-	protected boolean shouldSkipFormatting(PsiFile psiFile, Collection<TextRange> textRanges) {
+	protected boolean shouldSkipFormatting(PsiFile psiFile, Collection<? extends TextRange> textRanges) {
 		VirtualFile virtualFile = psiFile.getVirtualFile();
 
 		if (settings.isFormatSeletedTextInAllFileTypes()) {             
