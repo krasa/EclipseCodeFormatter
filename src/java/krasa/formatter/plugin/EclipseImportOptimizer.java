@@ -7,6 +7,7 @@ import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.psi.*;
@@ -61,7 +62,9 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 					LOG.info("Eclipse Import Optimizer failed", e);
 				} catch (IndexNotReadyException e) {
 					throw e;
-				} catch (Exception e) {
+				} catch (ProcessCanceledException e) {
+					throw e;
+				} catch (Throwable e) {
 					LOG.error("Eclipse Import Optimizer failed", e);
 				}
 			}
@@ -82,9 +85,11 @@ public class EclipseImportOptimizer implements ImportOptimizer {
 			throw e;
 		} catch (IndexNotReadyException e) {
 			throw e;
+		} catch (ProcessCanceledException e) {
+			throw e;
 		} catch (FileDoesNotExistsException e) {
 			throw e;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			final PsiImportList oldImportList = (psiFile).getImportList();
 			StringBuilder stringBuilder = new StringBuilder();
 			if (oldImportList != null) {
