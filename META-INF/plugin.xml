@@ -5,7 +5,7 @@
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
 
-	<version>20.7.201.6668.0-Eclipse_2020-06-JavaOnly</version>
+	<version>20.8.201.6668.0-Eclipse_2020-06-JavaOnly</version>
 	<idea-version since-build="201.6668"/>
 
 
@@ -30,6 +30,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>20.8
+		<br>- ProcessCanceledException fix
 	    <br>20.7
 		<br>- icons fix for 2020.3
 	    <br>20.6
