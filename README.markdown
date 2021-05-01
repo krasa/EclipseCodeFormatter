@@ -1,31 +1,48 @@
 # Eclipse Code Formatter [![Donate][badge-paypal-img]][badge-paypal]
 
-Allows using Eclipse's code formatter directly from IntelliJ. Solves the problem of maintaining a common code style in team environments where both IDEA and Eclipse are used.
+Allows using Eclipse's Java code formatter directly from IntelliJ. Solves the problem of maintaining a common code style
+in team environments where both IDEA and Eclipse are used.
 
-Currently supports formatting of 
- - Java (also emulates Eclipse's imports optimizing)
- 
-## Instructions ##
+---
+
+### Sponsored by
+
+<p><a title="Try CodeStream" href="https://sponsorlink.codestream.com/?utm_source=jbmarket&amp;utm_campaign=vojta_eclipse&amp;utm_medium=banner"><img src="https://alt-images.codestream.com/codestream_logo_vojta_eclipse.png"></a><br>
+Manage pull requests and conduct code reviews in your IDE with full source-tree context. Comment on any line, not just the diffs. Use jump-to-definition, your favorite keybindings, and code intelligence with more of your workflow.<br>
+<a title="Try CodeStream" href="https://sponsorlink.codestream.com/?utm_source=jbmarket&amp;utm_campaign=vojta_eclipse&amp;utm_medium=banner">Learn More</a></p>
+
+---
+
+## Instructions
+
 1. Install the plugin
-   - [Tutorial: Installing, Updating and Uninstalling Repository Plugins](http://www.jetbrains.com/idea/webhelp/installing-updating-and-uninstalling-repository-plugins.html)
-   - [Plugin repository page](http://plugins.jetbrains.com/plugin/?idea&id=6546)		
+    - [Tutorial: Installing, Updating and Uninstalling Repository Plugins](http://www.jetbrains.com/idea/webhelp/installing-updating-and-uninstalling-repository-plugins.html)
+    - [Plugin repository page](http://plugins.jetbrains.com/plugin/?idea&id=6546)
 2. Configure it
-   1. Get Eclipse formatter settings file: 
-      - Either, export formatter profiles to get a `*.xml` file
-         1. Go to `Eclipse | Windows | Preferences | Java | Code Style | Formatter`
-         2. Eclipse does not export default profiles, so you have to make your own via the `New` button
-         3. Export the profile via the `Export all...` button
-            - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/format.xml)
-      - Or, enable project specific formatter settings to get `org.eclipse.jdt.core.prefs`
-         1. With your project open in Eclipse's workspace, `right-click` the project and choose Properties
-         2. Go to `Java Code Style | Formatter` and select `Enable project specific settings`
-         3. Click `OK` to save the settings
-         4. Go to the `.settings` directory inside your project's directory. There you will find the `org.eclipse.jdt.core.prefs` file which contains the Eclipse formatter settings
-            - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/org.eclipse.jdt.core.prefs) 
-      - Or, export a [Workspace Mechanic](http://marketplace.eclipse.org/content/workspace-mechanic/) configuration to get a `*.epf` file
-         - The result should look like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/mechanic-formatter.epf) 
-   2. Open a project in IntelliJ
-   3. Set path to the config file via `IntelliJ | Settings | Other Settings | Eclipse Code Formatter | Eclipse preference file`
+    1. Get Eclipse formatter settings file:
+        - Either, export formatter profiles to get a `*.xml` file
+            1. Go to `Eclipse | Windows | Preferences | Java | Code Style | Formatter`
+            2. Eclipse does not export default profiles, so you have to make your own via the `New` button
+            3. Export the profile via the `Export all...` button
+                - The result should look
+                  like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/format.xml)
+
+    - Or, enable project specific formatter settings to get `org.eclipse.jdt.core.prefs`
+        1. With your project open in Eclipse's workspace, `right-click` the project and choose Properties
+        2. Go to `Java Code Style | Formatter` and select `Enable project specific settings`
+        3. Click `OK` to save the settings
+        4. Go to the `.settings` directory inside your project's directory. There you will find
+           the `org.eclipse.jdt.core.prefs` file which contains the Eclipse formatter settings
+            - The result should look
+              like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/org.eclipse.jdt.core.prefs)
+    - Or, export a [Workspace Mechanic](http://marketplace.eclipse.org/content/workspace-mechanic/) configuration to get
+      a `*.epf` file
+        - The result should look
+          like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/mechanic-formatter.epf)
+
+    2. Open a project in IntelliJ
+    3. Set path to the config file
+       via `IntelliJ | Settings | Other Settings | Eclipse Code Formatter | Eclipse preference file`
    4. When using exported profiles (the xml file), select desired profile in the combobox `Java formatter profile`
    5. Check `Optimizing Imports` configuration
       1. Set import order
@@ -45,7 +62,7 @@ Currently supports formatting of
 6. [Give it 5 stars](http://plugins.jetbrains.com/plugin/?idea&id=6546)
 7. [Make a donation](https://www.paypal.me/VojtechKrasa)
 
-## Possible problems with Java formatting ##
+## Possible problems with Java formatting
 - `@formatter:off` is not working
    See: https://github.com/krasa/EclipseCodeFormatter/issues/64
 - Nothing was formatted or formatting failed 
@@ -61,8 +78,7 @@ Currently supports formatting of
   - [check old issues](/issues)
   - Create a new issue [here](/issues/new)
 
-
-# Troubleshooting #
+# Troubleshooting
 If it is mysteriously not working, go to `Main Menu | Help | Edit Debug Settings` and add:
 ```
 krasa.formatter
