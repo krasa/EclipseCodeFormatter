@@ -1,19 +1,6 @@
 package krasa.formatter.utils;
 
-import static krasa.formatter.utils.StringUtils.getPackage;
-import static krasa.formatter.utils.StringUtils.getSimpleName;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
-import org.picocontainer.PicoContainer;
-
+import com.intellij.diagnostic.ActivityCategory;
 import com.intellij.openapi.components.BaseComponent;
 import com.intellij.openapi.components.ComponentConfig;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -26,8 +13,20 @@ import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.messages.MessageBus;
-
 import krasa.formatter.settings.Settings;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.junit.Assert;
+import org.junit.Test;
+import org.picocontainer.PicoContainer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static krasa.formatter.utils.StringUtils.getPackage;
+import static krasa.formatter.utils.StringUtils.getSimpleName;
 
 /**
  * @author Vojtech Krasa
@@ -88,22 +87,38 @@ public class StringUtilsTest {
 		}
 
 		@Override
-		public @NotNull RuntimeException createError(@NotNull Throwable throwable, @NotNull PluginId pluginId) {
+		public <T> T instantiateClassWithConstructorInjection(@NotNull Class<T> aClass, @NotNull Object o, @NotNull PluginId pluginId) {
 			return null;
 		}
 
 		@Override
-		public @NotNull RuntimeException createError(@NotNull @NonNls String s, @NotNull PluginId pluginId) {
+		public @NotNull
+		RuntimeException createError(@NotNull Throwable throwable, @NotNull PluginId pluginId) {
 			return null;
 		}
 
 		@Override
-		public @NotNull RuntimeException createError(@NotNull @NonNls String s, @NotNull PluginId pluginId, @Nullable Map<String, String> map) {
+		public @NotNull
+		RuntimeException createError(@NotNull @NonNls String s, @NotNull PluginId pluginId) {
 			return null;
 		}
 
 		@Override
-		public @NotNull <T> Class<T> loadClass(@NotNull String s, @NotNull PluginDescriptor pluginDescriptor) throws ClassNotFoundException {
+		public @NotNull
+		RuntimeException createError(@NotNull @NonNls String s, @Nullable Throwable throwable, @NotNull PluginId pluginId, @Nullable Map<String, String> map) {
+			return null;
+		}
+
+
+		@Override
+		public @NotNull
+		<T> Class<T> loadClass(@NotNull String s, @NotNull PluginDescriptor pluginDescriptor) throws ClassNotFoundException {
+			return null;
+		}
+
+		@Override
+		public @NotNull
+		ActivityCategory getActivityCategory(boolean b) {
 			return null;
 		}
 
@@ -196,9 +211,10 @@ public class StringUtilsTest {
 		}
 
 		@Override
-		public <T> T getComponent(Class<T> interfaceClass, T defaultImplementation) {
-			return null;
+		public boolean isInjectionForExtensionSupported() {
+			return false;
 		}
+
 
 		@NotNull
 		// @Override
@@ -220,6 +236,11 @@ public class StringUtilsTest {
 					return isDisposed();
 				}
 			};
+		}
+
+		@Override
+		public <T> T getService(@NotNull Class<T> aClass) {
+			return null;
 		}
 
 		@NotNull

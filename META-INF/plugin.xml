@@ -5,7 +5,7 @@
 	<name>Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
 
-	<version>20.8.203.000.0-Eclipse_2020-06-JavaOnly</version>
+	<version>20.9.203.000.0-Eclipse_2020-06-JavaOnly</version>
 	<idea-version since-build="203.000"/>
 
 
@@ -18,11 +18,11 @@
         for instructions how to use it.     <br><br>
 
 	 <br><br>
-	 Sponsored by:<br> 
+	 Sponsored by:<br>
         <p><a title="Try CodeStream" href="https://sponsorlink.codestream.com/?utm_source=jbmarket&amp;utm_campaign=vojta_eclipse&amp;utm_medium=banner"><img src="https://alt-images.codestream.com/codestream_logo_vojta_eclipse.png"></a><br>
         Manage pull requests and conduct code reviews in your IDE with full source-tree context. Comment on any line, not just the diffs. Use jump-to-definition, your favorite keybindings, and code intelligence with more of your workflow.<br>
         <a title="Try CodeStream" href="https://sponsorlink.codestream.com/?utm_source=jbmarket&amp;utm_campaign=vojta_eclipse&amp;utm_medium=banner">Learn More</a></p>
-        
+
               <br> <br>
         <a href="https://www.paypal.me/VojtechKrasa">Donations</a> | <a href="https://github.com/krasa/EclipseCodeFormatter/">GitHub</a> | <a href="https://github.com/krasa/EclipseCodeFormatter/issues">Issues</a>
         ]]></description>
@@ -33,6 +33,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>20.9
+		<br>- NPE fix
 	    <br>20.8
 		<br>- ProcessCanceledException fix
 	    <br>20.7
