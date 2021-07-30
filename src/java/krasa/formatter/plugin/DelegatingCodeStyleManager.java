@@ -85,6 +85,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 		original.reformatText(element, startOffset, endOffset);
 	}
 
+
 	@Override
 	public void adjustLineIndent(@NotNull PsiFile file, TextRange rangeToAdjust) throws IncorrectOperationException {
 		original.adjustLineIndent(file, rangeToAdjust);
