@@ -8,6 +8,26 @@
 
 package krasa.formatter.plugin;
 
+import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.*;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.List;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.DocumentEvent;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
 import com.centerkey.utils.BareBonesBrowserLaunch;
 import com.intellij.openapi.application.ex.ApplicationEx;
 import com.intellij.openapi.application.ex.ApplicationManagerEx;
@@ -29,29 +49,12 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
+
 import krasa.formatter.eclipse.ConfigFileLocator;
 import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.MyConfigurable;
 import krasa.formatter.settings.ProjectSettings;
 import krasa.formatter.settings.Settings;
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.DocumentEvent;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.*;
-
-import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.*;
 
 /**
  * Configuration dialog for changing the {@link krasa.formatter.settings.Settings} of the plugin.
@@ -117,8 +120,6 @@ public class ProjectSettingsForm {
 
 	private JTextField pathToCustomEclipse;
 	private JButton customEclipseLocationBrowse;
-	private JRadioButton useEclipseNewest;
-	private JRadioButton useEclipseCustom;
 	private JLabel javaFormatterVersionLabel;
 	private JRadioButton importOrdering451;
 	private JRadioButton importOrdering452;
@@ -142,7 +143,7 @@ public class ProjectSettingsForm {
 		enabledBy(new JComponent[]{eclipseSupportedFileTypesLabel, enableJavaFormatting, doNotFormatOtherFilesRadioButton,
 				formatOtherFilesWithExceptionsRadioButton,
 				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
-				importOrderConfigurationManualRadioButton, useEclipseNewest, useEclipseCustom,
+				importOrderConfigurationManualRadioButton,
 				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452}, useEclipseFormatter);
 
 		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, schemeEclipseJC,
@@ -150,10 +151,9 @@ public class ProjectSettingsForm {
 				schemeEclipse21,
 				schemeEclipseFile, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
 				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, customEclipseLocationBrowse, pathToCustomEclipse,
-				useEclipseNewest, useEclipseCustom, javaFormatterVersionLabel, importStyleLabel,
+				javaFormatterVersionLabel, importStyleLabel,
 				importOrdering451, importOrdering452}, enableJavaFormatting);
 
-		enabledBy(new JComponent[]{pathToCustomEclipse, customEclipseLocationBrowse,}, useEclipseCustom);
 
 		enabledBy(new JComponent[]{importOrder, pathToImportOrderPreferenceFile, pathToImportOrderPreferenceFileBrowse, importOrderManualExample,
 						importOrderLabel, importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton, importOrderConfigurationManualRadioButton},
@@ -249,7 +249,6 @@ public class ProjectSettingsForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				browseForFile(pathToCustomEclipse, createSingleFolderDescriptor(), "Select Eclipse location");
-				useEclipseCustom.setSelected(true);
 			}
 		});
 
@@ -465,12 +464,6 @@ public class ProjectSettingsForm {
 				BareBonesBrowserLaunch.openURL("http://plugins.intellij.net/plugin/?idea&id=6546");
 			}
 		});
-		useEclipseNewest.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				importOrdering452.setSelected(true);
-			}
-		});
 		profileHelp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -653,8 +646,6 @@ public class ProjectSettingsForm {
 		doNotFormatOtherFilesRadioButton.setSelected(!in.isFormatOtherFileTypesWithIntelliJ());
 		useDefaultFormatter.setSelected(Objects.equals(in.getFormatter(), Settings.Formatter.DEFAULT));
 		useEclipseFormatter.setSelected(Objects.equals(in.getFormatter(), Settings.Formatter.ECLIPSE));
-		useEclipseNewest.setSelected(Objects.equals(in.getEclipseVersion(), Settings.FormatterVersion.NEWEST));
-		useEclipseCustom.setSelected(Objects.equals(in.getEclipseVersion(), Settings.FormatterVersion.CUSTOM));
 		importOrdering451.setSelected(Objects.equals(in.getImportOrdering(), Settings.ImportOrdering.ECLIPSE_44));
 		importOrdering452.setSelected(Objects.equals(in.getImportOrdering(), Settings.ImportOrdering.ECLIPSE_452));
 		importOrderConfigurationFromFileRadioButton.setSelected(in.isImportOrderFromFile());
@@ -681,11 +672,6 @@ public class ProjectSettingsForm {
 			displayedSettings.setImportOrdering(Settings.ImportOrdering.ECLIPSE_44);
 		} else if (importOrdering452.isSelected()) {
 			displayedSettings.setImportOrdering(Settings.ImportOrdering.ECLIPSE_452);
-		}
-		if (useEclipseNewest.isSelected()) {
-			displayedSettings.setEclipseVersion(Settings.FormatterVersion.NEWEST);
-		} else if (useEclipseCustom.isSelected()) {
-			displayedSettings.setEclipseVersion(Settings.FormatterVersion.CUSTOM);
 		}
 
 		if (schemeEclipse.isSelected()) {
@@ -757,12 +743,6 @@ public class ProjectSettingsForm {
 			return true;
 		}
 		if (useEclipseFormatter.isSelected() != Settings.Formatter.ECLIPSE.equals(data.getFormatter())) {
-			return true;
-		}
-		if (useEclipseNewest.isSelected() != Settings.FormatterVersion.NEWEST.equals(data.getEclipseVersion())) {
-			return true;
-		}
-		if (useEclipseCustom.isSelected() != Settings.FormatterVersion.CUSTOM.equals(data.getEclipseVersion())) {
 			return true;
 		}
 		if (importOrdering451.isSelected() != Settings.ImportOrdering.ECLIPSE_44.equals(data.getImportOrdering())) {

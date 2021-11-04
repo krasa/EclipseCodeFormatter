@@ -30,9 +30,11 @@ import krasa.formatter.plugin.ProjectCodeStyleInstaller;
 public class ProjectComponent implements com.intellij.openapi.components.ProjectComponent {
 
 	private static final Logger LOG = Logger.getInstance(ProjectComponent.class.getName());
-	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup("Eclipse code formatter error",
+	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup(
+			"Code Formatter for Eclipse error",
 			NotificationDisplayType.BALLOON, true);
-	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup("Eclipse code formatter info",
+	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup(
+			"Code Formatter for Eclipse info",
 			NotificationDisplayType.NONE, true);
 
 	@NotNull
@@ -82,7 +84,9 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 		if (settings.isEnabled() && (settings.isEnableCppFormatting() || settings.isEnableJSFormatting() || settings.isEnableGWT())) {
 			SwingUtilities.invokeLater(() -> Notifications.Bus.notify(
 					GROUP_DISPLAY_ID_ERROR.createNotification(
-							"Eclipse Code Formatter plugin", "Support for Cpp, JS, GWT formatting was dropped. Install an older version or <a href=\"#\">click here</a> to disable this warning.", NotificationType.WARNING, new NotificationListener() {
+							"Code Formatter for Eclipse plugin",
+							"Support for Cpp, JS, GWT formatting was dropped. Install an older version or <a href=\"#\">click here</a> to disable this warning.",
+							NotificationType.WARNING, new NotificationListener() {
 								@Override
 								public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent hyperlinkEvent) {
 									settings.setEnableJSFormatting(false);

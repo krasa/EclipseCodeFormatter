@@ -38,7 +38,5 @@
         <jarDirectory url="file://$MODULE_DIR$/lib/test" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
-    <orderEntry type="library" scope="RUNTIME" name="eclipse" level="project" />
-    <orderEntry type="library" name="eclipse" level="project" />
   </component>
 </module>

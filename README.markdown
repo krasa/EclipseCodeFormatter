@@ -1,4 +1,4 @@
-# Eclipse Code Formatter [![Donate][badge-paypal-img]][badge-paypal]
+# Code Formatter for Eclipse [![Donate][badge-paypal-img]][badge-paypal]
 
 Allows using Eclipse's Java code formatter directly from IntelliJ. Solves the problem of maintaining a common code style
 in team environments where both IDEA and Eclipse are used.
@@ -19,6 +19,10 @@ Manage pull requests and conduct code reviews in your IDE with full source-tree 
     - [Tutorial: Installing, Updating and Uninstalling Repository Plugins](http://www.jetbrains.com/idea/webhelp/installing-updating-and-uninstalling-repository-plugins.html)
     - [Plugin repository page](http://plugins.jetbrains.com/plugin/?idea&id=6546)
 2. Configure it
+    1. Configure Eclipse location
+        - Install Eclipse
+        - Got To IntelliJ Settings | Other Settings | Code Formatter for Eclipse
+        - Set `Eclipse installation folder`
     1. Get Eclipse formatter settings file:
         - Either, export formatter profiles to get a `*.xml` file
             1. Go to `Eclipse | Windows | Preferences | Java | Code Style | Formatter`
@@ -42,7 +46,7 @@ Manage pull requests and conduct code reviews in your IDE with full source-tree 
 
     2. Open a project in IntelliJ
     3. Set path to the config file
-       via `IntelliJ | Settings | Other Settings | Eclipse Code Formatter | Eclipse preference file`
+       via `IntelliJ | Settings | Other Settings | Code Formatter for Eclipse | Eclipse preference file`
    4. When using exported profiles (the xml file), select desired profile in the combobox `Java formatter profile`
    5. Check `Optimizing Imports` configuration
       1. Set import order

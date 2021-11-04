@@ -158,7 +158,7 @@ public class GlobalSettings
 	@NotNull
 	@Override
 	public String getPresentableName() {
-		return "Eclipse Code Formatter";
+		return "Code Formatter for Eclipse";
 	}
 
 	public void delete(Settings settings, Project project) {

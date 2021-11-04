@@ -1,20 +1,5 @@
 package krasa.formatter.eclipse;
 
-import com.intellij.openapi.command.impl.DummyProject;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.JavaPsiImplementationHelper;
-import krasa.formatter.exception.FileDoesNotExistsException;
-import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.plugin.InvalidPropertyFile;
-import krasa.formatter.settings.Settings;
-import krasa.formatter.settings.provider.JavaPropertiesProvider;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,6 +7,25 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.intellij.openapi.command.impl.DummyProject;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.JavaPsiImplementationHelper;
+
+import krasa.formatter.exception.FileDoesNotExistsException;
+import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.exception.InvalidSettingsException;
+import krasa.formatter.plugin.InvalidPropertyFile;
+import krasa.formatter.settings.Settings;
+import krasa.formatter.settings.provider.JavaPropertiesProvider;
 
 /**
  * @author Vojtech Krasa
@@ -87,11 +91,11 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 		try {
 			ClassLoader classLoader;
-			if (settings.getEclipseVersion() == Settings.FormatterVersion.CUSTOM) {
+			// if (settings.getEclipseVersion() == Settings.FormatterVersion.CUSTOM) {
 				classLoader = getCustomClassloader(settings.getPathToEclipse());
-			} else {
-				classLoader = Classloaders.getEclipse();
-			}
+				// } else {
+				// classLoader = Classloaders.getEclipse();
+				// }
 
 			Map<String, String> options = getEclipseProfileOptions(level, configFile, classLoader);
 
@@ -167,10 +171,14 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	 * @return
 	 */
 	private ClassLoader getCustomClassloader(String pathToEclipse) throws ClassNotFoundException {
+		if (StringUtils.isBlank(pathToEclipse)) {
+			throw new InvalidSettingsException("Please set Eclipse installation location.", true);
+		}
 		ConfigurableEclipseLocation configurableEclipseLocation = new ConfigurableEclipseLocation();
 		List<URL> urlList = configurableEclipseLocation.run(pathToEclipse.trim());
 		if (urlList.isEmpty()) {
-			throw new FormattingFailedException("Invalid path to Eclipse, no jars found in '" + pathToEclipse + "'", true);
+			throw new InvalidSettingsException("Invalid path to Eclipse, no jars found in '" + pathToEclipse + "'",
+					true);
 		}
 		ClassLoader classLoader = Classloaders.getCustomClassloader(urlList);
 		return classLoader;

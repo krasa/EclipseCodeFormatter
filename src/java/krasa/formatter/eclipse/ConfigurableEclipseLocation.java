@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.diagnostic.Logger;
 
 import krasa.formatter.exception.FormattingFailedException;
+import krasa.formatter.exception.InvalidSettingsException;
 
 public class ConfigurableEclipseLocation {
 	private static final Logger LOG = Logger.getInstance(ConfigurableEclipseLocation.class.getName());
@@ -61,13 +62,15 @@ public class ConfigurableEclipseLocation {
 			root = findEclipseRoot(root, start);
 
 			if (root == null || !root.exists()) {
-				throw new IllegalStateException("Invalid Eclipse location, it must contain '.eclipseproduct' file");
+				throw new InvalidSettingsException("Invalid Eclipse location, it must contain '.eclipseproduct' file");
 			}
 
 			LOG.debug("found root=" + root.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + "ms");
 
 			jars = findJars(root);
 
+		} catch (InvalidSettingsException e) {
+			throw e;
 		} catch (Throwable e) {
 			throw new RuntimeException("from=" + from, e);
 		}

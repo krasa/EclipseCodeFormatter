@@ -94,7 +94,8 @@ public class FileUtils {
 			throw new FileDoesNotExistsException(file);
 		}
 		try {
-			return readXmlJavaSettingsFile(org.apache.commons.io.FileUtils.readFileToString(file, "UTF-8"), properties, profile);
+			return readXmlJavaSettingsFile(org.apache.commons.io.FileUtils.readFileToString(file, "UTF-8"), properties,
+					profile);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -112,10 +113,12 @@ public class FileUtils {
 
 			NodeList profiles = doc.getElementsByTagName("profile");
 			if (profiles.getLength() == 0) {
-				throw new IllegalStateException("Loading of profile settings failed, the file does not contain any profiles.");
+				throw new IllegalStateException(
+						"Loading of profile settings failed, the file does not contain any profiles.");
 			}
 			if (profiles.getLength() > 1 && profile == null) {
-				throw new IllegalStateException("No Eclipse formatter profile selected, go to settings and properly configure it.");
+				throw new IllegalStateException(
+						"No Eclipse formatter profile selected, go to settings and properly configure it.");
 			}
 			for (int temp = 0; temp < profiles.getLength(); temp++) {
 				Node profileNode = profiles.item(temp);
@@ -126,7 +129,8 @@ public class FileUtils {
 						profileFound = true;
 						NodeList childNodes = profileElement.getElementsByTagName("setting");
 						if (childNodes.getLength() == 0) {
-							throw new IllegalStateException("Loading of profile settings failed, the profile has no settings elements.");
+							throw new IllegalStateException(
+									"Loading of profile settings failed, the profile has no settings elements.");
 						}
 						for (int i = 0; i < childNodes.getLength(); i++) {
 							Node item = childNodes.item(i);
@@ -157,9 +161,9 @@ public class FileUtils {
 		List<String> profileNames = new ArrayList<String>();
 		if (file.exists()) {
 			try { // load file profiles
-				// delete eclipse dependency to fix java.lang.ClassCastException:
-				// org.apache.xerces.jaxp.DocumentBuilderFactoryImpl cannot be cast to
-				// javax.xml.parsers.DocumentBuilderFactory
+					// delete eclipse dependency to fix java.lang.ClassCastException:
+					// org.apache.xerces.jaxp.DocumentBuilderFactoryImpl cannot be cast to
+					// javax.xml.parsers.DocumentBuilderFactory
 
 				InputSource in = new InputSource(file.toURI().toASCIIString());
 				in.setEncoding("UTF-8");
@@ -189,9 +193,9 @@ public class FileUtils {
 	public static List<String> getProfileNamesFromConfigXML(InputStream s) throws ParsingFailedException {
 		List<String> profileNames = new ArrayList<String>();
 		try { // load file profiles
-			// delete eclipse dependency to fix java.lang.ClassCastException:
-			// org.apache.xerces.jaxp.DocumentBuilderFactoryImpl cannot be cast to
-			// javax.xml.parsers.DocumentBuilderFactory
+				// delete eclipse dependency to fix java.lang.ClassCastException:
+				// org.apache.xerces.jaxp.DocumentBuilderFactoryImpl cannot be cast to
+				// javax.xml.parsers.DocumentBuilderFactory
 
 			org.w3c.dom.Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(s);
 			doc.getDocumentElement().normalize();
