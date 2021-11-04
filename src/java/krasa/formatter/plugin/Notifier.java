@@ -1,7 +1,5 @@
 package krasa.formatter.plugin;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -11,10 +9,9 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-
 import krasa.formatter.exception.InvalidSettingsException;
 import krasa.formatter.settings.ProjectComponent;
-import krasa.formatter.settings.ProjectSettings;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vojtech Krasa
@@ -47,8 +44,7 @@ public class Notifier {
 				@Override
 				public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
 					Project eventProject = getEventProject(anActionEvent);
-					ProjectSettings instance = ProjectSettings.getInstance(eventProject);
-					ShowSettingsUtil.getInstance().showSettingsDialog(eventProject, "EclipseCodeFormatter");
+					ShowSettingsUtil.getInstance().showSettingsDialog(eventProject, "Code Formatter for Eclipse");
 				}
 			});
 		}
