@@ -8,26 +8,6 @@
 
 package krasa.formatter.plugin;
 
-import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.*;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.DocumentEvent;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
 import com.centerkey.utils.BareBonesBrowserLaunch;
 import com.intellij.openapi.application.ex.ApplicationEx;
 import com.intellij.openapi.application.ex.ApplicationManagerEx;
@@ -49,12 +29,29 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.mock.MockConfirmation;
-
 import krasa.formatter.eclipse.ConfigFileLocator;
 import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.MyConfigurable;
 import krasa.formatter.settings.ProjectSettings;
 import krasa.formatter.settings.Settings;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.DocumentEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.*;
+
+import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.*;
 
 /**
  * Configuration dialog for changing the {@link krasa.formatter.settings.Settings} of the plugin.
@@ -725,10 +722,10 @@ public class ProjectSettingsForm {
 		}
 		if (pathToCustomEclipse.isEnabled()) {
 			if (StringUtils.isBlank(pathToCustomEclipse.getText())) {
-				throw new ConfigurationException("Path to custom Eclipse folder is not valid");
+				throw new ConfigurationException("Path to 'Eclipse installation folder' is not valid");
 			}
 			if (!new File(pathToCustomEclipse.getText()).exists()) {
-				throw new ConfigurationException("Path to custom Eclipse folder is not valid - folder does not exist");
+				throw new ConfigurationException("Path to 'Eclipse installation folder' is not valid - folder does not exist");
 			}
 		}
 	}
