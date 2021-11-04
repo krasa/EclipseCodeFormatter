@@ -23,7 +23,7 @@ Manage pull requests and conduct code reviews in your IDE with full source-tree 
         - Install Eclipse
         - Got To IntelliJ Settings | Other Settings | Code Formatter for Eclipse
         - Set `Eclipse installation folder`
-    1. Get Eclipse formatter settings file:
+    2. Configure formatter
         - Either, export formatter profiles to get a `*.xml` file
             1. Go to `Eclipse | Windows | Preferences | Java | Code Style | Formatter`
             2. Eclipse does not export default profiles, so you have to make your own via the `New` button
@@ -31,34 +31,39 @@ Manage pull requests and conduct code reviews in your IDE with full source-tree 
                 - The result should look
                   like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/format.xml)
 
-    - Or, enable project specific formatter settings to get `org.eclipse.jdt.core.prefs`
-        1. With your project open in Eclipse's workspace, `right-click` the project and choose Properties
-        2. Go to `Java Code Style | Formatter` and select `Enable project specific settings`
-        3. Click `OK` to save the settings
-        4. Go to the `.settings` directory inside your project's directory. There you will find
-           the `org.eclipse.jdt.core.prefs` file which contains the Eclipse formatter settings
+        - Or, enable project specific formatter settings to get `org.eclipse.jdt.core.prefs`
+            1. With your project open in Eclipse's workspace, `right-click` the project and choose Properties
+            2. Go to `Java Code Style | Formatter` and select `Enable project specific settings`
+            3. Click `OK` to save the settings
+            4. Go to the `.settings` directory inside your project's directory. There you will find
+               the `org.eclipse.jdt.core.prefs` file which contains the Eclipse formatter settings
+                - The result should look
+                  like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/org.eclipse.jdt.core.prefs)
+        - Or, export a [Workspace Mechanic](http://marketplace.eclipse.org/content/workspace-mechanic/) configuration to
+          get a `*.epf` file
             - The result should look
-              like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/org.eclipse.jdt.core.prefs)
-    - Or, export a [Workspace Mechanic](http://marketplace.eclipse.org/content/workspace-mechanic/) configuration to get
-      a `*.epf` file
-        - The result should look
-          like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/mechanic-formatter.epf)
+              like [this](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/mechanic-formatter.epf)
 
-    2. Open a project in IntelliJ
-    3. Set path to the config file
-       via `IntelliJ | Settings | Other Settings | Code Formatter for Eclipse | Eclipse preference file`
-   4. When using exported profiles (the xml file), select desired profile in the combobox `Java formatter profile`
-   5. Check `Optimizing Imports` configuration
-      1. Set import order
-         - Either, leave the default
-         - Or, set path to Eclipse configuration file:
-            -  Go to `Eclipse | Windows | Preferences | Java | Code Style | Organize Imports`
-               - Either, click on `Export...`, ([example](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/bcjur2.importorder))
-               - Or, enable project specific settings and use `org.eclipse.jdt.ui.prefs` file which should contain the line `org.eclipse.jdt.ui.importorder=...`
-      2. Set the value of `Class count to use import with` and `Name count to use static import with` in `Settings | Editor | Code Style | Java | Imports` for Idea 14 or `Settings | Editor | Code Style | Imports` for older Idea. Eclipse uses 99 by default
-      3. For versions lower than 4.0 - make sure to disable IntelliJ's `Import Optimizing` in the reformat dialog via `Settings | Editor | Show "Reformat Code" dialog`. The plugin will take care of imports anyway
-      4. For versions higher than 4.0 - imports will be reordered together with normal IntelliJ's import optimizing
-      5. **Disable `Optimize imports on the fly`**
+        - Open a project in IntelliJ
+        - Set path to the config file
+          via `IntelliJ | Settings | Other Settings | Code Formatter for Eclipse | Eclipse preference file`
+        - When using exported profiles (the xml file), select desired profile in the combobox `Java formatter profile`
+    3. Check `Optimizing Imports` configuration
+        - Set import order
+            - Either, leave the default
+            - Or, set path to Eclipse configuration file:
+                - Go to `Eclipse | Windows | Preferences | Java | Code Style | Organize Imports`
+                    - Either, click on `Export...`
+                      , ([example](https://github.com/krasa/EclipseCodeFormatter/blob/master/test/resources/bcjur2.importorder))
+                    - Or, enable project specific settings and use `org.eclipse.jdt.ui.prefs` file which should contain
+                      the line `org.eclipse.jdt.ui.importorder=...`
+        - Set the value of `Class count to use import with` and `Name count to use static import with`
+          in `Settings | Editor | Code Style | Java | Imports` for Idea 14 or `Settings | Editor | Code Style | Imports`
+          for older Idea. Eclipse uses 99 by default
+        - For versions lower than 4.0 - make sure to disable IntelliJ's `Import Optimizing` in the reformat dialog
+          via `Settings | Editor | Show "Reformat Code" dialog`. The plugin will take care of imports anyway
+        - For versions higher than 4.0 - imports will be reordered together with normal IntelliJ's import optimizing
+        - **Disable `Optimize imports on the fly`**
 3. Format code as usual, notice the green bubble notification about successful formatting 
    -  notifications can be disabled at `Settings | Notifications`
 4. Use `Ctrl + Alt + O` as usual, it will use this plugin
