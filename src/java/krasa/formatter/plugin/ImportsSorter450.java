@@ -1,16 +1,16 @@
 package krasa.formatter.plugin;
 
-import java.util.*;
-
+import com.intellij.util.containers.MultiMap;
 import krasa.formatter.utils.StringUtils;
 
-import com.intellij.openapi.util.MultiValuesMap;
+import java.util.*;
+
 
 /*not thread safe*/
 class ImportsSorter450 implements ImportsSorter {
 
 	private List<String> template = new ArrayList<String>();
-	private MultiValuesMap<String, String> matchingImports = new MultiValuesMap<String, String>();
+	private MultiMap<String, String> matchingImports = new MultiMap<String, String>();
 	private ArrayList<String> notMatching = new ArrayList<String>();
 	private Set<String> allImportOrderItems = new HashSet<String>();
 	private Comparator<String> comparator;
@@ -87,7 +87,7 @@ class ImportsSorter450 implements ImportsSorter {
 		for (String anImport : imports) {
 			String orderItem = getBestMatchingImportOrderItem(anImport);
 			if (orderItem != null) {
-				matchingImports.put(orderItem, anImport);
+				matchingImports.putValue(orderItem, anImport);
 			} else {
 				notMatching.add(anImport);
 			}

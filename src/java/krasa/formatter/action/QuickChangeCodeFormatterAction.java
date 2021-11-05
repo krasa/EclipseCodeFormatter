@@ -1,5 +1,6 @@
 package krasa.formatter.action;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.ide.actions.QuickSwitchSchemeAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -10,10 +11,14 @@ import com.intellij.openapi.project.Project;
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
 
+import javax.swing.*;
+
 /**
  * @author Vojtech Krasa
  */
 public class QuickChangeCodeFormatterAction extends QuickSwitchSchemeAction implements DumbAware {
+
+	protected static final Icon ourCurrentAction = AllIcons.Actions.Forward;
 
 	@Override
 	protected void fillActions(final Project project, DefaultActionGroup group, DataContext dataContext) {
