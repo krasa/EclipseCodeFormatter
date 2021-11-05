@@ -8,13 +8,11 @@
 
 package krasa.formatter.settings;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.util.xmlb.annotations.Transient;
-
 import krasa.formatter.eclipse.ConfigFileLocator;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
@@ -66,6 +64,7 @@ public class Settings {
 	private FormatterVersion eclipseVersion = FormatterVersion.NEWEST;
 	private ImportOrdering importOrdering = ImportOrdering.ECLIPSE_452;
 	private ConfigType configType = ConfigType.CUSTOM;
+	@Deprecated
 	private String pathToEclipse = "";
 
 	public Settings() {
@@ -79,6 +78,7 @@ public class Settings {
 		this.configType = configType;
 	}
 
+	@Deprecated
 	public String getPathToEclipse() {
 		return pathToEclipse;
 	}
@@ -114,6 +114,7 @@ public class Settings {
 		}
 	}
 
+	@Deprecated
 	public void setPathToEclipse(String pathToEclipse) {
 		this.pathToEclipse = pathToEclipse;
 	}

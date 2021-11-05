@@ -1,17 +1,5 @@
 package krasa.formatter.eclipse;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -19,13 +7,24 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
-
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
 import krasa.formatter.exception.InvalidSettingsException;
 import krasa.formatter.plugin.InvalidPropertyFile;
+import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Vojtech Krasa
@@ -92,7 +91,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		try {
 			ClassLoader classLoader;
 			// if (settings.getEclipseVersion() == Settings.FormatterVersion.CUSTOM) {
-				classLoader = getCustomClassloader(settings.getPathToEclipse());
+			classLoader = getCustomClassloader(GlobalSettings.getInstance().getPathToEclipse());
 				// } else {
 				// classLoader = Classloaders.getEclipse();
 				// }

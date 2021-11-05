@@ -1,20 +1,18 @@
 package krasa.formatter.settings;
 
-import javax.swing.*;
-
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
+import krasa.formatter.Messages;
+import krasa.formatter.plugin.ProjectSettingsForm;
+import krasa.formatter.utils.ProjectUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
-
-import krasa.formatter.Messages;
-import krasa.formatter.plugin.ProjectSettingsForm;
-import krasa.formatter.utils.ProjectUtils;
+import javax.swing.*;
 
 // implements Configurable
 public class MyConfigurable implements Configurable {
@@ -54,8 +52,11 @@ public class MyConfigurable implements Configurable {
 
 	@Override
 	public boolean isModified() {
-		return form != null && (form.isModified(projectSettings.getSelectedProfile())
-				|| (form.getDisplayedSettings() != null && !isSameId()));
+		return form != null &&
+				(form.isModified(projectSettings.getSelectedProfile())
+						|| (form.getDisplayedSettings() != null && !isSameId())
+						|| (!ObjectUtils.equals(GlobalSettings.getInstance().getPathToEclipse(), form.pathToCustomEclipse.getText()))
+				);
 	}
 
 	private boolean isSameId() {
@@ -67,6 +68,8 @@ public class MyConfigurable implements Configurable {
 		if (form != null) {
 			form.validate();
 			Settings profile = form.exportDisplayedSettings();
+
+			GlobalSettings.getInstance().setPathToEclipse(form.pathToCustomEclipse.getText());
 
 			projectSettings.setProfile(profile);
 
@@ -88,6 +91,7 @@ public class MyConfigurable implements Configurable {
 	public void reset() {
 		if (form != null) {
 			form.importFrom(projectSettings.getSelectedProfile());
+			form.pathToCustomEclipse.setText(GlobalSettings.getInstance().getPathToEclipse());
 		}
 	}
 

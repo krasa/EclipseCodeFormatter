@@ -1,31 +1,33 @@
 package krasa.formatter.settings;
 
-import java.io.File;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.project.Project;
+import com.intellij.util.xmlb.XmlSerializerUtil;
+import krasa.formatter.plugin.Notifier;
+import krasa.formatter.utils.ProjectUtils;
+import krasa.formatter.utils.StringUtils;
+import org.apache.commons.beanutils.BeanUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.jetbrains.annotations.NotNull;
-
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.components.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-
-import krasa.formatter.plugin.Notifier;
-import krasa.formatter.utils.ProjectUtils;
-import krasa.formatter.utils.StringUtils;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * @author Vojtech Krasa
  */
 @State(name = "EclipseCodeFormatterSettings", storages = {@Storage("eclipseCodeFormatter.xml")})
 public class GlobalSettings
-		implements ApplicationComponent, PersistentStateComponent<GlobalSettings>, ExportableApplicationComponent {
+		implements ApplicationComponent, PersistentStateComponent<GlobalSettings> {
 	private List<Settings> settingsList = new ArrayList<Settings>();
 	private List<Long> deletedSettingsId = new ArrayList<Long>();
+	private String pathToEclipse = "";
 
 	public static GlobalSettings getInstance() {
 		return ApplicationManager.getApplication().getComponent(GlobalSettings.class);
@@ -39,10 +41,21 @@ public class GlobalSettings
 	@Override
 	public void loadState(GlobalSettings state) {
 		XmlSerializerUtil.copyBean(state, this);
+
+		migrateSettings();
 	}
+
 
 	public List<Settings> getSettingsList() {
 		return settingsList;
+	}
+
+	public String getPathToEclipse() {
+		return pathToEclipse;
+	}
+
+	public void setPathToEclipse(String pathToEclipse) {
+		this.pathToEclipse = pathToEclipse;
 	}
 
 	public void setSettingsList(List<Settings> settingsList) {
@@ -89,6 +102,7 @@ public class GlobalSettings
 			}
 		}
 	}
+
 	private void addToGlobalSettings(@NotNull Settings newSettings, @NotNull Project project) {
 		if (newSettings.getId() == null) {
 			newSettings.setId(generateId());
@@ -149,17 +163,6 @@ public class GlobalSettings
 		return "EclipseCodeFormatterGlobalSettings";
 	}
 
-	@NotNull
-	@Override
-	public File[] getExportFiles() {
-		return new File[] { PathManager.getOptionsFile("eclipseCodeFormatter") };
-	}
-
-	@NotNull
-	@Override
-	public String getPresentableName() {
-		return "Code Formatter for Eclipse";
-	}
 
 	public void delete(Settings settings, Project project) {
 		settingsList.remove(settings);
@@ -167,4 +170,33 @@ public class GlobalSettings
 		ProjectUtils.notifyProjectsWhichUsesThisSettings(settings, project);
 	}
 
+	private void migrateSettings() {
+		if (isBlank(pathToEclipse)) {
+			for (Settings settings : settingsList) {
+				pathToEclipse = settings.getPathToEclipse();
+				if (!isBlank(pathToEclipse)) {
+					break;
+				}
+			}
+		}
+
+		for (Settings settings : settingsList) {
+			settings.setPathToEclipse("");
+		}
+	}
+
+	public void migrateSettings(ProjectSettings projectSettings) {
+		if (isBlank(pathToEclipse)) {
+			Settings selectedProfile = projectSettings.getSelectedProfile();
+			pathToEclipse = selectedProfile.getPathToEclipse();
+		}
+
+		Settings selectedGlobalProfile = projectSettings.getSelectedGlobalProfile();
+		if (selectedGlobalProfile != null) {
+			selectedGlobalProfile.setPathToEclipse("");
+		}
+
+		ProjectSpecificProfile projectSpecificProfile = projectSettings.getProjectSpecificProfile();
+		projectSpecificProfile.setPathToEclipse("");
+	}
 }

@@ -92,7 +92,6 @@ public class ProjectSettingsForm {
 	private JButton eclipsePreferenceFilePathJavaBrowse;
 
 	private JCheckBox optimizeImportsCheckBox;
-	private JLabel importOrderLabel;
 	private JFormattedTextField importOrder;
 	private JLabel importOrderManualExample;
 	private JTextField pathToImportOrderPreferenceFile;
@@ -115,7 +114,7 @@ public class ProjectSettingsForm {
 	private JButton homepage;
 	private JCheckBox useForLiveTemplates;
 
-	private JTextField pathToCustomEclipse;
+	public JTextField pathToCustomEclipse;
 	private JButton customEclipseLocationBrowse;
 	private JLabel javaFormatterVersionLabel;
 	private JRadioButton importOrdering451;
@@ -147,13 +146,13 @@ public class ProjectSettingsForm {
 				schemeEclipse, schemeCurrentProject,
 				schemeEclipse21,
 				schemeEclipseFile, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
-				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, customEclipseLocationBrowse, pathToCustomEclipse,
-				javaFormatterVersionLabel, importStyleLabel,
+				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile,
+				importStyleLabel,
 				importOrdering451, importOrdering452}, enableJavaFormatting);
 
 
 		enabledBy(new JComponent[]{importOrder, pathToImportOrderPreferenceFile, pathToImportOrderPreferenceFileBrowse, importOrderManualExample,
-						importOrderLabel, importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton, importOrderConfigurationManualRadioButton},
+						importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton, importOrderConfigurationManualRadioButton},
 				optimizeImportsCheckBox);
 
 		enabledBy(new JComponent[]{pathToImportOrderPreferenceFile, importOrderPreferenceFileExample, pathToImportOrderPreferenceFileBrowse},
@@ -199,10 +198,8 @@ public class ProjectSettingsForm {
 
 
 	public ProjectSettingsForm(final Project project, MyConfigurable myConfigurable) {
+		Donate.initDonateButton(donateButton);
 		this.myConfigurable = myConfigurable;
-		donateButton.setBorder(BorderFactory.createEmptyBorder());
-		donateButton.setContentAreaFilled(false);
-		donateButton.putClientProperty("JButton.backgroundColor", rootComponent.getBackground());
 		this.project = project;
 		for (Field field : ProjectSettingsForm.class.getDeclaredFields()) {
 			try {
@@ -687,6 +684,8 @@ public class ProjectSettingsForm {
 		displayedSettings.setFormatOtherFileTypesWithIntelliJ(formatOtherFilesWithExceptionsRadioButton.isSelected());
 		displayedSettings.setImportOrderFromFile(importOrderConfigurationFromFileRadioButton.isSelected());
 		displayedSettings.setSelectedJavaProfile(profileCheck(javaFormatterProfile.getSelectedItem()));
+
+
 		getData(displayedSettings);
 		return displayedSettings;
 	}
@@ -823,7 +822,6 @@ public class ProjectSettingsForm {
 		importOrder.setText(data.getImportOrder());
 		pathToImportOrderPreferenceFile.setText(data.getImportOrderConfigFilePath());
 		useForLiveTemplates.setSelected(data.isUseForLiveTemplates());
-		pathToCustomEclipse.setText(data.getPathToEclipse());
 	}
 
 	public void getData(Settings data) {
@@ -835,7 +833,6 @@ public class ProjectSettingsForm {
 		data.setImportOrder(importOrder.getText());
 		data.setImportOrderConfigFilePath(pathToImportOrderPreferenceFile.getText());
 		data.setUseForLiveTemplates(useForLiveTemplates.isSelected());
-		data.setPathToEclipse(pathToCustomEclipse.getText());
 	}
 
 	public boolean isModified(Settings data) {
@@ -860,8 +857,6 @@ public class ProjectSettingsForm {
 				: data.getImportOrderConfigFilePath() != null)
 			return true;
 		if (useForLiveTemplates.isSelected() != data.isUseForLiveTemplates())
-			return true;
-		if (pathToCustomEclipse.getText() != null ? !pathToCustomEclipse.getText().equals(data.getPathToEclipse()) : data.getPathToEclipse() != null)
 			return true;
 		return false;
 	}
