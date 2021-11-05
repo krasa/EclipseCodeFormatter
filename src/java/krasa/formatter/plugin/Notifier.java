@@ -31,7 +31,8 @@ public class Notifier {
 			if (e instanceof InvalidSettingsException) {
 				content = psiFile.getName() + " failed to format. " + reason + "\n";
 			} else {
-				content = psiFile.getName() + " failed to format with Code Formatter for Eclipse. " + reason + "\n";
+				content = psiFile.getName() + " failed to format with Adapter for Eclipse Code Formatter. " + reason
+						+ "\n";
 			}
 		} else {
 			content = psiFile.getName() + " failed to format with IntelliJ code formatter.\n" + reason;
@@ -44,7 +45,8 @@ public class Notifier {
 				@Override
 				public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
 					notification.expire();
-					ShowSettingsUtil.getInstance().showSettingsDialog(getEventProject(anActionEvent), "Code Formatter for Eclipse");
+					ShowSettingsUtil.getInstance().showSettingsDialog(getEventProject(anActionEvent),
+							"Adapter for Eclipse Code Formatter");
 				}
 			});
 		}
@@ -53,13 +55,15 @@ public class Notifier {
 
 	public void notifyEclipseLocationNotSet(Project project) {
 		String content = "Please configure Eclipse's location for the Code Formatter plugin, bundled Eclipse was removed.";
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content, NotificationType.WARNING);
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+				NotificationType.WARNING);
 
 		notification.addAction(new AnAction("Open Settings") {
 			@Override
 			public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
 				notification.expire();
-				ShowSettingsUtil.getInstance().showSettingsDialog(getEventProject(anActionEvent), "Code Formatter for Eclipse");
+				ShowSettingsUtil.getInstance().showSettingsDialog(getEventProject(anActionEvent),
+						"Adapter for Eclipse Code Formatter");
 			}
 		});
 		showNotification(notification, project);
@@ -76,7 +80,7 @@ public class Notifier {
 		if (formattedByIntelliJ) {
 			content = psiFile.getName() + " formatted successfully by IntelliJ code formatter";
 		} else {
-			content = psiFile.getName() + " formatted successfully by Code Formatter for Eclipse";
+			content = psiFile.getName() + " formatted successfully by Adapter for Eclipse Code Formatter";
 		}
 		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_INFO.createNotification(content,
 				NotificationType.INFORMATION);
@@ -94,14 +98,17 @@ public class Notifier {
 
 	public void notifyBrokenImportSorter(Project project) {
 		String content = "Formatting failed due to a new Import optimizer.";
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content, NotificationType.ERROR);
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+				NotificationType.ERROR);
 		showNotification(notification, project);
 
 	}
 
 	public static void notifyDeletedSettings(final Project project) {
-		String content = "Eclipse formatter settings profile was deleted for project " + project.getName() + ". Check the configuration.";
-		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content, NotificationType.ERROR);
+		String content = "Eclipse formatter settings profile was deleted for project " + project.getName()
+				+ ". Check the configuration.";
+		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+				NotificationType.ERROR);
 		ApplicationManager.getApplication().invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -110,10 +117,9 @@ public class Notifier {
 		});
 	}
 
-
 	public void configurationError(Exception e, Project project) {
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
-				"Eclipse Formatter configuration error: " + e.getMessage(), NotificationType.ERROR);
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR
+				.createNotification("Eclipse Formatter configuration error: " + e.getMessage(), NotificationType.ERROR);
 		showNotification(notification, project);
 	}
 }

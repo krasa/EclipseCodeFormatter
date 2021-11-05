@@ -2,7 +2,7 @@
 		"http://plugins.intellij.net/plugin.dtd">
 <idea-plugin version="2" url="http://plugins.intellij.net/plugin/?idea&amp;id=6546">
 
-	<name>Code Formatter for Eclipse</name>
+	<name>Adapter for Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
 
 	<version>21.1.203.000.1</version>
@@ -99,7 +99,7 @@
 		<lang.importOptimizer order="FIRST" language="JAVA"
 							  implementationClass="krasa.formatter.plugin.EclipseImportOptimizer"/>
 		<projectConfigurable provider="krasa.formatter.settings.MyConfigurableProvider" id="EclipseFormatter"
-							 displayName="Code Formatter for Eclipse"/>
+							 displayName="Adapter for Eclipse Code Formatter"/>
 		<projectService
 				serviceImplementation="krasa.formatter.settings.ProjectSettings"/>
 		<defaultLiveTemplatesProvider implementation="krasa.formatter.templates.LiveTemplatesProvider"/>

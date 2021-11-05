@@ -30,10 +30,10 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 
 	private static final Logger LOG = Logger.getInstance(ProjectComponent.class.getName());
 	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup(
-			"Code Formatter for Eclipse error",
+			"Adapter for Eclipse Code Formatter error",
 			NotificationDisplayType.BALLOON, true);
 	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup(
-			"Code Formatter for Eclipse info",
+			"Adapter for Eclipse Code Formatter info",
 			NotificationDisplayType.NONE, true);
 
 	@NotNull
