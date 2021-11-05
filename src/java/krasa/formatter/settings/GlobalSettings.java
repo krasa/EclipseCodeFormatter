@@ -183,6 +183,7 @@ public class GlobalSettings
 		for (Settings settings : settingsList) {
 			settings.setPathToEclipse("");
 		}
+
 	}
 
 	public void migrateSettings(ProjectSettings projectSettings) {

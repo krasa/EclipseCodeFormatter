@@ -43,12 +43,26 @@ public class Notifier {
 			notification.addAction(new AnAction("Open Settings") {
 				@Override
 				public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-					Project eventProject = getEventProject(anActionEvent);
-					ShowSettingsUtil.getInstance().showSettingsDialog(eventProject, "Code Formatter for Eclipse");
+					notification.expire();
+					ShowSettingsUtil.getInstance().showSettingsDialog(getEventProject(anActionEvent), "Code Formatter for Eclipse");
 				}
 			});
 		}
 		showNotification(notification, psiFile.getProject());
+	}
+
+	public void notifyEclipseLocationNotSet(Project project) {
+		String content = "Please configure Eclipse's location for the Code Formatter plugin, bundled Eclipse was removed.";
+		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content, NotificationType.WARNING);
+
+		notification.addAction(new AnAction("Open Settings") {
+			@Override
+			public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+				notification.expire();
+				ShowSettingsUtil.getInstance().showSettingsDialog(getEventProject(anActionEvent), "Code Formatter for Eclipse");
+			}
+		});
+		showNotification(notification, project);
 	}
 
 	void notifyFormattingWasDisabled(PsiFile psiFile) {

@@ -7,18 +7,17 @@ package krasa.formatter.settings;/*
  */
 
 
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-
-import org.jetbrains.annotations.NotNull;
-
-import com.intellij.notification.*;
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationGroup;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-
 import krasa.formatter.plugin.EclipseCodeStyleManager;
+import krasa.formatter.plugin.Notifier;
 import krasa.formatter.plugin.ProjectCodeStyleInstaller;
+import org.jetbrains.annotations.NotNull;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Takes care of initializing a project's CodeFormatter and disposing of it when the project is closed. Updates the
@@ -81,26 +80,10 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 	}
 
 	public void installOrUpdate(@NotNull Settings settings) {
-		if (settings.isEnabled() && (settings.isEnableCppFormatting() || settings.isEnableJSFormatting() || settings.isEnableGWT())) {
-			SwingUtilities.invokeLater(() -> Notifications.Bus.notify(
-					GROUP_DISPLAY_ID_ERROR.createNotification(
-							"Code Formatter for Eclipse plugin",
-							"Support for Cpp, JS, GWT formatting was dropped. Install an older version or <a href=\"#\">click here</a> to disable this warning.",
-							NotificationType.WARNING, new NotificationListener() {
-								@Override
-								public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent hyperlinkEvent) {
-									settings.setEnableJSFormatting(false);
-									settings.setEnableGWT(false);
-									settings.setEnableCppFormatting(false);
-									if (!settings.isProjectSpecific()) {
-										GlobalSettings.getInstance().updateSettings(settings, project);
-									}
-
-									notification.hideBalloon();
-								}
-							}),
-					project));
-
+		if (settings.isEnabled()) {
+			if (isBlank(GlobalSettings.getInstance().getPathToEclipse())) {
+				new Notifier().notifyEclipseLocationNotSet(project);
+			}
 		}
 		if (eclipseCodeStyleManager == null) {
 			eclipseCodeStyleManager = projectCodeStyle.install(settings);
