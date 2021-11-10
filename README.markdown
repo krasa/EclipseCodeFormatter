@@ -22,7 +22,7 @@ Manage pull requests and conduct code reviews in your IDE with full source-tree 
     1. Configure Eclipse location
         - Install Eclipse
         - Got To IntelliJ Settings | Other Settings | Adapter for Eclipse Code Formatter
-        - Set `Eclipse installation folder` ("/Users/xxx/Eclipse.app/Contents/Eclipse" for Mac)
+        - Set `Eclipse installation folder` (`/Users/xxx/Eclipse.app/Contents/Eclipse` for Mac)
     2. Configure formatter
         - Either, export formatter profiles to get a `*.xml` file
             1. Go to `Eclipse | Windows | Preferences | Java | Code Style | Formatter`
