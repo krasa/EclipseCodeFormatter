@@ -116,6 +116,8 @@ public class ProjectSettingsForm {
 
 	public JTextField pathToCustomEclipse;
 	private JButton customEclipseLocationBrowse;
+	private JRadioButton useEclipseNewest;
+	private JRadioButton useEclipseCustom;
 	private JLabel javaFormatterVersionLabel;
 	private JRadioButton importOrdering451;
 	private JRadioButton importOrdering452;
@@ -139,17 +141,16 @@ public class ProjectSettingsForm {
 		enabledBy(new JComponent[]{eclipseSupportedFileTypesLabel, enableJavaFormatting, doNotFormatOtherFilesRadioButton,
 				formatOtherFilesWithExceptionsRadioButton,
 				importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton,
-				importOrderConfigurationManualRadioButton,
+				importOrderConfigurationManualRadioButton, useEclipseNewest, useEclipseCustom,
 				formatSelectedTextInAllFileTypes, useForLiveTemplates, importOrdering451, importOrdering452}, useEclipseFormatter);
 
 		enabledBy(new JComponent[]{pathToEclipsePreferenceFileJava, schemeEclipseJC,
 				schemeEclipse, schemeCurrentProject,
 				schemeEclipse21,
 				schemeEclipseFile, eclipsePrefsExample, eclipsePreferenceFileJavaLabel, optimizeImportsCheckBox,
-				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile,
-				importStyleLabel,
+				eclipsePreferenceFilePathJavaBrowse, javaFormatterProfileLabel, javaFormatterProfile, customEclipseLocationBrowse, pathToCustomEclipse,
+				useEclipseNewest, useEclipseCustom, javaFormatterVersionLabel, importStyleLabel,
 				importOrdering451, importOrdering452}, enableJavaFormatting);
-
 
 		enabledBy(new JComponent[]{importOrder, pathToImportOrderPreferenceFile, pathToImportOrderPreferenceFileBrowse, importOrderManualExample,
 						importOrderPreferenceFileExample, importOrderConfigurationFromFileRadioButton, importOrderConfigurationManualRadioButton},
@@ -458,6 +459,12 @@ public class ProjectSettingsForm {
 				BareBonesBrowserLaunch.openURL("http://plugins.intellij.net/plugin/?idea&id=6546");
 			}
 		});
+		useEclipseNewest.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				importOrdering452.setSelected(true);
+			}
+		});
 		profileHelp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -640,6 +647,8 @@ public class ProjectSettingsForm {
 		doNotFormatOtherFilesRadioButton.setSelected(!in.isFormatOtherFileTypesWithIntelliJ());
 		useDefaultFormatter.setSelected(Objects.equals(in.getFormatter(), Settings.Formatter.DEFAULT));
 		useEclipseFormatter.setSelected(Objects.equals(in.getFormatter(), Settings.Formatter.ECLIPSE));
+		useEclipseNewest.setSelected(Objects.equals(in.getEclipseVersion(), Settings.FormatterVersion.NEWEST));
+		useEclipseCustom.setSelected(Objects.equals(in.getEclipseVersion(), Settings.FormatterVersion.CUSTOM));
 		importOrdering451.setSelected(Objects.equals(in.getImportOrdering(), Settings.ImportOrdering.ECLIPSE_44));
 		importOrdering452.setSelected(Objects.equals(in.getImportOrdering(), Settings.ImportOrdering.ECLIPSE_452));
 		importOrderConfigurationFromFileRadioButton.setSelected(in.isImportOrderFromFile());
@@ -666,6 +675,11 @@ public class ProjectSettingsForm {
 			displayedSettings.setImportOrdering(Settings.ImportOrdering.ECLIPSE_44);
 		} else if (importOrdering452.isSelected()) {
 			displayedSettings.setImportOrdering(Settings.ImportOrdering.ECLIPSE_452);
+		}
+		if (useEclipseNewest.isSelected()) {
+			displayedSettings.setEclipseVersion(Settings.FormatterVersion.NEWEST);
+		} else if (useEclipseCustom.isSelected()) {
+			displayedSettings.setEclipseVersion(Settings.FormatterVersion.CUSTOM);
 		}
 
 		if (schemeEclipse.isSelected()) {
@@ -719,7 +733,7 @@ public class ProjectSettingsForm {
 				throw new ConfigurationException("Path to Import Order file is not valid - the file does not exist");
 			}
 		}
-		if (pathToCustomEclipse.isEnabled()) {
+		if (pathToCustomEclipse.isEnabled() && useEclipseCustom.isSelected()) {
 			if (StringUtils.isBlank(pathToCustomEclipse.getText())) {
 				throw new ConfigurationException("Path to 'Eclipse installation folder' is not valid");
 			}
@@ -739,6 +753,12 @@ public class ProjectSettingsForm {
 			return true;
 		}
 		if (useEclipseFormatter.isSelected() != Settings.Formatter.ECLIPSE.equals(data.getFormatter())) {
+			return true;
+		}
+		if (useEclipseNewest.isSelected() != Settings.FormatterVersion.NEWEST.equals(data.getEclipseVersion())) {
+			return true;
+		}
+		if (useEclipseCustom.isSelected() != Settings.FormatterVersion.CUSTOM.equals(data.getEclipseVersion())) {
 			return true;
 		}
 		if (importOrdering451.isSelected() != Settings.ImportOrdering.ECLIPSE_44.equals(data.getImportOrdering())) {

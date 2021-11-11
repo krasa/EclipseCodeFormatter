@@ -90,11 +90,11 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 
 		try {
 			ClassLoader classLoader;
-			// if (settings.getEclipseVersion() == Settings.FormatterVersion.CUSTOM) {
-			classLoader = getCustomClassloader(GlobalSettings.getInstance().getPathToEclipse());
-				// } else {
-				// classLoader = Classloaders.getEclipse();
-				// }
+			if (settings.getEclipseVersion() == Settings.FormatterVersion.CUSTOM) {
+				classLoader = getCustomClassloader(GlobalSettings.getInstance().getPathToEclipse());
+			} else {
+				classLoader = Classloaders.getEclipse();
+			}
 
 			Map<String, String> options = getEclipseProfileOptions(level, configFile, classLoader);
 

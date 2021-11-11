@@ -80,11 +80,6 @@ public class ProjectComponent implements com.intellij.openapi.components.Project
 	}
 
 	public void installOrUpdate(@NotNull Settings settings) {
-		if (settings.isEnabled()) {
-			if (isBlank(GlobalSettings.getInstance().getPathToEclipse())) {
-				new Notifier().notifyEclipseLocationNotSet(project);
-			}
-		}
 		if (eclipseCodeStyleManager == null) {
 			eclipseCodeStyleManager = projectCodeStyle.install(settings);
 		} else {
