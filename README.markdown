@@ -21,10 +21,11 @@ Manage pull requests and conduct code reviews in your IDE with full source-tree 
     - [Tutorial: Installing, Updating and Uninstalling Repository Plugins](http://www.jetbrains.com/idea/webhelp/installing-updating-and-uninstalling-repository-plugins.html)
     - [Plugin repository page](http://plugins.jetbrains.com/plugin/?idea&id=6546)
 2. Configure it
-    1. Configure Eclipse location
+    1. Configure Eclipse location (optional)
         - Install Eclipse
         - Got To IntelliJ Settings | Other Settings | Adapter for Eclipse Code Formatter
         - Set `Eclipse installation folder` (`/Users/xxx/Eclipse.app/Contents/Eclipse` for Mac)
+        - Change `Java formatter version` to `Configured Eclipse installation folder`
     2. Configure formatter
         - Either, export formatter profiles to get a `*.xml` file
             1. Go to `Eclipse | Windows | Preferences | Java | Code Style | Formatter`
