@@ -3,6 +3,8 @@
 Allows using Eclipse's Java code formatter directly from IntelliJ. Solves the problem of maintaining a common code style
 in team environments where both IDEA and Eclipse are used.
 
+***Note:*** This project utilizes (and in some manners modifies) code licensed under [EPL-2.0](https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.html). For more information see [lib/eclipse](lib/eclipse/README.md).
+
 ---
 
 ### Sponsored by
