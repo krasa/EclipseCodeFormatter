@@ -5,7 +5,7 @@
 	<name>Adapter for Eclipse Code Formatter</name>
 	<id>EclipseCodeFormatter</id>
 
-	<version>21.1.203.000.1</version>
+	<version>22.0.203.000.0-Eclipse_2021-09</version>
 	<idea-version since-build="203.000"/>
 
 
@@ -33,6 +33,8 @@
 	</vendor>
 
 	<change-notes><![CDATA[
+	    <br>22.0
+		<br>- Re-introduced bundled Eclipse
 	    <br>21.1
 		<br>- Moved Eclipse path to global IDE settings.
 	    <br>21.0
