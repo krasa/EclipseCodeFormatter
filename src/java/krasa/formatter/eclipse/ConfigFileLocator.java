@@ -4,6 +4,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.SortedComboBoxModel;
@@ -209,18 +210,35 @@ public class ConfigFileLocator {
 				LOG.debug("moduleFileDir=" + moduleFileDir.getPath());
 			}
 
-			for (String conventionFileName : CONVENTIONFILENAMES) {
-				VirtualFile fileByRelativePath = moduleFileDir.findFileByRelativePath(conventionFileName);
-				if (fileByRelativePath != null && fileByRelativePath.exists()) {
-					if (!isValid(fileByRelativePath)) {
-						LOG.info("Found a config file, but is invalid, skipping. " + fileByRelativePath);
-						continue;
-					}
-					mostRecentFormatterFile = fileByRelativePath;
-					return fileByRelativePath;
-				}
+			VirtualFile configFile = findConfigFile(moduleFileDir);
+			if (configFile != null) {
+				return configFile;
 			}
+
 			moduleFileDir = getNextParentModuleDirectory(moduleFileDir, project);
+		}
+
+		// fallback to the project root for gradle projects
+		VirtualFile projectDir = ProjectUtil.guessProjectDir(project);
+		VirtualFile configFile = findConfigFile(projectDir);
+		return configFile;
+	}
+
+	@Nullable
+	private VirtualFile findConfigFile(VirtualFile dir) {
+		if (dir == null) {
+			return null;
+		}
+		for (String conventionFileName : CONVENTIONFILENAMES) {
+			VirtualFile configFile = dir.findFileByRelativePath(conventionFileName);
+			if (configFile != null && configFile.exists()) {
+				if (!isValid(configFile)) {
+					LOG.info("Found a config file, but is invalid, skipping. " + configFile);
+					continue;
+				}
+				mostRecentFormatterFile = configFile;
+				return configFile;
+			}
 		}
 		return null;
 	}
@@ -284,6 +302,9 @@ public class ConfigFileLocator {
 			Module moduleForFile = ModuleUtil.findModuleForFile(virtualFile, project);
 			if (moduleForFile != null) {
 				VirtualFile moduleFile = moduleForFile.getModuleFile();
+				// modules IntelliJ creates for gradle projects are not real modules. The module
+				// file has a virtual path of $ROOT/.idea/modules/projectA.iml which doesn't
+				// exist on disk (getModuleFile() returns null).
 				if (moduleFile != null) {
 					return moduleFile.getParent();
 				}
