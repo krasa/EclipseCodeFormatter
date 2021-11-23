@@ -33,11 +33,12 @@ public class ConfigFileLocator {
 	private static IModuleResolverStrategy moduleResolver = new DefaultModuleResolverStrategy();
 	private static VirtualFile mostRecentFormatterFile = null;
 
+	public static final String ECLIPSE_CODE_FORMATTER_XML = "eclipse-code-formatter.xml";
 	private final List<String> CONVENTIONFILENAMES = Arrays.asList(//
 			".settings/org.eclipse.jdt.core.prefs", //
 			".settings/mechanic-formatter.epf", //
 			"mechanic-formatter.epf", //
-			"eclipse-code-formatter.xml" //
+			ECLIPSE_CODE_FORMATTER_XML //
 	);
 
 	public String resolveConfigFilePath(String path) {
@@ -251,9 +252,8 @@ public class ConfigFileLocator {
 			if (virtualFile.getName().endsWith(".epf")) {
 				return isValidEPF(new File(virtualFile.getPath()));
 			}
-			if ("eclipse-code-formatter.xml".equals(virtualFile.getName())) {
-				List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(
-						new File(virtualFile.getPath()));
+			if (ECLIPSE_CODE_FORMATTER_XML.equals(virtualFile.getName())) {
+				List<String> profileNamesFromConfigXML = FileUtils.getProfileNamesFromConfigXML(new File(virtualFile.getPath()));
 				return profileNamesFromConfigXML.size() == 1;
 			}
 			return true;
