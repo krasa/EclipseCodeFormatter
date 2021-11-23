@@ -11,11 +11,11 @@
 
 	<description><![CDATA[
         Allows using Eclipse's Java code formatter directly from IntelliJ.<br>
-        Solves the problem of maintaining a common code style in team environments where both IDEA and Eclipse are used. <br>
-        <br>
+        Solves the problem of maintaining a common code style in team environments where both IDEA and Eclipse are used.
+       	 <br><br>
 
         Go to <a href="https://github.com/krasa/EclipseCodeFormatter#instructions">https://github.com/krasa/EclipseCodeFormatter#instructions</a>
-        for instructions how to use it.     <br><br>
+        for instructions how to use it.
 
 	 <br><br>
 	 Sponsored by:<br>
@@ -23,8 +23,12 @@
         Manage pull requests and conduct code reviews in your IDE with full source-tree context. Comment on any line, not just the diffs. Use jump-to-definition, your favorite keybindings, and code intelligence with more of your workflow.<br>
         <a title="Try CodeStream" href="https://sponsorlink.codestream.com/?utm_source=jbmarket&amp;utm_campaign=vojta_eclipse&amp;utm_medium=banner">Learn More</a></p>
 
-              <br> <br>
-        <a href="https://www.paypal.me/VojtechKrasa">Donations</a> | <a href="https://github.com/krasa/EclipseCodeFormatter/">GitHub</a> | <a href="https://github.com/krasa/EclipseCodeFormatter/issues">Issues</a>
+	  <br> <br>
+
+	<b>Note:</b> This project utilizes (and in some manners modifies) code licensed under <a href="https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.html">EPL-2.0</a>.
+	For more information see <a href="https://github.com/krasa/EclipseCodeFormatter/blob/master/lib/eclipse/README.md">lib/eclipse/README.md</a>.
+	<br> <br>
+	<a href="https://www.paypal.me/VojtechKrasa">Donations</a> | <a href="https://github.com/krasa/EclipseCodeFormatter/">GitHub</a> | <a href="https://github.com/krasa/EclipseCodeFormatter/issues">Issues</a>
         ]]></description>
 	<category>Formatting</category>
 
