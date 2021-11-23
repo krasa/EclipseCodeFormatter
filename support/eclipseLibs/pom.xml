@@ -15,36 +15,8 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<outputDirectory>${basedir}/../../lib/eclipse</outputDirectory>
-					<jarName>eclipse</jarName>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.googlecode.addjars-maven-plugin</groupId>
-				<artifactId>addjars-maven-plugin</artifactId>
-				<version>1.0.5</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>add-jars</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
-									<directory>${basedir}/lib</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
+				<version>3.2.4</version>
 				<configuration>
 					<!-- put your configurations here -->
 					<filters>
@@ -54,6 +26,7 @@
 								<exclude>META-INF/*.SF</exclude>
 								<exclude>META-INF/*.DSA</exclude>
 								<exclude>META-INF/*.RSA</exclude>
+								<exclude>plugin.xml</exclude>
 							</excludes>
 						</filter>
 					</filters>
@@ -66,10 +39,22 @@
 						</goals>
 						<configuration>
 							<minimizeJar>true</minimizeJar>
+							<createSourcesJar>true</createSourcesJar>
+							<finalName>eclipse</finalName>
+							<outputDirectory>${project.basedir}/../../lib/eclipse</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>org.eclipse.jdt.core</artifactId>
+			<!-- Version for IDE 2021-09 -->
+			<version>3.27.0</version>
+		</dependency>
+	</dependencies>
 </project>

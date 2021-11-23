@@ -53,22 +53,6 @@ public class Notifier {
 		showNotification(notification, psiFile.getProject());
 	}
 
-	public void notifyEclipseLocationNotSet(Project project) {
-		String content = "Please configure Eclipse's location for the Code Formatter plugin, bundled Eclipse was removed.";
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
-				NotificationType.WARNING);
-
-		notification.addAction(new AnAction("Open Settings") {
-			@Override
-			public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-				notification.expire();
-				ShowSettingsUtil.getInstance().showSettingsDialog(getEventProject(anActionEvent),
-						"Adapter for Eclipse Code Formatter");
-			}
-		});
-		showNotification(notification, project);
-	}
-
 	void notifyFormattingWasDisabled(PsiFile psiFile) {
 		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_INFO.createNotification(
 				psiFile.getName() + " - formatting was disabled for this file type", NotificationType.WARNING);
