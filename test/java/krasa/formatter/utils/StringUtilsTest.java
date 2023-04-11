@@ -13,6 +13,7 @@ import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.messages.MessageBus;
+import kotlinx.coroutines.CoroutineScope;
 import krasa.formatter.settings.Settings;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -117,6 +118,11 @@ public class StringUtilsTest {
 		}
 
 		@Override
+		public <T> @NotNull T instantiateClass(@NotNull String s, @NotNull PluginDescriptor pluginDescriptor) {
+			return null;
+		}
+
+		@Override
 		public @NotNull
 		ActivityCategory getActivityCategory(boolean b) {
 			return null;
@@ -198,7 +204,6 @@ public class StringUtilsTest {
 			return false;
 		}
 
-		@Override
 		@NotNull
 		public <T> T[] getComponents(Class<T> baseClass) {
 			return (T[]) ArrayUtil.EMPTY_OBJECT_ARRAY;
@@ -266,6 +271,11 @@ public class StringUtilsTest {
 		@Override
 		public boolean isDefault() {
 			return false;
+		}
+
+//		@Override
+		public CoroutineScope getCoroutineScope() {
+			return null;
 		}
 
 		@Override
