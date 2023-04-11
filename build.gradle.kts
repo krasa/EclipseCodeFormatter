@@ -10,7 +10,7 @@ tasks {
 }
 
 group = "EclipseCodeFormatter"
-version = "22.0.223.000.0-Eclipse_2023-03"
+version = "23.0.223.000.0-Eclipse_2023-03"
 
 tasks {
     patchPluginXml {

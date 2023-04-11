@@ -17,8 +17,8 @@ import javax.swing.*;
 public class ChangeFormatterToolbarAction extends DumbAwareAction {
 	private static final Logger LOG = Logger.getInstance(ChangeFormatterToolbarAction.class.getName());
 
-	public static final Icon ECLIPSE = IconLoader.getIcon("/krasa/formatter/eclipse.png");
-	public static final Icon IDEA = IconLoader.getIcon("/krasa/formatter/IDEA.png");
+	public static final Icon ECLIPSE = IconLoader.getIcon("/krasa/formatter/eclipse.png", ChangeFormatterToolbarAction.class);
+	public static final Icon IDEA = IconLoader.getIcon("/krasa/formatter/IDEA.png", ChangeFormatterToolbarAction.class);
 
 	@Override
 	public void actionPerformed(AnActionEvent e) {
