@@ -3,6 +3,12 @@ plugins {
     id("org.jetbrains.intellij") version "1.13.3"
 }
 
+tasks {
+    compileTestJava {
+        options.encoding = "UTF-8"
+    }
+}
+
 group = "EclipseCodeFormatter"
 version = "22.0.231.000.0-Eclipse_2021-09"
 

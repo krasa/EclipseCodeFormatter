@@ -1,13 +1,13 @@
 package krasa.easymock;
 
-import static org.easymock.EasyMock.*;
+import org.junit.After;
+import org.junit.Before;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import static org.easymock.EasyMock.*;
 
 public class EasyMockTest {
 

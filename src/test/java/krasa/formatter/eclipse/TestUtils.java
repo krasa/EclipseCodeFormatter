@@ -1,11 +1,11 @@
 package krasa.formatter.eclipse;
 
+import krasa.formatter.utils.FileUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Properties;
-
-import krasa.formatter.utils.FileUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vojtech Krasa

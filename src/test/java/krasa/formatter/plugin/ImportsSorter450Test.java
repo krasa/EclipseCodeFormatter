@@ -1,16 +1,15 @@
 package krasa.formatter.plugin;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import krasa.formatter.eclipse.TestUtils;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.StringUtils;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Vojtech Krasa

@@ -1,9 +1,9 @@
 package krasa.formatter;
 
-import static com.intellij.util.text.VersionComparatorUtil.compare;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import static com.intellij.util.text.VersionComparatorUtil.compare;
 
 public class Version {
 	@Test
