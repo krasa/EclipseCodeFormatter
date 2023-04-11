@@ -27,8 +27,12 @@ public class ConfigurableEclipseLocation {
 			"org.eclipse.equinox.common",
 			"org.eclipse.equinox.preferences",
 			"org.eclipse.jdt.core",
+			"org.eclipse.jdt.core.compiler.batch",
 			"org.eclipse.osgi",
 			"org.eclipse.text"
+	};
+	String[] OPTIONAL_JAR_NAMES = {
+			"org.eclipse.jdt.core.compiler.batch"
 	};
 	//@formatter:on
 
@@ -40,17 +44,6 @@ public class ConfigurableEclipseLocation {
 
 	}
 
-	public static void main(String[] args) throws IOException {
-		List<URL> urlList;
-		urlList = new ConfigurableEclipseLocation().run("C:\\Users\\vojtisek\\eclipse");
-//		urlList= new ConfigurableEclipseLocation().run("C:\\workspace\\eclipse-standard-kepler-R-macosx-cocoa");
-//		urlList= new ConfigurableEclipseLocation().run("C:\\workspace\\eclipse-standard-kepler-R-linux-gtk");
-//		urlList= new ConfigurableEclipseLocation().run("C:\\workspace\\eclipse-standard-kepler-R-win32");
-//		List<URL> urlList = new ConfigurableEclipseLocation().run("C:\\workspace\\eclipse-jee-2020-06-R-win32-x86_64");
-		for (URL jar : urlList) {
-			System.out.println(jar);
-		}
-	}
 
 	public List<URL> run(String from) {
 		long start = System.currentTimeMillis();
@@ -72,6 +65,9 @@ public class ConfigurableEclipseLocation {
 		} catch (Throwable e) {
 			throw new RuntimeException("from=" + from, e);
 		}
+
+		List.of(OPTIONAL_JAR_NAMES).forEach(jarNames::remove);
+
 		if (!jarNames.isEmpty()) {
 			throw new FormattingFailedException("Required jars not found in '" + from + "': " + jarNames.toString(), true);
 		}
