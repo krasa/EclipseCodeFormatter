@@ -53,8 +53,8 @@
 		<dependency>
 			<groupId>org.eclipse.jdt</groupId>
 			<artifactId>org.eclipse.jdt.core</artifactId>
-			<!-- Version for IDE 2021-09 -->
-			<version>3.27.0</version>
+			<!-- Version for IDE 2023-03 -->
+			<version>3.33.0</version>
 		</dependency>
 	</dependencies>
 </project>

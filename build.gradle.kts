@@ -10,15 +10,16 @@ tasks {
 }
 
 group = "EclipseCodeFormatter"
-version = "22.0.231.000.0-Eclipse_2021-09"
+version = "22.0.223.000.0-Eclipse_2023-03"
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("231.0")
+        sinceBuild.set("223.0")
         untilBuild.set("")
         changeNotes.set(
             buildString {
                 append("- Compatibility with IJ 2023").append("<br>")
+                append("- Bundled Eclipse 2023-03").append("<br>")
             }
         )
     }
@@ -51,7 +52,7 @@ repositories {
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    version.set("2023.1")
+    version.set("2022.3")
     type.set("IC") // Target IDE Platform
     plugins.set(listOf("java"))
 }

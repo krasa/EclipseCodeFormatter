@@ -11,5 +11,7 @@ public class Dependencies {
 	org.eclipse.jface.text.Document a10;
 	org.eclipse.jface.text.IDocument a11;
 	org.eclipse.text.edits.TextEdit a12;
+	org.eclipse.jdt.core.compiler.InvalidInputException a13;
+	org.eclipse.jdt.internal.compiler.util.SuffixConstants a14;
 
 }
