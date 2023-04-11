@@ -67,7 +67,7 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 			if (configFile == null) {
 				throw new FormattingFailedException("Formatter config file not resolved.", true);
 			}
-			if (javaPropertiesProvider == null || !javaPropertiesProvider.isSameFile(configFile) || javaPropertiesProvider.wasChanged()) {
+			if (codeFormatter == null || javaPropertiesProvider == null || !javaPropertiesProvider.isSameFile(configFile) || javaPropertiesProvider.wasChanged()) {
 				javaPropertiesProvider = new JavaPropertiesProvider(configFile.getCanonicalPath(), "");
 				return newCodeFormatter(level, configFile);
 			}
