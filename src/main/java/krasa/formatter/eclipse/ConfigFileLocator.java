@@ -301,13 +301,7 @@ public class ConfigFileLocator {
 		public VirtualFile getModuleDirForFile(VirtualFile virtualFile, Project project) {
 			Module moduleForFile = ModuleUtil.findModuleForFile(virtualFile, project);
 			if (moduleForFile != null) {
-				VirtualFile moduleFile = moduleForFile.getModuleFile();
-				// modules IntelliJ creates for gradle projects are not real modules. The module
-				// file has a virtual path of $ROOT/.idea/modules/projectA.iml which doesn't
-				// exist on disk (getModuleFile() returns null).
-				if (moduleFile != null) {
-					return moduleFile.getParent();
-				}
+				return ProjectUtil.guessModuleDir(moduleForFile);
 			}
 			return null;
 		}
