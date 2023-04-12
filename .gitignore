@@ -1,6 +1,9 @@
-/EclipseFormatter.zip
-**/out/**
-**/target/**
-support/eclipseLibs/target/**
-.shelf/
+/.gradle
+**/build
+**/out
+**/target
 *.iws
+*.ipr
+*.zip
+.shelf
+.idea

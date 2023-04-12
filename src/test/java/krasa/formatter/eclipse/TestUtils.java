@@ -38,7 +38,7 @@ public class TestUtils {
 	@NotNull
 	public static String normalizeUnitTestPath(String path) {
 		if (!new File(path).exists()) {
-			path = "test/" + path;
+			path = "src/test/" + path;
 		}
 		return path;
 	}

@@ -1,6 +1,7 @@
 package krasa.formatter.plugin;
 
 import com.intellij.psi.PsiClass;
+import krasa.formatter.eclipse.TestUtils;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.ImportOrderProvider;
 import krasa.formatter.utils.StringUtils;
@@ -169,7 +170,7 @@ public class ImportsSorter452Test {
 		Collections.shuffle(importsList);
 
 		Settings settings = new Settings();
-		File file = FileUtils.getFile("resources/issue104.importorder");
+		File file = FileUtils.getFile(TestUtils.normalizeUnitTestPath("resources/issue104.importorder"));
 		setPath(settings, file);
 		ImportOrderProvider importOrderProvider = new ImportOrderProvider(settings);
 
