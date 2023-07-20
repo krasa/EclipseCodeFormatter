@@ -121,7 +121,6 @@ public class ProjectSettingsForm {
 	private JLabel javaFormatterVersionLabel;
 	private JRadioButton importOrdering451;
 	private JRadioButton importOrdering452;
-	private JButton profileHelp;
 	private JLabel importStyleLabel;
 	private JRadioButton schemeEclipseJC;
 	private JRadioButton schemeEclipse;
@@ -465,19 +464,6 @@ public class ProjectSettingsForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				importOrdering452.setSelected(true);
-			}
-		});
-		profileHelp.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Messages.showInfoMessage(project,
-						"Close all projects to configure default settings.\n\n"
-								+ "<Project Specific> profile is not shared between projects. Other profiles are global - shared, synchronized and stored in the IDE."
-								+ "\nChange of a global profile will result in a change in all opened or closed projects using such profile."
-								+ "\nThe selected global profile is also fully persisted within a project, but most of the data is used only as a backup for syncing between different computers."
-								+ "\n\nPaths macros are automatically managed by the IDE. That can result in '$PROJECT_DIR$' being used for a global profile within a project config file,"
-								+ "\nbut an absolute path is actually stored and used in the IDE config file.",
-						"Profiles and persistence explanation");
 			}
 		});
 	}
