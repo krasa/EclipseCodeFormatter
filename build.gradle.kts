@@ -10,7 +10,7 @@ tasks {
 }
 
 group = "EclipseCodeFormatter"
-version = "23.1.223.000.0-Eclipse_2023-03"
+version = "23.2.223.000.0-Eclipse_2023-03"
 
 tasks {
     patchPluginXml {
@@ -18,9 +18,7 @@ tasks {
         untilBuild.set("")
         changeNotes.set(
             buildString {
-                append("- Compatibility with IJ 2023").append("<br>")
-                append("- Compatibility with Eclipse 2023-03").append("<br>")
-                append("- Bundled Eclipse 2023-03").append("<br>")
+                append("- #258 Option to disable copying of global profile to a project config file, to prevent unwanted VCS changes").append("<br>")
             }
         )
     }

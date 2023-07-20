@@ -66,6 +66,7 @@ public class Settings {
 	private ConfigType configType = ConfigType.CUSTOM;
 	@Deprecated
 	private String pathToEclipse = "";
+	private boolean backupToProjectConfigFile = true;
 
 	public Settings() {
 	}
@@ -416,5 +417,13 @@ public class Settings {
 		sb.append(", name='").append(name).append('\'');
 		sb.append('}');
 		return sb.toString();
+	}
+
+	public boolean isBackupToProjectConfigFile() {
+		return backupToProjectConfigFile;
+	}
+
+	public void setBackupToProjectConfigFile(boolean backupToProjectConfigFile) {
+		this.backupToProjectConfigFile = backupToProjectConfigFile;
 	}
 }

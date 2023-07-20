@@ -12,91 +12,120 @@ import org.jetbrains.annotations.NotNull;
 @State(name = "EclipseCodeFormatterProjectSettings", storages = {@Storage("eclipseCodeFormatter.xml")})
 public class ProjectSettings implements PersistentStateComponent<ProjectSettings> {
 
-	private ProjectSpecificProfile projectSpecificProfile = new ProjectSpecificProfile();
-	private Settings selectedGlobalProfile;
-	@Transient
-	private transient Project project;
+    private ProjectSpecificProfile projectSpecificProfile = new ProjectSpecificProfile();
+    private Settings selectedGlobalProfile;
+    private GlobalProfileReference selectedGlobalProfileReference;
+    @Transient
+    private transient Project project;
 
-	public ProjectSettings() {
-	}
+    public ProjectSettings() {
+    }
 
-	public ProjectSettings(@NotNull Project project) {
-		this.project = project;
-	}
+    public ProjectSettings(@NotNull Project project) {
+        this.project = project;
+    }
 
-	@NotNull
-	public ProjectSpecificProfile getProjectSpecificProfile() {
-		return projectSpecificProfile;
-	}
+    @NotNull
+    public ProjectSpecificProfile getProjectSpecificProfile() {
+        return projectSpecificProfile;
+    }
 
-	public void setProjectSpecificProfile(ProjectSpecificProfile projectSpecificProfile) {
-		this.projectSpecificProfile = projectSpecificProfile;
-	}
+    public void setProjectSpecificProfile(ProjectSpecificProfile projectSpecificProfile) {
+        this.projectSpecificProfile = projectSpecificProfile;
+    }
 
-	public Settings getSelectedGlobalProfile() {
-		return selectedGlobalProfile;
-	}
+    public Settings getSelectedGlobalProfile() {
+        return selectedGlobalProfile;
+    }
 
-	public void setSelectedGlobalProfile(Settings selectedGlobalProfile) {
-		this.selectedGlobalProfile = selectedGlobalProfile;
-	}
+    public void setSelectedGlobalProfile(Settings selectedGlobalProfile) {
+        this.selectedGlobalProfile = selectedGlobalProfile;
+    }
 
-	@Override
-	@NotNull
-	public ProjectSettings getState() {
-		return this;
-	}
+    @Override
+    @NotNull
+    public ProjectSettings getState() {
+        if (this.selectedGlobalProfile != null && !this.selectedGlobalProfile.isBackupToProjectConfigFile()) {
+            ProjectSettings projectSettings = new ProjectSettings();
+            projectSettings.projectSpecificProfile = this.projectSpecificProfile;
+            projectSettings.selectedGlobalProfileReference = new GlobalProfileReference(this.selectedGlobalProfile.getId(), selectedGlobalProfile.getName());
+            return projectSettings;
+        } else {
+            return this;
+        }
+    }
 
-	@Override
-	public void loadState(ProjectSettings state) {
-		XmlSerializerUtil.copyBean(state, this);
-	}
+    @Override
+    public void loadState(ProjectSettings state) {
+        XmlSerializerUtil.copyBean(state, this);
+    }
 
-	public static ProjectSettings getInstance(Project project) {
-		return project.getService(ProjectSettings.class);
-	}
+    public static ProjectSettings getInstance(Project project) {
+        return project.getService(ProjectSettings.class);
+    }
 
-	public Settings getSelectedProfile() {
-		Settings selectedGlobalProfile = getSelectedGlobalProfile();
-		if (selectedGlobalProfile != null) {
-			return selectedGlobalProfile;
-		}
-		return getProjectSpecificProfile();
-	}
+    public Settings getSelectedProfile() {
+        Settings selectedGlobalProfile = getSelectedGlobalProfile();
+        if (selectedGlobalProfile != null) {
+            return selectedGlobalProfile;
+        }
+        return getProjectSpecificProfile();
+    }
 
-	public void setProfile(Settings profile) {
-		if (profile.isProjectSpecific()) {
-			this.setProjectSpecificProfile((ProjectSpecificProfile) profile);
-			this.setSelectedGlobalProfile(null);
-		} else {
-			this.setSelectedGlobalProfile(profile);
-		}
-	}
+    public void setProfile(Settings profile) {
+        if (profile.isProjectSpecific()) {
+            this.setProjectSpecificProfile((ProjectSpecificProfile) profile);
+            this.setSelectedGlobalProfile(null);
+            this.setSelectedGlobalProfileReference(null);
+        } else {
+            this.setSelectedGlobalProfile(profile);
+            this.setSelectedGlobalProfileReference(null);
+        }
+    }
 
-	public void globalProfileUpdated(Settings updatedGlobalProfile) {
-		final Settings.Formatter formatter = getSelectedProfile().getFormatter();
-		setProfile(GlobalSettings.clone(updatedGlobalProfile));
-		getSelectedProfile().setFormatter(formatter);
-	}
+    public void globalProfileUpdated(Settings updatedGlobalProfile) {
+        final Settings.Formatter formatter = getSelectedProfile().getFormatter();
+        setProfile(GlobalSettings.clone(updatedGlobalProfile));
+        getSelectedProfile().setFormatter(formatter);
+    }
 
-	public void projectOpened() {
-		syncGlobalProfile();
-		GlobalSettings.getInstance().migrateSettings(this);
-	}
+    public void projectOpened() {
+        syncGlobalProfile();
+        GlobalSettings.getInstance().migrateSettings(this);
+    }
 
-	private void syncGlobalProfile() {
-		Settings selectedGlobalProfile = getSelectedGlobalProfile();
-		if (selectedGlobalProfile != null) {
-			Settings.Formatter formatter = selectedGlobalProfile.getFormatter();
-			Settings clone = null;
-			try {
-				clone = GlobalSettings.clone(
-						GlobalSettings.getInstance().getGlobalProfile(selectedGlobalProfile, project));
-				clone.setFormatter(formatter);
-			} catch (DeletedProfileException e) {
-				Notifier.notifyDeletedSettings(project);
-			}
-			setSelectedGlobalProfile(clone);
-		}
-	}
+    private void syncGlobalProfile() {
+        Settings selectedGlobalProfile = this.selectedGlobalProfile;
+        if (selectedGlobalProfile != null) {
+            Settings.Formatter formatter = selectedGlobalProfile.getFormatter();
+            Settings clone = null;
+            try {
+                Settings globalProfile = GlobalSettings.getInstance().findGlobalProfile(selectedGlobalProfile, project);
+                clone = GlobalSettings.clone(globalProfile);
+                clone.setFormatter(formatter);
+            } catch (DeletedProfileException e) {
+                Notifier.notifyDeletedSettings(project);
+            }
+            this.selectedGlobalProfile = clone;
+        } else if (selectedGlobalProfileReference != null) {
+            try {
+                Settings globalProfile = GlobalSettings.getInstance().findGlobalProfile(selectedGlobalProfileReference, project);
+                if (globalProfile != null) {
+                    this.selectedGlobalProfile = GlobalSettings.clone(globalProfile);
+                } else {
+                    Notifier.notifyProfileDoesNotExist(project);
+                }
+            } catch (DeletedProfileException e) {
+                Notifier.notifyDeletedSettings(project);
+            }
+        }
+    }
+
+    public GlobalProfileReference getSelectedGlobalProfileReference() {
+        return selectedGlobalProfileReference;
+    }
+
+    public void setSelectedGlobalProfileReference(GlobalProfileReference selectedGlobalProfileReference) {
+        this.selectedGlobalProfileReference = selectedGlobalProfileReference;
+    }
 }

@@ -20,6 +20,8 @@ public class Notifier {
 
 	public static final String NO_FILE_TO_FORMAT = "No file to format";
 
+
+
 	public void notifyFailedFormatting(PsiFile psiFile, boolean formattedByIntelliJ, Exception e) {
 		String error = e.getMessage() == null ? "" : e.getMessage();
 		notifyFailedFormatting(psiFile, formattedByIntelliJ, e, error);
@@ -89,7 +91,7 @@ public class Notifier {
 	}
 
 	public static void notifyDeletedSettings(final Project project) {
-		String content = "Eclipse formatter settings profile was deleted for project " + project.getName()
+		String content = "Adapter for Eclipse Code Formatter - settings profile was deleted for project " + project.getName()
 				+ ". Check the configuration.";
 		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
 				NotificationType.ERROR);
@@ -100,7 +102,13 @@ public class Notifier {
 			}
 		});
 	}
-
+	public static void notifyProfileDoesNotExist(Project project) {
+		String content = "Adapter for Eclipse Code Formatter - Global profile does not exist for project " + project.getName()
+				+ ". Check the configuration.";
+		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+				NotificationType.ERROR);
+		ApplicationManager.getApplication().invokeLater(() -> Notifications.Bus.notify(notification, project));
+	}
 	public void configurationError(Exception e, Project project) {
 		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR
 				.createNotification("Eclipse Formatter configuration error: " + e.getMessage(), NotificationType.ERROR);

@@ -128,6 +128,7 @@ public class ProjectSettingsForm {
 	private JRadioButton schemeEclipse21;
 	private JRadioButton schemeEclipseFile;
 	private JRadioButton schemeCurrentProject;
+	private JCheckBox backupToProjectCheckBox;
 
 	private final List<Popup> visiblePopups = new ArrayList<Popup>();
 	@NotNull
@@ -171,6 +172,7 @@ public class ProjectSettingsForm {
 		delete.setEnabled(!displayedSettings.isProjectSpecific());
 		rename.setEnabled(!displayedSettings.isProjectSpecific());
 		exportToProjectProfile.setEnabled(!displayedSettings.isProjectSpecific());
+		backupToProjectCheckBox.setEnabled(!displayedSettings.isProjectSpecific());
 		setJavaFormatterProfileModel();
 
 	}
@@ -661,6 +663,7 @@ public class ProjectSettingsForm {
 		schemeEclipseJC.setSelected(Objects.equals(in.getConfigType(), Settings.ConfigType.JAVA_CONVENTIONS));
 		schemeEclipseFile.setSelected(Objects.equals(in.getConfigType(), Settings.ConfigType.CUSTOM));
 
+
 		setData(in);
 		updateComponents();
 	}
@@ -842,6 +845,7 @@ public class ProjectSettingsForm {
 		importOrder.setText(data.getImportOrder());
 		pathToImportOrderPreferenceFile.setText(data.getImportOrderConfigFilePath());
 		useForLiveTemplates.setSelected(data.isUseForLiveTemplates());
+		backupToProjectCheckBox.setSelected(data.isBackupToProjectConfigFile());
 	}
 
 	public void getData(Settings data) {
@@ -853,6 +857,7 @@ public class ProjectSettingsForm {
 		data.setImportOrder(importOrder.getText());
 		data.setImportOrderConfigFilePath(pathToImportOrderPreferenceFile.getText());
 		data.setUseForLiveTemplates(useForLiveTemplates.isSelected());
+		data.setBackupToProjectConfigFile(backupToProjectCheckBox.isSelected());
 	}
 
 	public boolean isModified(Settings data) {
@@ -860,6 +865,8 @@ public class ProjectSettingsForm {
 		if (customIsModified(data)) {
 			return true;
 		}
+		if (backupToProjectCheckBox.isSelected() != data.isBackupToProjectConfigFile())
+			return true;
 		if (optimizeImportsCheckBox.isSelected() != data.isOptimizeImports())
 			return true;
 		if (formatSelectedTextInAllFileTypes.isSelected() != data.isFormatSeletedTextInAllFileTypes())
