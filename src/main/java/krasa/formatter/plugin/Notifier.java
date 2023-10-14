@@ -39,7 +39,7 @@ public class Notifier {
 		} else {
 			content = psiFile.getName() + " failed to format with IntelliJ code formatter.\n" + reason;
 		}
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+		Notification notification = ProjectComponent.getNotificationGroupError().createNotification(content,
 				NotificationType.ERROR);
 
 		if (e instanceof InvalidSettingsException) {
@@ -56,7 +56,7 @@ public class Notifier {
 	}
 
 	void notifyFormattingWasDisabled(PsiFile psiFile) {
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_INFO.createNotification(
+		Notification notification = ProjectComponent.getNotificationGroupInfo().createNotification(
 				psiFile.getName() + " - formatting was disabled for this file type", NotificationType.WARNING);
 		showNotification(notification, psiFile.getProject());
 	}
@@ -68,7 +68,7 @@ public class Notifier {
 		} else {
 			content = psiFile.getName() + " formatted successfully by Adapter for Eclipse Code Formatter";
 		}
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_INFO.createNotification(content,
+		Notification notification = ProjectComponent.getNotificationGroupInfo().createNotification(content,
 				NotificationType.INFORMATION);
 		showNotification(notification, psiFile.getProject());
 	}
@@ -84,7 +84,7 @@ public class Notifier {
 
 	public void notifyBrokenImportSorter(Project project) {
 		String content = "Formatting failed due to a new Import optimizer.";
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+		Notification notification = ProjectComponent.getNotificationGroupError().createNotification(content,
 				NotificationType.ERROR);
 		showNotification(notification, project);
 
@@ -93,7 +93,7 @@ public class Notifier {
 	public static void notifyDeletedSettings(final Project project) {
 		String content = "Adapter for Eclipse Code Formatter - settings profile was deleted for project " + project.getName()
 				+ ". Check the configuration.";
-		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+		final Notification notification = ProjectComponent.getNotificationGroupError().createNotification(content,
 				NotificationType.ERROR);
 		ApplicationManager.getApplication().invokeLater(new Runnable() {
 			@Override
@@ -105,12 +105,12 @@ public class Notifier {
 	public static void notifyProfileDoesNotExist(Project project) {
 		String content = "Adapter for Eclipse Code Formatter - Global profile does not exist for project " + project.getName()
 				+ ". Check the configuration.";
-		final Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(content,
+		final Notification notification = ProjectComponent.getNotificationGroupError().createNotification(content,
 				NotificationType.ERROR);
 		ApplicationManager.getApplication().invokeLater(() -> Notifications.Bus.notify(notification, project));
 	}
 	public void configurationError(Exception e, Project project) {
-		Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR
+		Notification notification = ProjectComponent.getNotificationGroupError()
 				.createNotification("Eclipse Formatter configuration error: " + e.getMessage(), NotificationType.ERROR);
 		showNotification(notification, project);
 	}

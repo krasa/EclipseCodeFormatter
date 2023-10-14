@@ -98,6 +98,9 @@
 	</actions>
 
 	<extensions defaultExtensionNs="com.intellij">
+		<notificationGroup id="Adapter for Eclipse Code Formatter error" displayType="BALLOON" isLogByDefault="true"/>
+		<notificationGroup id="Adapter for Eclipse Code Formatter info" displayType="NONE" isLogByDefault="true"/>
+
 		<lang.importOptimizer order="FIRST" language="JAVA"
 							  implementationClass="krasa.formatter.plugin.EclipseImportOptimizer"/>
 		<projectConfigurable provider="krasa.formatter.settings.MyConfigurableProvider" id="EclipseFormatter"

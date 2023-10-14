@@ -7,8 +7,8 @@ package krasa.formatter.settings;/*
  */
 
 
-import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.NotificationGroupManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
@@ -26,12 +26,17 @@ import org.jetbrains.annotations.NotNull;
 public class ProjectComponent implements com.intellij.openapi.components.ProjectComponent {
 
 	private static final Logger LOG = Logger.getInstance(ProjectComponent.class.getName());
-	public static final NotificationGroup GROUP_DISPLAY_ID_ERROR = new NotificationGroup(
-			"Adapter for Eclipse Code Formatter error",
-			NotificationDisplayType.BALLOON, true);
-	public static final NotificationGroup GROUP_DISPLAY_ID_INFO = new NotificationGroup(
-			"Adapter for Eclipse Code Formatter info",
-			NotificationDisplayType.NONE, true);
+
+	@NotNull
+	public static NotificationGroup getNotificationGroupError() {
+		return NotificationGroupManager.getInstance().getNotificationGroup("Adapter for Eclipse Code Formatter error");
+	}
+
+	@NotNull
+	public static NotificationGroup getNotificationGroupInfo() {
+		return NotificationGroupManager.getInstance().getNotificationGroup("Adapter for Eclipse Code Formatter info");
+
+	}
 
 	@NotNull
 	private final ProjectCodeStyleInstaller projectCodeStyle;

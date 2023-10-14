@@ -104,7 +104,7 @@ public class EclipseCodeStyleManager {
 
 		if (psiFile.getVirtualFile() == null) {
 			LOG.debug("virtual file is null");
-			Notification notification = ProjectComponent.GROUP_DISPLAY_ID_ERROR.createNotification(
+			Notification notification = ProjectComponent.getNotificationGroupError().createNotification(
 					Notifier.NO_FILE_TO_FORMAT, NotificationType.ERROR);
 			notifier.showNotification(notification, psiFile.getProject());
 			return;
