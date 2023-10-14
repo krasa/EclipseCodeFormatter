@@ -13,12 +13,6 @@
         Go to <a href="https://github.com/krasa/EclipseCodeFormatter#instructions">https://github.com/krasa/EclipseCodeFormatter#instructions</a>
         for instructions how to use it.
 
-	 <br><br>
-	 Sponsored by:<br>
-        <p><a title="Try CodeStream" href="https://sponsorlink.codestream.com/?utm_source=jbmarket&amp;utm_campaign=vojta_eclipse&amp;utm_medium=banner"><img src="https://alt-images.codestream.com/codestream_logo_vojta_eclipse.png"></a><br>
-        Manage pull requests and conduct code reviews in your IDE with full source-tree context. Comment on any line, not just the diffs. Use jump-to-definition, your favorite keybindings, and code intelligence with more of your workflow.<br>
-        <a title="Try CodeStream" href="https://sponsorlink.codestream.com/?utm_source=jbmarket&amp;utm_campaign=vojta_eclipse&amp;utm_medium=banner">Learn More</a></p>
-
 	  <br> <br>
 
 	<b>Note:</b> This project utilizes (and in some manners modifies) code licensed under <a href="https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.html">EPL-2.0</a>.
@@ -32,45 +26,6 @@
 		Krasa
 	</vendor>
 
-	<change-notes><![CDATA[
-	    <br>22.0
-		<br>- Re-introduced bundled Eclipse
-	    <br>21.1
-		<br>- Moved Eclipse path to global IDE settings.
-	    <br>21.0
-		<br>- Fixed license violations - renamed project, removed bundled Eclipse libs.
-	    <br>20.9
-		<br>- NPE fix
-	    <br>20.8
-		<br>- ProcessCanceledException fix
-	    <br>20.7
-		<br>- icons fix for 2020.3
-	    <br>20.6
-		<br>- NPE fix
-	    <br>20.5
-		<br>- Legacy config format ($PROJECT_FILE$) support removed
-	    <br>20.4
-		<br>- Fix for Chinese config
-	    <br>20.3
-		<br>- Fix for Save Actions plugin
-	    <br>20.2
-		<br>- added resolving for "eclipse-code-formatter.xml" with 1 profile.
-	    <br>20.1
-		<br>- freeze fix
-	    <br>20.0
-		<br>- Java formatter updated to Eclipse 2020-06
-		<br>- Support for custom Eclipse installed via an installer
-		<br>- Added build-in Eclipse profiles
-		<br>- Added resolving project/workspace/mechanic-formatter.epf config
-	    <br>19.5
-		<br>- fixed 'Custom Eclipse location' label
-		<br>- fixed error handling
-	    <br>19.4
-		<br>- allowing ".XML" in settings
-      	<br>...
-        <br>0.1 (2011-11-01)
-        <br>- Initial release
-    ]]></change-notes>
 
 	<depends>com.intellij.modules.lang</depends>
 	<depends>com.intellij.modules.java</depends>
