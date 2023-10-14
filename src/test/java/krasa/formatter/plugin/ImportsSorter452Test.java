@@ -453,7 +453,7 @@ throws Exception {
 //	@Test
 //	public void test6() throws Exception {
 //	String document = "package jobs;\n" + "\n" + "import models.Album;\n" + "import models.Picture;\n"
-//	+ "import org.apache.commons.lang.StringUtils;\n" + "import org.apache.http.HttpEntity;\n"
+//	+ "import org.apache.commons.lang3.StringUtils;\n" + "import org.apache.http.HttpEntity;\n"
 //	+ "import org.apache.http.HttpResponse;\n" + "import org.apache.http.HttpStatus;\n"
 //	+ "import org.apache.http.client.methods.HttpGet;\n"
 //	+ "import org.apache.http.impl.client.DefaultHttpClient;\n"

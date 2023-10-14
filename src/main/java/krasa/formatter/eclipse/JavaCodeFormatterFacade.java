@@ -14,7 +14,7 @@ import krasa.formatter.plugin.InvalidPropertyFile;
 import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

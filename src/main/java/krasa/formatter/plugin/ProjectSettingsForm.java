@@ -34,8 +34,8 @@ import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.MyConfigurable;
 import krasa.formatter.settings.ProjectSettings;
 import krasa.formatter.settings.Settings;
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

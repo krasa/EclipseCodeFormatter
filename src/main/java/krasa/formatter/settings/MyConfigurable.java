@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project;
 import krasa.formatter.Messages;
 import krasa.formatter.plugin.ProjectSettingsForm;
 import krasa.formatter.utils.ProjectUtils;
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

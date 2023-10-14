@@ -10,7 +10,7 @@ tasks {
 }
 
 group = "EclipseCodeFormatter"
-version = "23.2.223.000.0-Eclipse_2023-03"
+version = "23.3.223.000.0-Eclipse_2023-03"
 
 tasks {
     patchPluginXml {
@@ -18,7 +18,7 @@ tasks {
         untilBuild.set("")
         changeNotes.set(
             buildString {
-                append("- #258 Option to disable copying of global profile to a project config file, to prevent unwanted VCS changes").append("<br>")
+                append("- 2023.3 EAP compatibility").append("<br>")
             }
         )
     }
