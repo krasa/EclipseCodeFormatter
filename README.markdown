@@ -60,7 +60,7 @@ in team environments where both IDEA and Eclipse are used.
         - For versions higher than 4.0 - imports will be reordered together with normal IntelliJ's import optimizing
         - **Disable `Optimize imports on the fly`**
 3. Format code as usual, notice the green bubble notification about successful formatting 
-   -  notifications can be disabled at `Settings | Notifications`
+   -  notifications can be disabled at `Settings | Appearance & Behavior | Notifications`
 4. Use `Ctrl + Alt + O` as usual, it will use this plugin
 5. Use `Ctrl + ~` for quick switch between formatters or icon at the main toolbar
 6. [Give it 5 stars](http://plugins.jetbrains.com/plugin/?idea&id=6546)
