@@ -1,11 +1,8 @@
 package krasa.formatter.adapter;
 
-import com.intellij.pom.java.LanguageLevel;
 import krasa.formatter.eclipse.EclipseFormatterAdapter;
 import krasa.formatter.exception.FileDoesNotExistsException;
 import krasa.formatter.exception.FormattingFailedException;
-import krasa.formatter.settings.Settings;
-import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
@@ -24,12 +21,9 @@ public class EclipseJavaFormatterAdapter extends EclipseFormatterAdapter {
 	}
 
 	@Override
-	public String format(String text, int startOffset, int endOffset, LanguageLevel level)
+	public String format(int kind, String text, int startOffset, int length, int indentationLevel, String lineSeparator, String languageLevel)
 			throws FileDoesNotExistsException {
-		LOG.debug("#formatInternal");
-		if (endOffset > text.length()) {
-			endOffset = text.length();
-		}
+
 		IDocument doc = new Document();
 		try {
 			doc.set(text);
@@ -76,20 +70,15 @@ public class EclipseJavaFormatterAdapter extends EclipseFormatterAdapter {
 			 *             if offset is lower than 0, length is lower than 0 or length is greater than source length.
 			 */
 
-			LOG.debug("#starting to format by eclipse formatter");
-			TextEdit edit = defaultCodeFormatter.format(
-					CodeFormatter.K_COMPILATION_UNIT | CodeFormatter.F_INCLUDE_COMMENTS, text, startOffset,
-					endOffset - startOffset, 0, Settings.LINE_SEPARATOR);
+			TextEdit edit = defaultCodeFormatter.format(kind, text, startOffset, length, indentationLevel, lineSeparator);
 			if (edit != null) {
-				LOG.debug("reformatting done");
 				edit.apply(doc);
 			} else {
-				throw new FormattingFailedException(getErrorMessage(level));
+				throw new FormattingFailedException(getErrorMessage(languageLevel));
 			}
 			return doc.get();
 		} catch (IndexOutOfBoundsException e) {
-			LOG.debug(e);
-			throw new FormattingFailedException(getErrorMessage(level));
+			throw new FormattingFailedException(e, getErrorMessage(languageLevel));
 		} catch (BadLocationException e) {
 			throw new RuntimeException(e);
 		}

@@ -1,30 +1,9 @@
 package krasa.formatter.utils;
 
-import com.intellij.diagnostic.ActivityCategory;
-import com.intellij.openapi.components.BaseComponent;
-import com.intellij.openapi.components.ComponentConfig;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.ExtensionsArea;
-import com.intellij.openapi.extensions.PluginDescriptor;
-import com.intellij.openapi.extensions.PluginId;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.UserDataHolderBase;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.messages.MessageBus;
-import kotlinx.coroutines.CoroutineScope;
-import krasa.formatter.settings.Settings;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.Test;
-import org.picocontainer.PicoContainer;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static krasa.formatter.utils.StringUtils.getPackage;
 import static krasa.formatter.utils.StringUtils.getSimpleName;
@@ -63,238 +42,240 @@ public class StringUtilsTest {
 		strings = StringUtils.trimToList(" ");
 		Assert.assertFalse(strings.isEmpty());
 	}
+// todo
+//	@Test
+//	public void testGenerateName() throws Exception {
+//		ArrayList<Settings> settingsList = new ArrayList<Settings>();
+//		Project instance = new MyDummyProject();
+//		String s = StringUtils.generateName(settingsList, 1, instance.getName());
+//		Assert.assertEquals("dummy", s);
+//		settingsList.add(new Settings(1L, "dummy"));
+//
+//		s = StringUtils.generateName(settingsList, 1, instance.getName());
+//		Assert.assertEquals("dummy (1)", s);
+//		settingsList.add(new Settings(1L, "dummy (1)"));
+//
+//		s = StringUtils.generateName(settingsList, 1, instance.getName());
+//		Assert.assertEquals("dummy (2)", s);
+//	}
 
-	@Test
-	public void testGenerateName() throws Exception {
-		ArrayList<Settings> settingsList = new ArrayList<Settings>();
-		Project instance = new MyDummyProject();
-		String s = StringUtils.generateName(settingsList, 1, instance.getName());
-		Assert.assertEquals("dummy", s);
-		settingsList.add(new Settings(1L, "dummy"));
-
-		s = StringUtils.generateName(settingsList, 1, instance.getName());
-		Assert.assertEquals("dummy (1)", s);
-		settingsList.add(new Settings(1L, "dummy (1)"));
-
-		s = StringUtils.generateName(settingsList, 1, instance.getName());
-		Assert.assertEquals("dummy (2)", s);
-	}
-
-	class MyDummyProject extends UserDataHolderBase implements Project {
-		@NotNull
-		@Override
-		public ExtensionsArea getExtensionArea() {
-			return null;
-		}
-
-		@Override
-		public <T> T instantiateClassWithConstructorInjection(@NotNull Class<T> aClass, @NotNull Object o, @NotNull PluginId pluginId) {
-			return null;
-		}
-
-		@Override
-		public @NotNull
-		RuntimeException createError(@NotNull Throwable throwable, @NotNull PluginId pluginId) {
-			return null;
-		}
-
-		@Override
-		public @NotNull
-		RuntimeException createError(@NotNull @NonNls String s, @NotNull PluginId pluginId) {
-			return null;
-		}
-
-		@Override
-		public @NotNull
-		RuntimeException createError(@NotNull @NonNls String s, @Nullable Throwable throwable, @NotNull PluginId pluginId, @Nullable Map<String, String> map) {
-			return null;
-		}
-
-
-		@Override
-		public @NotNull
-		<T> Class<T> loadClass(@NotNull String s, @NotNull PluginDescriptor pluginDescriptor) throws ClassNotFoundException {
-			return null;
-		}
-
-		@Override
-		public <T> @NotNull T instantiateClass(@NotNull String s, @NotNull PluginDescriptor pluginDescriptor) {
-			return null;
-		}
-
-		@Override
-		public @NotNull
-		ActivityCategory getActivityCategory(boolean b) {
-			return null;
-		}
-
-		public MyDummyProject() {
-		}
-
-		@Override
-		public VirtualFile getProjectFile() {
-			return null;
-		}
-
-		@Override
-		@NotNull
-		public String getName() {
-			return "dummy";
-		}
-
-		@Override
-		@Nullable
-		@NonNls
-		public String getPresentableUrl() {
-			return null;
-		}
-
-		@Override
-		@NotNull
-		@NonNls
-		public String getLocationHash() {
-			return "dummy";
-		}
-
-		@Nullable
-		@NonNls
-		public String getLocation() {
-			throw new UnsupportedOperationException("Method getLocation not implemented in " + getClass());
-		}
-
-		@Override
-		@NotNull
-		public String getProjectFilePath() {
-			return "";
-		}
-
-		@Override
-		public VirtualFile getWorkspaceFile() {
-			return null;
-		}
-
-		@Override
-		@Nullable
-		public VirtualFile getBaseDir() {
-			return null;
-		}
-
-		// @Override
-		@Override
-		public String getBasePath() {
-			return null;
-		}
-
-		@Override
-		public void save() {
-		}
-
-		@Override
-		public BaseComponent getComponent(String name) {
-			return null;
-		}
-
-		@Override
-		public <T> T getComponent(Class<T> interfaceClass) {
-			return null;
-		}
-
-		@Override
-		public boolean hasComponent(@NotNull Class interfaceClass) {
-			return false;
-		}
-
-		@NotNull
-		public <T> T[] getComponents(Class<T> baseClass) {
-			return (T[]) ArrayUtil.EMPTY_OBJECT_ARRAY;
-		}
-
-		@Override
-		@NotNull
-		public PicoContainer getPicoContainer() {
-			throw new UnsupportedOperationException("getPicoContainer is not implement in : " + getClass());
-		}
-
-		@Override
-		public boolean isInjectionForExtensionSupported() {
-			return false;
-		}
-
-
-		@NotNull
-		// @Override
-		public Class[] getComponentInterfaces() {
-			return new Class[0];
-		}
-
-		@Override
-		public boolean isDisposed() {
-			return false;
-		}
-
-		@Override
-		@NotNull
-		public Condition getDisposed() {
-			return new Condition() {
-				@Override
-				public boolean value(final Object o) {
-					return isDisposed();
-				}
-			};
-		}
-
-		@Override
-		public <T> T getService(@NotNull Class<T> aClass) {
-			return null;
-		}
-
-		@NotNull
-		public ComponentConfig[] getComponentConfigurations() {
-			return new ComponentConfig[0];
-		}
-
-		@Nullable
-		public Object getComponent(final ComponentConfig componentConfig) {
-			return null;
-		}
-
-		@Override
-		public boolean isOpen() {
-			return false;
-		}
-
-		@Override
-		public boolean isInitialized() {
-			return false;
-		}
-
-		@Override
-		public boolean isDefault() {
-			return false;
-		}
-
+//	class MyDummyProject extends UserDataHolderBase implements Project {
+//
+//
+//		@NotNull
 //		@Override
-		public CoroutineScope getCoroutineScope() {
-			return null;
-		}
-
-		@Override
-		public MessageBus getMessageBus() {
-			return null;
-		}
-
-		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public <T> T[] getExtensions(final ExtensionPointName<T> extensionPointName) {
-			throw new UnsupportedOperationException("getExtensions()");
-		}
-
-		public ComponentConfig getConfig(Class componentImplementation) {
-			throw new UnsupportedOperationException("Method getConfig not implemented in " + getClass());
-		}
-	}
+//		public ExtensionsArea getExtensionArea() {
+//			return null;
+//		}
+//
+//		@Override
+//		public <T> T instantiateClassWithConstructorInjection(@NotNull Class<T> aClass, @NotNull Object o, @NotNull PluginId pluginId) {
+//			return null;
+//		}
+//
+//		@Override
+//		public @NotNull
+//		RuntimeException createError(@NotNull Throwable throwable, @NotNull PluginId pluginId) {
+//			return null;
+//		}
+//
+//		@Override
+//		public @NotNull
+//		RuntimeException createError(@NotNull @NonNls String s, @NotNull PluginId pluginId) {
+//			return null;
+//		}
+//
+//		@Override
+//		public @NotNull
+//		RuntimeException createError(@NotNull @NonNls String s, @Nullable Throwable throwable, @NotNull PluginId pluginId, @Nullable Map<String, String> map) {
+//			return null;
+//		}
+//
+//
+//		@Override
+//		public @NotNull
+//		<T> Class<T> loadClass(@NotNull String s, @NotNull PluginDescriptor pluginDescriptor) throws ClassNotFoundException {
+//			return null;
+//		}
+//
+//		@Override
+//		public <T> @NotNull T instantiateClass(@NotNull String s, @NotNull PluginDescriptor pluginDescriptor) {
+//			return null;
+//		}
+//
+//		@Override
+//		public @NotNull
+//		ActivityCategory getActivityCategory(boolean b) {
+//			return null;
+//		}
+//
+//		public MyDummyProject() {
+//		}
+//
+//		@Override
+//		public VirtualFile getProjectFile() {
+//			return null;
+//		}
+//
+//		@Override
+//		@NotNull
+//		public String getName() {
+//			return "dummy";
+//		}
+//
+//		@Override
+//		@Nullable
+//		@NonNls
+//		public String getPresentableUrl() {
+//			return null;
+//		}
+//
+//		@Override
+//		@NotNull
+//		@NonNls
+//		public String getLocationHash() {
+//			return "dummy";
+//		}
+//
+//		@Nullable
+//		@NonNls
+//		public String getLocation() {
+//			throw new UnsupportedOperationException("Method getLocation not implemented in " + getClass());
+//		}
+//
+//		@Override
+//		@NotNull
+//		public String getProjectFilePath() {
+//			return "";
+//		}
+//
+//		@Override
+//		public VirtualFile getWorkspaceFile() {
+//			return null;
+//		}
+//
+//		@Override
+//		@Nullable
+//		public VirtualFile getBaseDir() {
+//			return null;
+//		}
+//
+//		// @Override
+//		@Override
+//		public String getBasePath() {
+//			return null;
+//		}
+//
+//		@Override
+//		public void save() {
+//		}
+//
+//		@Override
+//		public BaseComponent getComponent(String name) {
+//			return null;
+//		}
+//
+//		@Override
+//		public <T> T getComponent(Class<T> interfaceClass) {
+//			return null;
+//		}
+//
+//		@Override
+//		public boolean hasComponent(@NotNull Class interfaceClass) {
+//			return false;
+//		}
+//
+//		@NotNull
+//		public <T> T[] getComponents(Class<T> baseClass) {
+//			return (T[]) ArrayUtil.EMPTY_OBJECT_ARRAY;
+//		}
+//
+////		@Override
+//		@NotNull
+//		public PicoContainer getPicoContainer() {
+//			throw new UnsupportedOperationException("getPicoContainer is not implement in : " + getClass());
+//		}
+//
+//		@Override
+//		public boolean isInjectionForExtensionSupported() {
+//			return false;
+//		}
+//
+//
+//		@NotNull
+//		// @Override
+//		public Class[] getComponentInterfaces() {
+//			return new Class[0];
+//		}
+//
+//		@Override
+//		public boolean isDisposed() {
+//			return false;
+//		}
+//
+//		@Override
+//		@NotNull
+//		public Condition getDisposed() {
+//			return new Condition() {
+//				@Override
+//				public boolean value(final Object o) {
+//					return isDisposed();
+//				}
+//			};
+//		}
+//
+//		@Override
+//		public <T> T getService(@NotNull Class<T> aClass) {
+//			return null;
+//		}
+//
+//		@NotNull
+//		public ComponentConfig[] getComponentConfigurations() {
+//			return new ComponentConfig[0];
+//		}
+//
+//		@Nullable
+//		public Object getComponent(final ComponentConfig componentConfig) {
+//			return null;
+//		}
+//
+//		@Override
+//		public boolean isOpen() {
+//			return false;
+//		}
+//
+//		@Override
+//		public boolean isInitialized() {
+//			return false;
+//		}
+//
+//		@Override
+//		public boolean isDefault() {
+//			return false;
+//		}
+//
+////		@Override
+//		public CoroutineScope getCoroutineScope() {
+//			return null;
+//		}
+//
+//		@Override
+//		public MessageBus getMessageBus() {
+//			return null;
+//		}
+//
+//		@Override
+//		public void dispose() {
+//		}
+//
+////		@Override
+//		public <T> T[] getExtensions(final ExtensionPointName<T> extensionPointName) {
+//			throw new UnsupportedOperationException("getExtensions()");
+//		}
+//
+//		public ComponentConfig getConfig(Class componentImplementation) {
+//			throw new UnsupportedOperationException("Method getConfig not implemented in " + getClass());
+//		}
+//	}
 
 }

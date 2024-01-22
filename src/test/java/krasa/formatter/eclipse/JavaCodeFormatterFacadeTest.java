@@ -1,15 +1,20 @@
 package krasa.formatter.eclipse;
 
+import com.intellij.mock.MockApplication;
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.util.PsiUtilCore;
+import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.Settings;
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
@@ -147,6 +152,24 @@ public class JavaCodeFormatterFacadeTest {
 		Assert.assertEquals(FORMATTED, output);
 		output = format(INPUT2);
 		Assert.assertEquals(FORMATTED2, output);
+	}
+
+	@Test
+	public void testFormatByXML_Formatter_20160606() throws Exception {
+		MockApplication app = MockApplication.setUp(Disposer.newDisposable());
+		app.registerService(GlobalSettings.class, new GlobalSettings());
+		GlobalSettings instance = GlobalSettings.getInstance();
+		instance.setPathToEclipse("C:/Users/vojtisek/eclipse/java-2023-03");
+
+		Settings settings = new Settings();
+		setPathToConfigFileJava(settings, "resources/Formatter_20160606.xml");
+		settings.setSelectedJavaProfile("Formatter_20160606");
+		settings.setEclipseVersion(Settings.FormatterVersion.CUSTOM);
+
+		eclipseCodeFormatterFacade = getEclipseCodeFormatterFacade(settings);
+		String input = FileUtils.readFileToString(new File("src/test/resources/example/Example.java"), "UTF-8");
+		String output = format(input);
+		Assert.assertEquals(input, output);
 	}
 
 	@Test

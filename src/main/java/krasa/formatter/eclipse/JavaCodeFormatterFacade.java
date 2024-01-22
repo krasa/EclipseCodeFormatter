@@ -15,6 +15,7 @@ import krasa.formatter.settings.GlobalSettings;
 import krasa.formatter.settings.Settings;
 import krasa.formatter.settings.provider.JavaPropertiesProvider;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +54,14 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 	public String format(String text, int startOffset, int endOffset, PsiFile psiFile)
 			throws FileDoesNotExistsException {
 		LanguageLevel languageLevel = getLanguageLevel(psiFile);
-		return getCodeFormatter(languageLevel, psiFile).format(text, startOffset, endOffset, languageLevel);
+		EclipseFormatterAdapter adapter = getCodeFormatter(languageLevel, psiFile);
+		int kind = CodeFormatter.K_COMPILATION_UNIT | CodeFormatter.F_INCLUDE_COMMENTS;
+		String lineSeparator = "\n";
+
+		if (endOffset > text.length()) {
+			endOffset = text.length();
+		}
+		return adapter.format(kind, text, startOffset, endOffset - startOffset, 0, lineSeparator, languageLevel.toString());
 	}
 
 
