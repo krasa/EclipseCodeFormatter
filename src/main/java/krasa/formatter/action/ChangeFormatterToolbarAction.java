@@ -1,5 +1,6 @@
 package krasa.formatter.action;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.diagnostic.Logger;
@@ -8,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import krasa.formatter.settings.ProjectComponent;
 import krasa.formatter.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -68,4 +70,8 @@ public class ChangeFormatterToolbarAction extends DumbAwareAction {
 		return settings;
 	}
 
+	@Override
+	public @NotNull ActionUpdateThread getActionUpdateThread() {
+		return ActionUpdateThread.BGT;
+	}
 }
