@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("org.jetbrains.intellij") version "1.16.0"
+    id("org.jetbrains.intellij") version "1.17.0"
 }
 
 tasks {
@@ -10,7 +10,7 @@ tasks {
 }
 
 group = "EclipseCodeFormatter"
-version = "23.3.223.000.0-Eclipse_2023-03"
+version = "23.4.223.000.0-Eclipse_2023-03"
 
 tasks {
     patchPluginXml {
@@ -18,7 +18,7 @@ tasks {
         untilBuild.set("")
         changeNotes.set(
             buildString {
-                append("- 2023.3 EAP compatibility").append("<br>")
+                append("- 2024.1 EAP compatibility").append("<br>")
             }
         )
     }
@@ -81,7 +81,7 @@ dependencies {
     implementation("commons-io:commons-io:2.11.0")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.apache.commons:commons-lang3:3.14.0")
 
 }
 
