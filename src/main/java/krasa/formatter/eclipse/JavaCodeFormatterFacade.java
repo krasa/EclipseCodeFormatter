@@ -61,7 +61,10 @@ public class JavaCodeFormatterFacade extends CodeFormatterFacade {
 		if (endOffset > text.length()) {
 			endOffset = text.length();
 		}
-		return adapter.format(kind, text, startOffset, endOffset - startOffset, 0, lineSeparator, languageLevel.toString());
+		LOG.debug("EclipseFormatterAdapter#format");
+		String format = adapter.format(kind, text, startOffset, endOffset - startOffset, 0, lineSeparator, languageLevel.toString());
+		LOG.debug("EclipseFormatterAdapter#format done");
+		return format;
 	}
 
 
