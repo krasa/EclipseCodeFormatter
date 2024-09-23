@@ -16,7 +16,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.4</version>
+				<version>3.6.0</version>
 				<configuration>
 					<!-- put your configurations here -->
 					<filters>
@@ -53,8 +53,8 @@
 		<dependency>
 			<groupId>org.eclipse.jdt</groupId>
 			<artifactId>org.eclipse.jdt.core</artifactId>
-			<!-- Version for IDE 2023-03 -->
-			<version>3.33.0</version>
+			<!-- Version for IDE 2024-09 -->
+			<version>3.39.0</version>
 		</dependency>
 	</dependencies>
 </project>
