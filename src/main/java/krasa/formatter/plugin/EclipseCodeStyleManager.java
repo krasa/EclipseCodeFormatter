@@ -84,19 +84,6 @@ public class EclipseCodeStyleManager {
 	}
 
 	// @Override
-	public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<? extends TextRange> textRanges, boolean processChangedTextOnly) throws IncorrectOperationException {
-		if (shouldReformatByEclipse(psiFile)) {
-			List<TextRange> list = new ArrayList<TextRange>(textRanges);
-			Collections.sort(list, Collections.reverseOrder(RANGE_COMPARATOR));
-			formatInternal(psiFile, list, Mode.ALWAYS_FORMAT);
-		} else if (shouldSkipFormatting(psiFile, textRanges)) {
-			notifier.notifyFormattingWasDisabled(psiFile);
-		} else {
-			original.reformatText(psiFile, textRanges, processChangedTextOnly);
-		}
-	}
-
-	// @Override
 	// todo should I even override this method?
 	public void reformatText(@NotNull final PsiFile psiFile, final int startOffset, final int endOffset) throws IncorrectOperationException {
 		List<TextRange> textRanges = Collections.singletonList(new TextRange(startOffset, endOffset));
