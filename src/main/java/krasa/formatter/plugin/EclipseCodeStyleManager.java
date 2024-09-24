@@ -92,6 +92,7 @@ public class EclipseCodeStyleManager {
 		} else if (shouldSkipFormatting(psiFile, textRanges)) {
 			notifier.notifyFormattingWasDisabled(psiFile);
 		} else {
+			//since IJ 241
 			original.reformatText(psiFile, textRanges, processChangedTextOnly);
 		}
 	}
